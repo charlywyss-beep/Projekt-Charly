@@ -793,8 +793,9 @@
             label[for="ag"] {
                 color: #6B7280 !important;
                 z-index: 10 !important;
-                /* HÖHER als Input */
+                pointer-events: none !important;
                 font-size: 0.875rem !important;
+                transition: opacity 0.2s !important;
             }
 
             body.dark label[for="mk"],
@@ -805,21 +806,29 @@
                 opacity: 0.9 !important;
             }
 
+            /* Label ausblenden wenn Input Wert hat */
+            label[for="mk"].hidden,
+            label[for="mg"].hidden,
+            label[for="mittk"].hidden,
+            label[for="ag"].hidden {
+                opacity: 0 !important;
+                visibility: hidden !important;
+            }
+
             /* Zeit-Input Rows: minimales gap */
             .arbeitszeit-kachel>div>div[style*="grid-row"] {
                 gap: 0.125rem !important;
             }
 
-            /* Fix für time inputs - schmaler und Platz für Button */
+            /* Fix für time inputs - zentriert mit gleichem Abstand */
             input[type="time"] {
                 background: white !important;
                 position: relative;
                 z-index: 1;
                 padding: 0.4rem !important;
                 font-size: 0.9rem !important;
-                width: calc(100% - 45px) !important;
-                /* Platz für X-Button lassen */
-                margin-right: 5px !important;
+                flex: 1 !important;
+                min-width: 0 !important;
             }
 
             body.dark input[type="time"] {
@@ -909,7 +918,7 @@
                 style="flex: 1; min-width: 300px; margin: 0; display: flex; justify-content: space-between; align-items: center; position: relative;">
                 <div style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
                     <h1><span>🕐</span>Arbeitszeiten</h1>
-                    <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;">v1.0.9</span>
+                    <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;">v1.1.0</span>
                 </div>
                 <div id="user-info" style="text-align: right; font-size: 0.875rem; color: #6B7280; line-height: 1.4;">
                     <div class="user-info-name">Wyss Charly</div>
@@ -7389,10 +7398,16 @@
     <script>
         // Hilfsfunktionen für Labels und Clear-Buttons
         function toggleLabel(id) {
-            // Labels sind jetzt pointer-events: none, also rein visuell
-            // Wir müssen hier nichts tun, da das Label immer sichtbar bleibt (als Overlay)
-            // oder wir könnten es ausblenden wenn wir wollten.
-            // Aber wichtiger ist updateClear:
+            const input = document.getElementById(id);
+            const label = document.getElementById(`label-${id}`);
+
+            if (input && label) {
+                if (input.value) {
+                    label.classList.add('hidden');
+                } else {
+                    label.classList.remove('hidden');
+                }
+            }
             updateClear();
         }
 
@@ -7418,11 +7433,13 @@
 
         // Initiale Ausführung
         document.addEventListener('DOMContentLoaded', () => {
+            // Labels initial aktualisieren
+            ['mk', 'mg', 'mittk', 'ag'].forEach(id => toggleLabel(id));
             updateClear();
         });
 
-        // Version 1.0.9 - Manuell erhöhen bei jeder Änderung
-        const version = '1.0.9';
+        // Version 1.1.0 - Manuell erhöhen bei jeder Änderung
+        const version = '1.1.0';
 
         // Prüfe Version und erzwinge Hard-Reload wenn nötig
         const lastVersion = localStorage.getItem('app_version');
