@@ -7372,13 +7372,41 @@
 
     <!-- ⏱ Automatischer Reload bei neuer Version -->
     <script>
-        // Version 1.0.2 - Manuell erhöhen bei jeder Änderung
-        const version = '1.0.2';
+        // Version 1.0.3 - Manuell erhöhen bei jeder Änderung
+        const version = '1.0.3';
 
-        if (localStorage.getItem('app_version') !== version) {
+        // Prüfe Version und erzwinge Hard-Reload wenn nötig
+        const lastVersion = localStorage.getItem('app_version');
+
+        if (lastVersion !== version) {
+            console.log(`Update erkannt: ${lastVersion} → ${version}`);
             localStorage.setItem('app_version', version);
-            location.reload(); // Seite neu laden bei Versionswechsel
+
+            // Lösche alle Caches
+            if ('caches' in window) {
+                caches.keys().then(function (names) {
+                    for (let name of names) caches.delete(name);
+                });
+            }
+
+            // Reload mit Cache-Bypass
+            setTimeout(() => {
+                window.location.reload(true); // Hard reload
+            }, 100);
         }
+
+        // Zusätzlich: Prüfe beim Fokus ob Update verfügbar (optional)
+        window.addEventListener('focus', function () {
+            // Lade Seite mit Cache-Bypass-Parameter neu
+            const url = new URL(window.location);
+            const currentCheck = url.searchParams.get('v');
+            if (!currentCheck || currentCheck !== version) {
+                url.searchParams.set('v', version);
+                if (currentCheck && currentCheck !== version) {
+                    window.location.href = url.toString();
+                }
+            }
+        });
     </script>
 
 </body>
