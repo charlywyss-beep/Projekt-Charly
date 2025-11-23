@@ -786,31 +786,46 @@
                 padding: 1rem !important;
             }
 
-            /* Fix für Labels: Hintergrund-Layer und Z-Index */
+            /* Fix für Labels im Dark Mode - heller und immer sichtbar */
+            label[for="mk"],
+            label[for="mg"],
+            label[for="mittk"],
+            label[for="ag"] {
+                color: #9CA3AF !important;
+                z-index: 0 !important;
+            }
+
+            body.dark label[for="mk"],
+            body.dark label[for="mg"],
+            body.dark label[for="mittk"],
+            body.dark label[for="ag"] {
+                color: #D1D5DB !important;
+            }
+
+            /* Zeit-Input Rows: weniger gap */
+            .arbeitszeit-kachel>div>div[style*="grid-row"] {
+                gap: 0.25rem !important;
+            }
+
+            /* Fix für time inputs */
             input[type="time"] {
                 background: white !important;
                 position: relative;
                 z-index: 1;
+                padding: 0.5rem !important;
             }
 
             body.dark input[type="time"] {
                 background: #374151 !important;
             }
 
-            /* Labels hinter den Inputs */
-            input[type="time"]+label,
-            label[for="mk"],
-            label[for="mg"],
-            label[for="mittk"],
-            label[for="ag"] {
-                z-index: 0 !important;
-            }
-
-            /* Clear-Buttons innerhalb der Kachel */
+            /* Clear-Buttons kleiner */
             .clear-btn {
-                width: 36px !important;
-                height: 36px !important;
+                width: 32px !important;
+                height: 32px !important;
+                min-width: 32px !important;
                 flex-shrink: 0 !important;
+                font-size: 0.875rem !important;
             }
         }
     </style>
@@ -7350,11 +7365,16 @@
         init();
     </script>
 
+    <!-- ⏱ Automatischer Reload bei neuer Version -->
+    <script>
+        // Version 1.0.0 - Manuell erhöhen bei jeder Änderung
+        const version = '1.0.0';
 
-
-
-
-
+        if (localStorage.getItem('app_version') !== version) {
+            localStorage.setItem('app_version', version);
+            location.reload(); // Seite neu laden bei Versionswechsel
+        }
+    </script>
 
 </body>
 
