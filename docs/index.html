@@ -784,6 +784,7 @@
                 max-width: 100% !important;
                 box-sizing: border-box !important;
                 padding: 1rem !important;
+                padding-right: 0.5rem !important;
             }
 
             /* Fix für Labels im Dark Mode - WEISS für Sichtbarkeit */
@@ -816,6 +817,7 @@
                 z-index: 1;
                 padding: 0.4rem !important;
                 font-size: 0.9rem !important;
+                max-width: calc(100% - 40px) !important;
             }
 
             body.dark input[type="time"] {
@@ -7370,8 +7372,8 @@
 
     <!-- ⏱ Automatischer Reload bei neuer Version -->
     <script>
-        // Version 1.0.1 - Manuell erhöhen bei jeder Änderung
-        const version = '1.0.1';
+        // Version 1.0.2 - Manuell erhöhen bei jeder Änderung
+        const version = '1.0.2';
 
         if (localStorage.getItem('app_version') !== version) {
             localStorage.setItem('app_version', version);
