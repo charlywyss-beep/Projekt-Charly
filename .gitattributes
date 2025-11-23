@@ -1,0 +1,16 @@
+# Standard: Textdateien automatisch behandeln
+* text=auto
+
+# Markdown-Dateien als Text
+*.md text
+
+# Registry-Dateien als INI anzeigen (für GitHub Syntax-Highlighting)
+*.reg linguist-language=INI
+
+# Binärdateien schützen (keine Zeilenend-Konvertierung, keine Merge-Versuche)
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.exe binary
+*.dll binary
