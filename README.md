@@ -20,11 +20,9 @@ Projekt-Charly
 
 
 
-\## Dokumentation
+## Dokumentation
+- [Thunderbird Setup](thunderbird-setup.md)
 
-
-
-\- \[Thunderbird Setup](thunderbird-setup.md)
 
 
 
