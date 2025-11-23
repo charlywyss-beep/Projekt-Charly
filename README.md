@@ -22,6 +22,13 @@ Projekt-Charly
 
 ## Dokumentation
 - [Thunderbird Setup](thunderbird-setup.md)
+## Registry-Tweaks
+- [Disable Telemetry](disable-telemetry.reg)
+- [Font Fix](font-fix.reg)
+- [Drafts Folder](drafts-folder.reg)
+- [Backup Thunderbird](backup-thunderbird.reg)
+
+
 
 
 
