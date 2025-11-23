@@ -8,10 +8,6 @@
 
 # 🛠️ \*\*Troubleshooting-Dokumentation und Workflows\*\* für Windows, Thunderbird, GitHub und mehr.
 
-# 
-
-# 
-
 # \## 📚 Inhalt
 
 # 
