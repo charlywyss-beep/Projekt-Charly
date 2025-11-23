@@ -1,9 +1,6 @@
 <html lang="de">
 
 <head>
-    <link rel="icon" type="image/png" href="logo.png">
-<link rel="apple-touch-icon" href="logo.png">
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arbeitszeitrechner</title>
@@ -749,6 +746,44 @@
 
             .tab {
                 min-width: auto;
+            }
+
+            /* Mobile Fixes für iPhone */
+            .kachel-grid {
+                grid-template-columns: 1fr !important;
+                gap: 1rem !important;
+            }
+
+            .arbeitszeit-kachel {
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+
+            /* Fix für Labels: Hintergrund-Layer und Z-Index */
+            input[type="time"] {
+                background: white !important;
+                position: relative;
+                z-index: 1;
+            }
+
+            body.dark input[type="time"] {
+                background: #374151 !important;
+            }
+
+            /* Labels hinter den Inputs */
+            input[type="time"]+label,
+            label[for="mk"],
+            label[for="mg"],
+            label[for="mittk"],
+            label[for="ag"] {
+                z-index: 0 !important;
+            }
+
+            /* Clear-Buttons innerhalb der Kachel */
+            .clear-btn {
+                width: 36px !important;
+                height: 36px !important;
+                flex-shrink: 0 !important;
             }
         }
     </style>
