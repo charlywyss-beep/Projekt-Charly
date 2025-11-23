@@ -30,3 +30,19 @@
 *.jpg    binary
 *.exe    binary
 *.zip    binary
+# Zeilenenden normalisieren
+*.md     text eol=lf
+*.reg    text eol=crlf
+*.sh     text eol=lf
+*.bat    text eol=crlf
+
+# Syntax-Highlighting auf GitHub
+*.reg    linguist-language=INI
+*.bat    linguist-language=Batchfile
+*.ps1    linguist-language=PowerShell
+
+# Binärdateien schützen
+*.png    binary
+*.jpg    binary
+*.exe    binary
+*.zip    binary
