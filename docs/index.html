@@ -1,18 +1,9 @@
 <html lang="de">
 
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Arbeitszeiten & Ferien – Projekt-Charly</title>
-
-  <!-- 🔲 App-Icon einfügen -->
-  <link rel="icon" type="image/png" href="logo.png">
-  <link rel="apple-touch-icon" href="logo.png">
-
-  <!-- Optional: Theme-Farbe für Mobile -->
-  <meta name="theme-color" content="#0f172a">
-</head>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arbeitszeitrechner</title>
 
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -7298,6 +7289,40 @@
                 document.getElementById('confirm-modal').classList.add('hidden');
             }
         });
+
+        // Toggle label visibility based on input value
+        function toggleLabel(id) {
+            const input = document.getElementById(id);
+            const label = document.getElementById(`label-${id}`);
+
+            if (input && label) {
+                if (input.value) {
+                    label.style.display = 'none';
+                } else {
+                    label.style.display = 'block';
+                }
+            }
+
+            updateClear();
+        }
+
+        // Update clear button visibility
+        function updateClear() {
+            ['mk', 'mg', 'mittk', 'ag'].forEach(id => {
+                const input = document.getElementById(id);
+                const clearBtn = document.getElementById(`c-${id}`);
+
+                if (input && clearBtn) {
+                    if (input.value) {
+                        clearBtn.classList.add('on');
+                        clearBtn.style.display = 'flex';
+                    } else {
+                        clearBtn.classList.remove('on');
+                        clearBtn.style.display = 'none';
+                    }
+                }
+            });
+        }
 
         window.addEventListener('click', (e) => {
             if (!e.target.closest('#export-menu') && !e.target.closest('.btn-sec')) {
