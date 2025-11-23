@@ -52,3 +52,24 @@ __pycache__/
 *.pyd
 *.egg-info/
 
+# Backup & temporäre Dateien
+*.bak
+*.tmp
+*.log
+
+# Systemdateien
+.DS_Store
+Thumbs.db
+
+# Editor-Dateien
+*.swp
+*.swo
+*.~lock.*
+~$*
+
+# Thunderbird-spezifisch
+*.msf
+*.dat
+*.sqlite
+
+
