@@ -794,6 +794,8 @@
                 color: #6B7280 !important;
                 z-index: 10 !important;
                 /* HÖHER als Input */
+                pointer-events: none !important;
+                /* Klicks gehen durch zum Input */
                 font-size: 0.875rem !important;
             }
 
@@ -831,6 +833,9 @@
                 min-width: 30px !important;
                 flex-shrink: 0 !important;
                 font-size: 0.8rem !important;
+                z-index: 20 !important;
+                /* Immer ganz oben */
+                position: relative;
             }
         }
     </style>
@@ -897,7 +902,7 @@
                 style="flex: 1; min-width: 300px; margin: 0; display: flex; justify-content: space-between; align-items: center; position: relative;">
                 <div style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
                     <h1><span>🕐</span>Arbeitszeiten</h1>
-                    <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;">v1.0.6</span>
+                    <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;">v1.0.7</span>
                 </div>
                 <div id="user-info" style="text-align: right; font-size: 0.875rem; color: #6B7280; line-height: 1.4;">
                     <div class="user-info-name">Wyss Charly</div>
@@ -7375,8 +7380,8 @@
 
     <!-- ⏱ Automatischer Reload bei neuer Version -->
     <script>
-        // Version 1.0.6 - Manuell erhöhen bei jeder Änderung
-        const version = '1.0.6';
+        // Version 1.0.7 - Manuell erhöhen bei jeder Änderung
+        const version = '1.0.7';
 
         // Prüfe Version und erzwinge Hard-Reload wenn nötig
         const lastVersion = localStorage.getItem('app_version');
