@@ -1,4 +1,13 @@
-# \# 🚀 Projekt-Charly
+# 🚀 Projekt-Charly
+
+![MIT License](https://img.shields.io/badge/license-MIT-green)
+![Language](https://img.shields.io/badge/language-Deutsch-blue)
+![Tool](https://img.shields.io/badge/tool-Thunderbird-blue)
+
+🛠️ **Troubleshooting-Dokumentation und Workflows** für Windows, Thunderbird, GitHub und mehr.
+
+🛠️ **Troubleshooting-Dokumentation und Workflows** für Windows, Thunderbird, GitHub und mehr.
+
 
 # 
 
