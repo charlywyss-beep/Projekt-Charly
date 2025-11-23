@@ -1,23 +1,20 @@
 <html lang="de">
 
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Arbeitszeiten & Ferien – Projekt-Charly</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Arbeitszeiten & Ferien – Projekt-Charly</title>
 
-  <!-- 🔲 App-Icon einfügen -->
-  <link rel="icon" type="image/png" href="logo.png">
-  <link rel="apple-touch-icon" href="logo.png">
+    <!-- 🔲 App-Icon einfügen -->
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="apple-touch-icon" href="logo.png">
 
-  <!-- Optional: Theme-Farbe für Mobile -->
-  <meta name="theme-color" content="#0f172a">
-</head>
+    <!-- Optional: Theme-Farbe für Mobile -->
+    <meta name="theme-color" content="#0f172a">
 
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Arbeitszeit">
-    <link rel="apple-touch-icon"
-        href="data:image/svg+xml,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'&gt;&lt;rect width='100' height='100' fill='%236366F1'/&gt;&lt;text x='50' y='70' font-size='60' text-anchor='middle' fill='white'&gt;🕐&lt;/text&gt;&lt;/svg&gt;">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
@@ -953,7 +950,8 @@
                                     style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: rgb(107, 114, 128); pointer-events: none; font-size: 0.875rem; white-space: nowrap; display: block;">Morgen
                                     Kommen</label>
                                 <input type="time" id="mk" style="width: 100%; height: 54px; box-sizing: border-box;"
-                                    oninput="toggleLabel('mk')">
+                                    oninput="toggleLabel('mk')" onfocus="toggleLabel('mk')" onchange="toggleLabel('mk')"
+                                    onblur="toggleLabel('mk')">
                             </div>
                             <button class="clear-btn" id="c-mk" onclick="clearField('mk')">✕</button>
                         </div>
@@ -965,7 +963,8 @@
                                     style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: rgb(107, 114, 128); pointer-events: none; font-size: 0.875rem; white-space: nowrap; display: block;">Morgen
                                     Gehen</label>
                                 <input type="time" id="mg" style="width: 100%; height: 54px; box-sizing: border-box;"
-                                    oninput="toggleLabel('mg')">
+                                    oninput="toggleLabel('mg')" onfocus="toggleLabel('mg')" onchange="toggleLabel('mg')"
+                                    onblur="toggleLabel('mg')">
                             </div>
                             <button class="clear-btn" id="c-mg" onclick="clearField('mg')">✕</button>
                         </div>
@@ -977,7 +976,8 @@
                                     style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: rgb(107, 114, 128); pointer-events: none; font-size: 0.875rem; white-space: nowrap; display: block;">Mittag
                                     Kommen</label>
                                 <input type="time" id="mittk" style="width: 100%; height: 54px; box-sizing: border-box;"
-                                    oninput="toggleLabel('mittk')">
+                                    oninput="toggleLabel('mittk')" onfocus="toggleLabel('mittk')"
+                                    onchange="toggleLabel('mittk')" onblur="toggleLabel('mittk')">
                             </div>
                             <button class="clear-btn" id="c-mittk" onclick="clearField('mittk')">✕</button>
                         </div>
@@ -989,7 +989,8 @@
                                     style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: rgb(107, 114, 128); pointer-events: none; font-size: 0.875rem; white-space: nowrap; display: block;">Abend
                                     Gehen</label>
                                 <input type="time" id="ag" style="width: 100%; height: 54px; box-sizing: border-box;"
-                                    oninput="toggleLabel('ag')">
+                                    oninput="toggleLabel('ag')" onfocus="toggleLabel('ag')" onchange="toggleLabel('ag')"
+                                    onblur="toggleLabel('ag')">
                             </div>
                             <button class="clear-btn" id="c-ag" onclick="clearField('ag')">✕</button>
                         </div>
@@ -7298,13 +7299,14 @@
             }
         });
 
-        // Toggle label visibility based on input value
+        // Toggle label visibility based on input value and focus
         function toggleLabel(id) {
             const input = document.getElementById(id);
             const label = document.getElementById(`label-${id}`);
 
             if (input && label) {
-                if (input.value) {
+                // Hide label if input has value OR is focused
+                if (input.value || document.activeElement === input) {
                     label.style.display = 'none';
                 } else {
                     label.style.display = 'block';
