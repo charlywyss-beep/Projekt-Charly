@@ -4,13 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arbeitszeitrechner</title>
-<!-- 🔲 App-Icon einfügen -->
-  <link rel="icon" type="image/png" href="logo.png">
-  <link rel="apple-touch-icon" href="logo.png">
 
-  <!-- Optional: Theme-Farbe für Mobile -->
-  <meta name="theme-color" content="#0f172a">
-</head>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Arbeitszeit">
@@ -737,6 +731,15 @@
         }
 
         @media (max-width: 480px) {
+            body {
+                padding: 0.75rem !important;
+            }
+
+            .container {
+                max-width: 100% !important;
+                overflow-x: hidden !important;
+            }
+
             h1 {
                 font-size: 1.25rem;
             }
@@ -763,6 +766,8 @@
             .arbeitszeit-kachel {
                 width: 100% !important;
                 max-width: 100% !important;
+                box-sizing: border-box !important;
+                padding: 1rem !important;
             }
 
             /* Fix für Labels: Hintergrund-Layer und Z-Index */
