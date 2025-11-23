@@ -833,6 +833,16 @@
                 min-width: 30px !important;
                 flex-shrink: 0 !important;
                 font-size: 0.8rem !important;
+                z-index: 20 !important;
+                position: relative;
+                visibility: hidden;
+                /* Standardmäßig unsichtbar, aber Platz belegend */
+                display: flex !important;
+                /* Immer im Layout! */
+            }
+
+            .clear-btn.visible {
+                visibility: visible !important;
             }
         }
     </style>
@@ -7377,6 +7387,40 @@
 
     <!-- ⏱ Automatischer Reload bei neuer Version -->
     <script>
+        // Hilfsfunktionen für Labels und Clear-Buttons
+        function toggleLabel(id) {
+            // Labels sind jetzt pointer-events: none, also rein visuell
+            // Wir müssen hier nichts tun, da das Label immer sichtbar bleibt (als Overlay)
+            // oder wir könnten es ausblenden wenn wir wollten.
+            // Aber wichtiger ist updateClear:
+            updateClear();
+        }
+
+        function updateClear() {
+            ['mk', 'mg', 'mittk', 'ag'].forEach(id => {
+                const clearBtn = document.getElementById(`c-${id}`);
+                const input = document.getElementById(id);
+
+                if (input && clearBtn) {
+                    // Nutze visibility statt display, damit Layout stabil bleibt
+                    if (input.value) {
+                        clearBtn.style.visibility = 'visible';
+                        clearBtn.classList.add('visible');
+                    } else {
+                        clearBtn.style.visibility = 'hidden';
+                        clearBtn.classList.remove('visible');
+                    }
+                    // Stelle sicher, dass display immer flex ist
+                    clearBtn.style.display = 'flex';
+                }
+            });
+        }
+
+        // Initiale Ausführung
+        document.addEventListener('DOMContentLoaded', () => {
+            updateClear();
+        });
+
         // Version 1.0.9 - Manuell erhöhen bei jeder Änderung
         const version = '1.0.9';
 
