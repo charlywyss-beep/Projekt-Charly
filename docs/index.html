@@ -894,7 +894,10 @@
         <div class="header">
             <div class="card"
                 style="flex: 1; min-width: 300px; margin: 0; display: flex; justify-content: space-between; align-items: center;">
-                <h1><span>🕐</span>Arbeitszeiten</h1>
+                <div style="display: flex; align-items: baseline; gap: 0.5rem;">
+                    <h1><span>🕐</span>Arbeitszeiten</h1>
+                    <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;">v1.0.5</span>
+                </div>
                 <div id="user-info" style="text-align: right; font-size: 0.875rem; color: #6B7280; line-height: 1.4;">
                     <div class="user-info-name">Wyss Charly</div>
                     <div class="user-info-persnr">Pers. Nr. 1972</div>
@@ -7371,8 +7374,8 @@
 
     <!-- ⏱ Automatischer Reload bei neuer Version -->
     <script>
-        // Version 1.0.4 - Manuell erhöhen bei jeder Änderung
-        const version = '1.0.4';
+        // Version 1.0.5 - Manuell erhöhen bei jeder Änderung
+        const version = '1.0.5';
 
         // Prüfe Version und erzwinge Hard-Reload wenn nötig
         const lastVersion = localStorage.getItem('app_version');
