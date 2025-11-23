@@ -786,46 +786,49 @@
                 padding: 1rem !important;
             }
 
-            /* Fix für Labels im Dark Mode - heller und immer sichtbar */
+            /* Fix für Labels im Dark Mode - WEISS für Sichtbarkeit */
             label[for="mk"],
             label[for="mg"],
             label[for="mittk"],
             label[for="ag"] {
-                color: #9CA3AF !important;
+                color: #6B7280 !important;
                 z-index: 0 !important;
+                font-size: 0.875rem !important;
             }
 
             body.dark label[for="mk"],
             body.dark label[for="mg"],
             body.dark label[for="mittk"],
             body.dark label[for="ag"] {
-                color: #D1D5DB !important;
+                color: #FFFFFF !important;
+                opacity: 0.9 !important;
             }
 
-            /* Zeit-Input Rows: weniger gap */
+            /* Zeit-Input Rows: minimales gap */
             .arbeitszeit-kachel>div>div[style*="grid-row"] {
-                gap: 0.25rem !important;
+                gap: 0.125rem !important;
             }
 
-            /* Fix für time inputs */
+            /* Fix für time inputs - schmaler */
             input[type="time"] {
                 background: white !important;
                 position: relative;
                 z-index: 1;
-                padding: 0.5rem !important;
+                padding: 0.4rem !important;
+                font-size: 0.9rem !important;
             }
 
             body.dark input[type="time"] {
                 background: #374151 !important;
             }
 
-            /* Clear-Buttons kleiner */
+            /* Clear-Buttons sehr klein */
             .clear-btn {
-                width: 32px !important;
-                height: 32px !important;
-                min-width: 32px !important;
+                width: 30px !important;
+                height: 30px !important;
+                min-width: 30px !important;
                 flex-shrink: 0 !important;
-                font-size: 0.875rem !important;
+                font-size: 0.8rem !important;
             }
         }
     </style>
@@ -7367,8 +7370,8 @@
 
     <!-- ⏱ Automatischer Reload bei neuer Version -->
     <script>
-        // Version 1.0.0 - Manuell erhöhen bei jeder Änderung
-        const version = '1.0.0';
+        // Version 1.0.1 - Manuell erhöhen bei jeder Änderung
+        const version = '1.0.1';
 
         if (localStorage.getItem('app_version') !== version) {
             localStorage.setItem('app_version', version);
