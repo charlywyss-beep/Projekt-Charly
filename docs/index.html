@@ -918,7 +918,7 @@
                 style="flex: 1; min-width: 300px; margin: 0; display: flex; justify-content: space-between; align-items: center; position: relative;">
                 <div style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
                     <h1><span>🕐</span>Arbeitszeiten</h1>
-                    <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;">v1.1.0</span>
+                    <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;">v1.1.1</span>
                 </div>
                 <div id="user-info" style="text-align: right; font-size: 0.875rem; color: #6B7280; line-height: 1.4;">
                     <div class="user-info-name">Wyss Charly</div>
@@ -999,51 +999,51 @@
                         <!-- Zeile 2: LEER (entspricht "Normaler Arbeitstag" rechts) -->
 
                         <!-- Zeile 3: Morgen Kommen -->
-                        <div style="grid-row: 3; display: flex; align-items: center; gap: 0.5rem;">
-                            <div style="position: relative; flex: 1;">
-                                <label for="mk" id="label-mk"
-                                    style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: rgb(107, 114, 128); pointer-events: none; font-size: 0.875rem; white-space: nowrap; display: block;">Morgen
-                                    Kommen</label>
-                                <input type="time" id="mk" style="width: 100%; height: 54px; box-sizing: border-box;"
-                                    oninput="toggleLabel('mk')">
-                            </div>
-                            <button class="clear-btn" id="c-mk" onclick="clearField('mk')">✕</button>
+                        <div style="grid-row: 3; position: relative;">
+                            <label for="mk" id="label-mk"
+                                style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: rgb(107, 114, 128); pointer-events: none; font-size: 0.875rem; white-space: nowrap; z-index: 10;">Morgen
+                                Kommen</label>
+                            <input type="time" id="mk"
+                                style="width: 100%; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;"
+                                oninput="toggleLabel('mk')">
+                            <button class="clear-btn" id="c-mk" onclick="clearField('mk')"
+                                style="position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%);">✕</button>
                         </div>
 
                         <!-- Zeile 4: Morgen Gehen -->
-                        <div style="grid-row: 4; display: flex; align-items: center; gap: 0.5rem;">
-                            <div style="position: relative; flex: 1;">
-                                <label for="mg" id="label-mg"
-                                    style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: rgb(107, 114, 128); pointer-events: none; font-size: 0.875rem; white-space: nowrap; display: block;">Morgen
-                                    Gehen</label>
-                                <input type="time" id="mg" style="width: 100%; height: 54px; box-sizing: border-box;"
-                                    oninput="toggleLabel('mg')">
-                            </div>
-                            <button class="clear-btn" id="c-mg" onclick="clearField('mg')">✕</button>
+                        <div style="grid-row: 4; position: relative;">
+                            <label for="mg" id="label-mg"
+                                style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: rgb(107, 114, 128); pointer-events: none; font-size: 0.875rem; white-space: nowrap; z-index: 10;">Morgen
+                                Gehen</label>
+                            <input type="time" id="mg"
+                                style="width: 100%; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;"
+                                oninput="toggleLabel('mg')">
+                            <button class="clear-btn" id="c-mg" onclick="clearField('mg')"
+                                style="position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%);">✕</button>
                         </div>
 
                         <!-- Zeile 5: Mittag Kommen -->
-                        <div style="grid-row: 5; display: flex; align-items: center; gap: 0.5rem;">
-                            <div style="position: relative; flex: 1;">
-                                <label for="mittk" id="label-mittk"
-                                    style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: rgb(107, 114, 128); pointer-events: none; font-size: 0.875rem; white-space: nowrap; display: block;">Mittag
-                                    Kommen</label>
-                                <input type="time" id="mittk" style="width: 100%; height: 54px; box-sizing: border-box;"
-                                    oninput="toggleLabel('mittk')">
-                            </div>
-                            <button class="clear-btn" id="c-mittk" onclick="clearField('mittk')">✕</button>
+                        <div style="grid-row: 5; position: relative;">
+                            <label for="mittk" id="label-mittk"
+                                style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: rgb(107, 114, 128); pointer-events: none; font-size: 0.875rem; white-space: nowrap; z-index: 10;">Mittag
+                                Kommen</label>
+                            <input type="time" id="mittk"
+                                style="width: 100%; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;"
+                                oninput="toggleLabel('mittk')">
+                            <button class="clear-btn" id="c-mittk" onclick="clearField('mittk')"
+                                style="position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%);">✕</button>
                         </div>
 
                         <!-- Zeile 6: Abend Gehen -->
-                        <div style="grid-row: 6; display: flex; align-items: center; gap: 0.5rem;">
-                            <div style="position: relative; flex: 1;">
-                                <label for="ag" id="label-ag"
-                                    style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: rgb(107, 114, 128); pointer-events: none; font-size: 0.875rem; white-space: nowrap; display: block;">Abend
-                                    Gehen</label>
-                                <input type="time" id="ag" style="width: 100%; height: 54px; box-sizing: border-box;"
-                                    oninput="toggleLabel('ag')">
-                            </div>
-                            <button class="clear-btn" id="c-ag" onclick="clearField('ag')">✕</button>
+                        <div style="grid-row: 6; position: relative;">
+                            <label for="ag" id="label-ag"
+                                style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: rgb(107, 114, 128); pointer-events: none; font-size: 0.875rem; white-space: nowrap; z-index: 10;">Abend
+                                Gehen</label>
+                            <input type="time" id="ag"
+                                style="width: 100%; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;"
+                                oninput="toggleLabel('ag')">
+                            <button class="clear-btn" id="c-ag" onclick="clearField('ag')"
+                                style="position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%);">✕</button>
                         </div>
 
                         <!-- Zeile 8: LEER (entspricht "Überzeit-Kompensation" rechts) -->
@@ -7438,8 +7438,8 @@
             updateClear();
         });
 
-        // Version 1.1.0 - Manuell erhöhen bei jeder Änderung
-        const version = '1.1.0';
+        // Version 1.1.1 - Manuell erhöhen bei jeder Änderung
+        const version = '1.1.1';
 
         // Prüfe Version und erzwinge Hard-Reload wenn nötig
         const lastVersion = localStorage.getItem('app_version');
