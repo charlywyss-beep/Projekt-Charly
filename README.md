@@ -4,6 +4,24 @@
 
 Troubleshooting-Dokumentation und Workflows für Windows, Thunderbird, GitHub und mehr.
 
+
+
+\## Inhalt
+
+
+
+\- \[Beschreibung](#beschreibung)
+
+\- \[Inhalt](#inhalt)
+
+\- \[Lizenz](#lizenz)
+
+\- \[Dokumentation](#dokumentation)
+
+\- \[Registry-Tweaks](#registry-tweaks)
+
+
+
 ## Inhalt
 
 * Schritt-für-Schritt-Guides
@@ -21,17 +39,12 @@ Projekt-Charly
 
 
 ## Dokumentation
-- [Thunderbird Setup](thunderbird-setup.md)
+
+* [Thunderbird Setup](thunderbird-setup.md)
+
 ## Registry-Tweaks
-- [Disable Telemetry](disable-telemetry.reg)
-- [Font Fix](font-fix.reg)
-- [Drafts Folder](drafts-folder.reg)
-- [Backup Thunderbird](backup-thunderbird.reg)
 
-
-
-
-
-
-
-
+* [Disable Telemetry](disable-telemetry.reg)
+* [Font Fix](font-fix.reg)
+* [Drafts Folder](drafts-folder.reg)
+* [Backup Thunderbird](backup-thunderbird.reg)
