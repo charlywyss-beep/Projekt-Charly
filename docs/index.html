@@ -783,45 +783,34 @@
                 width: 100% !important;
                 max-width: 100% !important;
                 box-sizing: border-box !important;
-                padding: 0.75rem !important;
-                overflow: hidden !important;
+                padding: 1rem !important;
             }
 
-            /* Zeitfeld-Container */
-            .arbeitszeit-kachel>div>div[style*="grid-row"] {
-                gap: 0.125rem !important;
-            }
-
-            /* Wrapper für Input + Button */
-            .arbeitszeit-kachel>div>div[style*="grid-row"]>div[style*="flex"] {
-                gap: 0.125rem !important;
-                max-width: 100% !important;
-            }
-
-            /* Fix für time inputs */
+            /* Fix für Labels: Hintergrund-Layer und Z-Index */
             input[type="time"] {
                 background: white !important;
                 position: relative;
                 z-index: 1;
-                min-width: 0 !important;
-                max-width: calc(100% - 30px) !important;
-                padding: 0.4rem !important;
-                font-size: 0.9rem !important;
-                flex: 1 !important;
             }
 
             body.dark input[type="time"] {
                 background: #374151 !important;
             }
 
-            /* Clear-Buttons noch kleiner damit sie sichtbar bleiben */
+            /* Labels hinter den Inputs */
+            input[type="time"]+label,
+            label[for="mk"],
+            label[for="mg"],
+            label[for="mittk"],
+            label[for="ag"] {
+                z-index: 0 !important;
+            }
+
+            /* Clear-Buttons innerhalb der Kachel */
             .clear-btn {
-                width: 28px !important;
-                height: 28px !important;
-                min-width: 28px !important;
+                width: 36px !important;
+                height: 36px !important;
                 flex-shrink: 0 !important;
-                font-size: 0.75rem !important;
-                padding: 0 !important;
             }
         }
     </style>
@@ -966,48 +955,51 @@
                         <!-- Zeile 2: LEER (entspricht "Normaler Arbeitstag" rechts) -->
 
                         <!-- Zeile 3: Morgen Kommen -->
-                        <div style="grid-row: 3; display: flex; flex-direction: column; gap: 0.25rem;">
-                            <label for="mk" class="time-label">Morgen Kommen</label>
-                            <div style="display: flex; gap: 0.25rem; align-items: center;">
-                                <input type="time" id="mk"
-                                    style="width: 100%; height: 48px; box-sizing: border-box; flex: 1;"
-                                    oninput="updateClear()" onchange="updateClear()">
-                                <button class="clear-btn" id="c-mk" onclick="clearField('mk')">✕</button>
+                        <div style="grid-row: 3; display: flex; align-items: center; gap: 0.5rem;">
+                            <div style="position: relative; flex: 1;">
+                                <label for="mk" id="label-mk"
+                                    style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: rgb(107, 114, 128); pointer-events: none; font-size: 0.875rem; white-space: nowrap; display: block;">Morgen
+                                    Kommen</label>
+                                <input type="time" id="mk" style="width: 100%; height: 54px; box-sizing: border-box;"
+                                    oninput="toggleLabel('mk')">
                             </div>
+                            <button class="clear-btn" id="c-mk" onclick="clearField('mk')">✕</button>
                         </div>
 
                         <!-- Zeile 4: Morgen Gehen -->
-                        <div style="grid-row: 4; display: flex; flex-direction: column; gap: 0.25rem;">
-                            <label for="mg" class="time-label">Morgen Gehen</label>
-                            <div style="display: flex; gap: 0.25rem; align-items: center;">
-                                <input type="time" id="mg"
-                                    style="width: 100%; height: 48px; box-sizing: border-box; flex: 1;"
-                                    oninput="updateClear()" onchange="updateClear()">
-                                <button class="clear-btn" id="c-mg" onclick="clearField('mg')">✕</button>
+                        <div style="grid-row: 4; display: flex; align-items: center; gap: 0.5rem;">
+                            <div style="position: relative; flex: 1;">
+                                <label for="mg" id="label-mg"
+                                    style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: rgb(107, 114, 128); pointer-events: none; font-size: 0.875rem; white-space: nowrap; display: block;">Morgen
+                                    Gehen</label>
+                                <input type="time" id="mg" style="width: 100%; height: 54px; box-sizing: border-box;"
+                                    oninput="toggleLabel('mg')">
                             </div>
+                            <button class="clear-btn" id="c-mg" onclick="clearField('mg')">✕</button>
                         </div>
 
                         <!-- Zeile 5: Mittag Kommen -->
-                        <div style="grid-row: 5; display: flex; flex-direction: column; gap: 0.25rem;">
-                            <label for="mittk" class="time-label">Mittag
-                                Kommen</label>
-                            <div style="display: flex; gap: 0.25rem; align-items: center;">
-                                <input type="time" id="mittk"
-                                    style="width: 100%; height: 48px; box-sizing: border-box; flex: 1;"
-                                    oninput="updateClear()" onchange="updateClear()">
-                                <button class="clear-btn" id="c-mittk" onclick="clearField('mittk')">✕</button>
+                        <div style="grid-row: 5; display: flex; align-items: center; gap: 0.5rem;">
+                            <div style="position: relative; flex: 1;">
+                                <label for="mittk" id="label-mittk"
+                                    style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: rgb(107, 114, 128); pointer-events: none; font-size: 0.875rem; white-space: nowrap; display: block;">Mittag
+                                    Kommen</label>
+                                <input type="time" id="mittk" style="width: 100%; height: 54px; box-sizing: border-box;"
+                                    oninput="toggleLabel('mittk')">
                             </div>
+                            <button class="clear-btn" id="c-mittk" onclick="clearField('mittk')">✕</button>
                         </div>
 
                         <!-- Zeile 6: Abend Gehen -->
-                        <div style="grid-row: 6; display: flex; flex-direction: column; gap: 0.25rem;">
-                            <label for="ag" class="time-label">Abend Gehen</label>
-                            <div style="display: flex; gap: 0.25rem; align-items: center;">
-                                <input type="time" id="ag"
-                                    style="width: 100%; height: 48px; box-sizing: border-box; flex: 1;"
-                                    oninput="updateClear()" onchange="updateClear()">
-                                <button class="clear-btn" id="c-ag" onclick="clearField('ag')">✕</button>
+                        <div style="grid-row: 6; display: flex; align-items: center; gap: 0.5rem;">
+                            <div style="position: relative; flex: 1;">
+                                <label for="ag" id="label-ag"
+                                    style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: rgb(107, 114, 128); pointer-events: none; font-size: 0.875rem; white-space: nowrap; display: block;">Abend
+                                    Gehen</label>
+                                <input type="time" id="ag" style="width: 100%; height: 54px; box-sizing: border-box;"
+                                    oninput="toggleLabel('ag')">
                             </div>
+                            <button class="clear-btn" id="c-ag" onclick="clearField('ag')">✕</button>
                         </div>
 
                         <!-- Zeile 8: LEER (entspricht "Überzeit-Kompensation" rechts) -->
