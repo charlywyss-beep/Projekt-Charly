@@ -811,8 +811,7 @@
             label[for="mg"].hidden,
             label[for="mittk"].hidden,
             label[for="ag"].hidden {
-                opacity: 0 !important;
-                visibility: hidden !important;
+                display: none !important;
             }
 
             /* Zeit-Input Rows: minimales gap */
@@ -825,10 +824,11 @@
                 background: white !important;
                 position: relative;
                 z-index: 1;
-                padding: 0.4rem !important;
+                padding: 0.75rem !important;
+                padding-right: 3rem !important;
+                /* Mehr Platz für Clear-Button */
                 font-size: 0.9rem !important;
-                flex: 1 !important;
-                min-width: 0 !important;
+                border-radius: 0.5rem !important;
             }
 
             body.dark input[type="time"] {
@@ -918,7 +918,7 @@
                 style="flex: 1; min-width: 300px; margin: 0; display: flex; justify-content: space-between; align-items: center; position: relative;">
                 <div style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
                     <h1><span>🕐</span>Arbeitszeiten</h1>
-                    <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;">v1.1.1</span>
+                    <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;">v1.1.2</span>
                 </div>
                 <div id="user-info" style="text-align: right; font-size: 0.875rem; color: #6B7280; line-height: 1.4;">
                     <div class="user-info-name">Wyss Charly</div>
@@ -7438,8 +7438,8 @@
             updateClear();
         });
 
-        // Version 1.1.1 - Manuell erhöhen bei jeder Änderung
-        const version = '1.1.1';
+        // Version 1.1.2 - Manuell erhöhen bei jeder Änderung
+        const version = '1.1.2';
 
         // Prüfe Version und erzwinge Hard-Reload wenn nötig
         const lastVersion = localStorage.getItem('app_version');
