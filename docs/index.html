@@ -843,7 +843,10 @@
                 flex-shrink: 0 !important;
                 font-size: 0.8rem !important;
                 z-index: 20 !important;
-                position: relative;
+                position: absolute !important;
+                right: 0.5rem !important;
+                top: 50% !important;
+                transform: translateY(-50%) !important;
                 visibility: hidden;
                 /* Standardmäßig unsichtbar, aber Platz belegend */
                 display: flex !important;
@@ -852,6 +855,30 @@
 
             .clear-btn.visible {
                 visibility: visible !important;
+            }
+
+            /* Container für Input + Button */
+            .time-input-container {
+                position: relative !important;
+                width: 100% !important;
+            }
+
+            /* Input-Felder - identisch zu Normaler Arbeitstag */
+            .time-input-container input[type="time"] {
+                width: 100% !important;
+                height: 54px !important;
+                box-sizing: border-box !important;
+                padding: 0.75rem !important;
+                padding-right: 2.5rem !important;
+                border-radius: 0.5rem !important;
+                font-size: 0.9rem !important;
+                background: white !important;
+                border: 1px solid rgba(0, 0, 0, 0.1) !important;
+            }
+
+            body.dark .time-input-container input[type="time"] {
+                background: #374151 !important;
+                border: 1px solid rgba(255, 255, 255, 0.1) !important;
             }
         }
     </style>
@@ -918,7 +945,7 @@
                 style="flex: 1; min-width: 300px; margin: 0; display: flex; justify-content: space-between; align-items: center; position: relative;">
                 <div style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
                     <h1><span>🕐</span>Arbeitszeiten</h1>
-                    <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;">v1.1.5</span>
+                    <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;">v1.1.6</span>
                 </div>
                 <div id="user-info" style="text-align: right; font-size: 0.875rem; color: #6B7280; line-height: 1.4;">
                     <div class="user-info-name">Wyss Charly</div>
@@ -999,51 +1026,40 @@
                         <!-- Zeile 2: LEER (entspricht "Normaler Arbeitstag" rechts) -->
 
                         <!-- Zeile 3: Morgen Kommen -->
-                        <div style="grid-row: 3; position: relative;">
+                        <div style="grid-row: 3;" class="time-input-container">
                             <label for="mk" id="label-mk"
                                 style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: rgb(107, 114, 128); pointer-events: none; font-size: 0.875rem; white-space: nowrap; z-index: 10;">Morgen
                                 Kommen</label>
-                            <input type="time" id="mk"
-                                style="width: 100%; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;"
-                                oninput="toggleLabel('mk')" onchange="toggleLabel('mk')">
-                            <button class="clear-btn" id="c-mk" onclick="clearField('mk')"
-                                style="position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%);">✕</button>
+                            <input type="time" id="mk" oninput="toggleLabel('mk')" onchange="toggleLabel('mk')">
+                            <button class="clear-btn" id="c-mk" onclick="clearField('mk')">✕</button>
                         </div>
 
                         <!-- Zeile 4: Morgen Gehen -->
-                        <div style="grid-row: 4; position: relative;">
+                        <div style="grid-row: 4;" class="time-input-container">
                             <label for="mg" id="label-mg"
                                 style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: rgb(107, 114, 128); pointer-events: none; font-size: 0.875rem; white-space: nowrap; z-index: 10;">Morgen
                                 Gehen</label>
-                            <input type="time" id="mg"
-                                style="width: 100%; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;"
-                                oninput="toggleLabel('mg')" onchange="toggleLabel('mg')">
-                            <button class="clear-btn" id="c-mg" onclick="clearField('mg')"
-                                style="position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%);">✕</button>
+                            <input type="time" id="mg" oninput="toggleLabel('mg')" onchange="toggleLabel('mg')">
+                            <button class="clear-btn" id="c-mg" onclick="clearField('mg')">✕</button>
                         </div>
 
                         <!-- Zeile 5: Mittag Kommen -->
-                        <div style="grid-row: 5; position: relative;">
+                        <div style="grid-row: 5;" class="time-input-container">
                             <label for="mittk" id="label-mittk"
                                 style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: rgb(107, 114, 128); pointer-events: none; font-size: 0.875rem; white-space: nowrap; z-index: 10;">Mittag
                                 Kommen</label>
-                            <input type="time" id="mittk"
-                                style="width: 100%; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;"
-                                oninput="toggleLabel('mittk')" onchange="toggleLabel('mittk')">
-                            <button class="clear-btn" id="c-mittk" onclick="clearField('mittk')"
-                                style="position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%);">✕</button>
+                            <input type="time" id="mittk" oninput="toggleLabel('mittk')"
+                                onchange="toggleLabel('mittk')">
+                            <button class="clear-btn" id="c-mittk" onclick="clearField('mittk')">✕</button>
                         </div>
 
                         <!-- Zeile 6: Abend Gehen -->
-                        <div style="grid-row: 6; position: relative;">
+                        <div style="grid-row: 6;" class="time-input-container">
                             <label for="ag" id="label-ag"
                                 style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: rgb(107, 114, 128); pointer-events: none; font-size: 0.875rem; white-space: nowrap; z-index: 10;">Abend
                                 Gehen</label>
-                            <input type="time" id="ag"
-                                style="width: 100%; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;"
-                                oninput="toggleLabel('ag')" onchange="toggleLabel('ag')">
-                            <button class="clear-btn" id="c-ag" onclick="clearField('ag')"
-                                style="position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%);">✕</button>
+                            <input type="time" id="ag" oninput="toggleLabel('ag')" onchange="toggleLabel('ag')">
+                            <button class="clear-btn" id="c-ag" onclick="clearField('ag')">✕</button>
                         </div>
 
                         <!-- Zeile 8: LEER (entspricht "Überzeit-Kompensation" rechts) -->
@@ -7438,8 +7454,8 @@
             updateClear();
         });
 
-        // Version 1.1.5 - Manuell erhöhen bei jeder Änderung
-        const version = '1.1.5';
+        // Version 1.1.6 - Manuell erhöhen bei jeder Änderung
+        const version = '1.1.6';
 
         // Prüfe Version und erzwinge Hard-Reload wenn nötig
         const lastVersion = localStorage.getItem('app_version');
