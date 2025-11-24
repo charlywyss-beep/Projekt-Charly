@@ -1,20 +1,15 @@
 <html lang="de">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Arbeitszeiten & Ferien – Projekt-Charly</title>
-
-    <!-- 🔲 App-Icon einfügen -->
-    <link rel="icon" type="image/png" href="logo.png">
-    <link rel="apple-touch-icon" href="logo.png">
-
-    <!-- Optional: Theme-Farbe für Mobile -->
-    <meta name="theme-color" content="#0f172a">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arbeitszeitrechner</title>
 
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Arbeitszeit">
+    <link rel="apple-touch-icon"
+        href="data:image/svg+xml,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'&gt;&lt;rect width='100' height='100' fill='%236366F1'/&gt;&lt;text x='50' y='70' font-size='60' text-anchor='middle' fill='white'&gt;🕐&lt;/text&gt;&lt;/svg&gt;">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
@@ -301,17 +296,6 @@
 
         body.dark label {
             color: #9CA3AF;
-        }
-
-        .time-label {
-            font-size: 0.75rem;
-            color: #6B7280;
-            margin: 0;
-            font-weight: 500;
-        }
-
-        body.dark .time-label {
-            color: #D1D5DB;
         }
 
         .user-info-name {
@@ -746,16 +730,7 @@
             font-size: 0.95rem;
         }
 
-        @media (max-width: 480px) and (hover: none) and (pointer: coarse) {
-            body {
-                padding: 0.75rem !important;
-            }
-
-            .container {
-                max-width: 100% !important;
-                overflow-x: hidden !important;
-            }
-
+        @media (max-width: 480px) {
             h1 {
                 font-size: 1.25rem;
             }
@@ -771,87 +746,6 @@
 
             .tab {
                 min-width: auto;
-            }
-
-            /* Mobile Fixes für iPhone */
-            .kachel-grid {
-                grid-template-columns: 1fr !important;
-                gap: 1rem !important;
-            }
-
-            .arbeitszeit-kachel {
-                width: 100% !important;
-                max-width: 100% !important;
-                box-sizing: border-box !important;
-                padding: 1rem !important;
-            }
-
-            /* Fix für Labels im Dark Mode - WEISS für Sichtbarkeit */
-            label[for="mk"],
-            label[for="mg"],
-            label[for="mittk"],
-            label[for="ag"] {
-                color: #6B7280 !important;
-                z-index: 10 !important;
-                pointer-events: none !important;
-                font-size: 0.875rem !important;
-                transition: opacity 0.2s !important;
-            }
-
-            body.dark label[for="mk"],
-            body.dark label[for="mg"],
-            body.dark label[for="mittk"],
-            body.dark label[for="ag"] {
-                color: #FFFFFF !important;
-                opacity: 0.9 !important;
-            }
-
-            /* Label ausblenden wenn Input Wert hat */
-            label[for="mk"].hidden,
-            label[for="mg"].hidden,
-            label[for="mittk"].hidden,
-            label[for="ag"].hidden {
-                display: none !important;
-            }
-
-            /* Zeit-Input Rows: minimales gap */
-            .arbeitszeit-kachel>div>div[style*="grid-row"] {
-                gap: 0.125rem !important;
-            }
-
-            /* Fix für time inputs - zentriert mit gleichem Abstand */
-            input[type="time"] {
-                background: white !important;
-                position: relative;
-                z-index: 1;
-                padding: 0.75rem !important;
-                padding-right: 3rem !important;
-                /* Mehr Platz für Clear-Button */
-                font-size: 0.9rem !important;
-                border-radius: 0.5rem !important;
-            }
-
-            body.dark input[type="time"] {
-                background: #374151 !important;
-            }
-
-            /* Clear-Buttons sehr klein */
-            .clear-btn {
-                width: 30px !important;
-                height: 30px !important;
-                min-width: 30px !important;
-                flex-shrink: 0 !important;
-                font-size: 0.8rem !important;
-                z-index: 20 !important;
-                position: relative;
-                visibility: hidden;
-                /* Standardmäßig unsichtbar, aber Platz belegend */
-                display: flex !important;
-                /* Immer im Layout! */
-            }
-
-            .clear-btn.visible {
-                visibility: visible !important;
             }
         }
     </style>
@@ -915,11 +809,8 @@
     <div class="container">
         <div class="header">
             <div class="card"
-                style="flex: 1; min-width: 300px; margin: 0; display: flex; justify-content: space-between; align-items: center; position: relative;">
-                <div style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
-                    <h1><span>🕐</span>Arbeitszeiten</h1>
-                    <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;">v1.1.4</span>
-                </div>
+                style="flex: 1; min-width: 300px; margin: 0; display: flex; justify-content: space-between; align-items: center;">
+                <h1><span>🕐</span>Arbeitszeiten</h1>
                 <div id="user-info" style="text-align: right; font-size: 0.875rem; color: #6B7280; line-height: 1.4;">
                     <div class="user-info-name">Wyss Charly</div>
                     <div class="user-info-persnr">Pers. Nr. 1972</div>
@@ -998,52 +889,52 @@
 
                         <!-- Zeile 2: LEER (entspricht "Normaler Arbeitstag" rechts) -->
 
-                        <!-- Zeile 3: Morgen Kommen -->
-                        <div style="grid-row: 3; position: relative;">
-                            <label for="mk" id="label-mk"
-                                style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: rgb(107, 114, 128); pointer-events: none; font-size: 0.875rem; white-space: nowrap; z-index: 10;">Morgen
-                                Kommen</label>
-                            <input type="time" id="mk"
-                                style="width: 100%; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;"
-                                oninput="toggleLabel('mk')">
-                            <button class="clear-btn" id="c-mk" onclick="clearField('mk')"
-                                style="position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%);">✕</button>
+                        <!-- Zeile 3: Morgen Kommen (entspricht "Bezahlter Feiertag" rechts) -->
+                        <div style="grid-row: 3; display: flex; align-items: center; gap: 0.5rem;">
+                            <div style="position: relative; flex: 1;">
+                                <label for="mk" id="label-mk"
+                                    style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: rgb(107, 114, 128); pointer-events: none; font-size: 0.875rem; white-space: nowrap; display: block;">Morgen
+                                    Kommen</label>
+                                <input type="time" id="mk" style="width: 100%; height: 54px; box-sizing: border-box;"
+                                    oninput="toggleLabel('mk')">
+                            </div>
+                            <button class="clear-btn" id="c-mk" onclick="clearField('mk')">✕</button>
                         </div>
 
-                        <!-- Zeile 4: Morgen Gehen -->
-                        <div style="grid-row: 4; position: relative;">
-                            <label for="mg" id="label-mg"
-                                style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: rgb(107, 114, 128); pointer-events: none; font-size: 0.875rem; white-space: nowrap; z-index: 10;">Morgen
-                                Gehen</label>
-                            <input type="time" id="mg"
-                                style="width: 100%; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;"
-                                oninput="toggleLabel('mg')">
-                            <button class="clear-btn" id="c-mg" onclick="clearField('mg')"
-                                style="position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%);">✕</button>
+                        <!-- Zeile 4: Morgen Gehen (direkt unter Morgen Kommen) -->
+                        <div style="grid-row: 4; display: flex; align-items: center; gap: 0.5rem;">
+                            <div style="position: relative; flex: 1;">
+                                <label for="mg" id="label-mg"
+                                    style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: rgb(107, 114, 128); pointer-events: none; font-size: 0.875rem; white-space: nowrap; display: block;">Morgen
+                                    Gehen</label>
+                                <input type="time" id="mg" style="width: 100%; height: 54px; box-sizing: border-box;"
+                                    oninput="toggleLabel('mg')">
+                            </div>
+                            <button class="clear-btn" id="c-mg" onclick="clearField('mg')">✕</button>
                         </div>
 
-                        <!-- Zeile 5: Mittag Kommen -->
-                        <div style="grid-row: 5; position: relative;">
-                            <label for="mittk" id="label-mittk"
-                                style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: rgb(107, 114, 128); pointer-events: none; font-size: 0.875rem; white-space: nowrap; z-index: 10;">Mittag
-                                Kommen</label>
-                            <input type="time" id="mittk"
-                                style="width: 100%; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;"
-                                oninput="toggleLabel('mittk')">
-                            <button class="clear-btn" id="c-mittk" onclick="clearField('mittk')"
-                                style="position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%);">✕</button>
+                        <!-- Zeile 5: Mittag Kommen (direkt unter Morgen Gehen) -->
+                        <div style="grid-row: 5; display: flex; align-items: center; gap: 0.5rem;">
+                            <div style="position: relative; flex: 1;">
+                                <label for="mittk" id="label-mittk"
+                                    style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: rgb(107, 114, 128); pointer-events: none; font-size: 0.875rem; white-space: nowrap; display: block;">Mittag
+                                    Kommen</label>
+                                <input type="time" id="mittk" style="width: 100%; height: 54px; box-sizing: border-box;"
+                                    oninput="toggleLabel('mittk')">
+                            </div>
+                            <button class="clear-btn" id="c-mittk" onclick="clearField('mittk')">✕</button>
                         </div>
 
-                        <!-- Zeile 6: Abend Gehen -->
-                        <div style="grid-row: 6; position: relative;">
-                            <label for="ag" id="label-ag"
-                                style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: rgb(107, 114, 128); pointer-events: none; font-size: 0.875rem; white-space: nowrap; z-index: 10;">Abend
-                                Gehen</label>
-                            <input type="time" id="ag"
-                                style="width: 100%; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;"
-                                oninput="toggleLabel('ag')">
-                            <button class="clear-btn" id="c-ag" onclick="clearField('ag')"
-                                style="position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%);">✕</button>
+                        <!-- Zeile 6: Abend Gehen (direkt unter Mittag Kommen) -->
+                        <div style="grid-row: 6; display: flex; align-items: center; gap: 0.5rem;">
+                            <div style="position: relative; flex: 1;">
+                                <label for="ag" id="label-ag"
+                                    style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: rgb(107, 114, 128); pointer-events: none; font-size: 0.875rem; white-space: nowrap; display: block;">Abend
+                                    Gehen</label>
+                                <input type="time" id="ag" style="width: 100%; height: 54px; box-sizing: border-box;"
+                                    oninput="toggleLabel('ag')">
+                            </div>
+                            <button class="clear-btn" id="c-ag" onclick="clearField('ag')">✕</button>
                         </div>
 
                         <!-- Zeile 8: LEER (entspricht "Überzeit-Kompensation" rechts) -->
@@ -7350,41 +7241,6 @@
             }
         });
 
-        // Toggle label visibility based on input value and focus
-        function toggleLabel(id) {
-            const input = document.getElementById(id);
-            const label = document.getElementById(`label-${id}`);
-
-            if (input && label) {
-                // Hide label if input has value OR is focused
-                if (input.value || document.activeElement === input) {
-                    label.style.display = 'none';
-                } else {
-                    label.style.display = 'block';
-                }
-            }
-
-            updateClear();
-        }
-
-        // Update clear button visibility
-        function updateClear() {
-            ['mk', 'mg', 'mittk', 'ag'].forEach(id => {
-                const input = document.getElementById(id);
-                const clearBtn = document.getElementById(`c-${id}`);
-
-                if (input && clearBtn) {
-                    if (input.value) {
-                        clearBtn.classList.add('on');
-                        clearBtn.style.display = 'flex';
-                    } else {
-                        clearBtn.classList.remove('on');
-                        clearBtn.style.display = 'none';
-                    }
-                }
-            });
-        }
-
         window.addEventListener('click', (e) => {
             if (!e.target.closest('#export-menu') && !e.target.closest('.btn-sec')) {
                 document.getElementById('export-menu').classList.add('hidden');
@@ -7394,86 +7250,11 @@
         init();
     </script>
 
-    <!-- ⏱ Automatischer Reload bei neuer Version -->
-    <script>
-        // Hilfsfunktionen für Labels und Clear-Buttons
-        function toggleLabel(id) {
-            const input = document.getElementById(id);
-            const label = document.getElementById(`label-${id}`);
 
-            if (input && label) {
-                if (input.value) {
-                    label.classList.add('hidden');
-                } else {
-                    label.classList.remove('hidden');
-                }
-            }
-            updateClear();
-        }
 
-        function updateClear() {
-            ['mk', 'mg', 'mittk', 'ag'].forEach(id => {
-                const clearBtn = document.getElementById(`c-${id}`);
-                const input = document.getElementById(id);
 
-                if (input && clearBtn) {
-                    // Nutze visibility statt display, damit Layout stabil bleibt
-                    if (input.value) {
-                        clearBtn.style.visibility = 'visible';
-                        clearBtn.classList.add('visible');
-                    } else {
-                        clearBtn.style.visibility = 'hidden';
-                        clearBtn.classList.remove('visible');
-                    }
-                    // Stelle sicher, dass display immer flex ist
-                    clearBtn.style.display = 'flex';
-                }
-            });
-        }
 
-        // Initiale Ausführung
-        document.addEventListener('DOMContentLoaded', () => {
-            // Labels initial aktualisieren
-            ['mk', 'mg', 'mittk', 'ag'].forEach(id => toggleLabel(id));
-            updateClear();
-        });
 
-        // Version 1.1.4 - Manuell erhöhen bei jeder Änderung
-        const version = '1.1.4';
-
-        // Prüfe Version und erzwinge Hard-Reload wenn nötig
-        const lastVersion = localStorage.getItem('app_version');
-
-        if (lastVersion !== version) {
-            console.log(`Update erkannt: ${lastVersion} → ${version}`);
-            localStorage.setItem('app_version', version);
-
-            // Lösche alle Caches
-            if ('caches' in window) {
-                caches.keys().then(function (names) {
-                    for (let name of names) caches.delete(name);
-                });
-            }
-
-            // Reload mit Cache-Bypass
-            setTimeout(() => {
-                window.location.reload(true); // Hard reload
-            }, 100);
-        }
-
-        // Zusätzlich: Prüfe beim Fokus ob Update verfügbar (optional)
-        window.addEventListener('focus', function () {
-            // Lade Seite mit Cache-Bypass-Parameter neu
-            const url = new URL(window.location);
-            const currentCheck = url.searchParams.get('v');
-            if (!currentCheck || currentCheck !== version) {
-                url.searchParams.set('v', version);
-                if (currentCheck && currentCheck !== version) {
-                    window.location.href = url.toString();
-                }
-            }
-        });
-    </script>
 
 </body>
 
