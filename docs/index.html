@@ -825,8 +825,8 @@
                 position: relative;
                 z-index: 1;
                 padding: 0.75rem !important;
-                padding-right: 3rem !important;
-                /* Mehr Platz für Clear-Button */
+                padding-right: 2.5rem !important;
+                /* Reduziert für iOS Time-Picker */
                 font-size: 0.9rem !important;
                 border-radius: 0.5rem !important;
             }
@@ -918,7 +918,7 @@
                 style="flex: 1; min-width: 300px; margin: 0; display: flex; justify-content: space-between; align-items: center; position: relative;">
                 <div style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
                     <h1><span>🕐</span>Arbeitszeiten</h1>
-                    <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;">v1.1.4</span>
+                    <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;">v1.1.5</span>
                 </div>
                 <div id="user-info" style="text-align: right; font-size: 0.875rem; color: #6B7280; line-height: 1.4;">
                     <div class="user-info-name">Wyss Charly</div>
@@ -1005,7 +1005,7 @@
                                 Kommen</label>
                             <input type="time" id="mk"
                                 style="width: 100%; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;"
-                                oninput="toggleLabel('mk')">
+                                oninput="toggleLabel('mk')" onchange="toggleLabel('mk')">
                             <button class="clear-btn" id="c-mk" onclick="clearField('mk')"
                                 style="position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%);">✕</button>
                         </div>
@@ -1017,7 +1017,7 @@
                                 Gehen</label>
                             <input type="time" id="mg"
                                 style="width: 100%; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;"
-                                oninput="toggleLabel('mg')">
+                                oninput="toggleLabel('mg')" onchange="toggleLabel('mg')">
                             <button class="clear-btn" id="c-mg" onclick="clearField('mg')"
                                 style="position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%);">✕</button>
                         </div>
@@ -1029,7 +1029,7 @@
                                 Kommen</label>
                             <input type="time" id="mittk"
                                 style="width: 100%; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;"
-                                oninput="toggleLabel('mittk')">
+                                oninput="toggleLabel('mittk')" onchange="toggleLabel('mittk')">
                             <button class="clear-btn" id="c-mittk" onclick="clearField('mittk')"
                                 style="position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%);">✕</button>
                         </div>
@@ -1041,7 +1041,7 @@
                                 Gehen</label>
                             <input type="time" id="ag"
                                 style="width: 100%; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;"
-                                oninput="toggleLabel('ag')">
+                                oninput="toggleLabel('ag')" onchange="toggleLabel('ag')">
                             <button class="clear-btn" id="c-ag" onclick="clearField('ag')"
                                 style="position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%);">✕</button>
                         </div>
@@ -7438,8 +7438,8 @@
             updateClear();
         });
 
-        // Version 1.1.4 - Manuell erhöhen bei jeder Änderung
-        const version = '1.1.4';
+        // Version 1.1.5 - Manuell erhöhen bei jeder Änderung
+        const version = '1.1.5';
 
         // Prüfe Version und erzwinge Hard-Reload wenn nötig
         const lastVersion = localStorage.getItem('app_version');
