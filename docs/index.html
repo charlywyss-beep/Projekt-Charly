@@ -855,23 +855,56 @@
                 visibility: visible !important;
             }
 
-            /* NUR Mobile: Flex-Layout für Zeitfelder */
+            /* NUR Mobile: Flex-wrap Layout für Zeitfelder */
             div[style*="grid-row: 3"],
             div[style*="grid-row: 4"],
             div[style*="grid-row: 5"],
             div[style*="grid-row: 6"] {
                 display: flex !important;
+                flex-wrap: wrap !important;
                 align-items: center !important;
-                gap: 0.75rem !important;
+                gap: 0.5rem !important;
             }
 
-            /* Input: max-width für iOS Time-Picker Icon */
+            /* Label nimmt volle Breite - erscheint in erster Zeile */
+            div[style*="grid-row: 3"] label,
+            div[style*="grid-row: 4"] label,
+            div[style*="grid-row: 5"] label,
+            div[style*="grid-row: 6"] label {
+                flex-basis: 100% !important;
+                position: static !important;
+                transform: none !important;
+                left: auto !important;
+                top: auto !important;
+                font-size: 0.75rem !important;
+                color: #9CA3AF !important;
+                margin-bottom: 0 !important;
+                display: block !important;
+            }
+
+            body.dark div[style*="grid-row: 3"] label,
+            body.dark div[style*="grid-row: 4"] label,
+            body.dark div[style*="grid-row: 5"] label,
+            body.dark div[style*="grid-row: 6"] label {
+                color: #D1D5DB !important;
+            }
+
+            /* Input in zweiter Zeile */
             div[style*="grid-row: 3"] input,
             div[style*="grid-row: 4"] input,
             div[style*="grid-row: 5"] input,
             div[style*="grid-row: 6"] input {
                 flex: 0 1 auto !important;
-                max-width: 200px !important;
+                width: auto !important;
+                max-width: none !important;
+            }
+
+            /* Button neben Input in zweiter Zeile */
+            div[style*="grid-row: 3"] .clear-btn,
+            div[style*="grid-row: 4"] .clear-btn,
+            div[style*="grid-row: 5"] .clear-btn,
+            div[style*="grid-row: 6"] .clear-btn {
+                flex: 0 0 auto !important;
             }
         }
     </style>
@@ -939,7 +972,7 @@
                 <div style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
                     <div>
                         <h1><span>🕐</span>Arbeitszeiten</h1>
-                        <div style="font-size: 0.65rem; color: #9CA3AF; margin-top: 0.5rem; margin-left: 0.5rem;">v1.2.3
+                        <div style="font-size: 0.65rem; color: #9CA3AF; margin-top: 0.5rem; margin-left: 0.5rem;">v1.2.5
                         </div>
                     </div>
                     <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;"></span>
@@ -7462,8 +7495,8 @@
             updateClear();
         });
 
-        // Version 1.2.3 - Manuell erhöhen bei jeder Änderung
-        const version = '1.2.3';
+        // Version 1.2.5 - Manuell erhöhen bei jeder Änderung
+        const version = '1.2.5';
 
         // Prüfe Version und erzwinge Hard-Reload wenn nötig
         const lastVersion = localStorage.getItem('app_version');
