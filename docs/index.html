@@ -1002,7 +1002,7 @@
                     <div>
                         <h1><span>🕐</span>Arbeitszeiten</h1>
                         <div style="font-size: 0.65rem; color: #9CA3AF; margin-top: 0.5rem; margin-left: 0.5rem;">
-                            v1.2.11
+                            v1.2.12
                         </div>
                     </div>
                 </div>
@@ -2372,7 +2372,7 @@
                 </div>
                 <div id="urlaub-vorschau"
                     style="padding: 0.75rem; background: #F3F4F6; border-radius: 0.5rem; font-size: 0.875rem; color: #374151; display: none;">
-                    <strong>Vorschau:</strong> <span id="urlaub-anzahl">0</span> Arbeitstage werden als Urlaub markiert
+                    <strong>Vorschau:</strong> <span id="urlaub-anzahl">0</span> Arbeitage werden als Urlaub markiert
                 </div>
             </div>
             <div style="display: flex; gap: 0.5rem; margin-top: 1.5rem;">
@@ -2867,18 +2867,8 @@
         function clearField(id) {
             document.getElementById(id).value = '';
 
-            const fieldOrder = ['mk', 'mg', 'mittk', 'ag'];
-            const currentIndex = fieldOrder.indexOf(id);
-
-            for (let i = currentIndex + 1; i < fieldOrder.length; i++) {
-                document.getElementById(fieldOrder[i]).value = '';
-            }
-
-            // Toggle labels für alle geänderten Felder
+            // Toggle label für das geänderte Feld
             toggleLabel(id);
-            for (let i = currentIndex + 1; i < fieldOrder.length; i++) {
-                toggleLabel(fieldOrder[i]);
-            }
 
             calc();
             updateClear();
@@ -7520,8 +7510,8 @@
             updateClear();
         });
 
-        // Version 1.2.11 - Manuell erhöhen bei jeder Änderung
-        const version = '1.2.11';
+        // Version 1.2.12 - Manuell erhöhen bei jeder Änderung
+        const version = '1.2.12';
 
         // Prüfe Version und erzwinge Hard-Reload wenn nötig
         const lastVersion = localStorage.getItem('app_version');
