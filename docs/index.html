@@ -932,27 +932,82 @@
             div[style*="grid-row: 5"] .clear-btn,
             div[style*="grid-row: 6"] .clear-btn {
                 flex: 0 0 auto !important;
+                flex: 0 0 auto !important;
                 margin-left: 1.25rem !important;
                 /* Erzwingt Abstand zum Input */
             }
         }
-    </style>
-    <style>
-        :is([id*='google_ads_iframe'], [id*='taboola-'], .taboolaHeight, .taboola-placeholder, #top-ad, #credential_picker_container, #credentials-picker-container, #credential_picker_iframe, [id*='google-one-tap-iframe'], #google-one-tap-popup-container, .google-one-tap__module, .google-one-tap-modal-div, #amp_floatingAdDiv, #ez-content-blocker-container) {
-            display: none !important;
-            min-height: 0 !important;
-            height: 0 !important;
+
+        /* Desktop: Zeit-Input Container */
+        .arbeitszeit-kachel>div>div[style*="grid-row: 3"],
+        .arbeitszeit-kachel>div>div[style*="grid-row: 4"],
+        .arbeitszeit-kachel>div>div[style*="grid-row: 5"],
+        .arbeitszeit-kachel>div>div[style*="grid-row: 6"] {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: flex-start !important;
+            gap: 0.5rem !important;
+            position: relative !important;
         }
-    </style>
-    <style>
-        :is([id*='google_ads_iframe'], [id*='taboola-'], .taboolaHeight, .taboola-placeholder, #top-ad, #credential_picker_container, #credentials-picker-container, #credential_picker_iframe, [id*='google-one-tap-iframe'], #google-one-tap-popup-container, .google-one-tap__module, .google-one-tap-modal-div, #amp_floatingAdDiv, #ez-content-blocker-container) {
-            display: none !important;
-            min-height: 0 !important;
-            height: 0 !important;
+
+        /* Label Styling */
+        .arbeitszeit-kachel label[for="mk"],
+        .arbeitszeit-kachel label[for="mg"],
+        .arbeitszeit-kachel label[for="mittk"],
+        .arbeitszeit-kachel label[for="ag"] {
+            /* Position & Layout */
+            position: static !important;
+            transform: none !important;
+            display: block !important;
+
+            /* Spacing */
+            margin: 0 !important;
+            padding: 0 0.5rem !important;
+
+            /* Sizing */
+            width: auto !important;
+            min-width: 140px !important;
+            white-space: nowrap !important;
+
+            /* Appearance */
+            pointer-events: none !important;
+            z-index: 10 !important;
+            opacity: 1 !important;
+            color: #6B7280 !important;
+            font-size: 0.875rem !important;
         }
-    </style>
-    <style>
-        :is([id*='google_ads_iframe'], [id*='taboola-'], .taboolaHeight, .taboola-placeholder, #top-ad, #credential_picker_container, #credentials-picker-container, #credential_picker_iframe, [id*='google-one-tap-iframe'], #google-one-tap-popup-container, .google-one-tap__module, .google-one-tap-modal-div, #amp_floatingAdDiv, #ez-content-blocker-container) {
+
+        /* Dark Mode Labels */
+        body.dark .arbeitszeit-kachel label[for="mk"],
+        body.dark .arbeitszeit-kachel label[for="mg"],
+        body.dark .arbeitszeit-kachel label[for="mittk"],
+        body.dark .arbeitszeit-kachel label[for="ag"] {
+            color: #E5E7EB !important;
+        }
+
+        /* Zeit-Input */
+        .arbeitszeit-kachel input[type="time"] {
+            flex: 1 !important;
+            text-align: center !important;
+            padding-right: 0.75rem !important;
+            padding-left: 0.75rem !important;
+        }
+
+        /* Clear Button */
+        .arbeitszeit-kachel .clear-btn {
+            position: static !important;
+            transform: none !important;
+            margin: 0 !important;
+            margin-left: 1.5rem !important;
+            /* 0.5rem gap + 1.5rem margin = 2rem zum Input */
+            margin-right: 0.5rem !important;
+            flex-shrink: 0 !important;
+        }
+
+        .google-one-tap__module,
+        .google-one-tap-modal-div,
+        #amp_floatingAdDiv,
+        #ez-content-blocker-container {
             display: none !important;
             min-height: 0 !important;
             height: 0 !important;
@@ -1002,7 +1057,7 @@
                     <div>
                         <h1><span>🕐</span>Arbeitszeiten</h1>
                         <div style="font-size: 0.65rem; color: #9CA3AF; margin-top: 0.5rem; margin-left: 0.5rem;">
-                            v1.2.26
+                            v1.2.40
                         </div>
                     </div>
                     <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;"></span>
@@ -1086,51 +1141,37 @@
                         <!-- Zeile 2: LEER (entspricht "Normaler Arbeitstag" rechts) -->
 
                         <!-- Zeile 3: Morgen Kommen -->
-                        <div style="grid-row: 3; position: relative;">
-                            <label for="mk" id="label-mk"
-                                style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: rgb(107, 114, 128); pointer-events: none; font-size: 0.875rem; white-space: nowrap; z-index: 10;">Morgen
-                                Kommen</label>
-                            <input type="time" id="mk"
-                                style="width: 100%; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;"
-                                oninput="toggleLabel('mk')" onchange="toggleLabel('mk')">
-                            <button class="clear-btn" id="c-mk" onclick="clearField('mk')"
-                                style="position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%);">✕</button>
+                        <div style="grid-row: 3;">
+                            <label for="mk" id="label-mk">Morgen Kommen</label>
+                            <input type="time" id="mk" oninput="toggleLabel('mk')" onchange="toggleLabel('mk')">
+                            <button class="clear-btn" id="c-mk" onclick="clearField('mk')">✕</button>
                         </div>
 
                         <!-- Zeile 4: Morgen Gehen -->
-                        <div style="grid-row: 4; position: relative;">
-                            <label for="mg" id="label-mg"
-                                style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: rgb(107, 114, 128); pointer-events: none; font-size: 0.875rem; white-space: nowrap; z-index: 10;">Morgen
-                                Gehen</label>
+                        <div style="grid-row: 4;">
+                            <label for="mg" id="label-mg">Morgen Gehen</label>
                             <input type="time" id="mg"
                                 style="width: 100%; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;"
                                 oninput="toggleLabel('mg')" onchange="toggleLabel('mg')">
-                            <button class="clear-btn" id="c-mg" onclick="clearField('mg')"
-                                style="position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%);">✕</button>
+                            <button class="clear-btn" id="c-mg" onclick="clearField('mg')">✕</button>
                         </div>
 
                         <!-- Zeile 5: Mittag Kommen -->
-                        <div style="grid-row: 5; position: relative;">
-                            <label for="mittk" id="label-mittk"
-                                style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: rgb(107, 114, 128); pointer-events: none; font-size: 0.875rem; white-space: nowrap; z-index: 10;">Mittag
-                                Kommen</label>
+                        <div style="grid-row: 5;">
+                            <label for="mittk" id="label-mittk">Mittag Kommen</label>
                             <input type="time" id="mittk"
                                 style="width: 100%; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;"
                                 oninput="toggleLabel('mittk')" onchange="toggleLabel('mittk')">
-                            <button class="clear-btn" id="c-mittk" onclick="clearField('mittk')"
-                                style="position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%);">✕</button>
+                            <button class="clear-btn" id="c-mittk" onclick="clearField('mittk')">✕</button>
                         </div>
 
                         <!-- Zeile 6: Abend Gehen -->
-                        <div style="grid-row: 6; position: relative;">
-                            <label for="ag" id="label-ag"
-                                style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: rgb(107, 114, 128); pointer-events: none; font-size: 0.875rem; white-space: nowrap; z-index: 10;">Abend
-                                Gehen</label>
+                        <div style="grid-row: 6;">
+                            <label for="ag" id="label-ag">Abend Gehen</label>
                             <input type="time" id="ag"
                                 style="width: 100%; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;"
                                 oninput="toggleLabel('ag')" onchange="toggleLabel('ag')">
-                            <button class="clear-btn" id="c-ag" onclick="clearField('ag')"
-                                style="position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%);">✕</button>
+                            <button class="clear-btn" id="c-ag" onclick="clearField('ag')">✕</button>
                         </div>
 
                         <!-- Zeile 8: LEER (entspricht "Überzeit-Kompensation" rechts) -->
@@ -7527,8 +7568,8 @@
             updateClear();
         });
 
-        // Version 1.2.26 - Manuell erhöhen bei jeder Änderung
-        const version = '1.2.26';
+        // Version 1.2.40 - Manuell erhöhen bei jeder Änderung
+        const version = '1.2.40';
 
         // Prüfe Version und erzwinge Hard-Reload wenn nötig
         const lastVersion = localStorage.getItem('app_version');
