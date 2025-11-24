@@ -998,44 +998,44 @@
         <div class="header">
             <div class="card"
                 style="flex: 1; min-width: 300px; margin: 0; display: flex; justify-content: space-between; align-items: center; position: relative;">
-                <div style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
+                <div style="flex: 1; display: flex; justify-content: space-between; align-items: center;">
                     <div>
                         <h1><span>🕐</span>Arbeitszeiten</h1>
                         <div style="font-size: 0.65rem; color: #9CA3AF; margin-top: 0.5rem; margin-left: 0.5rem;">
-                            v1.2.12
+                            v1.2.24
                         </div>
                     </div>
+                    <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;"></span>
                 </div>
-                <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;"></span>
-            </div>
-            <div id="user-info" style="text-align: right; font-size: 0.875rem; color: #6B7280; line-height: 1.4;">
-                <div class="user-info-name">Wyss Charly</div>
-                <div class="user-info-persnr">Pers. Nr. 1972</div>
-            </div>
-        </div>
-        <div style="display: flex; gap: 0.5rem;">
-            <button class="btn btn-sec card-sm" onclick="toggleDark()"><span id="icon">☀️</span></button>
-            <div style="position: relative;">
-                <button class="btn btn-sec card-sm" onclick="toggleExport()">📥</button>
-                <div id="export-menu" class="export-menu hidden">
-                    <button class="export-btn time-export" onclick="exportBoth()">📦 Excel + PDF</button>
-                    <button class="export-btn time-export" onclick="exportExcel()">📊 Excel (.xlsx)</button>
-                    <button class="export-btn time-export" onclick="exportCSV()">📄 CSV (Deutsch)</button>
-                    <button class="export-btn time-export" onclick="exportPDF()">📕 PDF</button>
-                    <div class="time-export" style="border-top: 1px solid #E5E7EB; margin: 0.5rem 0;"></div>
-                    <button class="export-btn settings-export" onclick="exportVollbackup()"
-                        style="color: #10B981; font-weight: 600;">💾 Voll-Backup erstellen</button>
-                    <button class="export-btn settings-export" onclick="importVollbackup()"
-                        style="color: #6366F1; font-weight: 600;">📥 Voll-Backup einlesen</button>
-                    <div class="settings-export" style="border-top: 1px solid #E5E7EB; margin: 0.5rem 0;"></div>
-                    <button class="export-btn time-export" onclick="importData()">📊 Excel/CSV importieren (nur
-                        Zeiten)</button>
-                    <button class="export-btn settings-export" onclick="downloadHTML()">💾 HTML speichern</button>
+                <div id="user-info" style="text-align: right; font-size: 0.875rem; color: #6B7280; line-height: 1.4;">
+                    <div class="user-info-name">Wyss Charly</div>
+                    <div class="user-info-persnr">Pers. Nr. 1972</div>
                 </div>
-                <input type="file" id="import-file" accept=".xlsx,.csv" style="display: none;"
-                    onchange="handleImport(event)">
-                <input type="file" id="backup-file" accept=".json" style="display: none;"
-                    onchange="handleBackupImport(event)">
+            </div>
+            <div style="display: flex; gap: 0.5rem;">
+                <button class="btn btn-sec card-sm" onclick="toggleDark()"><span id="icon">☀️</span></button>
+                <div style="position: relative;">
+                    <button class="btn btn-sec card-sm" onclick="toggleExport()">📥</button>
+                    <div id="export-menu" class="export-menu hidden">
+                        <button class="export-btn time-export" onclick="exportBoth()">📦 Excel + PDF</button>
+                        <button class="export-btn time-export" onclick="exportExcel()">📊 Excel (.xlsx)</button>
+                        <button class="export-btn time-export" onclick="exportCSV()">📄 CSV (Deutsch)</button>
+                        <button class="export-btn time-export" onclick="exportPDF()">📕 PDF</button>
+                        <div class="time-export" style="border-top: 1px solid #E5E7EB; margin: 0.5rem 0;"></div>
+                        <button class="export-btn settings-export" onclick="exportVollbackup()"
+                            style="color: #10B981; font-weight: 600;">💾 Voll-Backup erstellen</button>
+                        <button class="export-btn settings-export" onclick="importVollbackup()"
+                            style="color: #6366F1; font-weight: 600;">📥 Voll-Backup einlesen</button>
+                        <div class="settings-export" style="border-top: 1px solid #E5E7EB; margin: 0.5rem 0;"></div>
+                        <button class="export-btn time-export" onclick="importData()">📊 Excel/CSV importieren (nur
+                            Zeiten)</button>
+                        <button class="export-btn settings-export" onclick="downloadHTML()">💾 HTML speichern</button>
+                    </div>
+                    <input type="file" id="import-file" accept=".xlsx,.csv" style="display: none;"
+                        onchange="handleImport(event)">
+                    <input type="file" id="backup-file" accept=".json" style="display: none;"
+                        onchange="handleBackupImport(event)">
+                </div>
             </div>
         </div>
     </div>
@@ -7510,8 +7510,8 @@
             updateClear();
         });
 
-        // Version 1.2.12 - Manuell erhöhen bei jeder Änderung
-        const version = '1.2.12';
+        // Version 1.2.24 - Manuell erhöhen bei jeder Änderung
+        const version = '1.2.24';
 
         // Prüfe Version und erzwinge Hard-Reload wenn nötig
         const lastVersion = localStorage.getItem('app_version');
