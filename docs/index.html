@@ -865,15 +865,15 @@
                 align-items: center !important;
                 gap: 1rem !important;
                 /* Abstand Input <-> Button vergrößert */
-                margin-bottom: 1rem !important;
+                margin-bottom: 0 !important;
                 /* Vertikaler Abstand zum nächsten Feld */
-                padding-top: 0.5rem !important;
+                padding-top: 0 !important;
             }
 
             /* WICHTIG: Grid-Rows auf auto setzen, damit Platz für Label + Input ist */
             .arbeitszeit-kachel>div {
                 grid-template-rows: auto auto auto auto auto auto !important;
-                gap: 1.5rem !important;
+                gap: 0.5rem !important;
                 /* Abstand zwischen den Grid-Zeilen vergrößert */
                 display: flex !important;
                 flex-direction: column !important;
@@ -918,6 +918,8 @@
             div[style*="grid-row: 5"] .clear-btn,
             div[style*="grid-row: 6"] .clear-btn {
                 flex: 0 0 auto !important;
+                margin-left: 1.5rem !important;
+                /* Erzwingt Abstand zum Input */
             }
         }
     </style>
@@ -985,7 +987,7 @@
                 <div style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
                     <div>
                         <h1><span>🕐</span>Arbeitszeiten</h1>
-                        <div style="font-size: 0.65rem; color: #9CA3AF; margin-top: 0.5rem; margin-left: 0.5rem;">v1.2.7
+                        <div style="font-size: 0.65rem; color: #9CA3AF; margin-top: 0.5rem; margin-left: 0.5rem;">v1.2.9
                         </div>
                     </div>
                 </div>
@@ -7495,8 +7497,8 @@
             updateClear();
         });
 
-        // Version 1.2.7 - Manuell erhöhen bei jeder Änderung
-        const version = '1.2.7';
+        // Version 1.2.9 - Manuell erhöhen bei jeder Änderung
+        const version = '1.2.9';
 
         // Prüfe Version und erzwinge Hard-Reload wenn nötig
         const lastVersion = localStorage.getItem('app_version');
