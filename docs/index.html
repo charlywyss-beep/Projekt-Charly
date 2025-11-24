@@ -832,6 +832,17 @@
                 border-radius: 0.5rem !important;
                 text-align: center !important;
                 /* Text zentrieren */
+
+                /* Uhrzeit-Icon für leere Felder */
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239CA3AF' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' /%3E%3C/svg%3E") !important;
+                background-repeat: no-repeat !important;
+                background-position: right 0.75rem center !important;
+                background-size: 1.25rem !important;
+            }
+
+            /* Icon ausblenden wenn Wert vorhanden (damit X-Button Platz hat) */
+            input[type="time"].has-value {
+                background-image: none !important;
             }
 
             body.dark input[type="time"] {
@@ -948,7 +959,7 @@
         }
     </style>
     <style>
-        :is([id*='google_ads_iframe'], [id*='taboola-'], .taboolaHeight, .taboola-placeholder, #top-ad, #credential_picker_container, #credentials-picker-container, #credential_picker_iframe, [id*='google-one-tap-iframe'], #google-one-tap-popup-container, .google-one-tap__module, .google-one-tap-modal-div, #amp_floatingAdDiv, #ez-content-blocker-container) {
+        :is([id*='google_ads_iframe'], [id*='taboola-'], .taboolaHeight, .taboola-placeholder, #top-ad, #credential_picker_container, #credentials-picker-container, #credential_picker_iframe, [id*='google-one-tap-iframe'], #google-one-tap-popup-container, .google-one-tap-modal-div, #amp_floatingAdDiv, #ez-content-blocker-container) {
             display: none !important;
             min-height: 0 !important;
             height: 0 !important;
@@ -991,7 +1002,7 @@
                     <div>
                         <h1><span>🕐</span>Arbeitszeiten</h1>
                         <div style="font-size: 0.65rem; color: #9CA3AF; margin-top: 0.5rem; margin-left: 0.5rem;">
-                            v1.2.10
+                            v1.2.11
                         </div>
                     </div>
                 </div>
@@ -2698,6 +2709,10 @@
                 document.getElementById('ag').value = d.ag || '';
                 document.getElementById('notiz').value = d.notiz || '';
 
+                // Warnung immer zurücksetzen beim Laden eines neuen Tages
+                document.getElementById('tagtyp-warning').classList.add('hidden');
+
+                // Tag-Typ setzen (Radio Buttons)
                 const tagTyp = d.tagTyp || 'normal';
                 const tagTypRadios = document.getElementsByName('tagTyp');
                 for (const radio of tagTypRadios) {
@@ -7438,9 +7453,11 @@
 
                 if (input && clearBtn) {
                     if (input.value) {
+                        input.classList.add('has-value'); // Klasse für CSS hinzufügen
                         clearBtn.classList.add('on');
                         clearBtn.style.display = 'flex';
                     } else {
+                        input.classList.remove('has-value'); // Klasse entfernen
                         clearBtn.classList.remove('on');
                         clearBtn.style.display = 'none';
                     }
@@ -7482,9 +7499,11 @@
                 if (input && clearBtn) {
                     // Nutze visibility statt display, damit Layout stabil bleibt
                     if (input.value) {
+                        input.classList.add('has-value'); // Klasse für CSS hinzufügen
                         clearBtn.style.visibility = 'visible';
                         clearBtn.classList.add('visible');
                     } else {
+                        input.classList.remove('has-value'); // Klasse entfernen
                         clearBtn.style.visibility = 'hidden';
                         clearBtn.classList.remove('visible');
                     }
@@ -7501,8 +7520,8 @@
             updateClear();
         });
 
-        // Version 1.2.10 - Manuell erhöhen bei jeder Änderung
-        const version = '1.2.10';
+        // Version 1.2.11 - Manuell erhöhen bei jeder Änderung
+        const version = '1.2.11';
 
         // Prüfe Version und erzwinge Hard-Reload wenn nötig
         const lastVersion = localStorage.getItem('app_version');
