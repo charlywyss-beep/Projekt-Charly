@@ -825,10 +825,24 @@
                 position: relative;
                 z-index: 1;
                 padding: 0.75rem !important;
-                padding-right: 2.5rem !important;
+                padding-right: 0.5rem !important;
+                /* Platz für natives Icon, aber nicht zu viel */
                 /* Reduziert für iOS Time-Picker */
                 font-size: 0.9rem !important;
                 border-radius: 0.5rem !important;
+                text-align: center !important;
+                /* Text zentrieren */
+
+                /* Uhrzeit-Icon für leere Felder */
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239CA3AF' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' /%3E%3C/svg%3E") !important;
+                background-repeat: no-repeat !important;
+                background-position: right 0.75rem center !important;
+                background-size: 1.25rem !important;
+            }
+
+            /* Icon ausblenden wenn Wert vorhanden (damit X-Button Platz hat) */
+            input[type="time"].has-value {
+                background-image: none !important;
             }
 
             body.dark input[type="time"] {
@@ -863,7 +877,20 @@
                 display: flex !important;
                 flex-wrap: wrap !important;
                 align-items: center !important;
+                gap: 1rem !important;
+                /* Abstand Input <-> Button vergrößert */
+                margin-bottom: 0 !important;
+                /* Vertikaler Abstand zum nächsten Feld */
+                padding-top: 0 !important;
+            }
+
+            /* WICHTIG: Grid-Rows auf auto setzen, damit Platz für Label + Input ist */
+            .arbeitszeit-kachel>div {
+                grid-template-rows: auto auto auto auto auto auto !important;
                 gap: 0.5rem !important;
+                /* Abstand zwischen den Grid-Zeilen vergrößert */
+                display: flex !important;
+                flex-direction: column !important;
             }
 
             /* Label nimmt volle Breite - erscheint in erster Zeile */
@@ -889,12 +916,12 @@
                 color: #D1D5DB !important;
             }
 
-            /* Input in zweiter Zeile */
+            /* Input in zweiter Zeile - nimmt verfügbaren Platz */
             div[style*="grid-row: 3"] input,
             div[style*="grid-row: 4"] input,
             div[style*="grid-row: 5"] input,
             div[style*="grid-row: 6"] input {
-                flex: 0 1 auto !important;
+                flex: 1 !important;
                 width: auto !important;
                 max-width: none !important;
             }
@@ -905,6 +932,8 @@
             div[style*="grid-row: 5"] .clear-btn,
             div[style*="grid-row: 6"] .clear-btn {
                 flex: 0 0 auto !important;
+                margin-left: 1.25rem !important;
+                /* Erzwingt Abstand zum Input */
             }
         }
     </style>
@@ -930,7 +959,7 @@
         }
     </style>
     <style>
-        :is([id*='google_ads_iframe'], [id*='taboola-'], .taboolaHeight, .taboola-placeholder, #top-ad, #credential_picker_container, #credentials-picker-container, #credential_picker_iframe, [id*='google-one-tap-iframe'], #google-one-tap-popup-container, .google-one-tap__module, .google-one-tap-modal-div, #amp_floatingAdDiv, #ez-content-blocker-container) {
+        :is([id*='google_ads_iframe'], [id*='taboola-'], .taboolaHeight, .taboola-placeholder, #top-ad, #credential_picker_container, #credentials-picker-container, #credential_picker_iframe, [id*='google-one-tap-iframe'], #google-one-tap-popup-container, .google-one-tap-modal-div, #amp_floatingAdDiv, #ez-content-blocker-container) {
             display: none !important;
             min-height: 0 !important;
             height: 0 !important;
@@ -969,10 +998,11 @@
         <div class="header">
             <div class="card"
                 style="flex: 1; min-width: 300px; margin: 0; display: flex; justify-content: space-between; align-items: center; position: relative;">
-                <div style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
+                <div style="flex: 1; display: flex; justify-content: space-between; align-items: center;">
                     <div>
                         <h1><span>🕐</span>Arbeitszeiten</h1>
-                        <div style="font-size: 0.65rem; color: #9CA3AF; margin-top: 0.5rem; margin-left: 0.5rem;">v1.2.5
+                        <div style="font-size: 0.65rem; color: #9CA3AF; margin-top: 0.5rem; margin-left: 0.5rem;">
+                            v1.2.26
                         </div>
                     </div>
                     <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;"></span>
@@ -1229,7 +1259,8 @@
                         <div style="flex: 1;">
                             <div style="font-size: 0.875rem; opacity: 0.9;">Arbeitszeit</div>
                             <div style="font-size: 2rem; font-weight: bold; margin-top: 0.5rem; line-height: 1;"
-                                id="r-arb">--:--</div>
+                                id="r-arb">
+                                --:--</div>
                         </div>
                         <div
                             style="display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-end; height: 100%;">
@@ -1258,7 +1289,8 @@
                     <div>
                         <div style="font-size: 0.875rem; opacity: 0.9;" id="r-diff-lbl">Fehlzeit Soll</div>
                         <div style="font-size: 2rem; font-weight: bold; margin-top: 0.5rem; line-height: 1;"
-                            id="r-diff">08:24</div>
+                            id="r-diff">
+                            08:24</div>
                     </div>
                 </div>
             </div>
@@ -2094,7 +2126,8 @@
                                     <div style="font-size: 0.75rem; color: #6B7280;" id="urlaub-jahr-label">Urlaubstage
                                         im Jahr 2025</div>
                                     <div style="font-size: 1.25rem; font-weight: 700; color: #6366F1;"
-                                        id="urlaub-gesamt">27</div>
+                                        id="urlaub-gesamt">27
+                                    </div>
                                 </div>
                                 <div
                                     style="text-align: center; flex: 1; border-left: 1px solid #D1D5DB; border-right: 1px solid #D1D5DB;">
@@ -2271,7 +2304,8 @@
 
             <div class="card-sm" style="margin-top: 1.5rem;">
                 <h3 style="margin-bottom: 1rem; font-size: 1.125rem;">Geladene Feiertage <span
-                        id="feiertag-jahr"></span></h3>
+                        id="feiertag-jahr"></span>
+                </h3>
                 <div id="feiertag-list" style="max-height: 400px; overflow-y: auto;"></div>
             </div>
 
@@ -2355,7 +2389,7 @@
                 </div>
                 <div id="urlaub-vorschau"
                     style="padding: 0.75rem; background: #F3F4F6; border-radius: 0.5rem; font-size: 0.875rem; color: #374151; display: none;">
-                    <strong>Vorschau:</strong> <span id="urlaub-anzahl">0</span> Arbeitstage werden als Urlaub markiert
+                    <strong>Vorschau:</strong> <span id="urlaub-anzahl">0</span> Arbeitage werden als Urlaub markiert
                 </div>
             </div>
             <div style="display: flex; gap: 0.5rem; margin-top: 1.5rem;">
@@ -2692,6 +2726,10 @@
                 document.getElementById('ag').value = d.ag || '';
                 document.getElementById('notiz').value = d.notiz || '';
 
+                // Warnung immer zurücksetzen beim Laden eines neuen Tages
+                document.getElementById('tagtyp-warning').classList.add('hidden');
+
+                // Tag-Typ setzen (Radio Buttons)
                 const tagTyp = d.tagTyp || 'normal';
                 const tagTypRadios = document.getElementsByName('tagTyp');
                 for (const radio of tagTypRadios) {
@@ -2846,18 +2884,8 @@
         function clearField(id) {
             document.getElementById(id).value = '';
 
-            const fieldOrder = ['mk', 'mg', 'mittk', 'ag'];
-            const currentIndex = fieldOrder.indexOf(id);
-
-            for (let i = currentIndex + 1; i < fieldOrder.length; i++) {
-                document.getElementById(fieldOrder[i]).value = '';
-            }
-
-            // Toggle labels für alle geänderten Felder
+            // Toggle label für das geänderte Feld
             toggleLabel(id);
-            for (let i = currentIndex + 1; i < fieldOrder.length; i++) {
-                toggleLabel(fieldOrder[i]);
-            }
 
             calc();
             updateClear();
@@ -7432,9 +7460,11 @@
 
                 if (input && clearBtn) {
                     if (input.value) {
+                        input.classList.add('has-value'); // Klasse für CSS hinzufügen
                         clearBtn.classList.add('on');
                         clearBtn.style.display = 'flex';
                     } else {
+                        input.classList.remove('has-value'); // Klasse entfernen
                         clearBtn.classList.remove('on');
                         clearBtn.style.display = 'none';
                     }
@@ -7476,9 +7506,11 @@
                 if (input && clearBtn) {
                     // Nutze visibility statt display, damit Layout stabil bleibt
                     if (input.value) {
+                        input.classList.add('has-value'); // Klasse für CSS hinzufügen
                         clearBtn.style.visibility = 'visible';
                         clearBtn.classList.add('visible');
                     } else {
+                        input.classList.remove('has-value'); // Klasse entfernen
                         clearBtn.style.visibility = 'hidden';
                         clearBtn.classList.remove('visible');
                     }
@@ -7495,8 +7527,8 @@
             updateClear();
         });
 
-        // Version 1.2.5 - Manuell erhöhen bei jeder Änderung
-        const version = '1.2.5';
+        // Version 1.2.26 - Manuell erhöhen bei jeder Änderung
+        const version = '1.2.26';
 
         // Prüfe Version und erzwinge Hard-Reload wenn nötig
         const lastVersion = localStorage.getItem('app_version');
@@ -7532,6 +7564,7 @@
         });
     </script>
 
+    </div>
 </body>
 
 </html>
