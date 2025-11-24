@@ -825,10 +825,13 @@
                 position: relative;
                 z-index: 1;
                 padding: 0.75rem !important;
-                padding-right: 2.5rem !important;
+                padding-right: 0.5rem !important;
+                /* Platz für natives Icon, aber nicht zu viel */
                 /* Reduziert für iOS Time-Picker */
                 font-size: 0.9rem !important;
                 border-radius: 0.5rem !important;
+                text-align: center !important;
+                /* Text zentrieren */
             }
 
             body.dark input[type="time"] {
@@ -918,7 +921,7 @@
             div[style*="grid-row: 5"] .clear-btn,
             div[style*="grid-row: 6"] .clear-btn {
                 flex: 0 0 auto !important;
-                margin-left: 1.5rem !important;
+                margin-left: 1.25rem !important;
                 /* Erzwingt Abstand zum Input */
             }
         }
@@ -987,7 +990,8 @@
                 <div style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
                     <div>
                         <h1><span>🕐</span>Arbeitszeiten</h1>
-                        <div style="font-size: 0.65rem; color: #9CA3AF; margin-top: 0.5rem; margin-left: 0.5rem;">v1.2.9
+                        <div style="font-size: 0.65rem; color: #9CA3AF; margin-top: 0.5rem; margin-left: 0.5rem;">
+                            v1.2.10
                         </div>
                     </div>
                 </div>
@@ -7497,8 +7501,8 @@
             updateClear();
         });
 
-        // Version 1.2.9 - Manuell erhöhen bei jeder Änderung
-        const version = '1.2.9';
+        // Version 1.2.10 - Manuell erhöhen bei jeder Änderung
+        const version = '1.2.10';
 
         // Prüfe Version und erzwinge Hard-Reload wenn nötig
         const lastVersion = localStorage.getItem('app_version');
