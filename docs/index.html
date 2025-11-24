@@ -1057,7 +1057,7 @@
                     <div>
                         <h1><span>🕐</span>Arbeitszeiten</h1>
                         <div style="font-size: 0.65rem; color: #9CA3AF; margin-top: 0.5rem; margin-left: 0.5rem;">
-                            v1.2.40
+                            v1.2.43
                         </div>
                     </div>
                     <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;"></span>
@@ -2459,6 +2459,9 @@
             year = today.getFullYear(), woche = getMonday(today);
 
         let feiertage = {};
+
+        // Flag um zu verhindern, dass die Tag-Typ-Warnung beim initialen Laden angezeigt wird
+        let pageInitiallyLoaded = false;
         let settings = {
             soll: '08:24',
             pause: '00:30',
@@ -3048,20 +3051,13 @@
             }
 
             // Prüfen ob von normalem Arbeitstag mit Zeiten zu speziellem Typ gewechselt wird
-            const oldData = data[date] || {};
-            const oldTagTyp = oldData.tagTyp || 'normal';
             const hasOldTimes = oldData.mk || oldData.mg || oldData.mittk || oldData.ag;
             const hasNewTimes = mk || mg || mittk || ag;
             const specialTypes = ['urlaub', 'krank', 'unbezahlt', 'kompensation', 'feiertag-bezahlt', 'feiertag-unbezahlt'];
 
-            // Wenn von normal mit Zeiten zu speziellem Typ gewechselt wird UND noch Zeiten eingetragen sind
-            if (oldTagTyp === 'normal' && hasOldTimes && specialTypes.includes(tagTyp) && hasNewTimes) {
-                // Zeige Warnbox statt Browser-Confirm
-                document.getElementById('tagtyp-warning').classList.remove('hidden');
-                // Speichere gewünschten Tag-Typ global
-                window.pendingTagTyp = tagTyp;
-                return; // Stoppe save() hier - wird fortgesetzt nach Bestätigung
-            }
+            // WARNUNG ENTFERNT: Keine automatische Warnung mehr beim Speichern
+            // Die Warnung soll nur beim aktiven Ändern des Tag-Typs erscheinen,
+            // nicht beim Laden oder automatischen Speichern
 
             const notiz = document.getElementById('notiz').value.trim();
 
@@ -7566,10 +7562,21 @@
             // Labels initial aktualisieren
             ['mk', 'mg', 'mittk', 'ag'].forEach(id => toggleLabel(id));
             updateClear();
+
+            // WICHTIG: Tag-Typ-Warnbox explizit verstecken beim Laden
+            const warningBox = document.getElementById('tagtyp-warning');
+            if (warningBox) {
+                warningBox.classList.add('hidden');
+            }
+
+            // Setze Flag nach kurzem Delay (damit alle Init-Funktionen durchgelaufen sind)
+            setTimeout(() => {
+                pageInitiallyLoaded = true;
+            }, 1000);
         });
 
-        // Version 1.2.40 - Manuell erhöhen bei jeder Änderung
-        const version = '1.2.40';
+        // Version 1.2.43 - Manuell erhöhen bei jeder Änderung
+        const version = '1.2.43';
 
         // Prüfe Version und erzwinge Hard-Reload wenn nötig
         const lastVersion = localStorage.getItem('app_version');
