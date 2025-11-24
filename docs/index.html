@@ -746,7 +746,7 @@
             font-size: 0.95rem;
         }
 
-        @media (max-width: 480px) {
+        @media (max-width: 480px) and (hover: none) and (pointer: coarse) {
             body {
                 padding: 0.75rem !important;
             }
@@ -918,7 +918,7 @@
                 style="flex: 1; min-width: 300px; margin: 0; display: flex; justify-content: space-between; align-items: center; position: relative;">
                 <div style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
                     <h1><span>🕐</span>Arbeitszeiten</h1>
-                    <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;">v1.1.2</span>
+                    <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;">v1.1.4</span>
                 </div>
                 <div id="user-info" style="text-align: right; font-size: 0.875rem; color: #6B7280; line-height: 1.4;">
                     <div class="user-info-name">Wyss Charly</div>
@@ -7438,8 +7438,8 @@
             updateClear();
         });
 
-        // Version 1.1.2 - Manuell erhöhen bei jeder Änderung
-        const version = '1.1.2';
+        // Version 1.1.4 - Manuell erhöhen bei jeder Änderung
+        const version = '1.1.4';
 
         // Prüfe Version und erzwinge Hard-Reload wenn nötig
         const lastVersion = localStorage.getItem('app_version');
