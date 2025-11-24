@@ -1057,7 +1057,7 @@
                     <div>
                         <h1><span>🕐</span>Arbeitszeiten</h1>
                         <div style="font-size: 0.65rem; color: #9CA3AF; margin-top: 0.5rem; margin-left: 0.5rem;">
-                            v1.2.44
+                            v1.2.46
                         </div>
                     </div>
                     <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;"></span>
@@ -1182,7 +1182,7 @@
 
                     <!-- Warnbox für Tag-Typ Wechsel -->
                     <div id="tagtyp-warning" class="hidden"
-                        style="display: none !important; margin-top: 1rem; padding: 1rem; background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%); border: 2px solid #F59E0B; border-radius: 0.5rem;">
+                        style="margin-top: 1rem; padding: 1rem; background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%); border: 2px solid #F59E0B; border-radius: 0.5rem;">
                         <div
                             style="font-weight: 700; font-size: 1rem; color: #92400E; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
                             ⚠️ Tag-Typ Wechsel
@@ -2460,8 +2460,11 @@
 
         let feiertage = {};
 
-        // Flag um zu verhindern, dass die Tag-Typ-Warnung beim initialen Laden angezeigt wird
-        let pageInitiallyLoaded = false;
+        // Zeitstempel beim Laden - Warnung wird erst 2 Sekunden nach Laden erlaubt
+        const pageLoadTime = Date.now();
+        // Flags für Initialisierung und Nutzer-Trigger
+        let initialLoad = true;
+        let tagChangedByUser = false;
         let settings = {
             soll: '08:24',
             pause: '00:30',
@@ -2655,6 +2658,12 @@
             switchView(view);
             calc(); updateClear();
 
+            // WICHTIG: Warnung explizit beim Start verstecken
+            const warningBox = document.getElementById('tagtyp-warning');
+            if (warningBox) {
+                warningBox.classList.add('hidden');
+            }
+
             setTimeout(() => {
                 calc();
             }, 500);
@@ -2773,11 +2782,15 @@
                 // Warnung immer zurücksetzen beim Laden eines neuen Tages
                 document.getElementById('tagtyp-warning').classList.add('hidden');
 
-                // Tag-Typ setzen (Radio Buttons)
+                // Tag-Typ setzen (Radio Buttons) – ohne Nutzer-Flag
                 const tagTyp = d.tagTyp || 'normal';
                 const tagTypRadios = document.getElementsByName('tagTyp');
                 for (const radio of tagTypRadios) {
                     radio.checked = (radio.value === tagTyp);
+                }
+                // Nach dem initialen Laden kein Nutzer-Trigger
+                if (initialLoad) {
+                    // nichts tun
                 }
 
                 updateTagTypAnzeige(tagTyp);
@@ -2796,11 +2809,16 @@
                 for (const radio of tagTypRadios) {
                     radio.checked = (radio.value === defaultTyp);
                 }
-
+                // Initialer Load – kein Nutzer-Trigger
+                if (initialLoad) {
+                    // nichts tun
+                }
                 updateTagTypAnzeige(defaultTyp);
             }
             calc();
             updateClear();
+            // Initialisierung abgeschlossen – setzen Flag
+            initialLoad = false;
 
             // Toggle labels based on field values
             ['mk', 'mg', 'mittk', 'ag'].forEach(id => toggleLabel(id));
@@ -2990,20 +3008,21 @@
                 document.getElementById('ag').value = '';
                 updateClear();
                 // Speichern mit dem gewünschten Tag-Typ
-                save();
+                save(window.pendingTagTyp); // Übergib den pending Tag-Typ an save()
             } else {
                 // Abbrechen geklickt: Zurück auf "Normaler Arbeitstag"
                 const normalRadio = document.querySelector('input[name="tagTyp"][value="normal"]');
                 if (normalRadio) {
                     normalRadio.checked = true;
-                    updateTagTyp();
+                    updateTagTyp(); // Dies wird tagChangedByUser auf true setzen, aber save() wird es zurücksetzen
                 }
                 // Lösche pending Tag-Typ
                 delete window.pendingTagTyp;
             }
+            tagChangedByUser = false; // Reset Flag nach Bestätigung/Abbruch
         }
 
-        function save() {
+        function save(forceTagTyp = null) {
             let mk = document.getElementById('mk').value;
             let mg = document.getElementById('mg').value;
             let mittk = document.getElementById('mittk').value;
@@ -3041,25 +3060,41 @@
             // Keine Validierungsfehler -> Fehlermeldung ausblenden
             clearMsg();
 
-            const tagTypRadios = document.getElementsByName('tagTyp');
-            let tagTyp = 'normal';
-            for (const radio of tagTypRadios) {
-                if (radio.checked) {
-                    tagTyp = radio.value;
-                    break;
+            let tagTyp;
+            if (forceTagTyp) {
+                tagTyp = forceTagTyp;
+            } else {
+                const tagTypRadios = document.getElementsByName('tagTyp');
+                for (const radio of tagTypRadios) {
+                    if (radio.checked) {
+                        tagTyp = radio.value;
+                        break;
+                    }
                 }
             }
 
             // Prüfen ob von normalem Arbeitstag mit Zeiten zu speziellem Typ gewechselt wird
+            const oldData = data[date] || {};
+            const oldTagTyp = oldData.tagTyp || 'normal';
             const hasOldTimes = oldData.mk || oldData.mg || oldData.mittk || oldData.ag;
             const hasNewTimes = mk || mg || mittk || ag;
             const specialTypes = ['urlaub', 'krank', 'unbezahlt', 'kompensation', 'feiertag-bezahlt', 'feiertag-unbezahlt'];
 
-            // WARNUNG ENTFERNT: Keine automatische Warnung mehr beim Speichern
-            // Die Warnung soll nur beim aktiven Ändern des Tag-Typs erscheinen,
-            // nicht beim Laden oder automatischen Speichern
+            // Nur auslösen, wenn der Nutzer den Tag-Typ aktiv geändert hat UND es ein Wechsel von Normal mit Zeiten zu Spezial ist
+            if (tagChangedByUser && oldTagTyp === 'normal' && hasOldTimes && specialTypes.includes(tagTyp) && hasNewTimes) {
+                // Zeige Warnbox statt Browser-Confirm
+                document.getElementById('tagtyp-warning').classList.remove('hidden');
+                // Speichere gewünschten Tag-Typ global
+                window.pendingTagTyp = tagTyp;
+                // Reset Flag nach Nutzung
+                tagChangedByUser = false;
+                return; // Stoppe save() hier - wird fortgesetzt nach Bestätigung
+            }
 
             const notiz = document.getElementById('notiz').value.trim();
+
+            // Reset Nutzer-Flag, falls kein spezieller Wechsel nötig oder nach erfolgreichem Speichern
+            tagChangedByUser = false;
 
             if (!mk && !mg && !mittk && !ag && tagTyp === 'normal') {
                 delete data[date];
@@ -4351,7 +4386,7 @@
             const sollProTag = timeToMin(settings.soll);
 
             let erarbeitet = 0;
-            let kompensationstage = 0;
+            let kompensationage = 0;
 
             // Alle Tage ab dem Startjahr durchgehen
             for (const datum in data) {
@@ -4379,7 +4414,7 @@
 
                 if (!isWeekend && !(isFT && ftBezahlt)) {
                     if (entry.tagTyp === 'kompensation') {
-                        kompensationstage++;
+                        kompensationage++;
                         sollMin = sollProTag;  // Sollzeit setzen für korrekte Berechnung
                     } else if (entry.tagTyp !== 'urlaub' && entry.tagTyp !== 'krank' && entry.tagTyp !== 'unbezahlt') {
                         sollMin = sollProTag;
@@ -4789,15 +4824,17 @@
         }
 
         function updateTagTyp() {
+            // Tag-Typ ändern (Radio Buttons)
             const tagTypRadios = document.getElementsByName('tagTyp');
-            let selectedTyp = 'normal';
+            let tagTyp = 'normal';
             for (const radio of tagTypRadios) {
-                if (radio.checked) {
-                    selectedTyp = radio.value;
-                    break;
-                }
+                if (radio.checked) { tagTyp = radio.value; break; }
             }
-            updateTagTypAnzeige(selectedTyp);
+            // Nur setzen, wenn nicht im Initialisierungsmodus
+            if (!initialLoad) {
+                tagChangedByUser = true;
+            }
+            updateTagTypAnzeige(tagTyp);
         }
 
         let urlaubLoeschModus = false;
@@ -7562,21 +7599,10 @@
             // Labels initial aktualisieren
             ['mk', 'mg', 'mittk', 'ag'].forEach(id => toggleLabel(id));
             updateClear();
-
-            // WICHTIG: Tag-Typ-Warnbox explizit verstecken beim Laden
-            const warningBox = document.getElementById('tagtyp-warning');
-            if (warningBox) {
-                warningBox.classList.add('hidden');
-            }
-
-            // Setze Flag nach kurzem Delay (damit alle Init-Funktionen durchgelaufen sind)
-            setTimeout(() => {
-                pageInitiallyLoaded = true;
-            }, 1000);
         });
 
-        // Version 1.2.44 - Manuell erhöhen bei jeder Änderung
-        const version = '1.2.44';
+        // Version 1.2.46 - Manuell erhöhen bei jeder Änderung
+        const version = '1.2.46';
 
         // Prüfe Version und erzwinge Hard-Reload wenn nötig
         const lastVersion = localStorage.getItem('app_version');
