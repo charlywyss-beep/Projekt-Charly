@@ -843,9 +843,12 @@
                 flex-shrink: 0 !important;
                 font-size: 0.8rem !important;
                 z-index: 20 !important;
-                position: relative;
+                position: relative !important;
                 visibility: hidden;
                 display: flex !important;
+                top: auto !important;
+                right: auto !important;
+                transform: none !important;
             }
 
             .clear-btn.visible {
@@ -862,7 +865,11 @@
                 gap: 0.5rem !important;
             }
 
-            div[style*="grid-row"]>div[style*="position: relative"] {
+            /* Input nimmt verfügbaren Platz */
+            div[style*="grid-row: 3"] input,
+            div[style*="grid-row: 4"] input,
+            div[style*="grid-row: 5"] input,
+            div[style*="grid-row: 6"] input {
                 flex: 1 !important;
             }
         }
@@ -1015,55 +1022,51 @@
                         <!-- Zeile 2: LEER (entspricht "Normaler Arbeitstag" rechts) -->
 
                         <!-- Zeile 3: Morgen Kommen -->
-                        <div style="grid-row: 3;">
-                            <div style="position: relative;">
-                                <label for="mk" id="label-mk"
-                                    style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: rgb(107, 114, 128); pointer-events: none; font-size: 0.875rem; white-space: nowrap; z-index: 10;">Morgen
-                                    Kommen</label>
-                                <input type="time" id="mk"
-                                    style="width: 100%; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;"
-                                    oninput="toggleLabel('mk')" onchange="toggleLabel('mk')">
-                            </div>
-                            <button class="clear-btn" id="c-mk" onclick="clearField('mk')">✕</button>
+                        <div style="grid-row: 3; position: relative;">
+                            <label for="mk" id="label-mk"
+                                style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: rgb(107, 114, 128); pointer-events: none; font-size: 0.875rem; white-space: nowrap; z-index: 10;">Morgen
+                                Kommen</label>
+                            <input type="time" id="mk"
+                                style="width: 100%; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;"
+                                oninput="toggleLabel('mk')" onchange="toggleLabel('mk')">
+                            <button class="clear-btn" id="c-mk" onclick="clearField('mk')"
+                                style="position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%);">✕</button>
                         </div>
 
                         <!-- Zeile 4: Morgen Gehen -->
-                        <div style="grid-row: 4;">
-                            <div style="position: relative;">
-                                <label for="mg" id="label-mg"
-                                    style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: rgb(107, 114, 128); pointer-events: none; font-size: 0.875rem; white-space: nowrap; z-index: 10;">Morgen
-                                    Gehen</label>
-                                <input type="time" id="mg"
-                                    style="width: 100%; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;"
-                                    oninput="toggleLabel('mg')" onchange="toggleLabel('mg')">
-                            </div>
-                            <button class="clear-btn" id="c-mg" onclick="clearField('mg')">✕</button>
+                        <div style="grid-row: 4; position: relative;">
+                            <label for="mg" id="label-mg"
+                                style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: rgb(107, 114, 128); pointer-events: none; font-size: 0.875rem; white-space: nowrap; z-index: 10;">Morgen
+                                Gehen</label>
+                            <input type="time" id="mg"
+                                style="width: 100%; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;"
+                                oninput="toggleLabel('mg')" onchange="toggleLabel('mg')">
+                            <button class="clear-btn" id="c-mg" onclick="clearField('mg')"
+                                style="position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%);">✕</button>
                         </div>
 
                         <!-- Zeile 5: Mittag Kommen -->
-                        <div style="grid-row: 5;">
-                            <div style="position: relative;">
-                                <label for="mittk" id="label-mittk"
-                                    style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: rgb(107, 114, 128); pointer-events: none; font-size: 0.875rem; white-space: nowrap; z-index: 10;">Mittag
-                                    Kommen</label>
-                                <input type="time" id="mittk"
-                                    style="width: 100%; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;"
-                                    oninput="toggleLabel('mittk')" onchange="toggleLabel('mittk')">
-                            </div>
-                            <button class="clear-btn" id="c-mittk" onclick="clearField('mittk')">✕</button>
+                        <div style="grid-row: 5; position: relative;">
+                            <label for="mittk" id="label-mittk"
+                                style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: rgb(107, 114, 128); pointer-events: none; font-size: 0.875rem; white-space: nowrap; z-index: 10;">Mittag
+                                Kommen</label>
+                            <input type="time" id="mittk"
+                                style="width: 100%; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;"
+                                oninput="toggleLabel('mittk')" onchange="toggleLabel('mittk')">
+                            <button class="clear-btn" id="c-mittk" onclick="clearField('mittk')"
+                                style="position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%);">✕</button>
                         </div>
 
                         <!-- Zeile 6: Abend Gehen -->
-                        <div style="grid-row: 6;">
-                            <div style="position: relative;">
-                                <label for="ag" id="label-ag"
-                                    style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: rgb(107, 114, 128); pointer-events: none; font-size: 0.875rem; white-space: nowrap; z-index: 10;">Abend
-                                    Gehen</label>
-                                <input type="time" id="ag"
-                                    style="width: 100%; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;"
-                                    oninput="toggleLabel('ag')" onchange="toggleLabel('ag')">
-                            </div>
-                            <button class="clear-btn" id="c-ag" onclick="clearField('ag')">✕</button>
+                        <div style="grid-row: 6; position: relative;">
+                            <label for="ag" id="label-ag"
+                                style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: rgb(107, 114, 128); pointer-events: none; font-size: 0.875rem; white-space: nowrap; z-index: 10;">Abend
+                                Gehen</label>
+                            <input type="time" id="ag"
+                                style="width: 100%; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;"
+                                oninput="toggleLabel('ag')" onchange="toggleLabel('ag')">
+                            <button class="clear-btn" id="c-ag" onclick="clearField('ag')"
+                                style="position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%);">✕</button>
                         </div>
 
                         <!-- Zeile 8: LEER (entspricht "Überzeit-Kompensation" rechts) -->
