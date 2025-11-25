@@ -1044,6 +1044,52 @@
             }
         }
 
+        /* 📱 LANDSCAPE MODE: Gleiche Regeln für Querformat auf mobilen Geräten */
+        @media (max-height: 500px) and (orientation: landscape) and (hover: none) and (pointer: coarse) {
+
+            /* ✅ Überzeit-Verwaltung auch im Querformat vertikal */
+            div[style*="background"][style*="FEF3C7"],
+            div[style*="background"][style*="fef3c7"],
+            div[style*="background"][style*="254, 243, 199"],
+            div[style*="background-color"][style*="FEF3C7"],
+            div[style*="background-color"][style*="fef3c7"],
+            div[style*="background"][style*="rgb(254, 243, 199)"],
+            div[style*="background"][style*="rgba(254, 243, 199"] {
+                display: flex !important;
+                flex-direction: column !important;
+                flex-wrap: wrap !important;
+                gap: 0.5rem !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                height: auto !important;
+                min-height: 60px !important;
+                max-height: none !important;
+                box-sizing: border-box !important;
+                padding: 0.75rem !important;
+                overflow: visible !important;
+                position: relative !important;
+            }
+
+            /* Alle Kinder: volle Breite, vertical layout */
+            div[style*="background"][style*="FEF3C7"]>*,
+            div[style*="background"][style*="fef3c7"]>*,
+            div[style*="background-color"][style*="FEF3C7"]>*,
+            div[style*="background"][style*="rgb(254, 243, 199)"]>* {
+                width: 100% !important;
+                max-width: 100% !important;
+                box-sizing: border-box !important;
+                margin-bottom: 0.5rem !important;
+                display: block !important;
+                position: relative !important;
+                left: auto !important;
+                right: auto !important;
+                top: auto !important;
+                bottom: auto !important;
+                float: none !important;
+                transform: none !important;
+            }
+        }
+
         /* Desktop: Zeit-Input Container */
         .arbeitszeit-kachel>div>div[style*="grid-row: 3"],
         .arbeitszeit-kachel>div>div[style*="grid-row: 4"],
@@ -1163,7 +1209,7 @@
                     <div>
                         <h1><span>🕐</span>Arbeitszeiten</h1>
                         <div style="font-size: 0.65rem; color: #9CA3AF; margin-top: 0.5rem; margin-left: 0.5rem;">
-                            v1.2.61
+                            v1.2.62
                         </div>
                     </div>
                     <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;"></span>
@@ -7694,8 +7740,8 @@
             });
         }
 
-        // Version 1.2.61 - Manuell erhöhen bei jeder Änderung
-        const version = '1.2.61';
+        // Version 1.2.62 - Manuell erhöhen bei jeder Änderung
+        const version = '1.2.62';
 
         // Initialise user info with fallback placeholders
         const userInfoEl = document.getElementById('user-info');
