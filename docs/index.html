@@ -626,6 +626,23 @@
             }
         }
 
+        /* ✅ Überzeit-Eingabefelder - Textfarbe sichtbar halten */
+        #settings-ueberzeit-datum,
+        #settings-ueberzeit-start {
+            color: #1F2937 !important;
+            /* Dunkler Text für Light Mode */
+        }
+
+        /* Überzeit-Eingabefelder - Dark Mode */
+        body.dark #settings-ueberzeit-datum,
+        body.dark #settings-ueberzeit-start {
+            color: #1F2937 !important;
+            /* Dunkler Text auch im Dark Mode (wegen gelbem Hintergrund) */
+            background: #FEF3C7 !important;
+            /* Heller gelber/beige Hintergrund */
+            border-color: #F59E0B !important;
+        }
+
         .tab {
             min-width: 120px;
             padding: 0.875rem 1rem;
@@ -951,6 +968,80 @@
                 margin-left: 1.25rem !important;
                 /* Erzwingt Abstand zum Input */
             }
+
+            /* ✅ Überzeit-Verwaltung Mobile Portrait Fix */
+            /* Stelle sicher, dass die gelben Input-Felder vertikal stacken */
+            #settings-ueberzeit-datum,
+            #settings-ueberzeit-start {
+                width: 100% !important;
+                max-width: 100% !important;
+                display: block !important;
+                margin-bottom: 0.75rem !important;
+                box-sizing: border-box !important;
+                font-size: 0.75rem !important;
+                padding: 0.65rem !important;
+                overflow: hidden !important;
+                text-overflow: ellipsis !important;
+                position: relative !important;
+            }
+
+            /* 🔥🔥 ULTRA-AGGRESSIVE: Überschreibe ALLE inline-styles */
+            /* Target: Gelbe Boxen + alle ihre Kinder */
+            div[style*="background"][style*="FEF3C7"],
+            div[style*="background"][style*="fef3c7"],
+            div[style*="background"][style*="254, 243, 199"],
+            div[style*="background-color"][style*="FEF3C7"],
+            div[style*="background-color"][style*="fef3c7"],
+            div[style*="background"][style*="rgb(254, 243, 199)"],
+            div[style*="background"][style*="rgba(254, 243, 199"] {
+                display: flex !important;
+                flex-direction: column !important;
+                flex-wrap: wrap !important;
+                gap: 0.5rem !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                height: auto !important;
+                /* ⚡ KRITISCH: Überschreibe feste Höhe */
+                min-height: 60px !important;
+                max-height: none !important;
+                box-sizing: border-box !important;
+                padding: 0.75rem !important;
+                overflow: visible !important;
+                position: relative !important;
+                /* Überschreibe absolute positioning */
+            }
+
+            /* Alle Kinder: volle Breite, vertical layout, KEINE absolute Position */
+            div[style*="background"][style*="FEF3C7"]>*,
+            div[style*="background"][style*="fef3c7"]>*,
+            div[style*="background-color"][style*="FEF3C7"]>*,
+            div[style*="background"][style*="rgb(254, 243, 199)"]>* {
+                width: 100% !important;
+                max-width: 100% !important;
+                box-sizing: border-box !important;
+                margin-bottom: 0.5rem !important;
+                display: block !important;
+                position: relative !important;
+                /* ⚡ KRITISCH: Reset alle Position-Properties */
+                left: auto !important;
+                right: auto !important;
+                top: auto !important;
+                bottom: auto !important;
+                float: none !important;
+                transform: none !important;
+            }
+
+            /* Generische Regel: ALLE inputs in Einstellungen */
+            #v-einstellungen input[type="text"],
+            #v-einstellungen input[type="date"],
+            #v-einstellungen input[type="time"],
+            #v-einstellungen input:not([type]) {
+                max-width: 100% !important;
+                width: 100% !important;
+                box-sizing: border-box !important;
+                font-size: 0.875rem !important;
+                position: relative !important;
+            }
         }
 
         /* Desktop: Zeit-Input Container */
@@ -1072,7 +1163,7 @@
                     <div>
                         <h1><span>🕐</span>Arbeitszeiten</h1>
                         <div style="font-size: 0.65rem; color: #9CA3AF; margin-top: 0.5rem; margin-left: 0.5rem;">
-                            v1.2.51
+                            v1.2.61
                         </div>
                     </div>
                     <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;"></span>
@@ -4088,13 +4179,16 @@
                 document.getElementById('m-diff-info').textContent = `${erfuellteTage} / ${arbeitsTageImMonat} Tage`;
             }
 
-            // Ferientage anzeigen
+            // Ferientage anzeigen (mit Null-Checks)
             const urlaubGesamt = (settings.urlaubTage || 25) + (settings.resturlaubVorjahr || 0);
             const urlaubBisHierthin = getUrlaubBisZumMonat(m);
             const urlaubRest = urlaubGesamt - urlaubBisHierthin;
-            document.getElementById('m-urlaub-gesamt').textContent = urlaubGesamt;
-            document.getElementById('m-urlaub-bezogen').textContent = urlaubBisHierthin;
-            document.getElementById('m-urlaub-rest').textContent = urlaubRest;
+            const mUrlaubGesamt = document.getElementById('m-urlaub-gesamt');
+            const mUrlaubBezogen = document.getElementById('m-urlaub-bezogen');
+            const mUrlaubRest = document.getElementById('m-urlaub-rest');
+            if (mUrlaubGesamt) mUrlaubGesamt.textContent = urlaubGesamt;
+            if (mUrlaubBezogen) mUrlaubBezogen.textContent = urlaubBisHierthin;
+            if (mUrlaubRest) mUrlaubRest.textContent = urlaubRest;
         }
 
         function jahrVor() {
@@ -7600,8 +7694,8 @@
             });
         }
 
-        // Version 1.2.52 - Manuell erhöhen bei jeder Änderung
-        const version = '1.2.52';
+        // Version 1.2.61 - Manuell erhöhen bei jeder Änderung
+        const version = '1.2.61';
 
         // Initialise user info with fallback placeholders
         const userInfoEl = document.getElementById('user-info');
