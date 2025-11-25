@@ -1241,7 +1241,7 @@
                     <div>
                         <h1><span>🕐</span>Arbeitszeiten</h1>
                         <div style="font-size: 0.65rem; color: #9CA3AF; margin-top: 0.5rem; margin-left: 0.5rem;">
-                            v1.2.66
+                            v1.2.69
                         </div>
                     </div>
                     <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;"></span>
@@ -3870,10 +3870,11 @@
                     : `${kwText}    ${d}.${m}. - ${sunday.getDate()}.${sunday.getMonth() + 1}.${y}`;
 
             let totalArb = 0;
-            let totalSoll = 0; // ⚡ NEU: Dynamische Berechnung
             let erfuellteTage = 0;
             let html = '<div class="flex-col">';
 
+            const sollWocheStunden = parseFloat(document.getElementById('soll-woche').value) || 42;
+            const totalSoll = sollWocheStunden * 60;
             const sollProTag = timeToMin(settings.soll);
 
             for (let i = 0; i < 7; i++) {
@@ -3930,6 +3931,12 @@
                         (isFT && ftBezahlt)) {
                         sollTagMin = 0;
                         erfuellteTage++;
+
+                        // ⚡ NEU: Krankheit, Urlaub, Kompensation zählen als gearbeitete Zeit (8:24)
+                        if ((tagTyp === 'krank' || tagTyp === 'urlaub' || tagTyp === 'kompensation') && arb === 0) {
+                            totalArb += sollProTag;
+                        }
+
                         if (arb > 0) {
                             diffClass = 'color: #10B981; font-weight: bold;';
                             if (isFT && ftBezahlt) {
@@ -3947,43 +3954,26 @@
                         }
                     } else {
                         // Normaler Arbeitstag
-                        // Prüfen auf unbezahlten Urlaub/Feiertag -> Soll ist trotzdem 0, aber nicht "erfüllt" im positiven Sinn
-                        if (tagTyp === 'unbezahlt' || (isFT && !ftBezahlt)) {
-                            sollTagMin = 0;
-                            // Hier keine Erhöhung von erfuellteTage, oder doch?
-                            // Im Excel wird es als 0 Soll gerechnet.
-                            if (arb > 0) {
-                                diffClass = 'color: #10B981; font-weight: bold;';
-                                diffText = `+${minToTime(arb)}`;
-                            } else {
-                                diffClass = 'color: #EF4444;';
-                                diffText = 'Unbezahlt';
-                            }
-                        } else {
-                            sollTagMin = sollProTag;
-                            const diff = sollTagMin - arb;
+                        sollTagMin = sollProTag;
+                        const diff = sollTagMin - arb;
 
-                            if (diff === 0) {
-                                erfuellteTage++;
-                                diffClass = 'color: #10B981; font-weight: bold;';
-                                diffText = '✓ Erfüllt';
-                            } else if (diff < 0) {
-                                erfuellteTage++;
-                                diffClass = 'color: #10B981; font-weight: bold;';
-                                diffText = `+${minToTime(-diff)}`;
-                            } else if (arb === 0) {
-                                diffClass = 'color: #EF4444; font-weight: bold;';
-                                diffText = '- Nicht gearbeitet';
-                            } else {
-                                diffClass = 'color: #EF4444; font-weight: bold;';
-                                diffText = `-${minToTime(diff)}`;
-                            }
+                        if (diff === 0) {
+                            erfuellteTage++;
+                            diffClass = 'color: #10B981; font-weight: bold;';
+                            diffText = '✓ Erfüllt';
+                        } else if (diff < 0) {
+                            erfuellteTage++;
+                            diffClass = 'color: #10B981; font-weight: bold;';
+                            diffText = `+${minToTime(-diff)}`;
+                        } else if (arb === 0) {
+                            diffClass = 'color: #EF4444; font-weight: bold;';
+                            diffText = '- Nicht gearbeitet';
+                        } else {
+                            diffClass = 'color: #EF4444; font-weight: bold;';
+                            diffText = `-${minToTime(diff)}`;
                         }
                     }
                 }
-
-                // ⚡ NEU: Sollzeit aufaddieren
-                totalSoll += sollTagMin;
 
                 let bgClass = '';
                 let tagTypIcon = '';
@@ -4002,81 +3992,85 @@
                             bgClass = 'tag-krank';
                             tagTypIcon = '<span class="emoji-medium">🤒</span> ';
                             diffText = 'Krankheit';
-                            diffClass = 'color: #10B981;'; // Grün, da entschuldigt
-                            break;
-                        case 'kompensation':
-                            bgClass = 'tag-kompensation';
-                            tagTypIcon = '<span class="emoji-medium">⏱️</span> ';
-                            diffText = 'Kompensation';
-                            diffClass = 'color: #10B981;';
-                            break;
-                        case 'feiertag-bezahlt':
-                            bgClass = 'feiertag';
-                            tagTypIcon = '<span class="emoji-medium">🔵</span> ';
-                            diffText = 'Feiertag';
-                            diffClass = 'color: #10B981;';
-                            break;
-                        case 'feiertag-unbezahlt':
-                            bgClass = 'feiertag-unbezahlt';
-                            tagTypIcon = '<span class="emoji-medium">🟠</span> ';
-                            diffText = 'Feiertag (unbez.)';
-                            diffClass = 'color: #EF4444;';
+                            diffClass = 'color: #F59E0B;';
                             break;
                         case 'unbezahlt':
                             bgClass = 'tag-unbezahlt';
                             tagTypIcon = '<span class="emoji-medium">📅</span> ';
-                            diffText = 'Unbezahlt';
+                            diffText = 'Unbez. Urlaub';
                             diffClass = 'color: #EF4444;';
                             break;
+                        case 'kompensation':
+                            bgClass = 'tag-kompensation';
+                            tagTypIcon = '<span class="emoji-medium">⏰</span> ';
+                            diffText = 'Kompensation';
+                            diffClass = 'color: #A855F7;';
+                            break;
+                        case 'normal':
+                            bgClass = 'tag-typ-normal';
+                            break;
+                        default:
+                            bgClass = 'tag-typ-normal';
+                            break;
                     }
+                } else if (isWeekend) {
+                    bgClass = 'weekend';
+                } else {
+                    // Fallback für normale Tage ohne expliziten Typ
+                    bgClass = 'tag-typ-normal';
                 }
 
-                html += `
-            <div class="card-sm ${bgClass}" style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem;">
-                <div style="display: flex; flex-direction: column;">
-                    <span style="font-weight: 600; font-size: 0.9rem;">${tagTypIcon}${dayName} ${dayNum}.${monthNum}.${dt.getFullYear()}</span>
-                    ${d.notiz ? `<span style="font-size: 0.75rem; color: #6B7280; margin-top: 0.25rem;">📝 ${d.notiz}</span>` : ''}
-                </div>
-                <div style="text-align: right;">
-                    <div style="font-family: monospace; font-size: 1rem; font-weight: 600;">${arb > 0 ? minToTime(arb) : '--:--'}</div>
-                    <div style="font-size: 0.75rem; ${diffClass}">${diffText}</div>
-                </div>
-            </div>
-        `;
+                // Fix für fehlendes notizDisplay (V18)
+                let notizDisplay = '';
+                if (d.notiz) {
+                    notizDisplay = `<div style="font-size: 0.75rem; color: #9CA3AF; margin-top: 0.25rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">📝 ${d.notiz}</div>`;
+                }
+
+                html += `<div class="card-sm ${bgClass}" style="cursor: pointer;" onclick="jumpToDate('${dateStr}')">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-weight: 600;">${tagTypIcon}${formatDateWithDay(dateStr)}</div>
+                            ${isFT ? `<div style="font-size: 0.75rem; opacity: 0.75; margin-top: 0.25rem;">${ftBezahlt ? '🔵' : '🟠'} ${ftName}</div>` : ''}
+                            ${notizDisplay}
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 1.25rem; font-weight: bold;">${arb > 0 ? minToTime(arb) : '--:--'}</div>
+                            <div style="font-size: 0.875rem; ${diffClass}">${diffText}</div>
+                        </div>
+                    </div>
+                </div>`;
+
             }
 
             html += '</div>';
-            document.getElementById('w-content').innerHTML = html;
-
-            // Update Header Stats
-            document.getElementById('w-arb').textContent = minToTime(totalArb);
-            document.getElementById('w-arb-info').textContent = `${erfuellteTage} / 5 Tage`;
-
-            // ⚡ NEU: Berechnete Sollzeit anzeigen
-            document.getElementById('w-soll').textContent = minToTime(totalSoll);
-            document.getElementById('w-soll-info').textContent = '5 Tage'; // Könnte man auch dynamisch machen, aber 5 Tage Standard ist ok
+            document.getElementById('w-list').innerHTML = html;
 
             const totalDiff = totalSoll - totalArb;
 
+            document.getElementById('w-arb').textContent = minToTime(totalArb);
+            document.getElementById('w-info').textContent = `${erfuellteTage} / 5 Tage`;
+
+            document.getElementById('w-soll').textContent = minToTime(totalSoll);
+            document.getElementById('w-soll-info').textContent = '5 Tage';
+
             if (totalDiff === 0) {
-                document.getElementById('w-diff').textContent = '±00:00';
-                document.getElementById('w-diff-lbl').textContent = 'Fehlzeit Woche';
+                document.getElementById('w-diff').textContent = minToTime(totalSoll);
+                document.getElementById('w-diff-lbl').textContent = 'Soll erreicht';
                 document.getElementById('w-diff-card').className = 'grad-green';
                 document.getElementById('w-diff-info').textContent = `${erfuellteTage} / 5 Tage`;
             } else if (totalDiff < 0) {
-                // Mehr gearbeitet als Soll -> Überzeit (Grün)
-                document.getElementById('w-diff').textContent = `+${minToTime(-totalDiff)}`;
+                document.getElementById('w-diff').textContent = minToTime(-totalDiff);
                 document.getElementById('w-diff-lbl').textContent = 'Überzeit Woche';
                 document.getElementById('w-diff-card').className = 'grad-green';
                 document.getElementById('w-diff-info').textContent = `${erfuellteTage} / 5 Tage`;
             } else {
-                // Weniger gearbeitet als Soll -> Fehlzeit (Orange/Rot)
                 document.getElementById('w-diff').textContent = minToTime(totalDiff);
                 document.getElementById('w-diff-lbl').textContent = 'Fehlzeit Woche';
                 document.getElementById('w-diff-card').className = 'grad-orange';
                 document.getElementById('w-diff-info').textContent = `${erfuellteTage} / 5 Tage`;
             }
         }
+
         function getWeekNumber(d) {
             const dt = new Date(d.getTime());
             dt.setHours(0, 0, 0, 0);
@@ -4180,6 +4174,12 @@
                         tagTyp === 'feiertag-bezahlt' ||
                         (isFT && ftBezahlt)) {
                         erfuellteTage++;
+
+                        // ⚡ NEU: Krankheit, Urlaub, Kompensation zählen als gearbeitete Zeit (8:24)
+                        if ((tagTyp === 'krank' || tagTyp === 'urlaub' || tagTyp === 'kompensation') && arb === 0) {
+                            totalArb += sollProTag;
+                        }
+
                         if (arb > 0) {
                             diff = -arb;
                             diffColor = '#10B981';
@@ -4353,6 +4353,11 @@
                             tagTyp === 'feiertag-bezahlt' ||
                             (isFT && ftBezahlt)) {
                             erfuellteTage++;
+                            
+                            // ⚡ NEU: Krankheit, Urlaub, Kompensation zählen als gearbeitete Zeit (8:24)
+                            if ((tagTyp === 'krank' || tagTyp === 'urlaub' || tagTyp === 'kompensation') && arb === 0) {
+                                totalArb += sollProTag;
+                            }
                         } else {
                             // Normaler Arbeitstag: Prüfe ob genug gearbeitet wurde
                             const diff = sollProTag - arb;
@@ -7784,8 +7789,8 @@
             });
         }
 
-        // Version 1.2.66 - Manuell erhöhen bei jeder Änderung
-        const version = '1.2.66';
+        // Version 1.2.69 - Manuell erhöhen bei jeder Änderung
+        const version = '1.2.69';
 
         // Initialise user info with fallback placeholders
         const userInfoEl = document.getElementById('user-info');
