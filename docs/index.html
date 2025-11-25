@@ -996,6 +996,9 @@
             div[style*="background"][style*="rgba(254, 243, 199"] {
                 display: flex !important;
                 flex-direction: column !important;
+                align-items: center !important;
+                /* 🎯 ZENTRIEREN */
+                justify-content: center !important;
                 flex-wrap: wrap !important;
                 gap: 0.5rem !important;
                 width: 100% !important;
@@ -1009,6 +1012,8 @@
                 overflow: visible !important;
                 position: relative !important;
                 /* Überschreibe absolute positioning */
+                text-align: center !important;
+                /* Text zentrieren */
             }
 
             /* Alle Kinder: volle Breite, vertical layout, KEINE absolute Position */
@@ -1017,7 +1022,8 @@
             div[style*="background-color"][style*="FEF3C7"]>*,
             div[style*="background"][style*="rgb(254, 243, 199)"]>* {
                 width: 100% !important;
-                max-width: 100% !important;
+                max-width: 400px !important;
+                /* 🎯 Nicht zu breit werden lassen */
                 box-sizing: border-box !important;
                 margin-bottom: 0.5rem !important;
                 display: block !important;
@@ -1029,6 +1035,8 @@
                 bottom: auto !important;
                 float: none !important;
                 transform: none !important;
+                text-align: center !important;
+                /* Text in Labels zentrieren */
             }
 
             /* Generische Regel: ALLE inputs in Einstellungen */
@@ -1041,6 +1049,8 @@
                 box-sizing: border-box !important;
                 font-size: 0.875rem !important;
                 position: relative !important;
+                text-align: center !important;
+                /* Inputs zentrieren */
             }
         }
 
@@ -1224,7 +1234,7 @@
                     <div>
                         <h1><span>🕐</span>Arbeitszeiten</h1>
                         <div style="font-size: 0.65rem; color: #9CA3AF; margin-top: 0.5rem; margin-left: 0.5rem;">
-                            v1.2.63
+                            v1.2.64
                         </div>
                     </div>
                     <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;"></span>
@@ -7755,8 +7765,8 @@
             });
         }
 
-        // Version 1.2.63 - Manuell erhöhen bei jeder Änderung
-        const version = '1.2.63';
+        // Version 1.2.64 - Manuell erhöhen bei jeder Änderung
+        const version = '1.2.64';
 
         // Initialise user info with fallback placeholders
         const userInfoEl = document.getElementById('user-info');
