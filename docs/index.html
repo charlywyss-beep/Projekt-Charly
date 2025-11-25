@@ -1021,9 +1021,10 @@
             div[style*="background"][style*="fef3c7"]>*,
             div[style*="background-color"][style*="FEF3C7"]>*,
             div[style*="background"][style*="rgb(254, 243, 199)"]>* {
-                width: 100% !important;
-                max-width: 400px !important;
-                /* 🎯 Nicht zu breit werden lassen */
+                width: 85% !important;
+                /* 🎯 Etwas Platz lassen für Zentrierung */
+                max-width: 350px !important;
+                /* 🎯 Begrenzte Breite wie gewünscht */
                 box-sizing: border-box !important;
                 margin-bottom: 0.5rem !important;
                 display: block !important;
@@ -1037,20 +1038,26 @@
                 transform: none !important;
                 text-align: center !important;
                 /* Text in Labels zentrieren */
+                margin-left: auto !important;
+                margin-right: auto !important;
             }
 
-            /* Generische Regel: ALLE inputs in Einstellungen */
+            /* Generische Regel: ALLE inputs in Einstellungen - MUSS AUCH BEGRENZT SEIN */
             #v-einstellungen input[type="text"],
             #v-einstellungen input[type="date"],
             #v-einstellungen input[type="time"],
             #v-einstellungen input:not([type]) {
-                max-width: 100% !important;
-                width: 100% !important;
+                max-width: 350px !important;
+                /* 🎯 Fix für Specificity Issue */
+                width: 85% !important;
+                /* 🎯 Fix für Specificity Issue */
                 box-sizing: border-box !important;
                 font-size: 0.875rem !important;
                 position: relative !important;
                 text-align: center !important;
                 /* Inputs zentrieren */
+                margin-left: auto !important;
+                margin-right: auto !important;
             }
         }
 
@@ -1234,7 +1241,7 @@
                     <div>
                         <h1><span>🕐</span>Arbeitszeiten</h1>
                         <div style="font-size: 0.65rem; color: #9CA3AF; margin-top: 0.5rem; margin-left: 0.5rem;">
-                            v1.2.64
+                            v1.2.65
                         </div>
                     </div>
                     <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;"></span>
@@ -7765,8 +7772,8 @@
             });
         }
 
-        // Version 1.2.64 - Manuell erhöhen bei jeder Änderung
-        const version = '1.2.64';
+        // Version 1.2.65 - Manuell erhöhen bei jeder Änderung
+        const version = '1.2.65';
 
         // Initialise user info with fallback placeholders
         const userInfoEl = document.getElementById('user-info');
