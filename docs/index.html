@@ -740,6 +740,16 @@
             top: 60px !important;
         }
 
+        /* 📱 PORTRAIT MODE: Export-Menü rechts ausrichten statt abschneiden */
+        @media (max-width: 480px) and (orientation: portrait) and (hover: none) and (pointer: coarse) {
+            .export-menu {
+                right: 0.5rem !important;
+                left: auto !important;
+                max-width: calc(100vw - 1rem) !important;
+                min-width: 200px !important;
+            }
+        }
+
         .view-navigation {
             flex-direction: column !important;
             align-items: stretch !important;
@@ -1241,7 +1251,7 @@
                     <div>
                         <h1><span>🕐</span>Arbeitszeiten</h1>
                         <div style="font-size: 0.65rem; color: #9CA3AF; margin-top: 0.5rem; margin-left: 0.5rem;">
-                            v1.2.69
+                            v1.2.70
                         </div>
                     </div>
                     <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;"></span>
@@ -4353,7 +4363,7 @@
                             tagTyp === 'feiertag-bezahlt' ||
                             (isFT && ftBezahlt)) {
                             erfuellteTage++;
-                            
+
                             // ⚡ NEU: Krankheit, Urlaub, Kompensation zählen als gearbeitete Zeit (8:24)
                             if ((tagTyp === 'krank' || tagTyp === 'urlaub' || tagTyp === 'kompensation') && arb === 0) {
                                 totalArb += sollProTag;
@@ -7789,8 +7799,8 @@
             });
         }
 
-        // Version 1.2.69 - Manuell erhöhen bei jeder Änderung
-        const version = '1.2.69';
+        // Version 1.2.70 - Manuell erhöhen bei jeder Änderung
+        const version = '1.2.70';
 
         // Initialise user info with fallback placeholders
         const userInfoEl = document.getElementById('user-info');
