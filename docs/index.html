@@ -740,11 +740,11 @@
             top: 60px !important;
         }
 
-        /* 📱 PORTRAIT MODE: Export-Menü rechts ausrichten statt abschneiden */
+        /* 📱 PORTRAIT MODE: Export-Menü nach LINKS ausklappen (statt rechts) */
         @media (max-width: 480px) and (orientation: portrait) and (hover: none) and (pointer: coarse) {
             .export-menu {
-                right: 0.5rem !important;
-                left: auto !important;
+                left: 0 !important;
+                right: auto !important;
                 max-width: calc(100vw - 1rem) !important;
                 min-width: 200px !important;
             }
@@ -1251,7 +1251,7 @@
                     <div>
                         <h1><span>🕐</span>Arbeitszeiten</h1>
                         <div style="font-size: 0.65rem; color: #9CA3AF; margin-top: 0.5rem; margin-left: 0.5rem;">
-                            v1.2.70
+                            v1.2.71
                         </div>
                     </div>
                     <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;"></span>
@@ -7799,8 +7799,8 @@
             });
         }
 
-        // Version 1.2.70 - Manuell erhöhen bei jeder Änderung
-        const version = '1.2.70';
+        // Version 1.2.71 - Manuell erhöhen bei jeder Änderung
+        const version = '1.2.71';
 
         // Initialise user info with fallback placeholders
         const userInfoEl = document.getElementById('user-info');
