@@ -1185,6 +1185,8 @@
             text-align: center !important;
             padding-right: 0.75rem !important;
             padding-left: 0.75rem !important;
+            min-width: 0 !important;
+            /* Fix für Flexbox Overflow */
         }
 
         /* Clear Button */
@@ -1251,7 +1253,7 @@
                     <div>
                         <h1><span>🕐</span>Arbeitszeiten</h1>
                         <div style="font-size: 0.65rem; color: #9CA3AF; margin-top: 0.5rem; margin-left: 0.5rem;">
-                            v1.2.75
+                            v1.2.76
                         </div>
                     </div>
                     <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;"></span>
@@ -7827,7 +7829,7 @@
         }
 
         // Version 1.2.72 - Manuell erhöhen bei        // Version
-        const version = '1.2.75';
+        const version = '1.2.76';
 
         // Initialise user info with fallback placeholders
         const userInfoEl = document.getElementById('user-info');
