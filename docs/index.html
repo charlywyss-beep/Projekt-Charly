@@ -1251,7 +1251,7 @@
                     <div>
                         <h1><span>🕐</span>Arbeitszeiten</h1>
                         <div style="font-size: 0.65rem; color: #9CA3AF; margin-top: 0.5rem; margin-left: 0.5rem;">
-                            v1.2.71
+                            v1.2.72
                         </div>
                     </div>
                     <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;"></span>
@@ -1265,7 +1265,7 @@
                 <button class="btn btn-sec card-sm" onclick="toggleDark()"><span id="icon">☀️</span></button>
                 <div style="position: relative;">
                     <button class="btn btn-sec card-sm" onclick="toggleExport()">📥</button>
-                    <div id="export-menu" class="export-menu hidden">
+                    <div id="export-menu" class="export-menu hidden" onclick="if(event.target===this) toggleExport();">
                         <button class="export-btn time-export" onclick="exportBoth()">📦 Excel + PDF</button>
                         <button class="export-btn time-export" onclick="exportExcel()">📊 Excel (.xlsx)</button>
                         <button class="export-btn time-export" onclick="exportCSV()">📄 CSV (Deutsch)</button>
@@ -7799,8 +7799,8 @@
             });
         }
 
-        // Version 1.2.71 - Manuell erhöhen bei jeder Änderung
-        const version = '1.2.71';
+        // Version 1.2.72 - Manuell erhöhen bei jeder Änderung
+        const version = '1.2.72';
 
         // Initialise user info with fallback placeholders
         const userInfoEl = document.getElementById('user-info');
