@@ -1265,7 +1265,7 @@
                 <button class="btn btn-sec card-sm" onclick="toggleDark()"><span id="icon">☀️</span></button>
                 <div style="position: relative;">
                     <button class="btn btn-sec card-sm" onclick="toggleExport()">📥</button>
-                    <div id="export-menu" class="export-menu hidden" onclick="if(event.target===this) toggleExport();">
+                    <div id="export-menu" class="export-menu hidden">
                         <button class="export-btn time-export" onclick="exportBoth()">📦 Excel + PDF</button>
                         <button class="export-btn time-export" onclick="exportExcel()">📊 Excel (.xlsx)</button>
                         <button class="export-btn time-export" onclick="exportCSV()">📄 CSV (Deutsch)</button>
@@ -5188,12 +5188,27 @@
             document.getElementById('icon').textContent = '☀️';
         }
 
+        // Globaler Click-Listener zum Schließen des Menüs
+        function closeExportMenuOutside(event) {
+            const menu = document.getElementById('export-menu');
+            const toggleBtn = event.target.closest('button[onclick="toggleExport()"]');
+
+            // Wenn Klick NICHT im Menü und NICHT auf dem Toggle-Button
+            if (menu && !menu.contains(event.target) && !toggleBtn) {
+                menu.classList.add('hidden');
+                document.removeEventListener('click', closeExportMenuOutside);
+            }
+        }
+
         function toggleExport() {
             const menu = document.getElementById('export-menu');
-            menu.classList.toggle('hidden');
+            const isHidden = menu.classList.contains('hidden');
 
-            // Update visibility based on current view
-            if (!menu.classList.contains('hidden')) {
+            if (isHidden) {
+                // Menü öffnen
+                menu.classList.remove('hidden');
+
+                // Update visibility based on current view
                 const isSettings = view === 'einstellungen';
                 const timeExports = menu.querySelectorAll('.time-export');
                 const settingsExports = menu.querySelectorAll('.settings-export');
@@ -5207,6 +5222,16 @@
                 settingsExports.forEach(el => {
                     el.style.display = '';
                 });
+
+                // Event Listener hinzufügen (mit kleiner Verzögerung, damit der aktuelle Klick nicht sofort schließt)
+                setTimeout(() => {
+                    document.addEventListener('click', closeExportMenuOutside);
+                }, 0);
+
+            } else {
+                // Menü schließen
+                menu.classList.add('hidden');
+                document.removeEventListener('click', closeExportMenuOutside);
             }
         }
 
