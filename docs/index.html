@@ -437,6 +437,19 @@
             opacity: 1;
         }
 
+        /* Make clear button always visible but transparent when empty */
+        .clear-btn {
+            visibility: visible !important;
+            opacity: 0;
+            /* Hidden by default */
+            pointer-events: none;
+        }
+
+        .clear-btn.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
         .month-card {
             cursor: pointer;
             transition: all 0.2s;
@@ -900,15 +913,20 @@
                 font-size: 0.8rem !important;
                 z-index: 20 !important;
                 position: relative !important;
-                visibility: hidden;
+                visibility: visible !important;
+                /* Always visible to keep layout stable */
                 display: flex !important;
                 top: auto !important;
                 right: auto !important;
                 transform: none !important;
+                opacity: 0;
+                /* Hidden by default */
+                pointer-events: none;
             }
 
             .clear-btn.visible {
-                visibility: visible !important;
+                opacity: 1 !important;
+                pointer-events: auto !important;
             }
 
             /* NUR Mobile: Flex-wrap Layout für Zeitfelder */
@@ -1253,7 +1271,7 @@
                     <div>
                         <h1><span>🕐</span>Arbeitszeiten</h1>
                         <div style="font-size: 0.65rem; color: #9CA3AF; margin-top: 0.5rem; margin-left: 0.5rem;">
-                            v1.2.76
+                            v1.2.77
                         </div>
                     </div>
                     <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;"></span>
@@ -7829,7 +7847,7 @@
         }
 
         // Version 1.2.72 - Manuell erhöhen bei        // Version
-        const version = '1.2.76';
+        const version = '1.2.77';
 
         // Initialise user info with fallback placeholders
         const userInfoEl = document.getElementById('user-info');
