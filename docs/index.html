@@ -801,6 +801,45 @@
             font-size: 0.95rem;
         }
 
+        /* 📱 PORTRAIT MODE: SVG Icons für iPad Air */
+        @media (max-width: 480px) and (orientation: portrait) and (hover: none) and (pointer: coarse) {
+
+            /* Zeit-Input mit SVG Uhr-Icon und Placeholder */
+            input[type="time"] {
+                -webkit-appearance: none !important;
+                appearance: none !important;
+                background-image:
+                    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239CA3AF' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' /%3E%3C/svg%3E"),
+                    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='20' viewBox='0 0 60 20'%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%239CA3AF' font-family='sans-serif' font-size='14'%3E-- : --%3C/text%3E%3C/svg%3E") !important;
+                background-repeat: no-repeat, no-repeat !important;
+                background-position: right 0.75rem center, center center !important;
+                background-size: 1.25rem, 60px 20px !important;
+            }
+
+            /* Icon & Placeholder ausblenden wenn Wert vorhanden */
+            input[type="time"].has-value {
+                background-image: none !important;
+            }
+
+            /* Dark Mode: Hellere Icons/Text */
+            body.dark input[type="time"] {
+                background-image:
+                    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23E5E7EB' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' /%3E%3C/svg%3E"),
+                    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='20' viewBox='0 0 60 20'%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23E5E7EB' font-family='sans-serif' font-size='14'%3E-- : --%3C/text%3E%3C/svg%3E") !important;
+            }
+
+            /* Clear-Button Visibility mit !important für iOS */
+            .clear-btn {
+                opacity: 0 !important;
+                pointer-events: none !important;
+            }
+
+            .clear-btn.visible {
+                opacity: 1 !important;
+                pointer-events: auto !important;
+            }
+        }
+
         @media (max-width: 480px) and (hover: none) and (pointer: coarse) {
             body {
                 padding: 0.75rem !important;
@@ -934,6 +973,7 @@
             .clear-btn.visible {
                 opacity: 1 !important;
                 pointer-events: auto !important;
+                transition: opacity 0.2s ease !important;
             }
 
             /* NUR Mobile: Flex-wrap Layout für Zeitfelder */
@@ -1278,7 +1318,7 @@
                     <div>
                         <h1><span>🕐</span>Arbeitszeiten</h1>
                         <div style="font-size: 0.65rem; color: #9CA3AF; margin-top: 0.5rem; margin-left: 0.5rem;">
-                            v1.2.80
+                            v1.2.81
                         </div>
                     </div>
                     <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;"></span>
@@ -1403,6 +1443,13 @@
                     <!-- Fehlermeldung innerhalb der Kachel -->
                     <!-- Fehlermeldungen / Erfolg -->
                     <div id="msg" class="message msg-ok hidden" style="margin-top: 0.75rem; text-align: center;"></div>
+
+                    <!-- Zurücksetzen und Speichern Buttons -->
+                    <div style="display: flex; gap: 0.5rem; margin-top: 1.25rem;">
+                        <button class="btn btn-danger" style="flex: 1;" onclick="reset()">↻ Zurücksetzen</button>
+                        <button class="btn btn-success" id="btn-save" style="flex: 1;" onclick="save()">💾
+                            Speichern</button>
+                    </div>
                 </div>
 
                 <div class="arbeitszeit-kachel">
@@ -1483,10 +1530,7 @@
             <!-- Platzhalter für Warnbox (wird dynamisch eingefügt) -->
             <div id="tagtyp-warning-container"></div>
 
-            <div style="display: flex; gap: 0.5rem; margin-top: 1.25rem;">
-                <button class="btn btn-danger" style="flex: 1;" onclick="reset()">↻ Zurücksetzen</button>
-                <button class="btn btn-success" id="btn-save" style="flex: 1;" onclick="save()">💾 Speichern</button>
-            </div>
+            <!-- Buttons wurden nach oben in Arbeitszeiten-Kachel verschoben -->
 
             <div id="compact-result"
                 style="margin-top: 1rem; padding: 1rem; background: rgba(99, 102, 241, 0.1); border-radius: 0.5rem; display: none;">
@@ -7866,7 +7910,7 @@
         }
 
         // Version 1.2.72 - Manuell erhöhen bei        // Version
-        const version = '1.2.80';
+        const version = '1.2.81';
 
         // Initialise user info with fallback placeholders
         const userInfoEl = document.getElementById('user-info');
