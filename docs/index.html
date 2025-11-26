@@ -809,7 +809,7 @@
                 -webkit-appearance: none !important;
                 appearance: none !important;
                 background-image:
-                    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239CA3AF' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M12 8v4l3 3m6-3a9 9 0  11-18 0 9 9 0 0118 0z' /%3E%3C/svg%3E"),
+                    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239CA3AF' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' /%3E%3C/svg%3E"),
                     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='20' viewBox='0 0 60 20'%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%239CA3AF' font-family='sans-serif' font-size='14'%3E-- : --%3C/text%3E%3C/svg%3E") !important;
                 background-repeat: no-repeat, no-repeat !important;
                 background-position: right 0.75rem center, center center !important;
@@ -837,7 +837,6 @@
             .clear-btn.visible {
                 opacity: 1 !important;
                 pointer-events: auto !important;
-                transition: opacity 0.2s ease !important;
             }
         }
 
@@ -974,6 +973,7 @@
             .clear-btn.visible {
                 opacity: 1 !important;
                 pointer-events: auto !important;
+                transition: opacity 0.2s ease !important;
             }
 
             /* NUR Mobile: Flex-wrap Layout für Zeitfelder */
@@ -1318,7 +1318,7 @@
                     <div>
                         <h1><span>🕐</span>Arbeitszeiten</h1>
                         <div style="font-size: 0.65rem; color: #9CA3AF; margin-top: 0.5rem; margin-left: 0.5rem;">
-                            v1.2.82
+                            v1.2.81
                         </div>
                     </div>
                     <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;"></span>
@@ -1444,1172 +1444,1228 @@
                     <!-- Fehlermeldungen / Erfolg -->
                     <div id="msg" class="message msg-ok hidden" style="margin-top: 0.75rem; text-align: center;"></div>
                 </div>
+            </div>
+        </div>
 
-                <div class="arbeitszeit-kachel">
-                    <h3 class="arbeitszeit-kachel-title">📋 Zusatzoptionen</h3>
+        <!-- Zurücksetzen und Speichern Buttons NACH dem kachel-grid -->
+        <div style="display: flex; gap: 0.5rem; margin-top: 1.25rem;">
+            <button class="btn btn-danger" style="flex: 1;" onclick="reset()">↻ Zurücksetzen</button>
+            <button class="btn btn-success" id="btn-save" style="flex: 1;" onclick="save()">💾 Speichern</button>
+        </div>
+
+        <!-- Platzhalter für Warnbox (wird dynamisch eingefügt) -->
+        <div id="tagtyp-warning-container"></div>
+
+        <div id="compact-result"
+            style="margin-top: 1rem; padding: 1rem; background: rgba(99, 102, 241, 0.1); border-radius: 0.5rem; display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                <span style="font-weight: 600; color: #6366F1;">⏱️ Arbeitszeit:</span>
+                <span id="compact-arb" style="font-weight: bold; font-size: 1.125rem;">--:--</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-weight: 600;" id="compact-diff-label">Differenz:</span>
+                <span id="compact-diff" style="font-weight: bold; font-size: 1.125rem;">--:--</span>
+            </div>
+        </div>
+
+        <div
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1.5rem;">
+
+            <div class="grad-blue">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <div style="flex: 1;">
+                        <div style="font-size: 0.875rem; opacity: 0.9;">Arbeitszeit</div>
+                        <div style="font-size: 2rem; font-weight: bold; margin-top: 0.5rem; line-height: 1;" id="r-arb">
+                            --:--</div>
+                    </div>
                     <div
-                        style="display: grid; grid-template-rows: 24px 54px 54px 54px 54px 54px 54px 54px; gap: 0.75rem;">
-                        <!-- Zeile 1: Label -->
-                        <label
-                            style="grid-row: 1; font-weight: 600; font-size: 0.9375rem; line-height: 24px; align-self: start;">Tag-Typ</label>
-
-                        <!-- Zeile 2: Normaler Arbeitstag -->
-                        <label class="tag-typ-label tag-typ-normal"
-                            style="grid-row: 2; display: flex; align-items: center; cursor: pointer; padding: 0.75rem; border-radius: 0.5rem; height: 54px;">
-                            <input type="radio" name="tagTyp" value="normal" checked="" onchange="updateTagTyp()"
-                                style="margin-right: 0.5rem;">
-                            <span class="emoji-medium">⚙️</span> <span>Normaler Arbeitstag</span>
-                        </label>
-
-                        <!-- Zeile 3: Bezahlter Feiertag -->
-                        <label class="tag-typ-label feiertag"
-                            style="grid-row: 3; display: flex; align-items: center; cursor: pointer; padding: 0.75rem; border-radius: 0.5rem; height: 54px;">
-                            <input type="radio" name="tagTyp" value="feiertag-bezahlt" onchange="updateTagTyp()"
-                                style="margin-right: 0.5rem;">
-                            <span class="emoji-medium">🔵</span> <span>Bezahlter Feiertag</span>
-                        </label>
-
-                        <!-- Zeile 4: Unbezahlter Feiertag -->
-                        <label class="tag-typ-label feiertag-unbezahlt"
-                            style="grid-row: 4; display: flex; align-items: center; cursor: pointer; padding: 0.75rem; border-radius: 0.5rem; height: 54px;">
-                            <input type="radio" name="tagTyp" value="feiertag-unbezahlt" onchange="updateTagTyp()"
-                                style="margin-right: 0.5rem;">
-                            <span class="emoji-medium">🟠</span> <span>Unbezahlter Feiertag</span>
-                        </label>
-
-                        <!-- Zeile 5: Urlaub -->
-                        <label class="tag-typ-label tag-urlaub"
-                            style="grid-row: 5; display: flex; align-items: center; cursor: pointer; padding: 0.75rem; border-radius: 0.5rem; height: 54px;">
-                            <input type="radio" name="tagTyp" value="urlaub" onchange="updateTagTyp()"
-                                style="margin-right: 0.5rem;">
-                            <span class="emoji-medium">🏖️</span> <span>Urlaub</span>
-                        </label>
-
-                        <!-- Zeile 6: Krankheit -->
-                        <label class="tag-typ-label tag-krank"
-                            style="grid-row: 6; display: flex; align-items: center; cursor: pointer; padding: 0.75rem; border-radius: 0.5rem; height: 54px;">
-                            <input type="radio" name="tagTyp" value="krank" onchange="updateTagTyp()"
-                                style="margin-right: 0.5rem;">
-                            <span class="emoji-medium">🤒</span> <span>Krankheit</span>
-                        </label>
-
-                        <!-- Zeile 7: Unbezahlter Urlaub -->
-                        <label class="tag-typ-label tag-unbezahlt"
-                            style="grid-row: 7; display: flex; align-items: center; cursor: pointer; padding: 0.75rem; border-radius: 0.5rem; height: 54px;">
-                            <input type="radio" name="tagTyp" value="unbezahlt" onchange="updateTagTyp()"
-                                style="margin-right: 0.5rem;">
-                            <span class="emoji-medium">📅</span> <span>Unbezahlter Urlaub</span>
-                        </label>
-
-                        <!-- Zeile 8: Überzeit-Kompensation -->
-                        <label class="tag-typ-label tag-kompensation"
-                            style="grid-row: 8; display: flex; align-items: center; cursor: pointer; padding: 0.75rem; border-radius: 0.5rem; height: 54px;">
-                            <input type="radio" name="tagTyp" value="kompensation" onchange="updateTagTyp()"
-                                style="margin-right: 0.5rem;">
-                            <span class="emoji-medium">⏰</span> <span>Überzeit-Kompensation</span>
-                        </label>
-
-                        <!-- Notiz am Ende außerhalb des Grids -->
-                        <div style="margin-top: 1rem;">
-                            <label
-                                style="display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.9375rem;">Notiz
-                                (optional)</label>
-                            <input type="text" id="notiz" placeholder="z.B. Projektname, Grund, etc." maxlength="100">
+                        style="display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-end; height: 100%;">
+                        <div id="pause-info"
+                            style="font-size: 0.75rem; font-style: italic; opacity: 0.75; margin-top: auto;">&nbsp;
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Platzhalter für Warnbox (wird dynamisch eingefügt) -->
-            <div id="tagtyp-warning-container"></div>
-
-            <div style="display: flex; gap: 0.5rem; margin-top: 1.25rem;">
-                <button class="btn btn-danger" style="flex: 1;" onclick="reset()">↻ Zurücksetzen</button>
-                <button class="btn btn-success" id="btn-save" style="flex: 1;" onclick="save()">💾 Speichern</button>
-            </div>
-
-            <div id="compact-result"
-                style="margin-top: 1rem; padding: 1rem; background: rgba(99, 102, 241, 0.1); border-radius: 0.5rem; display: none;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-                    <span style="font-weight: 600; color: #6366F1;">⏱️ Arbeitszeit:</span>
-                    <span id="compact-arb" style="font-weight: bold; font-size: 1.125rem;">--:--</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span style="font-weight: 600;" id="compact-diff-label">Differenz:</span>
-                    <span id="compact-diff" style="font-weight: bold; font-size: 1.125rem;">--:--</span>
+            <div id="r-soll-card" class="grad-purple" style="position: relative;">
+                <button onclick="toggleSollModus()"
+                    style="position: absolute; top: 50%; right: 1.5rem; transform: translateY(-50%); background: rgba(255,255,255,0.3); border: none; border-radius: 0.5rem; padding: 0.75rem 1rem; cursor: pointer; color: white; font-size: 1.5rem; font-weight: 700; transition: all 0.2s; box-shadow: 0 2px 6px rgba(0,0,0,0.15);"
+                    onmouseover="this.style.background='rgba(255,255,255,0.45)'"
+                    onmouseout="this.style.background='rgba(255,255,255,0.3)'">⇄</button>
+                <div style="padding-right: 80px;">
+                    <div style="font-size: 0.875rem; opacity: 0.9;" id="soll-label">Sollzeit</div>
+                    <div style="font-size: 2rem; font-weight: bold; margin-top: 0.5rem; line-height: 1;"
+                        id="r-soll-display">08:24</div>
+                    <div style="font-size: 0.875rem; opacity: 0.85; margin-top: 0.5rem; text-align: right;"
+                        id="soll-info">&nbsp;</div>
                 </div>
             </div>
 
-            <div
-                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1.5rem;">
-
-                <div class="grad-blue">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                        <div style="flex: 1;">
-                            <div style="font-size: 0.875rem; opacity: 0.9;">Arbeitszeit</div>
-                            <div style="font-size: 2rem; font-weight: bold; margin-top: 0.5rem; line-height: 1;"
-                                id="r-arb">
-                                --:--</div>
-                        </div>
-                        <div
-                            style="display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-end; height: 100%;">
-                            <div id="pause-info"
-                                style="font-size: 0.75rem; font-style: italic; opacity: 0.75; margin-top: auto;">&nbsp;
-                            </div>
-                        </div>
-                    </div>
+            <div id="r-diff-card" class="grad-orange">
+                <div>
+                    <div style="font-size: 0.875rem; opacity: 0.9;" id="r-diff-lbl">Fehlzeit Soll</div>
+                    <div style="font-size: 2rem; font-weight: bold; margin-top: 0.5rem; line-height: 1;" id="r-diff">
+                        08:24</div>
                 </div>
+            </div>
+        </div>
+    </div>
 
-                <div id="r-soll-card" class="grad-purple" style="position: relative;">
-                    <button onclick="toggleSollModus()"
-                        style="position: absolute; top: 50%; right: 1.5rem; transform: translateY(-50%); background: rgba(255,255,255,0.3); border: none; border-radius: 0.5rem; padding: 0.75rem 1rem; cursor: pointer; color: white; font-size: 1.5rem; font-weight: 700; transition: all 0.2s; box-shadow: 0 2px 6px rgba(0,0,0,0.15);"
-                        onmouseover="this.style.background='rgba(255,255,255,0.45)'"
-                        onmouseout="this.style.background='rgba(255,255,255,0.3)'">⇄</button>
-                    <div style="padding-right: 80px;">
-                        <div style="font-size: 0.875rem; opacity: 0.9;" id="soll-label">Sollzeit</div>
-                        <div style="font-size: 2rem; font-weight: bold; margin-top: 0.5rem; line-height: 1;"
-                            id="r-soll-display">08:24</div>
-                        <div style="font-size: 0.875rem; opacity: 0.85; margin-top: 0.5rem; text-align: right;"
-                            id="soll-info">&nbsp;</div>
-                    </div>
+    <div id="v-woche" class="card hidden">
+        <div class="view-navigation" style="display: flex; justify-content: space-between; margin-bottom: 1.5rem;">
+            <h2>Wochenansicht</h2>
+            <div class="nav-controls" style="display: flex; gap: 0.5rem; align-items: center;">
+                <button class="btn btn-primary" onclick="wocheVor()">←</button>
+                <span id="w-name">KW 47 17.11. - 23.11.2025</span>
+                <button class="btn btn-primary" onclick="wocheWeiter()">→</button>
+            </div>
+        </div>
+        <div class="grid3" style="margin-bottom:1.5rem;">
+            <h3 class="arbeitszeit-kachel-title">📋 Zusatzoptionen</h3>
+            <div style="display: grid; grid-template-rows: 24px 54px 54px 54px 54px 54px 54px 54px; gap: 0.75rem;">
+                <!-- Zeile 1: Label -->
+                <label
+                    style="grid-row: 1; font-weight: 600; font-size: 0.9375rem; line-height: 24px; align-self: start;">Tag-Typ</label>
+
+                <!-- Zeile 2: Normaler Arbeitstag -->
+                <label class="tag-typ-label tag-typ-normal"
+                    style="grid-row: 2; display: flex; align-items: center; cursor: pointer; padding: 0.75rem; border-radius: 0.5rem; height: 54px;">
+                    <input type="radio" name="tagTyp" value="normal" checked="" onchange="updateTagTyp()"
+                        style="margin-right: 0.5rem;">
+                    <span class="emoji-medium">⚙️</span> <span>Normaler Arbeitstag</span>
+                </label>
+
+                <!-- Zeile 3: Bezahlter Feiertag -->
+                <label class="tag-typ-label feiertag"
+                    style="grid-row: 3; display: flex; align-items: center; cursor: pointer; padding: 0.75rem; border-radius: 0.5rem; height: 54px;">
+                    <input type="radio" name="tagTyp" value="feiertag-bezahlt" onchange="updateTagTyp()"
+                        style="margin-right: 0.5rem;">
+                    <span class="emoji-medium">🔵</span> <span>Bezahlter Feiertag</span>
+                </label>
+
+                <!-- Zeile 4: Unbezahlter Feiertag -->
+                <label class="tag-typ-label feiertag-unbezahlt"
+                    style="grid-row: 4; display: flex; align-items: center; cursor: pointer; padding: 0.75rem; border-radius: 0.5rem; height: 54px;">
+                    <input type="radio" name="tagTyp" value="feiertag-unbezahlt" onchange="updateTagTyp()"
+                        style="margin-right: 0.5rem;">
+                    <span class="emoji-medium">🟠</span> <span>Unbezahlter Feiertag</span>
+                </label>
+
+                <!-- Zeile 5: Urlaub -->
+                <label class="tag-typ-label tag-urlaub"
+                    style="grid-row: 5; display: flex; align-items: center; cursor: pointer; padding: 0.75rem; border-radius: 0.5rem; height: 54px;">
+                    <input type="radio" name="tagTyp" value="urlaub" onchange="updateTagTyp()"
+                        style="margin-right: 0.5rem;">
+                    <span class="emoji-medium">🏖️</span> <span>Urlaub</span>
+                </label>
+
+                <!-- Zeile 6: Krankheit -->
+                <label class="tag-typ-label tag-krank"
+                    style="grid-row: 6; display: flex; align-items: center; cursor: pointer; padding: 0.75rem; border-radius: 0.5rem; height: 54px;">
+                    <input type="radio" name="tagTyp" value="krank" onchange="updateTagTyp()"
+                        style="margin-right: 0.5rem;">
+                    <span class="emoji-medium">🤒</span> <span>Krankheit</span>
+                </label>
+
+                <!-- Zeile 7: Unbezahlter Urlaub -->
+                <label class="tag-typ-label tag-unbezahlt"
+                    style="grid-row: 7; display: flex; align-items: center; cursor: pointer; padding: 0.75rem; border-radius: 0.5rem; height: 54px;">
+                    <input type="radio" name="tagTyp" value="unbezahlt" onchange="updateTagTyp()"
+                        style="margin-right: 0.5rem;">
+                    <span class="emoji-medium">📅</span> <span>Unbezahlter Urlaub</span>
+                </label>
+
+                <!-- Zeile 8: Überzeit-Kompensation -->
+                <label class="tag-typ-label tag-kompensation"
+                    style="grid-row: 8; display: flex; align-items: center; cursor: pointer; padding: 0.75rem; border-radius: 0.5rem; height: 54px;">
+                    <input type="radio" name="tagTyp" value="kompensation" onchange="updateTagTyp()"
+                        style="margin-right: 0.5rem;">
+                    <span class="emoji-medium">⏰</span> <span>Überzeit-Kompensation</span>
+                </label>
+
+                <!-- Notiz am Ende außerhalb des Grids -->
+                <div style="margin-top: 1rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.9375rem;">Notiz
+                        (optional)</label>
+                    <input type="text" id="notiz" placeholder="z.B. Projektname, Grund, etc." maxlength="100">
                 </div>
+            </div>
+        </div>
+    </div>
 
-                <div id="r-diff-card" class="grad-orange">
-                    <div>
-                        <div style="font-size: 0.875rem; opacity: 0.9;" id="r-diff-lbl">Fehlzeit Soll</div>
-                        <div style="font-size: 2rem; font-weight: bold; margin-top: 0.5rem; line-height: 1;"
-                            id="r-diff">
-                            08:24</div>
+
+    <!-- Platzhalter für Warnbox (wird dynamisch eingefügt) -->
+    <div id="tagtyp-warning-container"></div>
+
+
+    <div id="compact-result"
+        style="margin-top: 1rem; padding: 1rem; background: rgba(99, 102, 241, 0.1); border-radius: 0.5rem; display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+            <span style="font-weight: 600; color: #6366F1;">⏱️ Arbeitszeit:</span>
+            <span id="compact-arb" style="font-weight: bold; font-size: 1.125rem;">--:--</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-weight: 600;" id="compact-diff-label">Differenz:</span>
+            <span id="compact-diff" style="font-weight: bold; font-size: 1.125rem;">--:--</span>
+        </div>
+    </div>
+
+    <div
+        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1.5rem;">
+
+        <div class="grad-blue">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div style="flex: 1;">
+                    <div style="font-size: 0.875rem; opacity: 0.9;">Arbeitszeit</div>
+                    <div style="font-size: 2rem; font-weight: bold; margin-top: 0.5rem; line-height: 1;" id="r-arb">
+                        --:--</div>
+                </div>
+                <div
+                    style="display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-end; height: 100%;">
+                    <div id="pause-info"
+                        style="font-size: 0.75rem; font-style: italic; opacity: 0.75; margin-top: auto;">&nbsp;
                     </div>
                 </div>
             </div>
         </div>
 
-        <div id="v-woche" class="card hidden">
-            <div class="view-navigation" style="display: flex; justify-content: space-between; margin-bottom: 1.5rem;">
-                <h2>Wochenansicht</h2>
-                <div class="nav-controls" style="display: flex; gap: 0.5rem; align-items: center;">
-                    <button class="btn btn-primary" onclick="wocheVor()">←</button>
-                    <span id="w-name">KW 47 17.11. - 23.11.2025</span>
-                    <button class="btn btn-primary" onclick="wocheWeiter()">→</button>
+        <div id="r-soll-card" class="grad-purple" style="position: relative;">
+            <button onclick="toggleSollModus()"
+                style="position: absolute; top: 50%; right: 1.5rem; transform: translateY(-50%); background: rgba(255,255,255,0.3); border: none; border-radius: 0.5rem; padding: 0.75rem 1rem; cursor: pointer; color: white; font-size: 1.5rem; font-weight: 700; transition: all 0.2s; box-shadow: 0 2px 6px rgba(0,0,0,0.15);"
+                onmouseover="this.style.background='rgba(255,255,255,0.45)'"
+                onmouseout="this.style.background='rgba(255,255,255,0.3)'">⇄</button>
+            <div style="padding-right: 80px;">
+                <div style="font-size: 0.875rem; opacity: 0.9;" id="soll-label">Sollzeit</div>
+                <div style="font-size: 2rem; font-weight: bold; margin-top: 0.5rem; line-height: 1;"
+                    id="r-soll-display">08:24</div>
+                <div style="font-size: 0.875rem; opacity: 0.85; margin-top: 0.5rem; text-align: right;" id="soll-info">
+                    &nbsp;</div>
+            </div>
+        </div>
+
+        <div id="r-diff-card" class="grad-orange">
+            <div>
+                <div style="font-size: 0.875rem; opacity: 0.9;" id="r-diff-lbl">Fehlzeit Soll</div>
+                <div style="font-size: 2rem; font-weight: bold; margin-top: 0.5rem; line-height: 1;" id="r-diff">
+                    08:24</div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <div id="v-woche" class="card hidden">
+        <div class="view-navigation" style="display: flex; justify-content: space-between; margin-bottom: 1.5rem;">
+            <h2>Wochenansicht</h2>
+            <div class="nav-controls" style="display: flex; gap: 0.5rem; align-items: center;">
+                <button class="btn btn-primary" onclick="wocheVor()">←</button>
+                <span id="w-name">KW 47 17.11. - 23.11.2025</span>
+                <button class="btn btn-primary" onclick="wocheWeiter()">→</button>
+            </div>
+        </div>
+        <div class="grid3" style="margin-bottom: 1.5rem;">
+            <div class="grad-blue">
+                <div style="font-size: 0.875rem;">Arbeitszeit Woche</div>
+                <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                    <div style="font-size: 2rem; font-weight: bold;" id="w-arb">17:28</div>
+                    <div style="font-size: 0.75rem; font-style: italic;" id="w-info">4 / 5 Tage</div>
                 </div>
             </div>
-            <div class="grid3" style="margin-bottom: 1.5rem;">
-                <div class="grad-blue">
-                    <div style="font-size: 0.875rem;">Arbeitszeit Woche</div>
-                    <div style="display: flex; justify-content: space-between; align-items: flex-end;">
-                        <div style="font-size: 2rem; font-weight: bold;" id="w-arb">17:28</div>
-                        <div style="font-size: 0.75rem; font-style: italic;" id="w-info">4 / 5 Tage</div>
+            <div class="grad-purple">
+                <div style="font-size: 0.875rem;">Sollzeit Woche</div>
+                <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                    <div style="font-size: 2rem; font-weight: bold;" id="w-soll">42:00</div>
+                    <div style="font-size: 0.75rem; font-style: italic;" id="w-soll-info">5 Tage</div>
+                </div>
+            </div>
+            <div id="w-diff-card" class="grad-orange">
+                <div style="font-size: 0.875rem;" id="w-diff-lbl">Fehlzeit Woche</div>
+                <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                    <div style="font-size: 2rem; font-weight: bold;" id="w-diff">24:32</div>
+                    <div style="font-size: 0.75rem; font-style: italic;" id="w-diff-info">4 / 5 Tage</div>
+                </div>
+            </div>
+        </div>
+        <div id="w-list">
+            <div class="flex-col">
+                <div class="card-sm " style="cursor: pointer;" onclick="jumpToDate('2025-11-17')">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-weight: 600;">Mo 17.11.2025</div>
+
+
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 1.25rem; font-weight: bold;">09:28</div>
+                            <div style="font-size: 0.875rem; color: #10B981; font-weight: bold;">+01:04</div>
+                        </div>
                     </div>
                 </div>
-                <div class="grad-purple">
-                    <div style="font-size: 0.875rem;">Sollzeit Woche</div>
-                    <div style="display: flex; justify-content: space-between; align-items: flex-end;">
-                        <div style="font-size: 2rem; font-weight: bold;" id="w-soll">42:00</div>
-                        <div style="font-size: 0.75rem; font-style: italic;" id="w-soll-info">5 Tage</div>
+                <div class="card-sm " style="cursor: pointer;" onclick="jumpToDate('2025-11-18')">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-weight: 600;">Di 18.11.2025</div>
+
+                            <div style="font-size: 0.75rem; opacity: 0.75; margin-top: 0.25rem; font-style: italic;">
+                                📝 LS8- ACM</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 1.25rem; font-weight: bold;">08:00</div>
+                            <div style="font-size: 0.875rem; color: #EF4444; font-weight: bold;">-00:24</div>
+                        </div>
                     </div>
                 </div>
-                <div id="w-diff-card" class="grad-orange">
-                    <div style="font-size: 0.875rem;" id="w-diff-lbl">Fehlzeit Woche</div>
-                    <div style="display: flex; justify-content: space-between; align-items: flex-end;">
-                        <div style="font-size: 2rem; font-weight: bold;" id="w-diff">24:32</div>
-                        <div style="font-size: 0.75rem; font-style: italic;" id="w-diff-info">4 / 5 Tage</div>
+                <div class="card-sm tag-krank" style="cursor: pointer;" onclick="jumpToDate('2025-11-19')">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-weight: 600;"><span class="emoji-medium">🤒</span> Mi 19.11.2025</div>
+
+                            <div style="font-size: 0.75rem; opacity: 0.75; margin-top: 0.25rem; font-style: italic;">
+                                📝 Rückenschmerzen Krank geschri...</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 1.25rem; font-weight: bold;">--:--</div>
+                            <div style="font-size: 0.875rem; color: #F59E0B;">Krankheit</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-sm tag-krank" style="cursor: pointer;" onclick="jumpToDate('2025-11-20')">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-weight: 600;"><span class="emoji-medium">🤒</span> Do 20.11.2025</div>
+
+                            <div style="font-size: 0.75rem; opacity: 0.75; margin-top: 0.25rem; font-style: italic;">
+                                📝 Rückenschmerzen</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 1.25rem; font-weight: bold;">--:--</div>
+                            <div style="font-size: 0.875rem; color: #F59E0B;">Krankheit</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-sm tag-krank" style="cursor: pointer;" onclick="jumpToDate('2025-11-21')">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-weight: 600;"><span class="emoji-medium">🤒</span> Fr 21.11.2025</div>
+
+                            <div style="font-size: 0.75rem; opacity: 0.75; margin-top: 0.25rem; font-style: italic;">
+                                📝 Rückenschmerzen</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 1.25rem; font-weight: bold;">--:--</div>
+                            <div style="font-size: 0.875rem; color: #F59E0B;">Krankheit</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-sm " style="cursor: pointer;" onclick="jumpToDate('2025-11-22')">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-weight: 600;">Sa 22.11.2025</div>
+
+
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 1.25rem; font-weight: bold;">--:--</div>
+                            <div style="font-size: 0.875rem; color: #6B7280;">- Wochenende</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-sm " style="cursor: pointer;" onclick="jumpToDate('2025-11-23')">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-weight: 600;">So 23.11.2025</div>
+
+
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 1.25rem; font-weight: bold;">--:--</div>
+                            <div style="font-size: 0.875rem; color: #6B7280;">- Wochenende</div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div id="w-list">
+        </div>
+    </div>
+
+    <div id="v-monat" class="card hidden">
+        <div class="view-navigation" style="display: flex; justify-content: space-between; margin-bottom: 1.5rem;">
+            <h2>Monatsansicht</h2>
+            <div class="nav-controls" style="display: flex; gap: 0.5rem; align-items: center;">
+                <button class="btn btn-primary" onclick="monatVor()">←</button>
+                <span id="m-name"
+                    style="padding: 0.5rem 1rem; font-weight: 600; min-width: 200px; text-align: center; display: inline-block;">November
+                    2025</span>
+                <button class="btn btn-primary" onclick="monatWeiter()">→</button>
+            </div>
+        </div>
+        <div class="grid3" style="margin-bottom: 1.5rem;">
+            <div class="grad-blue">
+                <div style="font-size: 0.875rem;">Arbeitszeit Monat</div>
+                <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                    <div style="font-size: 2rem; font-weight: bold;" id="m-arb">17:28</div>
+                    <div style="font-size: 0.75rem; font-style: italic;" id="m-info">12 / 20 Tage</div>
+                </div>
+            </div>
+            <div class="grad-purple">
+                <div style="font-size: 0.875rem;">Sollzeit Monat</div>
+                <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                    <div style="font-size: 2rem; font-weight: bold;" id="m-soll">168:00</div>
+                    <div style="font-size: 0.75rem; font-style: italic;" id="m-soll-info">20 Tage</div>
+                </div>
+            </div>
+            <div id="m-diff-card" class="grad-orange">
+                <div style="font-size: 0.875rem;" id="m-diff-lbl">Fehlzeit Monat</div>
+                <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                    <div style="font-size: 2rem; font-weight: bold;" id="m-diff">150:32</div>
+                    <div style="font-size: 0.75rem; font-style: italic;" id="m-diff-info">12 / 20 Tage</div>
+                </div>
+            </div>
+        </div>
+        <div
+            style="display: flex; justify-content: space-between; margin-top: 0.75rem; padding: 0.75rem; background: rgba(99, 102, 241, 0.1); border-radius: 0.5rem;">
+            <div style="text-align: center; flex: 1;">
+                <div style="font-size: 0.75rem; color: #6B7280;" id="m-urlaub-jahr-label">Urlaubstage im Jahr 2025
+                </div>
+                <div style="font-size: 1.25rem; font-weight: 700; color: #6366F1;" id="m-urlaub-gesamt">27</div>
+            </div>
+            <div style="text-align: center; flex: 1; border-left: 1px solid #D1D5DB; border-right: 1px solid #D1D5DB;">
+                <div style="font-size: 0.75rem; color: #6B7280;">bezogene Tage</div>
+                <div style="font-size: 1.25rem; font-weight: 700; color: #EF4444;" id="m-urlaub-verbraucht">8</div>
+            </div>
+            <div style="text-align: center; flex: 1;">
+                <div style="font-size: 0.75rem; color: #6B7280;">verfügbare Tage</div>
+                <div style="font-size: 1.25rem; font-weight: 700; color: #10B981;" id="m-urlaub-rest">19</div>
+            </div>
+        </div>
+        <div style="margin-top: 1rem; margin-bottom: 1rem; display: flex; gap: 0.5rem;">
+            <button class="btn btn-primary" onclick="showMassenUrlaubDialog()" style="flex: 1;">📅 Urlaub über
+                Zeitraum eintragen</button>
+            <button class="btn btn-danger" onclick="toggleUrlaubLoeschModus()" style="flex: 1;"
+                id="urlaub-loeschen-btn-monat">🗑️ Mehrere Urlaubstage löschen</button>
+        </div>
+        <div class="cal" id="m-cal">
+            <div style="text-align: center; font-weight: 600; padding: 0.5rem; color: #6B7280;">Mo</div>
+            <div style="text-align: center; font-weight: 600; padding: 0.5rem; color: #6B7280;">Di</div>
+            <div style="text-align: center; font-weight: 600; padding: 0.5rem; color: #6B7280;">Mi</div>
+            <div style="text-align: center; font-weight: 600; padding: 0.5rem; color: #6B7280;">Do</div>
+            <div style="text-align: center; font-weight: 600; padding: 0.5rem; color: #6B7280;">Fr</div>
+            <div style="text-align: center; font-weight: 600; padding: 0.5rem; color: #6B7280;">Sa</div>
+            <div style="text-align: center; font-weight: 600; padding: 0.5rem; color: #6B7280;">So</div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div class="card-sm cal-day feiertag" data-date="2025-11-01"
+                style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
+                onclick="jumpToDate('2025-11-01')">
+                <div style="font-weight: 600;">1</div>
+                <div style="text-align: right;">
+                    <div style="font-size: 0.7rem; opacity: 0.85; line-height: 1.1; margin-bottom: 0.15rem;">🔵
+                        Allerheiligen</div>
+
+
+                </div>
+            </div>
+            <div class="card-sm cal-day weekend" data-date="2025-11-02"
+                style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
+                onclick="jumpToDate('2025-11-02')">
+                <div style="font-weight: 600;">2</div>
+                <div style="text-align: right;">
+
+
+
+                </div>
+            </div>
+            <div class="card-sm cal-day tag-urlaub" data-date="2025-11-03"
+                style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
+                onclick="jumpToDate('2025-11-03')">
+                <div style="font-weight: 600;">3</div>
+                <div style="text-align: right;">
+                    <div style="font-size: 0.875rem; margin-bottom: 0.15rem;"><span class="emoji-medium">🏖️</span>
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="card-sm cal-day tag-urlaub" data-date="2025-11-04"
+                style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
+                onclick="jumpToDate('2025-11-04')">
+                <div style="font-weight: 600;">4</div>
+                <div style="text-align: right;">
+                    <div style="font-size: 0.875rem; margin-bottom: 0.15rem;"><span class="emoji-medium">🏖️</span>
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="card-sm cal-day tag-urlaub" data-date="2025-11-05"
+                style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
+                onclick="jumpToDate('2025-11-05')">
+                <div style="font-weight: 600;">5</div>
+                <div style="text-align: right;">
+                    <div style="font-size: 0.875rem; margin-bottom: 0.15rem;"><span class="emoji-medium">🏖️</span>
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="card-sm cal-day " data-date="2025-11-06"
+                style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
+                onclick="jumpToDate('2025-11-06')">
+                <div style="font-weight: 600;">6</div>
+                <div style="text-align: right;">
+
+
+
+                </div>
+            </div>
+            <div class="card-sm cal-day " data-date="2025-11-07"
+                style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
+                onclick="jumpToDate('2025-11-07')">
+                <div style="font-weight: 600;">7</div>
+                <div style="text-align: right;">
+
+
+
+                </div>
+            </div>
+            <div class="card-sm cal-day weekend" data-date="2025-11-08"
+                style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
+                onclick="jumpToDate('2025-11-08')">
+                <div style="font-weight: 600;">8</div>
+                <div style="text-align: right;">
+
+
+
+                </div>
+            </div>
+            <div class="card-sm cal-day weekend" data-date="2025-11-09"
+                style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
+                onclick="jumpToDate('2025-11-09')">
+                <div style="font-weight: 600;">9</div>
+                <div style="text-align: right;">
+
+
+
+                </div>
+            </div>
+            <div class="card-sm cal-day " data-date="2025-11-10"
+                style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
+                onclick="jumpToDate('2025-11-10')">
+                <div style="font-weight: 600;">10</div>
+                <div style="text-align: right;">
+
+
+
+                </div>
+            </div>
+            <div class="card-sm cal-day " data-date="2025-11-11"
+                style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
+                onclick="jumpToDate('2025-11-11')">
+                <div style="font-weight: 600;">11</div>
+                <div style="text-align: right;">
+
+
+
+                </div>
+            </div>
+            <div class="card-sm cal-day " data-date="2025-11-12"
+                style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
+                onclick="jumpToDate('2025-11-12')">
+                <div style="font-weight: 600;">12</div>
+                <div style="text-align: right;">
+
+
+
+                </div>
+            </div>
+            <div class="card-sm cal-day " data-date="2025-11-13"
+                style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
+                onclick="jumpToDate('2025-11-13')">
+                <div style="font-weight: 600;">13</div>
+                <div style="text-align: right;">
+
+
+
+                </div>
+            </div>
+            <div class="card-sm cal-day " data-date="2025-11-14"
+                style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
+                onclick="jumpToDate('2025-11-14')">
+                <div style="font-weight: 600;">14</div>
+                <div style="text-align: right;">
+
+
+
+                </div>
+            </div>
+            <div class="card-sm cal-day weekend" data-date="2025-11-15"
+                style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
+                onclick="jumpToDate('2025-11-15')">
+                <div style="font-weight: 600;">15</div>
+                <div style="text-align: right;">
+
+
+
+                </div>
+            </div>
+            <div class="card-sm cal-day weekend" data-date="2025-11-16"
+                style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
+                onclick="jumpToDate('2025-11-16')">
+                <div style="font-weight: 600;">16</div>
+                <div style="text-align: right;">
+
+
+
+                </div>
+            </div>
+            <div class="card-sm cal-day " data-date="2025-11-17"
+                style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
+                onclick="jumpToDate('2025-11-17')">
+                <div style="font-weight: 600;">17</div>
+                <div style="text-align: right;">
+
+                    <div style="font-size: 0.875rem; font-weight: bold;">09:28</div>
+                    <div style="font-size: 0.75rem; color: #10B981;">+01:04</div>
+                </div>
+            </div>
+            <div class="card-sm cal-day " data-date="2025-11-18"
+                style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
+                onclick="jumpToDate('2025-11-18')">
+                <div style="font-weight: 600;">18</div>
+                <div style="text-align: right;">
+
+                    <div style="font-size: 0.875rem; font-weight: bold;">08:00</div>
+                    <div style="font-size: 0.75rem; color: #EF4444;">-00:24</div>
+                </div>
+            </div>
+            <div class="card-sm cal-day tag-krank" data-date="2025-11-19"
+                style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
+                onclick="jumpToDate('2025-11-19')">
+                <div style="font-weight: 600;">19</div>
+                <div style="text-align: right;">
+                    <div style="font-size: 0.875rem; margin-bottom: 0.15rem;"><span class="emoji-medium">🤒</span>
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="card-sm cal-day tag-krank" data-date="2025-11-20"
+                style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
+                onclick="jumpToDate('2025-11-20')">
+                <div style="font-weight: 600;">20</div>
+                <div style="text-align: right;">
+                    <div style="font-size: 0.875rem; margin-bottom: 0.15rem;"><span class="emoji-medium">🤒</span>
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="card-sm cal-day tag-krank" data-date="2025-11-21"
+                style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
+                onclick="jumpToDate('2025-11-21')">
+                <div style="font-weight: 600;">21</div>
+                <div style="text-align: right;">
+                    <div style="font-size: 0.875rem; margin-bottom: 0.15rem;"><span class="emoji-medium">🤒</span>
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="card-sm cal-day weekend" data-date="2025-11-22"
+                style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
+                onclick="jumpToDate('2025-11-22')">
+                <div style="font-weight: 600;">22</div>
+                <div style="text-align: right;">
+
+
+
+                </div>
+            </div>
+            <div class="card-sm cal-day weekend" data-date="2025-11-23"
+                style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
+                onclick="jumpToDate('2025-11-23')">
+                <div style="font-weight: 600;">23</div>
+                <div style="text-align: right;">
+
+
+
+                </div>
+            </div>
+            <div class="card-sm cal-day tag-urlaub" data-date="2025-11-24"
+                style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
+                onclick="jumpToDate('2025-11-24')">
+                <div style="font-weight: 600;">24</div>
+                <div style="text-align: right;">
+                    <div style="font-size: 0.875rem; margin-bottom: 0.15rem;"><span class="emoji-medium">🏖️</span>
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="card-sm cal-day tag-urlaub" data-date="2025-11-25"
+                style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
+                onclick="jumpToDate('2025-11-25')">
+                <div style="font-weight: 600;">25</div>
+                <div style="text-align: right;">
+                    <div style="font-size: 0.875rem; margin-bottom: 0.15rem;"><span class="emoji-medium">🏖️</span>
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="card-sm cal-day tag-urlaub" data-date="2025-11-26"
+                style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
+                onclick="jumpToDate('2025-11-26')">
+                <div style="font-weight: 600;">26</div>
+                <div style="text-align: right;">
+                    <div style="font-size: 0.875rem; margin-bottom: 0.15rem;"><span class="emoji-medium">🏖️</span>
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="card-sm cal-day tag-urlaub" data-date="2025-11-27"
+                style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
+                onclick="jumpToDate('2025-11-27')">
+                <div style="font-weight: 600;">27</div>
+                <div style="text-align: right;">
+                    <div style="font-size: 0.875rem; margin-bottom: 0.15rem;"><span class="emoji-medium">🏖️</span>
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="card-sm cal-day tag-urlaub" data-date="2025-11-28"
+                style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
+                onclick="jumpToDate('2025-11-28')">
+                <div style="font-weight: 600;">28</div>
+                <div style="text-align: right;">
+                    <div style="font-size: 0.875rem; margin-bottom: 0.15rem;"><span class="emoji-medium">🏖️</span>
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="card-sm cal-day weekend" data-date="2025-11-29"
+                style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
+                onclick="jumpToDate('2025-11-29')">
+                <div style="font-weight: 600;">29</div>
+                <div style="text-align: right;">
+
+
+
+                </div>
+            </div>
+            <div class="card-sm cal-day weekend" data-date="2025-11-30"
+                style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
+                onclick="jumpToDate('2025-11-30')">
+                <div style="font-weight: 600;">30</div>
+                <div style="text-align: right;">
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="v-jahr" class="card">
+        <div class="view-navigation" style="display: flex; justify-content: space-between; margin-bottom: 1.5rem;">
+            <h2>Jahresansicht</h2>
+            <div class="nav-controls" style="display: flex; gap: 0.5rem; align-items: center;">
+                <button class="btn btn-primary" onclick="jahrVor()">←</button>
+                <span id="j-name"
+                    style="padding: 0.5rem 1rem; font-weight: 600; min-width: 100px; text-align: center; display: inline-block;">2025</span>
+                <button class="btn btn-primary" onclick="jahrWeiter()">→</button>
+            </div>
+        </div>
+        <div class="grid3" style="margin-bottom: 1.5rem;">
+            <div class="grad-blue">
+                <div style="font-size: 0.875rem;">Arbeitszeit Jahr</div>
+                <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                    <div style="font-size: 2rem; font-weight: bold;" id="j-arb">08:06</div>
+                    <div style="font-size: 0.75rem; font-style: italic;" id="j-info">16 / 261 Tage</div>
+                </div>
+            </div>
+            <div class="grad-purple">
+                <div style="font-size: 0.875rem;">Sollzeit Jahr</div>
+                <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                    <div style="font-size: 2rem; font-weight: bold;" id="j-soll">2192:24</div>
+                    <div style="font-size: 0.75rem; font-style: italic;" id="j-soll-info">261 Tage</div>
+                </div>
+            </div>
+            <div id="j-diff-card" class="grad-orange">
+                <div style="font-size: 0.875rem;" id="j-diff-lbl">Fehlzeit Jahr</div>
+                <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                    <div style="font-size: 2rem; font-weight: bold;" id="j-diff">2184:18</div>
+                    <div style="font-size: 0.75rem; font-style: italic;" id="j-diff-info">16 / 261 Tage</div>
+                </div>
+            </div>
+        </div>
+        <div
+            style="display: flex; justify-content: space-between; margin-top: 0.75rem; padding: 0.75rem; background: rgba(99, 102, 241, 0.1); border-radius: 0.5rem;">
+            <div style="text-align: center; flex: 1;">
+                <div style="font-size: 0.75rem; color: #6B7280;" id="j-urlaub-jahr-label">Urlaubstage im Jahr 2025
+                </div>
+                <div style="font-size: 1.25rem; font-weight: 700; color: #6366F1;" id="j-urlaub-gesamt">27</div>
+            </div>
+            <div style="text-align: center; flex: 1; border-left: 1px solid #D1D5DB; border-right: 1px solid #D1D5DB;">
+                <div style="font-size: 0.75rem; color: #6B7280;">bezogene Tage</div>
+                <div style="font-size: 1.25rem; font-weight: 700; color: #EF4444;" id="j-urlaub-verbraucht">8</div>
+            </div>
+            <div style="text-align: center; flex: 1;">
+                <div style="font-size: 0.75rem; color: #6B7280;">verfügbare Tage</div>
+                <div style="font-size: 1.25rem; font-weight: 700; color: #10B981;" id="j-urlaub-rest">19</div>
+            </div>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;" id="j-list">
+            <div class="card-sm month-card" onclick="jumpToMonth('2025-01')">
+                <div style="font-weight: 600; margin-bottom: 0.75rem; font-size: 1.125rem;">Jan 2025</div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <span style="color: #6B7280; font-size: 0.875rem;">Arbeitszeit:</span>
+                    <span style="font-weight: bold;">00:00</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <span style="color: #6B7280; font-size: 0.875rem;">Sollzeit:</span>
+                    <span style="font-weight: bold;">193:12</span>
+                </div>
+                <div
+                    style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #E5E7EB;">
+                    <span style="color: #6B7280; font-size: 0.875rem;">Fehlzeit:</span>
+                    <span style="font-weight: bold; color: #EF4444;">193:12</span>
+                </div>
+                <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #6B7280;">2 / 23 Tage</div>
+            </div>
+            <div class="card-sm month-card" onclick="jumpToMonth('2025-02')">
+                <div style="font-weight: 600; margin-bottom: 0.75rem; font-size: 1.125rem;">Feb 2025</div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <span style="color: #6B7280; font-size: 0.875rem;">Arbeitszeit:</span>
+                    <span style="font-weight: bold;">00:00</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <span style="color: #6B7280; font-size: 0.875rem;">Sollzeit:</span>
+                    <span style="font-weight: bold;">168:00</span>
+                </div>
+                <div
+                    style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #E5E7EB;">
+                    <span style="color: #6B7280; font-size: 0.875rem;">Fehlzeit:</span>
+                    <span style="font-weight: bold; color: #EF4444;">168:00</span>
+                </div>
+                <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #6B7280;">0 / 20 Tage</div>
+            </div>
+            <div class="card-sm month-card" onclick="jumpToMonth('2025-03')">
+                <div style="font-weight: 600; margin-bottom: 0.75rem; font-size: 1.125rem;">Mär 2025</div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <span style="color: #6B7280; font-size: 0.875rem;">Arbeitszeit:</span>
+                    <span style="font-weight: bold;">00:00</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <span style="color: #6B7280; font-size: 0.875rem;">Sollzeit:</span>
+                    <span style="font-weight: bold;">176:24</span>
+                </div>
+                <div
+                    style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #E5E7EB;">
+                    <span style="color: #6B7280; font-size: 0.875rem;">Fehlzeit:</span>
+                    <span style="font-weight: bold; color: #EF4444;">176:24</span>
+                </div>
+                <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #6B7280;">0 / 21 Tage</div>
+            </div>
+            <div class="card-sm month-card" onclick="jumpToMonth('2025-04')">
+                <div style="font-weight: 600; margin-bottom: 0.75rem; font-size: 1.125rem;">Apr 2025</div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <span style="color: #6B7280; font-size: 0.875rem;">Arbeitszeit:</span>
+                    <span style="font-weight: bold;">00:00</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <span style="color: #6B7280; font-size: 0.875rem;">Sollzeit:</span>
+                    <span style="font-weight: bold;">184:48</span>
+                </div>
+                <div
+                    style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #E5E7EB;">
+                    <span style="color: #6B7280; font-size: 0.875rem;">Fehlzeit:</span>
+                    <span style="font-weight: bold; color: #EF4444;">184:48</span>
+                </div>
+                <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #6B7280;">0 / 22 Tage</div>
+            </div>
+            <div class="card-sm month-card" onclick="jumpToMonth('2025-05')">
+                <div style="font-weight: 600; margin-bottom: 0.75rem; font-size: 1.125rem;">Mai 2025</div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <span style="color: #6B7280; font-size: 0.875rem;">Arbeitszeit:</span>
+                    <span style="font-weight: bold;">00:00</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <span style="color: #6B7280; font-size: 0.875rem;">Sollzeit:</span>
+                    <span style="font-weight: bold;">184:48</span>
+                </div>
+                <div
+                    style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #E5E7EB;">
+                    <span style="color: #6B7280; font-size: 0.875rem;">Fehlzeit:</span>
+                    <span style="font-weight: bold; color: #EF4444;">184:48</span>
+                </div>
+                <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #6B7280;">0 / 22 Tage</div>
+            </div>
+            <div class="card-sm month-card" onclick="jumpToMonth('2025-06')">
+                <div style="font-weight: 600; margin-bottom: 0.75rem; font-size: 1.125rem;">Jun 2025</div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <span style="color: #6B7280; font-size: 0.875rem;">Arbeitszeit:</span>
+                    <span style="font-weight: bold;">00:00</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <span style="color: #6B7280; font-size: 0.875rem;">Sollzeit:</span>
+                    <span style="font-weight: bold;">176:24</span>
+                </div>
+                <div
+                    style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #E5E7EB;">
+                    <span style="color: #6B7280; font-size: 0.875rem;">Fehlzeit:</span>
+                    <span style="font-weight: bold; color: #EF4444;">176:24</span>
+                </div>
+                <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #6B7280;">1 / 21 Tage</div>
+            </div>
+            <div class="card-sm month-card" onclick="jumpToMonth('2025-07')">
+                <div style="font-weight: 600; margin-bottom: 0.75rem; font-size: 1.125rem;">Jul 2025</div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <span style="color: #6B7280; font-size: 0.875rem;">Arbeitszeit:</span>
+                    <span style="font-weight: bold;">00:00</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <span style="color: #6B7280; font-size: 0.875rem;">Sollzeit:</span>
+                    <span style="font-weight: bold;">193:12</span>
+                </div>
+                <div
+                    style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #E5E7EB;">
+                    <span style="color: #6B7280; font-size: 0.875rem;">Fehlzeit:</span>
+                    <span style="font-weight: bold; color: #EF4444;">193:12</span>
+                </div>
+                <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #6B7280;">0 / 23 Tage</div>
+            </div>
+            <div class="card-sm month-card" onclick="jumpToMonth('2025-08')">
+                <div style="font-weight: 600; margin-bottom: 0.75rem; font-size: 1.125rem;">Aug 2025</div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <span style="color: #6B7280; font-size: 0.875rem;">Arbeitszeit:</span>
+                    <span style="font-weight: bold;">00:00</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <span style="color: #6B7280; font-size: 0.875rem;">Sollzeit:</span>
+                    <span style="font-weight: bold;">176:24</span>
+                </div>
+                <div
+                    style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #E5E7EB;">
+                    <span style="color: #6B7280; font-size: 0.875rem;">Fehlzeit:</span>
+                    <span style="font-weight: bold; color: #EF4444;">176:24</span>
+                </div>
+                <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #6B7280;">1 / 21 Tage</div>
+            </div>
+            <div class="card-sm month-card" onclick="jumpToMonth('2025-09')">
+                <div style="font-weight: 600; margin-bottom: 0.75rem; font-size: 1.125rem;">Sep 2025</div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <span style="color: #6B7280; font-size: 0.875rem;">Arbeitszeit:</span>
+                    <span style="font-weight: bold;">00:00</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <span style="color: #6B7280; font-size: 0.875rem;">Sollzeit:</span>
+                    <span style="font-weight: bold;">184:48</span>
+                </div>
+                <div
+                    style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #E5E7EB;">
+                    <span style="color: #6B7280; font-size: 0.875rem;">Fehlzeit:</span>
+                    <span style="font-weight: bold; color: #EF4444;">184:48</span>
+                </div>
+                <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #6B7280;">0 / 22 Tage</div>
+            </div>
+            <div class="card-sm month-card" onclick="jumpToMonth('2025-10')">
+                <div style="font-weight: 600; margin-bottom: 0.75rem; font-size: 1.125rem;">Okt 2025</div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <span style="color: #6B7280; font-size: 0.875rem;">Arbeitszeit:</span>
+                    <span style="font-weight: bold;">00:00</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <span style="color: #6B7280; font-size: 0.875rem;">Sollzeit:</span>
+                    <span style="font-weight: bold;">193:12</span>
+                </div>
+                <div
+                    style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #E5E7EB;">
+                    <span style="color: #6B7280; font-size: 0.875rem;">Fehlzeit:</span>
+                    <span style="font-weight: bold; color: #EF4444;">193:12</span>
+                </div>
+                <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #6B7280;">0 / 23 Tage</div>
+            </div>
+            <div class="card-sm month-card" onclick="jumpToMonth('2025-11')">
+                <div style="font-weight: 600; margin-bottom: 0.75rem; font-size: 1.125rem;">Nov 2025</div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <span style="color: #6B7280; font-size: 0.875rem;">Arbeitszeit:</span>
+                    <span style="font-weight: bold;">08:06</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <span style="color: #6B7280; font-size: 0.875rem;">Sollzeit:</span>
+                    <span style="font-weight: bold;">168:00</span>
+                </div>
+                <div
+                    style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #E5E7EB;">
+                    <span style="color: #6B7280; font-size: 0.875rem;">Fehlzeit:</span>
+                    <span style="font-weight: bold; color: #EF4444;">159:54</span>
+                </div>
+                <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #6B7280;">11 / 20 Tage</div>
+            </div>
+            <div class="card-sm month-card" onclick="jumpToMonth('2025-12')">
+                <div style="font-weight: 600; margin-bottom: 0.75rem; font-size: 1.125rem;">Dez 2025</div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <span style="color: #6B7280; font-size: 0.875rem;">Arbeitszeit:</span>
+                    <span style="font-weight: bold;">00:00</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <span style="color: #6B7280; font-size: 0.875rem;">Sollzeit:</span>
+                    <span style="font-weight: bold;">193:12</span>
+                </div>
+                <div
+                    style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #E5E7EB;">
+                    <span style="color: #6B7280; font-size: 0.875rem;">Fehlzeit:</span>
+                    <span style="font-weight: bold; color: #EF4444;">193:12</span>
+                </div>
+                <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #6B7280;">1 / 23 Tage</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="v-einstellungen" class="card hidden">
+        <h2 style="margin-bottom: 1.5rem;">⚙️ Einstellungen</h2>
+
+        <div class="grid2" style="gap: 1.5rem;">
+
+            <div class="card-sm">
+                <h3 style="margin-bottom: 1rem; font-size: 1.125rem;">Arbeitszeit-Einstellungen</h3>
                 <div class="flex-col">
-                    <div class="card-sm " style="cursor: pointer;" onclick="jumpToDate('2025-11-17')">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <div>
-                                <div style="font-weight: 600;">Mo 17.11.2025</div>
-
-
+                    <div>
+                        <label>Sollzeit pro Woche (Stunden)</label>
+                        <input type="number" id="soll-woche" min="0" max="60" step="0.5" value="42"
+                            onchange="updateSollFromWoche()"
+                            style="width: 100%; padding: 0.75rem 1rem; font-size: 1rem;" data-ddg-inputtype="unknown">
+                    </div>
+                    <div>
+                        <label>Standard-Sollzeit pro Tag (berechnet aus Woche ÷ 5)</label>
+                        <input type="time" id="soll" value="08:24" onchange="updateSettings()" style="width: 100%;">
+                        <div style="font-size: 0.75rem; color: #6B7280; margin-top: 0.25rem;">
+                            Wird automatisch berechnet: <span id="soll-berechnet">42h ÷ 5 = 8:24</span>
+                        </div>
+                    </div>
+                    <div>
+                        <label>Pausendauer (ab 6h Arbeitszeit)</label>
+                        <input type="time" id="pause" value="00:30" onchange="updateSettings()" style="width: 100%;">
+                    </div>
+                    <div>
+                        <label>Überzeit-Vorgabe (z.B. 09:00)</label>
+                        <input type="time" id="ueberzeit-vorgabe" value="09:00" onchange="updateSettings()"
+                            style="width: 100%;">
+                    </div>
+                    <div>
+                        <label>Resturlaub aus Vorjahr</label>
+                        <input type="number" id="settings-resturlaub" min="0" max="50" value="0"
+                            onchange="updateSettings()" style="width: 100%; padding: 0.75rem 1rem; font-size: 1rem;"
+                            data-ddg-inputtype="unknown">
+                    </div>
+                    <div>
+                        <label>Urlaubstage pro Jahr</label>
+                        <input type="number" id="settings-urlaub" min="0" max="50" value="25"
+                            onchange="updateSettings()" style="width: 100%; padding: 0.75rem 1rem; font-size: 1rem;"
+                            data-ddg-inputtype="unknown">
+                        <div
+                            style="display: flex; justify-content: space-between; margin-top: 0.75rem; padding: 0.75rem; background: rgba(99, 102, 241, 0.1); border-radius: 0.5rem;">
+                            <div style="text-align: center; flex: 1;">
+                                <div style="font-size: 0.75rem; color: #6B7280;" id="urlaub-jahr-label">Urlaubstage
+                                    im Jahr 2025</div>
+                                <div style="font-size: 1.25rem; font-weight: 700; color: #6366F1;" id="urlaub-gesamt">27
+                                </div>
                             </div>
-                            <div style="text-align: right;">
-                                <div style="font-size: 1.25rem; font-weight: bold;">09:28</div>
-                                <div style="font-size: 0.875rem; color: #10B981; font-weight: bold;">+01:04</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-sm " style="cursor: pointer;" onclick="jumpToDate('2025-11-18')">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <div>
-                                <div style="font-weight: 600;">Di 18.11.2025</div>
-
-                                <div
-                                    style="font-size: 0.75rem; opacity: 0.75; margin-top: 0.25rem; font-style: italic;">
-                                    📝 LS8- ACM</div>
-                            </div>
-                            <div style="text-align: right;">
-                                <div style="font-size: 1.25rem; font-weight: bold;">08:00</div>
-                                <div style="font-size: 0.875rem; color: #EF4444; font-weight: bold;">-00:24</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-sm tag-krank" style="cursor: pointer;" onclick="jumpToDate('2025-11-19')">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <div>
-                                <div style="font-weight: 600;"><span class="emoji-medium">🤒</span> Mi 19.11.2025</div>
-
-                                <div
-                                    style="font-size: 0.75rem; opacity: 0.75; margin-top: 0.25rem; font-style: italic;">
-                                    📝 Rückenschmerzen Krank geschri...</div>
-                            </div>
-                            <div style="text-align: right;">
-                                <div style="font-size: 1.25rem; font-weight: bold;">--:--</div>
-                                <div style="font-size: 0.875rem; color: #F59E0B;">Krankheit</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-sm tag-krank" style="cursor: pointer;" onclick="jumpToDate('2025-11-20')">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <div>
-                                <div style="font-weight: 600;"><span class="emoji-medium">🤒</span> Do 20.11.2025</div>
-
-                                <div
-                                    style="font-size: 0.75rem; opacity: 0.75; margin-top: 0.25rem; font-style: italic;">
-                                    📝 Rückenschmerzen</div>
-                            </div>
-                            <div style="text-align: right;">
-                                <div style="font-size: 1.25rem; font-weight: bold;">--:--</div>
-                                <div style="font-size: 0.875rem; color: #F59E0B;">Krankheit</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-sm tag-krank" style="cursor: pointer;" onclick="jumpToDate('2025-11-21')">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <div>
-                                <div style="font-weight: 600;"><span class="emoji-medium">🤒</span> Fr 21.11.2025</div>
-
-                                <div
-                                    style="font-size: 0.75rem; opacity: 0.75; margin-top: 0.25rem; font-style: italic;">
-                                    📝 Rückenschmerzen</div>
-                            </div>
-                            <div style="text-align: right;">
-                                <div style="font-size: 1.25rem; font-weight: bold;">--:--</div>
-                                <div style="font-size: 0.875rem; color: #F59E0B;">Krankheit</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-sm " style="cursor: pointer;" onclick="jumpToDate('2025-11-22')">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <div>
-                                <div style="font-weight: 600;">Sa 22.11.2025</div>
-
-
-                            </div>
-                            <div style="text-align: right;">
-                                <div style="font-size: 1.25rem; font-weight: bold;">--:--</div>
-                                <div style="font-size: 0.875rem; color: #6B7280;">- Wochenende</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-sm " style="cursor: pointer;" onclick="jumpToDate('2025-11-23')">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <div>
-                                <div style="font-weight: 600;">So 23.11.2025</div>
-
-
-                            </div>
-                            <div style="text-align: right;">
-                                <div style="font-size: 1.25rem; font-weight: bold;">--:--</div>
-                                <div style="font-size: 0.875rem; color: #6B7280;">- Wochenende</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="v-monat" class="card hidden">
-            <div class="view-navigation" style="display: flex; justify-content: space-between; margin-bottom: 1.5rem;">
-                <h2>Monatsansicht</h2>
-                <div class="nav-controls" style="display: flex; gap: 0.5rem; align-items: center;">
-                    <button class="btn btn-primary" onclick="monatVor()">←</button>
-                    <span id="m-name"
-                        style="padding: 0.5rem 1rem; font-weight: 600; min-width: 200px; text-align: center; display: inline-block;">November
-                        2025</span>
-                    <button class="btn btn-primary" onclick="monatWeiter()">→</button>
-                </div>
-            </div>
-            <div class="grid3" style="margin-bottom: 1.5rem;">
-                <div class="grad-blue">
-                    <div style="font-size: 0.875rem;">Arbeitszeit Monat</div>
-                    <div style="display: flex; justify-content: space-between; align-items: flex-end;">
-                        <div style="font-size: 2rem; font-weight: bold;" id="m-arb">17:28</div>
-                        <div style="font-size: 0.75rem; font-style: italic;" id="m-info">12 / 20 Tage</div>
-                    </div>
-                </div>
-                <div class="grad-purple">
-                    <div style="font-size: 0.875rem;">Sollzeit Monat</div>
-                    <div style="display: flex; justify-content: space-between; align-items: flex-end;">
-                        <div style="font-size: 2rem; font-weight: bold;" id="m-soll">168:00</div>
-                        <div style="font-size: 0.75rem; font-style: italic;" id="m-soll-info">20 Tage</div>
-                    </div>
-                </div>
-                <div id="m-diff-card" class="grad-orange">
-                    <div style="font-size: 0.875rem;" id="m-diff-lbl">Fehlzeit Monat</div>
-                    <div style="display: flex; justify-content: space-between; align-items: flex-end;">
-                        <div style="font-size: 2rem; font-weight: bold;" id="m-diff">150:32</div>
-                        <div style="font-size: 0.75rem; font-style: italic;" id="m-diff-info">12 / 20 Tage</div>
-                    </div>
-                </div>
-            </div>
-            <div
-                style="display: flex; justify-content: space-between; margin-top: 0.75rem; padding: 0.75rem; background: rgba(99, 102, 241, 0.1); border-radius: 0.5rem;">
-                <div style="text-align: center; flex: 1;">
-                    <div style="font-size: 0.75rem; color: #6B7280;" id="m-urlaub-jahr-label">Urlaubstage im Jahr 2025
-                    </div>
-                    <div style="font-size: 1.25rem; font-weight: 700; color: #6366F1;" id="m-urlaub-gesamt">27</div>
-                </div>
-                <div
-                    style="text-align: center; flex: 1; border-left: 1px solid #D1D5DB; border-right: 1px solid #D1D5DB;">
-                    <div style="font-size: 0.75rem; color: #6B7280;">bezogene Tage</div>
-                    <div style="font-size: 1.25rem; font-weight: 700; color: #EF4444;" id="m-urlaub-verbraucht">8</div>
-                </div>
-                <div style="text-align: center; flex: 1;">
-                    <div style="font-size: 0.75rem; color: #6B7280;">verfügbare Tage</div>
-                    <div style="font-size: 1.25rem; font-weight: 700; color: #10B981;" id="m-urlaub-rest">19</div>
-                </div>
-            </div>
-            <div style="margin-top: 1rem; margin-bottom: 1rem; display: flex; gap: 0.5rem;">
-                <button class="btn btn-primary" onclick="showMassenUrlaubDialog()" style="flex: 1;">📅 Urlaub über
-                    Zeitraum eintragen</button>
-                <button class="btn btn-danger" onclick="toggleUrlaubLoeschModus()" style="flex: 1;"
-                    id="urlaub-loeschen-btn-monat">🗑️ Mehrere Urlaubstage löschen</button>
-            </div>
-            <div class="cal" id="m-cal">
-                <div style="text-align: center; font-weight: 600; padding: 0.5rem; color: #6B7280;">Mo</div>
-                <div style="text-align: center; font-weight: 600; padding: 0.5rem; color: #6B7280;">Di</div>
-                <div style="text-align: center; font-weight: 600; padding: 0.5rem; color: #6B7280;">Mi</div>
-                <div style="text-align: center; font-weight: 600; padding: 0.5rem; color: #6B7280;">Do</div>
-                <div style="text-align: center; font-weight: 600; padding: 0.5rem; color: #6B7280;">Fr</div>
-                <div style="text-align: center; font-weight: 600; padding: 0.5rem; color: #6B7280;">Sa</div>
-                <div style="text-align: center; font-weight: 600; padding: 0.5rem; color: #6B7280;">So</div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div class="card-sm cal-day feiertag" data-date="2025-11-01"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-01')">
-                    <div style="font-weight: 600;">1</div>
-                    <div style="text-align: right;">
-                        <div style="font-size: 0.7rem; opacity: 0.85; line-height: 1.1; margin-bottom: 0.15rem;">🔵
-                            Allerheiligen</div>
-
-
-                    </div>
-                </div>
-                <div class="card-sm cal-day weekend" data-date="2025-11-02"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-02')">
-                    <div style="font-weight: 600;">2</div>
-                    <div style="text-align: right;">
-
-
-
-                    </div>
-                </div>
-                <div class="card-sm cal-day tag-urlaub" data-date="2025-11-03"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-03')">
-                    <div style="font-weight: 600;">3</div>
-                    <div style="text-align: right;">
-                        <div style="font-size: 0.875rem; margin-bottom: 0.15rem;"><span class="emoji-medium">🏖️</span>
-                        </div>
-
-
-                    </div>
-                </div>
-                <div class="card-sm cal-day tag-urlaub" data-date="2025-11-04"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-04')">
-                    <div style="font-weight: 600;">4</div>
-                    <div style="text-align: right;">
-                        <div style="font-size: 0.875rem; margin-bottom: 0.15rem;"><span class="emoji-medium">🏖️</span>
-                        </div>
-
-
-                    </div>
-                </div>
-                <div class="card-sm cal-day tag-urlaub" data-date="2025-11-05"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-05')">
-                    <div style="font-weight: 600;">5</div>
-                    <div style="text-align: right;">
-                        <div style="font-size: 0.875rem; margin-bottom: 0.15rem;"><span class="emoji-medium">🏖️</span>
-                        </div>
-
-
-                    </div>
-                </div>
-                <div class="card-sm cal-day " data-date="2025-11-06"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-06')">
-                    <div style="font-weight: 600;">6</div>
-                    <div style="text-align: right;">
-
-
-
-                    </div>
-                </div>
-                <div class="card-sm cal-day " data-date="2025-11-07"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-07')">
-                    <div style="font-weight: 600;">7</div>
-                    <div style="text-align: right;">
-
-
-
-                    </div>
-                </div>
-                <div class="card-sm cal-day weekend" data-date="2025-11-08"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-08')">
-                    <div style="font-weight: 600;">8</div>
-                    <div style="text-align: right;">
-
-
-
-                    </div>
-                </div>
-                <div class="card-sm cal-day weekend" data-date="2025-11-09"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-09')">
-                    <div style="font-weight: 600;">9</div>
-                    <div style="text-align: right;">
-
-
-
-                    </div>
-                </div>
-                <div class="card-sm cal-day " data-date="2025-11-10"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-10')">
-                    <div style="font-weight: 600;">10</div>
-                    <div style="text-align: right;">
-
-
-
-                    </div>
-                </div>
-                <div class="card-sm cal-day " data-date="2025-11-11"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-11')">
-                    <div style="font-weight: 600;">11</div>
-                    <div style="text-align: right;">
-
-
-
-                    </div>
-                </div>
-                <div class="card-sm cal-day " data-date="2025-11-12"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-12')">
-                    <div style="font-weight: 600;">12</div>
-                    <div style="text-align: right;">
-
-
-
-                    </div>
-                </div>
-                <div class="card-sm cal-day " data-date="2025-11-13"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-13')">
-                    <div style="font-weight: 600;">13</div>
-                    <div style="text-align: right;">
-
-
-
-                    </div>
-                </div>
-                <div class="card-sm cal-day " data-date="2025-11-14"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-14')">
-                    <div style="font-weight: 600;">14</div>
-                    <div style="text-align: right;">
-
-
-
-                    </div>
-                </div>
-                <div class="card-sm cal-day weekend" data-date="2025-11-15"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-15')">
-                    <div style="font-weight: 600;">15</div>
-                    <div style="text-align: right;">
-
-
-
-                    </div>
-                </div>
-                <div class="card-sm cal-day weekend" data-date="2025-11-16"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-16')">
-                    <div style="font-weight: 600;">16</div>
-                    <div style="text-align: right;">
-
-
-
-                    </div>
-                </div>
-                <div class="card-sm cal-day " data-date="2025-11-17"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-17')">
-                    <div style="font-weight: 600;">17</div>
-                    <div style="text-align: right;">
-
-                        <div style="font-size: 0.875rem; font-weight: bold;">09:28</div>
-                        <div style="font-size: 0.75rem; color: #10B981;">+01:04</div>
-                    </div>
-                </div>
-                <div class="card-sm cal-day " data-date="2025-11-18"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-18')">
-                    <div style="font-weight: 600;">18</div>
-                    <div style="text-align: right;">
-
-                        <div style="font-size: 0.875rem; font-weight: bold;">08:00</div>
-                        <div style="font-size: 0.75rem; color: #EF4444;">-00:24</div>
-                    </div>
-                </div>
-                <div class="card-sm cal-day tag-krank" data-date="2025-11-19"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-19')">
-                    <div style="font-weight: 600;">19</div>
-                    <div style="text-align: right;">
-                        <div style="font-size: 0.875rem; margin-bottom: 0.15rem;"><span class="emoji-medium">🤒</span>
-                        </div>
-
-
-                    </div>
-                </div>
-                <div class="card-sm cal-day tag-krank" data-date="2025-11-20"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-20')">
-                    <div style="font-weight: 600;">20</div>
-                    <div style="text-align: right;">
-                        <div style="font-size: 0.875rem; margin-bottom: 0.15rem;"><span class="emoji-medium">🤒</span>
-                        </div>
-
-
-                    </div>
-                </div>
-                <div class="card-sm cal-day tag-krank" data-date="2025-11-21"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-21')">
-                    <div style="font-weight: 600;">21</div>
-                    <div style="text-align: right;">
-                        <div style="font-size: 0.875rem; margin-bottom: 0.15rem;"><span class="emoji-medium">🤒</span>
-                        </div>
-
-
-                    </div>
-                </div>
-                <div class="card-sm cal-day weekend" data-date="2025-11-22"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-22')">
-                    <div style="font-weight: 600;">22</div>
-                    <div style="text-align: right;">
-
-
-
-                    </div>
-                </div>
-                <div class="card-sm cal-day weekend" data-date="2025-11-23"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-23')">
-                    <div style="font-weight: 600;">23</div>
-                    <div style="text-align: right;">
-
-
-
-                    </div>
-                </div>
-                <div class="card-sm cal-day tag-urlaub" data-date="2025-11-24"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-24')">
-                    <div style="font-weight: 600;">24</div>
-                    <div style="text-align: right;">
-                        <div style="font-size: 0.875rem; margin-bottom: 0.15rem;"><span class="emoji-medium">🏖️</span>
-                        </div>
-
-
-                    </div>
-                </div>
-                <div class="card-sm cal-day tag-urlaub" data-date="2025-11-25"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-25')">
-                    <div style="font-weight: 600;">25</div>
-                    <div style="text-align: right;">
-                        <div style="font-size: 0.875rem; margin-bottom: 0.15rem;"><span class="emoji-medium">🏖️</span>
-                        </div>
-
-
-                    </div>
-                </div>
-                <div class="card-sm cal-day tag-urlaub" data-date="2025-11-26"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-26')">
-                    <div style="font-weight: 600;">26</div>
-                    <div style="text-align: right;">
-                        <div style="font-size: 0.875rem; margin-bottom: 0.15rem;"><span class="emoji-medium">🏖️</span>
-                        </div>
-
-
-                    </div>
-                </div>
-                <div class="card-sm cal-day tag-urlaub" data-date="2025-11-27"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-27')">
-                    <div style="font-weight: 600;">27</div>
-                    <div style="text-align: right;">
-                        <div style="font-size: 0.875rem; margin-bottom: 0.15rem;"><span class="emoji-medium">🏖️</span>
-                        </div>
-
-
-                    </div>
-                </div>
-                <div class="card-sm cal-day tag-urlaub" data-date="2025-11-28"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-28')">
-                    <div style="font-weight: 600;">28</div>
-                    <div style="text-align: right;">
-                        <div style="font-size: 0.875rem; margin-bottom: 0.15rem;"><span class="emoji-medium">🏖️</span>
-                        </div>
-
-
-                    </div>
-                </div>
-                <div class="card-sm cal-day weekend" data-date="2025-11-29"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-29')">
-                    <div style="font-weight: 600;">29</div>
-                    <div style="text-align: right;">
-
-
-
-                    </div>
-                </div>
-                <div class="card-sm cal-day weekend" data-date="2025-11-30"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-30')">
-                    <div style="font-weight: 600;">30</div>
-                    <div style="text-align: right;">
-
-
-
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="v-jahr" class="card">
-            <div class="view-navigation" style="display: flex; justify-content: space-between; margin-bottom: 1.5rem;">
-                <h2>Jahresansicht</h2>
-                <div class="nav-controls" style="display: flex; gap: 0.5rem; align-items: center;">
-                    <button class="btn btn-primary" onclick="jahrVor()">←</button>
-                    <span id="j-name"
-                        style="padding: 0.5rem 1rem; font-weight: 600; min-width: 100px; text-align: center; display: inline-block;">2025</span>
-                    <button class="btn btn-primary" onclick="jahrWeiter()">→</button>
-                </div>
-            </div>
-            <div class="grid3" style="margin-bottom: 1.5rem;">
-                <div class="grad-blue">
-                    <div style="font-size: 0.875rem;">Arbeitszeit Jahr</div>
-                    <div style="display: flex; justify-content: space-between; align-items: flex-end;">
-                        <div style="font-size: 2rem; font-weight: bold;" id="j-arb">08:06</div>
-                        <div style="font-size: 0.75rem; font-style: italic;" id="j-info">16 / 261 Tage</div>
-                    </div>
-                </div>
-                <div class="grad-purple">
-                    <div style="font-size: 0.875rem;">Sollzeit Jahr</div>
-                    <div style="display: flex; justify-content: space-between; align-items: flex-end;">
-                        <div style="font-size: 2rem; font-weight: bold;" id="j-soll">2192:24</div>
-                        <div style="font-size: 0.75rem; font-style: italic;" id="j-soll-info">261 Tage</div>
-                    </div>
-                </div>
-                <div id="j-diff-card" class="grad-orange">
-                    <div style="font-size: 0.875rem;" id="j-diff-lbl">Fehlzeit Jahr</div>
-                    <div style="display: flex; justify-content: space-between; align-items: flex-end;">
-                        <div style="font-size: 2rem; font-weight: bold;" id="j-diff">2184:18</div>
-                        <div style="font-size: 0.75rem; font-style: italic;" id="j-diff-info">16 / 261 Tage</div>
-                    </div>
-                </div>
-            </div>
-            <div
-                style="display: flex; justify-content: space-between; margin-top: 0.75rem; padding: 0.75rem; background: rgba(99, 102, 241, 0.1); border-radius: 0.5rem;">
-                <div style="text-align: center; flex: 1;">
-                    <div style="font-size: 0.75rem; color: #6B7280;" id="j-urlaub-jahr-label">Urlaubstage im Jahr 2025
-                    </div>
-                    <div style="font-size: 1.25rem; font-weight: 700; color: #6366F1;" id="j-urlaub-gesamt">27</div>
-                </div>
-                <div
-                    style="text-align: center; flex: 1; border-left: 1px solid #D1D5DB; border-right: 1px solid #D1D5DB;">
-                    <div style="font-size: 0.75rem; color: #6B7280;">bezogene Tage</div>
-                    <div style="font-size: 1.25rem; font-weight: 700; color: #EF4444;" id="j-urlaub-verbraucht">8</div>
-                </div>
-                <div style="text-align: center; flex: 1;">
-                    <div style="font-size: 0.75rem; color: #6B7280;">verfügbare Tage</div>
-                    <div style="font-size: 1.25rem; font-weight: 700; color: #10B981;" id="j-urlaub-rest">19</div>
-                </div>
-            </div>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;"
-                id="j-list">
-                <div class="card-sm month-card" onclick="jumpToMonth('2025-01')">
-                    <div style="font-weight: 600; margin-bottom: 0.75rem; font-size: 1.125rem;">Jan 2025</div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                        <span style="color: #6B7280; font-size: 0.875rem;">Arbeitszeit:</span>
-                        <span style="font-weight: bold;">00:00</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                        <span style="color: #6B7280; font-size: 0.875rem;">Sollzeit:</span>
-                        <span style="font-weight: bold;">193:12</span>
-                    </div>
-                    <div
-                        style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #E5E7EB;">
-                        <span style="color: #6B7280; font-size: 0.875rem;">Fehlzeit:</span>
-                        <span style="font-weight: bold; color: #EF4444;">193:12</span>
-                    </div>
-                    <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #6B7280;">2 / 23 Tage</div>
-                </div>
-                <div class="card-sm month-card" onclick="jumpToMonth('2025-02')">
-                    <div style="font-weight: 600; margin-bottom: 0.75rem; font-size: 1.125rem;">Feb 2025</div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                        <span style="color: #6B7280; font-size: 0.875rem;">Arbeitszeit:</span>
-                        <span style="font-weight: bold;">00:00</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                        <span style="color: #6B7280; font-size: 0.875rem;">Sollzeit:</span>
-                        <span style="font-weight: bold;">168:00</span>
-                    </div>
-                    <div
-                        style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #E5E7EB;">
-                        <span style="color: #6B7280; font-size: 0.875rem;">Fehlzeit:</span>
-                        <span style="font-weight: bold; color: #EF4444;">168:00</span>
-                    </div>
-                    <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #6B7280;">0 / 20 Tage</div>
-                </div>
-                <div class="card-sm month-card" onclick="jumpToMonth('2025-03')">
-                    <div style="font-weight: 600; margin-bottom: 0.75rem; font-size: 1.125rem;">Mär 2025</div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                        <span style="color: #6B7280; font-size: 0.875rem;">Arbeitszeit:</span>
-                        <span style="font-weight: bold;">00:00</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                        <span style="color: #6B7280; font-size: 0.875rem;">Sollzeit:</span>
-                        <span style="font-weight: bold;">176:24</span>
-                    </div>
-                    <div
-                        style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #E5E7EB;">
-                        <span style="color: #6B7280; font-size: 0.875rem;">Fehlzeit:</span>
-                        <span style="font-weight: bold; color: #EF4444;">176:24</span>
-                    </div>
-                    <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #6B7280;">0 / 21 Tage</div>
-                </div>
-                <div class="card-sm month-card" onclick="jumpToMonth('2025-04')">
-                    <div style="font-weight: 600; margin-bottom: 0.75rem; font-size: 1.125rem;">Apr 2025</div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                        <span style="color: #6B7280; font-size: 0.875rem;">Arbeitszeit:</span>
-                        <span style="font-weight: bold;">00:00</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                        <span style="color: #6B7280; font-size: 0.875rem;">Sollzeit:</span>
-                        <span style="font-weight: bold;">184:48</span>
-                    </div>
-                    <div
-                        style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #E5E7EB;">
-                        <span style="color: #6B7280; font-size: 0.875rem;">Fehlzeit:</span>
-                        <span style="font-weight: bold; color: #EF4444;">184:48</span>
-                    </div>
-                    <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #6B7280;">0 / 22 Tage</div>
-                </div>
-                <div class="card-sm month-card" onclick="jumpToMonth('2025-05')">
-                    <div style="font-weight: 600; margin-bottom: 0.75rem; font-size: 1.125rem;">Mai 2025</div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                        <span style="color: #6B7280; font-size: 0.875rem;">Arbeitszeit:</span>
-                        <span style="font-weight: bold;">00:00</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                        <span style="color: #6B7280; font-size: 0.875rem;">Sollzeit:</span>
-                        <span style="font-weight: bold;">184:48</span>
-                    </div>
-                    <div
-                        style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #E5E7EB;">
-                        <span style="color: #6B7280; font-size: 0.875rem;">Fehlzeit:</span>
-                        <span style="font-weight: bold; color: #EF4444;">184:48</span>
-                    </div>
-                    <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #6B7280;">0 / 22 Tage</div>
-                </div>
-                <div class="card-sm month-card" onclick="jumpToMonth('2025-06')">
-                    <div style="font-weight: 600; margin-bottom: 0.75rem; font-size: 1.125rem;">Jun 2025</div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                        <span style="color: #6B7280; font-size: 0.875rem;">Arbeitszeit:</span>
-                        <span style="font-weight: bold;">00:00</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                        <span style="color: #6B7280; font-size: 0.875rem;">Sollzeit:</span>
-                        <span style="font-weight: bold;">176:24</span>
-                    </div>
-                    <div
-                        style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #E5E7EB;">
-                        <span style="color: #6B7280; font-size: 0.875rem;">Fehlzeit:</span>
-                        <span style="font-weight: bold; color: #EF4444;">176:24</span>
-                    </div>
-                    <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #6B7280;">1 / 21 Tage</div>
-                </div>
-                <div class="card-sm month-card" onclick="jumpToMonth('2025-07')">
-                    <div style="font-weight: 600; margin-bottom: 0.75rem; font-size: 1.125rem;">Jul 2025</div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                        <span style="color: #6B7280; font-size: 0.875rem;">Arbeitszeit:</span>
-                        <span style="font-weight: bold;">00:00</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                        <span style="color: #6B7280; font-size: 0.875rem;">Sollzeit:</span>
-                        <span style="font-weight: bold;">193:12</span>
-                    </div>
-                    <div
-                        style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #E5E7EB;">
-                        <span style="color: #6B7280; font-size: 0.875rem;">Fehlzeit:</span>
-                        <span style="font-weight: bold; color: #EF4444;">193:12</span>
-                    </div>
-                    <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #6B7280;">0 / 23 Tage</div>
-                </div>
-                <div class="card-sm month-card" onclick="jumpToMonth('2025-08')">
-                    <div style="font-weight: 600; margin-bottom: 0.75rem; font-size: 1.125rem;">Aug 2025</div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                        <span style="color: #6B7280; font-size: 0.875rem;">Arbeitszeit:</span>
-                        <span style="font-weight: bold;">00:00</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                        <span style="color: #6B7280; font-size: 0.875rem;">Sollzeit:</span>
-                        <span style="font-weight: bold;">176:24</span>
-                    </div>
-                    <div
-                        style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #E5E7EB;">
-                        <span style="color: #6B7280; font-size: 0.875rem;">Fehlzeit:</span>
-                        <span style="font-weight: bold; color: #EF4444;">176:24</span>
-                    </div>
-                    <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #6B7280;">1 / 21 Tage</div>
-                </div>
-                <div class="card-sm month-card" onclick="jumpToMonth('2025-09')">
-                    <div style="font-weight: 600; margin-bottom: 0.75rem; font-size: 1.125rem;">Sep 2025</div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                        <span style="color: #6B7280; font-size: 0.875rem;">Arbeitszeit:</span>
-                        <span style="font-weight: bold;">00:00</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                        <span style="color: #6B7280; font-size: 0.875rem;">Sollzeit:</span>
-                        <span style="font-weight: bold;">184:48</span>
-                    </div>
-                    <div
-                        style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #E5E7EB;">
-                        <span style="color: #6B7280; font-size: 0.875rem;">Fehlzeit:</span>
-                        <span style="font-weight: bold; color: #EF4444;">184:48</span>
-                    </div>
-                    <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #6B7280;">0 / 22 Tage</div>
-                </div>
-                <div class="card-sm month-card" onclick="jumpToMonth('2025-10')">
-                    <div style="font-weight: 600; margin-bottom: 0.75rem; font-size: 1.125rem;">Okt 2025</div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                        <span style="color: #6B7280; font-size: 0.875rem;">Arbeitszeit:</span>
-                        <span style="font-weight: bold;">00:00</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                        <span style="color: #6B7280; font-size: 0.875rem;">Sollzeit:</span>
-                        <span style="font-weight: bold;">193:12</span>
-                    </div>
-                    <div
-                        style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #E5E7EB;">
-                        <span style="color: #6B7280; font-size: 0.875rem;">Fehlzeit:</span>
-                        <span style="font-weight: bold; color: #EF4444;">193:12</span>
-                    </div>
-                    <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #6B7280;">0 / 23 Tage</div>
-                </div>
-                <div class="card-sm month-card" onclick="jumpToMonth('2025-11')">
-                    <div style="font-weight: 600; margin-bottom: 0.75rem; font-size: 1.125rem;">Nov 2025</div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                        <span style="color: #6B7280; font-size: 0.875rem;">Arbeitszeit:</span>
-                        <span style="font-weight: bold;">08:06</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                        <span style="color: #6B7280; font-size: 0.875rem;">Sollzeit:</span>
-                        <span style="font-weight: bold;">168:00</span>
-                    </div>
-                    <div
-                        style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #E5E7EB;">
-                        <span style="color: #6B7280; font-size: 0.875rem;">Fehlzeit:</span>
-                        <span style="font-weight: bold; color: #EF4444;">159:54</span>
-                    </div>
-                    <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #6B7280;">11 / 20 Tage</div>
-                </div>
-                <div class="card-sm month-card" onclick="jumpToMonth('2025-12')">
-                    <div style="font-weight: 600; margin-bottom: 0.75rem; font-size: 1.125rem;">Dez 2025</div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                        <span style="color: #6B7280; font-size: 0.875rem;">Arbeitszeit:</span>
-                        <span style="font-weight: bold;">00:00</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                        <span style="color: #6B7280; font-size: 0.875rem;">Sollzeit:</span>
-                        <span style="font-weight: bold;">193:12</span>
-                    </div>
-                    <div
-                        style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #E5E7EB;">
-                        <span style="color: #6B7280; font-size: 0.875rem;">Fehlzeit:</span>
-                        <span style="font-weight: bold; color: #EF4444;">193:12</span>
-                    </div>
-                    <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #6B7280;">1 / 23 Tage</div>
-                </div>
-            </div>
-        </div>
-
-        <div id="v-einstellungen" class="card hidden">
-            <h2 style="margin-bottom: 1.5rem;">⚙️ Einstellungen</h2>
-
-            <div class="grid2" style="gap: 1.5rem;">
-
-                <div class="card-sm">
-                    <h3 style="margin-bottom: 1rem; font-size: 1.125rem;">Arbeitszeit-Einstellungen</h3>
-                    <div class="flex-col">
-                        <div>
-                            <label>Sollzeit pro Woche (Stunden)</label>
-                            <input type="number" id="soll-woche" min="0" max="60" step="0.5" value="42"
-                                onchange="updateSollFromWoche()"
-                                style="width: 100%; padding: 0.75rem 1rem; font-size: 1rem;"
-                                data-ddg-inputtype="unknown">
-                        </div>
-                        <div>
-                            <label>Standard-Sollzeit pro Tag (berechnet aus Woche ÷ 5)</label>
-                            <input type="time" id="soll" value="08:24" onchange="updateSettings()" style="width: 100%;">
-                            <div style="font-size: 0.75rem; color: #6B7280; margin-top: 0.25rem;">
-                                Wird automatisch berechnet: <span id="soll-berechnet">42h ÷ 5 = 8:24</span>
-                            </div>
-                        </div>
-                        <div>
-                            <label>Pausendauer (ab 6h Arbeitszeit)</label>
-                            <input type="time" id="pause" value="00:30" onchange="updateSettings()"
-                                style="width: 100%;">
-                        </div>
-                        <div>
-                            <label>Überzeit-Vorgabe (z.B. 09:00)</label>
-                            <input type="time" id="ueberzeit-vorgabe" value="09:00" onchange="updateSettings()"
-                                style="width: 100%;">
-                        </div>
-                        <div>
-                            <label>Resturlaub aus Vorjahr</label>
-                            <input type="number" id="settings-resturlaub" min="0" max="50" value="0"
-                                onchange="updateSettings()" style="width: 100%; padding: 0.75rem 1rem; font-size: 1rem;"
-                                data-ddg-inputtype="unknown">
-                        </div>
-                        <div>
-                            <label>Urlaubstage pro Jahr</label>
-                            <input type="number" id="settings-urlaub" min="0" max="50" value="25"
-                                onchange="updateSettings()" style="width: 100%; padding: 0.75rem 1rem; font-size: 1rem;"
-                                data-ddg-inputtype="unknown">
                             <div
-                                style="display: flex; justify-content: space-between; margin-top: 0.75rem; padding: 0.75rem; background: rgba(99, 102, 241, 0.1); border-radius: 0.5rem;">
-                                <div style="text-align: center; flex: 1;">
-                                    <div style="font-size: 0.75rem; color: #6B7280;" id="urlaub-jahr-label">Urlaubstage
-                                        im Jahr 2025</div>
-                                    <div style="font-size: 1.25rem; font-weight: 700; color: #6366F1;"
-                                        id="urlaub-gesamt">27
-                                    </div>
-                                </div>
-                                <div
-                                    style="text-align: center; flex: 1; border-left: 1px solid #D1D5DB; border-right: 1px solid #D1D5DB;">
-                                    <div style="font-size: 0.75rem; color: #6B7280;">bezogene Tage</div>
-                                    <div style="font-size: 1.25rem; font-weight: 700; color: #EF4444;"
-                                        id="urlaub-verbraucht">8</div>
-                                </div>
-                                <div style="text-align: center; flex: 1;">
-                                    <div style="font-size: 0.75rem; color: #6B7280;">verfügbare Tage</div>
-                                    <div style="font-size: 1.25rem; font-weight: 700; color: #10B981;" id="urlaub-rest">
-                                        19</div>
-                                </div>
+                                style="text-align: center; flex: 1; border-left: 1px solid #D1D5DB; border-right: 1px solid #D1D5DB;">
+                                <div style="font-size: 0.75rem; color: #6B7280;">bezogene Tage</div>
+                                <div style="font-size: 1.25rem; font-weight: 700; color: #EF4444;"
+                                    id="urlaub-verbraucht">8</div>
                             </div>
-                            <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
-                                <button class="btn btn-primary" onclick="showMassenUrlaubDialog()" style="flex: 1;">📅
-                                    Urlaub über Zeitraum eintragen</button>
-                                <button class="btn btn-danger" onclick="toggleUrlaubLoeschModus()" style="flex: 1;"
-                                    id="urlaub-loeschen-btn">🗑️ Mehrere Urlaubstage löschen</button>
+                            <div style="text-align: center; flex: 1;">
+                                <div style="font-size: 0.75rem; color: #6B7280;">verfügbare Tage</div>
+                                <div style="font-size: 1.25rem; font-weight: 700; color: #10B981;" id="urlaub-rest">
+                                    19</div>
                             </div>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+                            <button class="btn btn-primary" onclick="showMassenUrlaubDialog()" style="flex: 1;">📅
+                                Urlaub über Zeitraum eintragen</button>
+                            <button class="btn btn-danger" onclick="toggleUrlaubLoeschModus()" style="flex: 1;"
+                                id="urlaub-loeschen-btn">🗑️ Mehrere Urlaubstage löschen</button>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="card-sm">
-                    <h3 style="margin-bottom: 0.4rem; font-size: 1rem;">⏰ Überzeit-Verwaltung</h3>
+            <div class="card-sm">
+                <h3 style="margin-bottom: 0.4rem; font-size: 1rem;">⏰ Überzeit-Verwaltung</h3>
 
-                    <!-- Eingabefelder mit absoluter Positionierung - PASSEN SIE DIE PX-WERTE AN -->
+                <!-- Eingabefelder mit absoluter Positionierung - PASSEN SIE DIE PX-WERTE AN -->
+                <div
+                    style="background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%); border-radius: 0.4rem; padding: 0.4rem 0.6rem; border: 1px solid #FBBF24; margin-bottom: 0.5rem; position: relative; height: 45px;">
+                    <!-- STAND per : Horizontal=130px, Vertikal=zentriert -->
                     <div
-                        style="background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%); border-radius: 0.4rem; padding: 0.4rem 0.6rem; border: 1px solid #FBBF24; margin-bottom: 0.5rem; position: relative; height: 45px;">
-                        <!-- STAND per : Horizontal=130px, Vertikal=zentriert -->
-                        <div
-                            style="position: absolute; left: 125px; top: 50%; transform: translateY(-50%); display: flex; align-items: center; gap: 0.3rem;">
-                            <label
-                                style="font-size: 0.7rem; color: #92400E; font-weight: 700; white-space: nowrap; line-height: 26px;">per
-                                STAND:</label>
-                            <input type="date" id="settings-ueberzeit-datum" value="" onchange="updateSettings()"
-                                style="height: 26px; padding: 0 0.3rem; font-size: 0.85rem; font-weight: 700; border: 1px solid #F59E0B; border-radius: 0.25rem; background: white; width: 110px; text-align: center;">
-                        </div>
-                        <!-- ÜBERZEIT: Horizontal=500px, Vertikal=zentriert -->
-                        <div
-                            style="position: absolute; left: 500px; top: 50%; transform: translateY(-50%); display: flex; align-items: center; gap: 0.3rem;">
-                            <label
-                                style="font-size: 0.7rem; color: #92400E; font-weight: 700; text-transform: uppercase; white-space: nowrap; line-height: 26px;">ÜBERZEIT:</label>
-                            <input type="text" id="settings-ueberzeit-start" placeholder="+131:23"
-                                onkeydown="handleUeberzeitKeydown(event)" onblur="updateSettings()"
-                                style="height: 26px; padding: 0 0.4rem; font-size: 0.85rem; font-weight: 700; border: 1px solid #F59E0B; border-radius: 0.25rem; background: white; width: 90px; text-align: center; font-family: monospace;"
-                                data-ddg-inputtype="unknown">
-                        </div>
-                        <!-- Hilfetext rechts unten -->
-                        <div
-                            style="position: absolute; right: 25px; bottom: 15px; font-size: 0.65rem; color: #92400E; opacity: 1;">
-                            ( Eingabe: z.B. 12:45 ⏎ oder wenn minus -15:25 ⏎ )
-                        </div>
+                        style="position: absolute; left: 125px; top: 50%; transform: translateY(-50%); display: flex; align-items: center; gap: 0.3rem;">
+                        <label
+                            style="font-size: 0.7rem; color: #92400E; font-weight: 700; white-space: nowrap; line-height: 26px;">per
+                            STAND:</label>
+                        <input type="date" id="settings-ueberzeit-datum" value="" onchange="updateSettings()"
+                            style="height: 26px; padding: 0 0.3rem; font-size: 0.85rem; font-weight: 700; border: 1px solid #F59E0B; border-radius: 0.25rem; background: white; width: 110px; text-align: center;">
                     </div>
-
-                    <!-- Übersicht-Box -->
-                    <div id="ueberzeit-stats"
-                        style="padding: 0.5rem; background: rgba(99, 102, 241, 0.08); border-radius: 0.5rem; border: 1px solid rgba(99, 102, 241, 0.2);">
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
-                            <!-- Stand - Positioniert an erster roter Linie -->
-                            <div style="text-align: center; min-width: 100px;">
-                                <div style="font-size: 0.65rem; margin-bottom: 0.2rem; font-weight: 600; opacity: 0.7;">
-                                    Stand <span id="stats-datum-display">01.01.2025</span></div>
-                                <div style="font-weight: 700; font-size: 1.25rem; margin-bottom: 0.1rem;"
-                                    id="ueberzeit-start-display">+131:23</div>
-                                <div style="font-size: 0.65rem; opacity: 0.6; font-family: monospace;"
-                                    id="ueberzeit-start-industrial">+131.38h</div>
-                            </div>
-                            <div style="font-size: 1.2rem; opacity: 0.4; font-weight: 300;">→</div>
-                            <!-- Erarbeitet - Positioniert an zweiter roter Linie -->
-                            <div style="text-align: center; min-width: 100px;">
-                                <div style="font-size: 0.65rem; margin-bottom: 0.2rem; font-weight: 600; opacity: 0.7;">
-                                    Erarbeitet</div>
-                                <div style="font-weight: 700; font-size: 1.25rem; margin-bottom: 0.1rem; color: #10B981;"
-                                    id="ueberzeit-erarbeitet">-08:42</div>
-                                <div style="font-size: 0.65rem; opacity: 0.6; font-family: monospace;"
-                                    id="ueberzeit-erarbeitet-industrial">-8.70h</div>
-                            </div>
-                            <div style="font-size: 1.2rem; opacity: 0.4; font-weight: 300;">−</div>
-                            <!-- Bezogen - Positioniert an dritter roter Linie -->
-                            <div style="text-align: center; min-width: 100px;">
-                                <div style="font-size: 0.65rem; margin-bottom: 0.2rem; font-weight: 600; opacity: 0.7;">
-                                    Bezogen</div>
-                                <div style="font-weight: 700; font-size: 1.25rem; margin-bottom: 0.1rem; color: #EF4444;"
-                                    id="ueberzeit-bezogen">16:48</div>
-                                <div style="font-size: 0.65rem; opacity: 0.6; font-family: monospace;"
-                                    id="ueberzeit-bezogen-industrial">16.88h</div>
-                            </div>
-                            <div style="font-size: 1.2rem; opacity: 0.4; font-weight: 300;">=</div>
-                            <!-- Aktuell - Positioniert an vierter roter Linie -->
-                            <div style="text-align: center; min-width: 100px;">
-                                <div style="font-size: 0.65rem; margin-bottom: 0.2rem; font-weight: 600; opacity: 0.7;">
-                                    Aktuell</div>
-                                <div style="font-weight: 700; font-size: 1.25rem; margin-bottom: 0.1rem; color: rgb(16, 185, 129);"
-                                    id="ueberzeit-aktuell">+105:53</div>
-                                <div style="font-size: 0.65rem; opacity: 0.6; font-family: monospace;"
-                                    id="ueberzeit-aktuell-industrial">+105.88h</div>
-                            </div>
-                        </div>
+                    <!-- ÜBERZEIT: Horizontal=500px, Vertikal=zentriert -->
+                    <div
+                        style="position: absolute; left: 500px; top: 50%; transform: translateY(-50%); display: flex; align-items: center; gap: 0.3rem;">
+                        <label
+                            style="font-size: 0.7rem; color: #92400E; font-weight: 700; text-transform: uppercase; white-space: nowrap; line-height: 26px;">ÜBERZEIT:</label>
+                        <input type="text" id="settings-ueberzeit-start" placeholder="+131:23"
+                            onkeydown="handleUeberzeitKeydown(event)" onblur="updateSettings()"
+                            style="height: 26px; padding: 0 0.4rem; font-size: 0.85rem; font-weight: 700; border: 1px solid #F59E0B; border-radius: 0.25rem; background: white; width: 90px; text-align: center; font-family: monospace;"
+                            data-ddg-inputtype="unknown">
+                    </div>
+                    <!-- Hilfetext rechts unten -->
+                    <div
+                        style="position: absolute; right: 25px; bottom: 15px; font-size: 0.65rem; color: #92400E; opacity: 1;">
+                        ( Eingabe: z.B. 12:45 ⏎ oder wenn minus -15:25 ⏎ )
                     </div>
                 </div>
 
-                <div class="card-sm">
-                    <h3 style="margin-bottom: 1rem; font-size: 1.125rem;">Personalisierung</h3>
-                    <div class="flex-col">
-                        <div>
-                            <label>Name</label>
-                            <input type="text" id="settings-name" placeholder="Ihr Name" onchange="updateSettings()"
-                                style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #D1D5DB; border-radius: 0.5rem; font-size: 0.875rem;"
-                                data-ddg-inputtype="identities.fullName" data-ddg-autofill="true">
+                <!-- Übersicht-Box -->
+                <div id="ueberzeit-stats"
+                    style="padding: 0.5rem; background: rgba(99, 102, 241, 0.08); border-radius: 0.5rem; border: 1px solid rgba(99, 102, 241, 0.2);">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                        <!-- Stand - Positioniert an erster roter Linie -->
+                        <div style="text-align: center; min-width: 100px;">
+                            <div style="font-size: 0.65rem; margin-bottom: 0.2rem; font-weight: 600; opacity: 0.7;">
+                                Stand <span id="stats-datum-display">01.01.2025</span></div>
+                            <div style="font-weight: 700; font-size: 1.25rem; margin-bottom: 0.1rem;"
+                                id="ueberzeit-start-display">+131:23</div>
+                            <div style="font-size: 0.65rem; opacity: 0.6; font-family: monospace;"
+                                id="ueberzeit-start-industrial">+131.38h</div>
                         </div>
-                        <div>
-                            <label>Personalnummer</label>
-                            <input type="text" id="settings-personalnummer" placeholder="12345"
-                                onchange="updateSettings()"
-                                style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #D1D5DB; border-radius: 0.5rem; font-size: 0.875rem;"
-                                data-ddg-inputtype="unknown">
+                        <div style="font-size: 1.2rem; opacity: 0.4; font-weight: 300;">→</div>
+                        <!-- Erarbeitet - Positioniert an zweiter roter Linie -->
+                        <div style="text-align: center; min-width: 100px;">
+                            <div style="font-size: 0.65rem; margin-bottom: 0.2rem; font-weight: 600; opacity: 0.7;">
+                                Erarbeitet</div>
+                            <div style="font-weight: 700; font-size: 1.25rem; margin-bottom: 0.1rem; color: #10B981;"
+                                id="ueberzeit-erarbeitet">-08:42</div>
+                            <div style="font-size: 0.65rem; opacity: 0.6; font-family: monospace;"
+                                id="ueberzeit-erarbeitet-industrial">-8.70h</div>
                         </div>
-                    </div>
-                </div>
-
-                <div class="card-sm">
-                    <h3 style="margin-bottom: 1rem; font-size: 1.125rem;">Feiertage</h3>
-                    <div class="flex-col">
-                        <div>
-                            <label>Kanton</label>
-                            <select id="settings-kanton" onchange="updateSettings()"
-                                style="width: 100%; padding: 0.5rem; border: 1px solid #D1D5DB; border-radius: 0.5rem; font-size: 0.875rem;"
-                                data-ddg-inputtype="unknown">
-                                <option value="">-- Kanton wählen --</option>
-                                <option value="ZH">Zürich</option>
-                                <option value="BE">Bern</option>
-                                <option value="LU">Luzern</option>
-                                <option value="UR">Uri</option>
-                                <option value="SZ">Schwyz</option>
-                                <option value="OW">Obwalden</option>
-                                <option value="NW">Nidwalden</option>
-                                <option value="GL">Glarus</option>
-                                <option value="ZG">Zug</option>
-                                <option value="FR">Freiburg</option>
-                                <option value="SO">Solothurn</option>
-                                <option value="BS">Basel-Stadt</option>
-                                <option value="BL">Basel-Landschaft</option>
-                                <option value="SH">Schaffhausen</option>
-                                <option value="AR">Appenzell Ausserrhoden</option>
-                                <option value="AI">Appenzell Innerrhoden</option>
-                                <option value="SG">St. Gallen</option>
-                                <option value="GR">Graubünden</option>
-                                <option value="AG">Aargau</option>
-                                <option value="TG">Thurgau</option>
-                                <option value="TI">Tessin</option>
-                                <option value="VD">Waadt</option>
-                                <option value="VS">Wallis</option>
-                                <option value="NE">Neuenburg</option>
-                                <option value="GE">Genf</option>
-                                <option value="JU">Jura</option>
-                            </select>
+                        <div style="font-size: 1.2rem; opacity: 0.4; font-weight: 300;">−</div>
+                        <!-- Bezogen - Positioniert an dritter roter Linie -->
+                        <div style="text-align: center; min-width: 100px;">
+                            <div style="font-size: 0.65rem; margin-bottom: 0.2rem; font-weight: 600; opacity: 0.7;">
+                                Bezogen</div>
+                            <div style="font-weight: 700; font-size: 1.25rem; margin-bottom: 0.1rem; color: #EF4444;"
+                                id="ueberzeit-bezogen">16:48</div>
+                            <div style="font-size: 0.65rem; opacity: 0.6; font-family: monospace;"
+                                id="ueberzeit-bezogen-industrial">16.88h</div>
                         </div>
-                        <div>
-                            <button class="btn btn-primary" style="width: 100%;" onclick="importFeiertage()">📂
-                                Feiertags-JSON importieren</button>
-                            <input type="file" id="feiertag-file" accept=".json" style="display: none;"
-                                onchange="handleFeiertagImport(event)">
+                        <div style="font-size: 1.2rem; opacity: 0.4; font-weight: 300;">=</div>
+                        <!-- Aktuell - Positioniert an vierter roter Linie -->
+                        <div style="text-align: center; min-width: 100px;">
+                            <div style="font-size: 0.65rem; margin-bottom: 0.2rem; font-weight: 600; opacity: 0.7;">
+                                Aktuell</div>
+                            <div style="font-weight: 700; font-size: 1.25rem; margin-bottom: 0.1rem; color: rgb(16, 185, 129);"
+                                id="ueberzeit-aktuell">+105:53</div>
+                            <div style="font-size: 0.65rem; opacity: 0.6; font-family: monospace;"
+                                id="ueberzeit-aktuell-industrial">+105.88h</div>
                         </div>
-                        <div>
-                            <button class="btn btn-success" style="width: 100%;" onclick="showAddFeiertagDialog()">➕
-                                Feiertag manuell hinzufügen</button>
-                        </div>
-                        <div id="feiertag-info" style="font-size: 0.875rem; color: #6B7280;"></div>
                     </div>
                 </div>
             </div>
 
-            <div class="card-sm" style="margin-top: 1.5rem;">
-                <h3 style="margin-bottom: 1rem; font-size: 1.125rem;">Geladene Feiertage <span
-                        id="feiertag-jahr"></span>
-                </h3>
-                <div id="feiertag-list" style="max-height: 400px; overflow-y: auto;"></div>
+            <div class="card-sm">
+                <h3 style="margin-bottom: 1rem; font-size: 1.125rem;">Personalisierung</h3>
+                <div class="flex-col">
+                    <div>
+                        <label>Name</label>
+                        <input type="text" id="settings-name" placeholder="Ihr Name" onchange="updateSettings()"
+                            style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #D1D5DB; border-radius: 0.5rem; font-size: 0.875rem;"
+                            data-ddg-inputtype="identities.fullName" data-ddg-autofill="true">
+                    </div>
+                    <div>
+                        <label>Personalnummer</label>
+                        <input type="text" id="settings-personalnummer" placeholder="12345" onchange="updateSettings()"
+                            style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #D1D5DB; border-radius: 0.5rem; font-size: 0.875rem;"
+                            data-ddg-inputtype="unknown">
+                    </div>
+                </div>
             </div>
 
-            <div class="info-box" style="margin-top: 1.5rem;">
-                <h4 style="margin-bottom: 0.5rem; font-weight: 600;">ℹ️ Feiertags-Handling</h4>
-                <ul style="margin: 0; padding-left: 1.5rem; line-height: 1.8;">
-                    <li><strong>Bezahlte Feiertage:</strong> Zählen NICHT als Fehlzeit (blau markiert 🔵)</li>
-                    <li><strong>Unbezahlte Feiertage:</strong> Müssen genommen werden, belasten aber das Zeitkonto
-                        (orange markiert 🟠)</li>
-                    <li><strong>Brückentage:</strong> Optional, belasten Zeitkonto wenn genommen (lila markiert 🟣)</li>
-                    <li>Arbeit an Feiertagen wird als <strong>volle Überzeit</strong> gezählt</li>
-                    <li>Import eine JSON-Datei mit Feiertagen für automatische Verwaltung</li>
-                </ul>
+            <div class="card-sm">
+                <h3 style="margin-bottom: 1rem; font-size: 1.125rem;">Feiertage</h3>
+                <div class="flex-col">
+                    <div>
+                        <label>Kanton</label>
+                        <select id="settings-kanton" onchange="updateSettings()"
+                            style="width: 100%; padding: 0.5rem; border: 1px solid #D1D5DB; border-radius: 0.5rem; font-size: 0.875rem;"
+                            data-ddg-inputtype="unknown">
+                            <option value="">-- Kanton wählen --</option>
+                            <option value="ZH">Zürich</option>
+                            <option value="BE">Bern</option>
+                            <option value="LU">Luzern</option>
+                            <option value="UR">Uri</option>
+                            <option value="SZ">Schwyz</option>
+                            <option value="OW">Obwalden</option>
+                            <option value="NW">Nidwalden</option>
+                            <option value="GL">Glarus</option>
+                            <option value="ZG">Zug</option>
+                            <option value="FR">Freiburg</option>
+                            <option value="SO">Solothurn</option>
+                            <option value="BS">Basel-Stadt</option>
+                            <option value="BL">Basel-Landschaft</option>
+                            <option value="SH">Schaffhausen</option>
+                            <option value="AR">Appenzell Ausserrhoden</option>
+                            <option value="AI">Appenzell Innerrhoden</option>
+                            <option value="SG">St. Gallen</option>
+                            <option value="GR">Graubünden</option>
+                            <option value="AG">Aargau</option>
+                            <option value="TG">Thurgau</option>
+                            <option value="TI">Tessin</option>
+                            <option value="VD">Waadt</option>
+                            <option value="VS">Wallis</option>
+                            <option value="NE">Neuenburg</option>
+                            <option value="GE">Genf</option>
+                            <option value="JU">Jura</option>
+                        </select>
+                    </div>
+                    <div>
+                        <button class="btn btn-primary" style="width: 100%;" onclick="importFeiertage()">📂
+                            Feiertags-JSON importieren</button>
+                        <input type="file" id="feiertag-file" accept=".json" style="display: none;"
+                            onchange="handleFeiertagImport(event)">
+                    </div>
+                    <div>
+                        <button class="btn btn-success" style="width: 100%;" onclick="showAddFeiertagDialog()">➕
+                            Feiertag manuell hinzufügen</button>
+                    </div>
+                    <div id="feiertag-info" style="font-size: 0.875rem; color: #6B7280;"></div>
+                </div>
             </div>
         </div>
+
+        <div class="card-sm" style="margin-top: 1.5rem;">
+            <h3 style="margin-bottom: 1rem; font-size: 1.125rem;">Geladene Feiertage <span id="feiertag-jahr"></span>
+            </h3>
+            <div id="feiertag-list" style="max-height: 400px; overflow-y: auto;"></div>
+        </div>
+
+        <div class="info-box" style="margin-top: 1.5rem;">
+            <h4 style="margin-bottom: 0.5rem; font-weight: 600;">ℹ️ Feiertags-Handling</h4>
+            <ul style="margin: 0; padding-left: 1.5rem; line-height: 1.8;">
+                <li><strong>Bezahlte Feiertage:</strong> Zählen NICHT als Fehlzeit (blau markiert 🔵)</li>
+                <li><strong>Unbezahlte Feiertage:</strong> Müssen genommen werden, belasten aber das Zeitkonto
+                    (orange markiert 🟠)</li>
+                <li><strong>Brückentage:</strong> Optional, belasten Zeitkonto wenn genommen (lila markiert 🟣)</li>
+                <li>Arbeit an Feiertagen wird als <strong>volle Überzeit</strong> gezählt</li>
+                <li>Import eine JSON-Datei mit Feiertagen für automatische Verwaltung</li>
+            </ul>
+        </div>
+    </div>
     </div>
 
     <div id="feiertag-modal" class="hidden"
@@ -7906,7 +7962,7 @@
         }
 
         // Version 1.2.72 - Manuell erhöhen bei        // Version
-        const version = '1.2.82';
+        const version = '1.2.81';
 
         // Initialise user info with fallback placeholders
         const userInfoEl = document.getElementById('user-info');
