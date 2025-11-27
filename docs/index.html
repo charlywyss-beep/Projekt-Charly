@@ -1276,6 +1276,9 @@
             .kachel-grid>.arbeitszeit-kachel:first-child>div>div[style*="grid-row: 2"]>label {
                 grid-row: 1 !important;
                 margin-bottom: 0 !important;
+                justify-self: start !important;
+                /* Links ausrichten */
+                text-align: left !important;
             }
 
             .kachel-grid>.arbeitszeit-kachel:first-child>div>div[style*="grid-row: 2"]>input {
@@ -1482,7 +1485,7 @@
                     <div>
                         <h1><span>🕐</span>Arbeitszeiten</h1>
                         <div style="font-size: 0.65rem; color: #9CA3AF; margin-top: 0.5rem; margin-left: 0.5rem;">
-                            v1.2.103
+                            v1.2.104
                         </div>
                     </div>
                     <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;"></span>
@@ -8070,8 +8073,8 @@
             });
         }
 
-        // Version 1.2.103 - Manuell erhöhen bei jeder Änderung
-        const version = '1.2.103';
+        // Version 1.2.104 - Manuell erhöhen bei jeder Änderung
+        const version = '1.2.104';
 
         // Initialise user info with fallback placeholders
         const userInfoEl = document.getElementById('user-info');
