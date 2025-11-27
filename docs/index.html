@@ -1191,7 +1191,8 @@
         }
 
         /* 📱 LANDSCAPE MODE: Gleiche Regeln für Querformat auf mobilen Geräten */
-        @media (max-height: 500px) and (orientation: landscape) and (hover: none) and (pointer: coarse) {
+        /* FIXED: Changed from max-height: 500px to max-width: 1024px to cover ALL iPhones */
+        @media (max-width: 1024px) and (orientation: landscape) and (hover: none) and (pointer: coarse) {
 
             /* ✅ Überzeit-Verwaltung auch im Querformat vertikal */
             div[style*="background"][style*="FEF3C7"],
