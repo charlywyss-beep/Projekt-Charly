@@ -1257,157 +1257,124 @@
 
             /* 🔥 OVERRIDE INLINE STYLES: Force gap on container */
             /* 🔥 OVERRIDE INLINE STYLES: Force gap on container */
-            /* 🔥 OVERRIDE INLINE STYLES: Force gap on container */
             .arbeitszeit-kachel>div[style*="grid-template-rows"] {
                 gap: 2rem !important;
                 /* Override inline gap: 0.75rem */
-                /* Define 16-row grid pattern (Label 24px, Input 54px) */
-                grid-template-rows: repeat(8, 24px 54px) !important;
+                /* Ensure grid matches Right Kachel: 24px (Header) + 54px (Item) + 54px (Item)... */
+                grid-template-rows: 24px 54px 54px 54px 54px 54px 54px 54px !important;
             }
 
-            /* --- LEFT KACHEL ALIGNMENT --- */
-            /* Hide "Zeiten" header */
+            /* --- HYBRID LAYOUT STRATEGY (Landscape) --- */
+
+            /* 1. Hide "Zeiten" Header (Row 1) */
             .arbeitszeit-kachel>label[style*="grid-row: 1"] {
                 display: none !important;
             }
 
-            /* Flatten wrappers to allow direct grid placement */
-            .arbeitszeit-kachel>div>div[style*="grid-row"] {
+            /* 2. FIRST ITEM (Morgen Kommen): Vertical Layout (Split across Row 1 & 2) */
+            /* Use display: contents to let children participate in grid */
+            .arbeitszeit-kachel>div>div[style*="grid-row: 2"] {
                 display: contents !important;
             }
 
-            /* Re-assign Grid Rows for Left Kachel Items */
-            /* Row 1: Label "Morgen Kommen" */
+            /* Label MK -> Row 1 (Aligns with "Tag-Typ") */
             .arbeitszeit-kachel>div>div[style*="grid-row: 2"]>label {
                 grid-row: 1 !important;
+                width: 100% !important;
                 margin-bottom: 0 !important;
             }
 
-            /* Row 2: Input "Morgen Kommen" */
+            /* Input MK -> Row 2 (Aligns with "Normaler Arbeitstag") */
             .arbeitszeit-kachel>div>div[style*="grid-row: 2"]>input {
                 grid-row: 2 !important;
+                width: 100% !important;
             }
 
             .arbeitszeit-kachel>div>div[style*="grid-row: 2"]>.clear-btn {
                 grid-row: 2 !important;
             }
 
-            /* Row 3: Label "Morgen Gehen" */
-            .arbeitszeit-kachel>div>div[style*="grid-row: 3"]>label {
+            /* 3. SUBSEQUENT ITEMS (MG, MittK, AG): Horizontal Layout (Row 3, 4, 5) */
+            /* Wrapper MG -> Row 3 (Aligns with "Bezahlter Feiertag") */
+            .arbeitszeit-kachel>div>div[style*="grid-row: 3"] {
                 grid-row: 3 !important;
-                margin-bottom: 0 !important;
+                display: flex !important;
+                flex-direction: row !important;
+                /* Horizontal! */
+                align-items: center !important;
+                gap: 0.5rem !important;
             }
 
-            /* Row 4: Input "Morgen Gehen" */
-            .arbeitszeit-kachel>div>div[style*="grid-row: 3"]>input {
+            /* Wrapper MittK -> Row 4 (Aligns with "Unbezahlter Feiertag") */
+            .arbeitszeit-kachel>div>div[style*="grid-row: 4"] {
                 grid-row: 4 !important;
+                display: flex !important;
+                flex-direction: row !important;
+                align-items: center !important;
+                gap: 0.5rem !important;
             }
 
-            .arbeitszeit-kachel>div>div[style*="grid-row: 3"]>.clear-btn {
-                grid-row: 4 !important;
-            }
-
-            /* Row 5: Label "Mittag Kommen" */
-            .arbeitszeit-kachel>div>div[style*="grid-row: 4"]>label {
+            /* Wrapper AG -> Row 5 (Aligns with "Urlaub") */
+            .arbeitszeit-kachel>div>div[style*="grid-row: 5"] {
                 grid-row: 5 !important;
-                margin-bottom: 0 !important;
+                display: flex !important;
+                flex-direction: row !important;
+                align-items: center !important;
+                gap: 0.5rem !important;
             }
 
-            /* Row 6: Input "Mittag Kommen" */
-            .arbeitszeit-kachel>div>div[style*="grid-row: 4"]>input {
-                grid-row: 6 !important;
-            }
-
-            .arbeitszeit-kachel>div>div[style*="grid-row: 4"]>.clear-btn {
-                grid-row: 6 !important;
-            }
-
-            /* Row 7: Label "Abend Gehen" */
+            /* Styling for Horizontal Layout Items */
+            .arbeitszeit-kachel>div>div[style*="grid-row: 3"]>label,
+            .arbeitszeit-kachel>div>div[style*="grid-row: 4"]>label,
             .arbeitszeit-kachel>div>div[style*="grid-row: 5"]>label {
-                grid-row: 7 !important;
+                width: auto !important;
+                /* Shrink label */
+                flex-basis: auto !important;
                 margin-bottom: 0 !important;
+                margin-right: 0.5rem !important;
+                white-space: nowrap !important;
+                font-size: 0.8rem !important;
+                /* Slightly smaller to fit */
             }
 
-            /* Row 8: Input "Abend Gehen" */
+            .arbeitszeit-kachel>div>div[style*="grid-row: 3"]>input,
+            .arbeitszeit-kachel>div>div[style*="grid-row: 4"]>input,
             .arbeitszeit-kachel>div>div[style*="grid-row: 5"]>input {
-                grid-row: 8 !important;
-            }
-
-            .arbeitszeit-kachel>div>div[style*="grid-row: 5"]>.clear-btn {
-                grid-row: 8 !important;
-            }
-
-
-            /* --- RIGHT KACHEL ALIGNMENT --- */
-            /* Row 1: Label "Tag-Typ" */
-            .arbeitszeit-kachel label[style*="grid-row: 1"] {
-                grid-row: 1 !important;
-            }
-
-            /* Row 2: Radio "Normaler Arbeitstag" (Aligns with Input 1) */
-            .arbeitszeit-kachel .tag-typ-normal {
-                grid-row: 2 !important;
-            }
-
-            /* Row 4: Radio "Bezahlter Feiertag" (Aligns with Input 2) - SKIP ROW 3 */
-            .arbeitszeit-kachel .feiertag {
-                grid-row: 4 !important;
-            }
-
-            /* Row 6: Radio "Unbezahlter Feiertag" (Aligns with Input 3) - SKIP ROW 5 */
-            .arbeitszeit-kachel .feiertag-unbezahlt {
-                grid-row: 6 !important;
-            }
-
-            /* Row 8: Radio "Urlaub" (Aligns with Input 4) - SKIP ROW 7 */
-            .arbeitszeit-kachel .tag-urlaub {
-                grid-row: 8 !important;
-            }
-
-            /* Subsequent Radios */
-            .arbeitszeit-kachel .tag-krank {
-                grid-row: 10 !important;
-            }
-
-            .arbeitszeit-kachel .tag-unbezahlt {
-                grid-row: 12 !important;
-            }
-
-            .arbeitszeit-kachel .tag-kompensation {
-                grid-row: 14 !important;
+                flex: 1 !important;
+                /* Input takes remaining space */
+                width: auto !important;
             }
 
             /* 🔥 NEU: Arbeitszeiten Kachel - Label und Input vertikal stapeln */
-            /* The following rules are now obsolete due to the new grid-row assignments and display:contents */
-            /* .arbeitszeit-kachel>div>div[style*="grid-row"] {
+            .arbeitszeit-kachel>div>div[style*="grid-row"] {
                 display: flex !important;
                 flex-wrap: wrap !important;
                 align-items: center !important;
                 height: auto !important;
                 margin-bottom: 2rem !important;
                 /* INCREASED: Space between input groups */
-        }
+            }
 
-        /* Label nimmt volle Breite (Zeilenumbruch erzwingen) */
-        .arbeitszeit-kachel label {
-            width: 100% !important;
-            flex-basis: 100% !important;
-            margin-bottom: 0.25rem !important;
-            /* BACK to original - label to input spacing */
-            text-align: left !important;
-            display: block !important;
-        }
+            /* Label nimmt volle Breite (Zeilenumbruch erzwingen) */
+            .arbeitszeit-kachel label {
+                width: 100% !important;
+                flex-basis: 100% !important;
+                margin-bottom: 0.25rem !important;
+                /* BACK to original - label to input spacing */
+                text-align: left !important;
+                display: block !important;
+            }
 
-        /* Input nimmt verfügbaren Platz */
-        .arbeitszeit-kachel input[type="time"] {
-            flex: 1 !important;
-            min-width: 0 !important;
-        }
+            /* Input nimmt verfügbaren Platz */
+            .arbeitszeit-kachel input[type="time"] {
+                flex: 1 !important;
+                min-width: 0 !important;
+            }
 
-        /* Clear Button Abstand */
-        .arbeitszeit-kachel .clear-btn {
-            margin-left: 0.5rem !important;
-        }
+            /* Clear Button Abstand */
+            .arbeitszeit-kachel .clear-btn {
+                margin-left: 0.5rem !important;
+            }
         }
 
         /* Desktop: Zeit-Input Container */
@@ -1532,7 +1499,7 @@
                     <div>
                         <h1><span>🕐</span>Arbeitszeiten</h1>
                         <div style="font-size: 0.65rem; color: #9CA3AF; margin-top: 0.5rem; margin-left: 0.5rem;">
-                            v1.2.101
+                            v1.2.102
                         </div>
                     </div>
                     <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;"></span>
@@ -8120,8 +8087,8 @@
             });
         }
 
-        // Version 1.2.101 - Manuell erhöhen bei jeder Änderung
-        const version = '1.2.101';
+        // Version 1.2.102 - Manuell erhöhen bei jeder Änderung
+        const version = '1.2.102';
 
         // Initialise user info with fallback placeholders
         const userInfoEl = document.getElementById('user-info');
