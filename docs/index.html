@@ -1262,6 +1262,12 @@
                 grid-template-rows: 24px 54px 24px 54px 24px 54px 24px 54px !important;
             }
 
+            /* Force left alignment for grid items in left kachel */
+            .kachel-grid>.arbeitszeit-kachel:first-child>div[style*="grid-template-rows"] {
+                align-items: start !important;
+                justify-items: start !important;
+            }
+
             /* Hide "Zeiten" header in left kachel */
             .kachel-grid>.arbeitszeit-kachel:first-child>label[style*="grid-row: 1"] {
                 display: none !important;
@@ -1332,7 +1338,8 @@
             }
 
             /* 🔥 NEU: Arbeitszeiten Kachel - Label und Input vertikal stapeln */
-            .arbeitszeit-kachel>div>div[style*="grid-row"] {
+            /* ONLY apply to RIGHT kachel - left kachel uses display: contents */
+            .kachel-grid>.arbeitszeit-kachel:not(:first-child)>div>div[style*="grid-row"] {
                 display: flex !important;
                 flex-wrap: wrap !important;
                 align-items: center !important;
@@ -1485,7 +1492,7 @@
                     <div>
                         <h1><span>🕐</span>Arbeitszeiten</h1>
                         <div style="font-size: 0.65rem; color: #9CA3AF; margin-top: 0.5rem; margin-left: 0.5rem;">
-                            v1.2.104
+                            v1.2.105
                         </div>
                     </div>
                     <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;"></span>
@@ -8073,8 +8080,8 @@
             });
         }
 
-        // Version 1.2.104 - Manuell erhöhen bei jeder Änderung
-        const version = '1.2.104';
+        // Version 1.2.105 - Manuell erhöhen bei jeder Änderung
+        const version = '1.2.105';
 
         // Initialise user info with fallback placeholders
         const userInfoEl = document.getElementById('user-info');
