@@ -1257,84 +1257,157 @@
 
             /* 🔥 OVERRIDE INLINE STYLES: Force gap on container */
             /* 🔥 OVERRIDE INLINE STYLES: Force gap on container */
+            /* 🔥 OVERRIDE INLINE STYLES: Force gap on container */
             .arbeitszeit-kachel>div[style*="grid-template-rows"] {
                 gap: 2rem !important;
                 /* Override inline gap: 0.75rem */
+                /* Define 16-row grid pattern (Label 24px, Input 54px) */
+                grid-template-rows: repeat(8, 24px 54px) !important;
             }
 
-            /* --- LEFT KACHEL SPECIFIC FIXES (Landscape) --- */
-            /* Target ONLY the Left Kachel (first child) */
-            .kachel-grid>.arbeitszeit-kachel:first-child>div>label[style*="grid-row: 1"] {
+            /* --- LEFT KACHEL ALIGNMENT --- */
+            /* Hide "Zeiten" header */
+            .arbeitszeit-kachel>label[style*="grid-row: 1"] {
                 display: none !important;
-                /* Hide "Zeiten" header */
             }
 
-            /* Shift all rows UP by 1 in Left Kachel */
-            .kachel-grid>.arbeitszeit-kachel:first-child>div>[style*="grid-row: 2"] {
+            /* Flatten wrappers to allow direct grid placement */
+            .arbeitszeit-kachel>div>div[style*="grid-row"] {
+                display: contents !important;
+            }
+
+            /* Re-assign Grid Rows for Left Kachel Items */
+            /* Row 1: Label "Morgen Kommen" */
+            .arbeitszeit-kachel>div>div[style*="grid-row: 2"]>label {
                 grid-row: 1 !important;
+                margin-bottom: 0 !important;
             }
 
-            .kachel-grid>.arbeitszeit-kachel:first-child>div>[style*="grid-row: 3"] {
+            /* Row 2: Input "Morgen Kommen" */
+            .arbeitszeit-kachel>div>div[style*="grid-row: 2"]>input {
                 grid-row: 2 !important;
             }
 
-            .kachel-grid>.arbeitszeit-kachel:first-child>div>[style*="grid-row: 4"] {
-                grid-row: 3 !important;
+            .arbeitszeit-kachel>div>div[style*="grid-row: 2"]>.clear-btn {
+                grid-row: 2 !important;
             }
 
-            .kachel-grid>.arbeitszeit-kachel:first-child>div>[style*="grid-row: 5"] {
+            /* Row 3: Label "Morgen Gehen" */
+            .arbeitszeit-kachel>div>div[style*="grid-row: 3"]>label {
+                grid-row: 3 !important;
+                margin-bottom: 0 !important;
+            }
+
+            /* Row 4: Input "Morgen Gehen" */
+            .arbeitszeit-kachel>div>div[style*="grid-row: 3"]>input {
                 grid-row: 4 !important;
             }
 
-            .kachel-grid>.arbeitszeit-kachel:first-child>div>[style*="grid-row: 6"] {
-                grid-row: 5 !important;
+            .arbeitszeit-kachel>div>div[style*="grid-row: 3"]>.clear-btn {
+                grid-row: 4 !important;
             }
 
-            .kachel-grid>.arbeitszeit-kachel:first-child>div>[style*="grid-row: 7"] {
+            /* Row 5: Label "Mittag Kommen" */
+            .arbeitszeit-kachel>div>div[style*="grid-row: 4"]>label {
+                grid-row: 5 !important;
+                margin-bottom: 0 !important;
+            }
+
+            /* Row 6: Input "Mittag Kommen" */
+            .arbeitszeit-kachel>div>div[style*="grid-row: 4"]>input {
                 grid-row: 6 !important;
             }
 
-            .kachel-grid>.arbeitszeit-kachel:first-child>div>[style*="grid-row: 8"] {
-                grid-row: 7 !important;
+            .arbeitszeit-kachel>div>div[style*="grid-row: 4"]>.clear-btn {
+                grid-row: 6 !important;
             }
 
-            /* Add margin to labels in Left Kachel to match Right Kachel gap */
-            /* This aligns the Input (Left) with the Radio Button (Right) */
-            .kachel-grid>.arbeitszeit-kachel:first-child label {
-                margin-bottom: 0.75rem !important;
-                /* Matches grid gap */
+            /* Row 7: Label "Abend Gehen" */
+            .arbeitszeit-kachel>div>div[style*="grid-row: 5"]>label {
+                grid-row: 7 !important;
+                margin-bottom: 0 !important;
+            }
+
+            /* Row 8: Input "Abend Gehen" */
+            .arbeitszeit-kachel>div>div[style*="grid-row: 5"]>input {
+                grid-row: 8 !important;
+            }
+
+            .arbeitszeit-kachel>div>div[style*="grid-row: 5"]>.clear-btn {
+                grid-row: 8 !important;
+            }
+
+
+            /* --- RIGHT KACHEL ALIGNMENT --- */
+            /* Row 1: Label "Tag-Typ" */
+            .arbeitszeit-kachel label[style*="grid-row: 1"] {
+                grid-row: 1 !important;
+            }
+
+            /* Row 2: Radio "Normaler Arbeitstag" (Aligns with Input 1) */
+            .arbeitszeit-kachel .tag-typ-normal {
+                grid-row: 2 !important;
+            }
+
+            /* Row 4: Radio "Bezahlter Feiertag" (Aligns with Input 2) - SKIP ROW 3 */
+            .arbeitszeit-kachel .feiertag {
+                grid-row: 4 !important;
+            }
+
+            /* Row 6: Radio "Unbezahlter Feiertag" (Aligns with Input 3) - SKIP ROW 5 */
+            .arbeitszeit-kachel .feiertag-unbezahlt {
+                grid-row: 6 !important;
+            }
+
+            /* Row 8: Radio "Urlaub" (Aligns with Input 4) - SKIP ROW 7 */
+            .arbeitszeit-kachel .tag-urlaub {
+                grid-row: 8 !important;
+            }
+
+            /* Subsequent Radios */
+            .arbeitszeit-kachel .tag-krank {
+                grid-row: 10 !important;
+            }
+
+            .arbeitszeit-kachel .tag-unbezahlt {
+                grid-row: 12 !important;
+            }
+
+            .arbeitszeit-kachel .tag-kompensation {
+                grid-row: 14 !important;
             }
 
             /* 🔥 NEU: Arbeitszeiten Kachel - Label und Input vertikal stapeln */
-            .arbeitszeit-kachel>div>div[style*="grid-row"] {
+            /* The following rules are now obsolete due to the new grid-row assignments and display:contents */
+            /* .arbeitszeit-kachel>div>div[style*="grid-row"] {
                 display: flex !important;
                 flex-wrap: wrap !important;
                 align-items: center !important;
                 height: auto !important;
                 margin-bottom: 2rem !important;
                 /* INCREASED: Space between input groups */
-            }
+        }
 
-            /* Label nimmt volle Breite (Zeilenumbruch erzwingen) */
-            .arbeitszeit-kachel label {
-                width: 100% !important;
-                flex-basis: 100% !important;
-                margin-bottom: 0.25rem !important;
-                /* BACK to original - label to input spacing */
-                text-align: left !important;
-                display: block !important;
-            }
+        /* Label nimmt volle Breite (Zeilenumbruch erzwingen) */
+        .arbeitszeit-kachel label {
+            width: 100% !important;
+            flex-basis: 100% !important;
+            margin-bottom: 0.25rem !important;
+            /* BACK to original - label to input spacing */
+            text-align: left !important;
+            display: block !important;
+        }
 
-            /* Input nimmt verfügbaren Platz */
-            .arbeitszeit-kachel input[type="time"] {
-                flex: 1 !important;
-                min-width: 0 !important;
-            }
+        /* Input nimmt verfügbaren Platz */
+        .arbeitszeit-kachel input[type="time"] {
+            flex: 1 !important;
+            min-width: 0 !important;
+        }
 
-            /* Clear Button Abstand */
-            .arbeitszeit-kachel .clear-btn {
-                margin-left: 0.5rem !important;
-            }
+        /* Clear Button Abstand */
+        .arbeitszeit-kachel .clear-btn {
+            margin-left: 0.5rem !important;
+        }
         }
 
         /* Desktop: Zeit-Input Container */
@@ -1459,7 +1532,7 @@
                     <div>
                         <h1><span>🕐</span>Arbeitszeiten</h1>
                         <div style="font-size: 0.65rem; color: #9CA3AF; margin-top: 0.5rem; margin-left: 0.5rem;">
-                            v1.2.100
+                            v1.2.101
                         </div>
                     </div>
                     <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;"></span>
@@ -8047,8 +8120,8 @@
             });
         }
 
-        // Version 1.2.100 - Manuell erhöhen bei jeder Änderung
-        const version = '1.2.100';
+        // Version 1.2.101 - Manuell erhöhen bei jeder Änderung
+        const version = '1.2.101';
 
         // Initialise user info with fallback placeholders
         const userInfoEl = document.getElementById('user-info');
