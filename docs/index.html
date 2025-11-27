@@ -1278,8 +1278,8 @@
                 justify-items: start !important;
             }
 
-            /* Hide "Zeiten" header in left kachel (Row 1 in HTML) */
-            .kachel-grid>.arbeitszeit-kachel:first-child>label[style*="grid-row: 1"] {
+            /* Hide "Zeiten" header in left kachel (Row 1 in HTML) - FIXED SELECTOR */
+            .kachel-grid>.arbeitszeit-kachel:first-child>div>label[style*="grid-row: 1"] {
                 display: none !important;
             }
 
@@ -1511,7 +1511,7 @@
                     <div>
                         <h1><span>🕐</span>Arbeitszeiten</h1>
                         <div style="font-size: 0.65rem; color: #9CA3AF; margin-top: 0.5rem; margin-left: 0.5rem;">
-                            v1.2.111
+                            v1.2.112
                         </div>
                     </div>
                     <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;"></span>
@@ -8099,8 +8099,8 @@
             });
         }
 
-        // Version 1.2.111 - Manuell erhöhen bei jeder Änderung
-        const version = '1.2.111';
+        // Version 1.2.112 - Manuell erhöhen bei jeder Änderung
+        const version = '1.2.112';
 
         // Initialise user info with fallback placeholders
         const userInfoEl = document.getElementById('user-info');
