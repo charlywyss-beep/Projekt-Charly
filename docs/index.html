@@ -1410,7 +1410,7 @@
                     <div>
                         <h1><span>🕐</span>Arbeitszeiten</h1>
                         <div style="font-size: 0.65rem; color: #9CA3AF; margin-top: 0.5rem; margin-left: 0.5rem;">
-                            v1.2.93
+                            v1.2.94
                         </div>
                     </div>
                     <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;"></span>
@@ -1486,15 +1486,13 @@
 
                 <div class="arbeitszeit-kachel">
                     <h3 class="arbeitszeit-kachel-title">⏰ Arbeitszeiten</h3>
-                    <div style="display: grid; grid-template-rows: 24px 54px 54px 54px 54px 54px; gap: 0.75rem;">
+                    <div style="display: grid; grid-template-rows: 24px 54px 54px 54px 54px; gap: 0.75rem;">
                         <!-- Zeile 1: Label -->
                         <label
                             style="grid-row: 1; font-weight: 600; font-size: 0.9375rem; line-height: 24px; align-self: start;">Zeiten</label>
 
-                        <!-- Zeile 2: LEER (entspricht "Normaler Arbeitstag" rechts) -->
-
-                        <!-- Zeile 3: Morgen Kommen -->
-                        <div style="grid-row: 3;">
+                        <!-- Zeile 2: Morgen Kommen (auf gleicher Höhe wie "Normaler Arbeitstag" rechts) -->
+                        <div style="grid-row: 2;">
                             <label for="mk" id="label-mk">Morgen Kommen</label>
                             <input type="time" id="mk"
                                 style="width: auto; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;"
@@ -1502,8 +1500,8 @@
                             <button class="clear-btn" id="c-mk" onclick="clearField('mk')">✕</button>
                         </div>
 
-                        <!-- Zeile 4: Morgen Gehen -->
-                        <div style="grid-row: 4;">
+                        <!-- Zeile 3: Morgen Gehen -->
+                        <div style="grid-row: 3;">
                             <label for="mg" id="label-mg">Morgen Gehen</label>
                             <input type="time" id="mg"
                                 style="width: auto; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;"
@@ -1511,8 +1509,8 @@
                             <button class="clear-btn" id="c-mg" onclick="clearField('mg')">✕</button>
                         </div>
 
-                        <!-- Zeile 5: Mittag Kommen -->
-                        <div style="grid-row: 5;">
+                        <!-- Zeile 4: Mittag Kommen -->
+                        <div style="grid-row: 4;">
                             <label for="mittk" id="label-mittk">Mittag Kommen</label>
                             <input type="time" id="mittk"
                                 style="width: auto; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;"
@@ -1520,8 +1518,8 @@
                             <button class="clear-btn" id="c-mittk" onclick="clearField('mittk')">✕</button>
                         </div>
 
-                        <!-- Zeile 6: Abend Gehen -->
-                        <div style="grid-row: 6;">
+                        <!-- Zeile 5: Abend Gehen -->
+                        <div style="grid-row: 5;">
                             <label for="ag" id="label-ag">Abend Gehen</label>
                             <input type="time" id="ag"
                                 style="width: auto; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;"
@@ -1529,7 +1527,7 @@
                             <button class="clear-btn" id="c-ag" onclick="clearField('ag')">✕</button>
                         </div>
 
-                        <!-- Zeile 8: LEER (entspricht "Überzeit-Kompensation" rechts) -->
+                        <!-- Zeile 6-8: LEER (entspricht weitere Optionen rechts) -->
                     </div>
 
                     <!-- Fehlermeldung innerhalb der Kachel -->
@@ -7999,8 +7997,8 @@
             });
         }
 
-        // Version 1.2.93 - Manuell erhöhen bei jeder Änderung
-        const version = '1.2.93';
+        // Version 1.2.94 - Manuell erhöhen bei jeder Änderung
+        const version = '1.2.94';
 
         // Initialise user info with fallback placeholders
         const userInfoEl = document.getElementById('user-info');
