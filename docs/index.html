@@ -1258,13 +1258,13 @@
             /* 🔥 OVERRIDE INLINE STYLES: Force gap on container */
             .arbeitszeit-kachel>div[style*="grid-template-rows"] {
                 gap: 2rem !important;
-                /* Left kachel: 7 rows of 54px each */
+                /* Left kachel: Override to 8 rows (same as right kachel) to match alignment */
                 /* Right kachel: Alternating pattern: 24px (label) + 54px (input/radio) */
             }
 
-            /* Left kachel: Override to 7 rows (hide first row) */
+            /* Left kachel: Override to 8 rows (same as right kachel) to match alignment */
             .kachel-grid>.arbeitszeit-kachel:first-child>div[style*="grid-template-rows"] {
-                grid-template-rows: 54px 54px 54px 54px 54px 54px 54px !important;
+                grid-template-rows: 24px 54px 54px 54px 54px 54px 54px 54px !important;
             }
 
             /* Right kachel: Keep 8 rows */
@@ -1288,7 +1288,7 @@
                 display: contents !important;
             }
 
-            /* Morgen Kommen: HTML Row 2 -> CSS Row 1 */
+            /* Morgen Kommen: HTML Row 2 -> CSS Row 1 (Label) & 2 (Input) */
             .kachel-grid>.arbeitszeit-kachel:first-child>div>div[style*="grid-row: 2"]>label {
                 grid-row: 1 !important;
                 margin-bottom: 0 !important;
@@ -1298,6 +1298,8 @@
                 padding: 0 !important;
                 text-align: left !important;
                 font-size: 0.875rem !important;
+                align-self: end !important;
+                /* Align to bottom of 24px row */
             }
 
             /* Tag-Typ label: match font-size to Morgen Kommen */
@@ -1313,7 +1315,7 @@
                 grid-row: 2 !important;
             }
 
-            /* Morgen Gehen: HTML Row 3 -> CSS Row 2 */
+            /* Morgen Gehen: HTML Row 3 -> CSS Row 3 (Label) & 4 (Input) */
             .kachel-grid>.arbeitszeit-kachel:first-child>div>div[style*="grid-row: 3"]>label {
                 grid-row: 3 !important;
                 margin-bottom: 0 !important;
@@ -1327,7 +1329,7 @@
                 grid-row: 4 !important;
             }
 
-            /* Mittag Kommen: HTML Row 4 -> CSS Row 3 */
+            /* Mittag Kommen: HTML Row 4 -> CSS Row 5 (Label) & 6 (Input) */
             .kachel-grid>.arbeitszeit-kachel:first-child>div>div[style*="grid-row: 4"]>label {
                 grid-row: 5 !important;
                 margin-bottom: 0 !important;
@@ -1341,7 +1343,7 @@
                 grid-row: 6 !important;
             }
 
-            /* Abend Gehen: HTML Row 5 -> CSS Row 4 */
+            /* Abend Gehen: HTML Row 5 -> CSS Row 7 (Label) & 8 (Input) */
             .kachel-grid>.arbeitszeit-kachel:first-child>div>div[style*="grid-row: 5"]>label {
                 grid-row: 7 !important;
                 margin-bottom: 0 !important;
@@ -1511,7 +1513,7 @@
                     <div>
                         <h1><span>🕐</span>Arbeitszeiten</h1>
                         <div style="font-size: 0.65rem; color: #9CA3AF; margin-top: 0.5rem; margin-left: 0.5rem;">
-                            v1.2.112
+                            v1.2.113
                         </div>
                     </div>
                     <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;"></span>
@@ -8099,8 +8101,8 @@
             });
         }
 
-        // Version 1.2.112 - Manuell erhöhen bei jeder Änderung
-        const version = '1.2.112';
+        // Version 1.2.113 - Manuell erhöhen bei jeder Änderung
+        const version = '1.2.113';
 
         // Initialise user info with fallback placeholders
         const userInfoEl = document.getElementById('user-info');
