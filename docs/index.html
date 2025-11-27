@@ -1257,16 +1257,16 @@
                 flex-wrap: wrap !important;
                 align-items: center !important;
                 height: auto !important;
-                margin-bottom: 1rem !important;
-                /* Increased from 0.5rem for better spacing */
+                margin-bottom: 2rem !important;
+                /* INCREASED: Space between input groups */
             }
 
             /* Label nimmt volle Breite (Zeilenumbruch erzwingen) */
             .arbeitszeit-kachel label {
                 width: 100% !important;
                 flex-basis: 100% !important;
-                margin-bottom: 0.5rem !important;
-                /* Increased from 0.25rem */
+                margin-bottom: 0.25rem !important;
+                /* BACK to original - label to input spacing */
                 text-align: left !important;
                 display: block !important;
             }
@@ -1404,7 +1404,7 @@
                     <div>
                         <h1><span>🕐</span>Arbeitszeiten</h1>
                         <div style="font-size: 0.65rem; color: #9CA3AF; margin-top: 0.5rem; margin-left: 0.5rem;">
-                            v1.2.90
+                            v1.2.92
                         </div>
                     </div>
                     <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;"></span>
@@ -7993,8 +7993,8 @@
             });
         }
 
-        // Version 1.2.90 - Manuell erhöhen bei jeder Änderung
-        const version = '1.2.90';
+        // Version 1.2.92 - Manuell erhöhen bei jeder Änderung
+        const version = '1.2.92';
 
         // Initialise user info with fallback placeholders
         const userInfoEl = document.getElementById('user-info');
