@@ -1434,6 +1434,20 @@
             .arbeitszeit-kachel .clear-btn {
                 margin-left: 0.5rem !important;
             }
+
+            /* 🔥 FIX: Input Styling in Landscape to match Portrait (Darker Gray, Smaller Font) */
+            .arbeitszeit-kachel input[type="time"] {
+                font-size: 0.9rem !important;
+                font-weight: normal !important;
+                border-radius: 0.5rem !important;
+            }
+
+            body.dark .arbeitszeit-kachel input[type="time"] {
+                background-color: #374151 !important;
+                /* Match mobile portrait dark mode */
+                border-color: #4B5563 !important;
+                color: white !important;
+            }
         }
 
         /* Desktop: Zeit-Input Container */
@@ -1558,7 +1572,7 @@
                     <div>
                         <h1><span>🕐</span>Arbeitszeiten</h1>
                         <div style="font-size: 0.65rem; color: #9CA3AF; margin-top: 0.5rem; margin-left: 0.5rem;">
-                            v1.2.118
+                            v1.2.119
                         </div>
                     </div>
                     <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;"></span>
@@ -8146,8 +8160,8 @@
             });
         }
 
-        // Version 1.2.118 - Manuell erhöhen bei jeder Änderung
-        const version = '1.2.118';
+        // Version 1.2.119 - Manuell erhöhen bei jeder Änderung
+        const version = '1.2.119';
 
         // Initialise user info with fallback placeholders
         const userInfoEl = document.getElementById('user-info');
