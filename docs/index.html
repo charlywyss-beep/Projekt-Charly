@@ -1257,7 +1257,7 @@
 
             /* 🔥 OVERRIDE INLINE STYLES: Force gap on container */
             .arbeitszeit-kachel>div[style*="grid-template-rows"] {
-                gap: 2rem !important;
+                gap: 0.75rem !important;
                 /* Left kachel: Override to 8 rows (same as right kachel) to match alignment */
                 /* Right kachel: Alternating pattern: 24px (label) + 54px (input/radio) */
             }
@@ -1311,14 +1311,12 @@
                 grid-row: 2 !important;
             }
 
-            .kachel-grid>.arbeitszeit-kachel:first-child>div>div[style*="grid-row: 2"]>.clear-btn {
-                grid-row: 2 !important;
-            }
-
             /* Morgen Gehen: HTML Row 3 -> CSS Row 3 (Label) & 4 (Input) */
             .kachel-grid>.arbeitszeit-kachel:first-child>div>div[style*="grid-row: 3"]>label {
                 grid-row: 3 !important;
                 margin-bottom: 0 !important;
+                align-self: end !important;
+                /* Align to bottom of 54px row */
             }
 
             .kachel-grid>.arbeitszeit-kachel:first-child>div>div[style*="grid-row: 3"]>input {
@@ -1333,6 +1331,8 @@
             .kachel-grid>.arbeitszeit-kachel:first-child>div>div[style*="grid-row: 4"]>label {
                 grid-row: 5 !important;
                 margin-bottom: 0 !important;
+                align-self: end !important;
+                /* Align to bottom of 54px row */
             }
 
             .kachel-grid>.arbeitszeit-kachel:first-child>div>div[style*="grid-row: 4"]>input {
@@ -1347,6 +1347,8 @@
             .kachel-grid>.arbeitszeit-kachel:first-child>div>div[style*="grid-row: 5"]>label {
                 grid-row: 7 !important;
                 margin-bottom: 0 !important;
+                align-self: end !important;
+                /* Align to bottom of 54px row */
             }
 
             .kachel-grid>.arbeitszeit-kachel:first-child>div>div[style*="grid-row: 5"]>input {
@@ -1513,7 +1515,7 @@
                     <div>
                         <h1><span>🕐</span>Arbeitszeiten</h1>
                         <div style="font-size: 0.65rem; color: #9CA3AF; margin-top: 0.5rem; margin-left: 0.5rem;">
-                            v1.2.113
+                            v1.2.114
                         </div>
                     </div>
                     <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;"></span>
@@ -8101,8 +8103,8 @@
             });
         }
 
-        // Version 1.2.113 - Manuell erhöhen bei jeder Änderung
-        const version = '1.2.113';
+        // Version 1.2.114 - Manuell erhöhen bei jeder Änderung
+        const version = '1.2.114';
 
         // Initialise user info with fallback placeholders
         const userInfoEl = document.getElementById('user-info');
