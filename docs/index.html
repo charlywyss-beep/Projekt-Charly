@@ -799,10 +799,29 @@
             input[type="time"] {
                 -webkit-appearance: none !important;
                 appearance: none !important;
+                color: transparent !important;
+                /* Hide native placeholder */
                 background:
                     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239CA3AF' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' /%3E%3C/svg%3E") no-repeat right 0.75rem center / 1.25rem,
                     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='20' viewBox='0 0 60 20'%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%239CA3AF' font-family='sans-serif' font-size='14'%3E-- : --%3C/text%3E%3C/svg%3E") no-repeat center center / 60px 20px,
                     white !important;
+            }
+
+            /* ⚡ FORCE HIDE WEBKIT NATIVE TEXT */
+            input[type="time"]::-webkit-datetime-edit {
+                color: transparent !important;
+            }
+
+            /* Show text when focused or has value */
+            input[type="time"]:focus,
+            input[type="time"].has-value {
+                color: #1F2937 !important;
+            }
+
+            /* Show text in shadow DOM when focused or has value */
+            input[type="time"]:focus::-webkit-datetime-edit,
+            input[type="time"].has-value::-webkit-datetime-edit {
+                color: #1F2937 !important;
             }
 
             /* Icon & Placeholder ausblenden wenn Wert vorhanden */
@@ -966,11 +985,24 @@
             }
 
             body.dark input[type="time"] {
-                background: #374151 !important;
+                background-color: #374151 !important;
                 /* Dark Mode: Hellere Icons/Text */
                 background-image:
                     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23E5E7EB' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' /%3E%3C/svg%3E"),
                     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='20' viewBox='0 0 60 20'%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23E5E7EB' font-family='sans-serif' font-size='14'%3E-- : --%3C/text%3E%3C/svg%3E") !important;
+                background-repeat: no-repeat, no-repeat !important;
+            }
+
+            /* Show text when focused or has value in Dark Mode */
+            body.dark input[type="time"]:focus,
+            body.dark input[type="time"].has-value {
+                color: #F3F4F6 !important;
+            }
+
+            /* Show text in shadow DOM when focused or has value in Dark Mode */
+            body.dark input[type="time"]:focus::-webkit-datetime-edit,
+            body.dark input[type="time"].has-value::-webkit-datetime-edit {
+                color: #F3F4F6 !important;
             }
 
             /* Clear-Buttons sehr klein */
@@ -1217,6 +1249,35 @@
             div[style*="background-color"][style*="FEF3C7"]>input {
                 text-align: center !important;
             }
+
+            /* 🔥 NEU: Arbeitszeiten Kachel - Label und Input vertikal stapeln */
+            .arbeitszeit-kachel>div>div[style*="grid-row"] {
+                display: flex !important;
+                flex-wrap: wrap !important;
+                align-items: center !important;
+                height: auto !important;
+                margin-bottom: 0.5rem !important;
+            }
+
+            /* Label nimmt volle Breite (Zeilenumbruch erzwingen) */
+            .arbeitszeit-kachel label {
+                width: 100% !important;
+                flex-basis: 100% !important;
+                margin-bottom: 0.25rem !important;
+                text-align: left !important;
+                display: block !important;
+            }
+
+            /* Input nimmt verfügbaren Platz */
+            .arbeitszeit-kachel input[type="time"] {
+                flex: 1 !important;
+                min-width: 0 !important;
+            }
+
+            /* Clear Button Abstand */
+            .arbeitszeit-kachel .clear-btn {
+                margin-left: 0.5rem !important;
+            }
         }
 
         /* Desktop: Zeit-Input Container */
@@ -1340,7 +1401,7 @@
                     <div>
                         <h1><span>🕐</span>Arbeitszeiten</h1>
                         <div style="font-size: 0.65rem; color: #9CA3AF; margin-top: 0.5rem; margin-left: 0.5rem;">
-                            v1.2.84
+                            v1.2.89
                         </div>
                     </div>
                     <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;"></span>
@@ -7929,8 +7990,8 @@
             });
         }
 
-        // Version 1.2.84 - Manuell erhöhen bei jeder Änderung
-        const version = '1.2.84';
+        // Version 1.2.89 - Manuell erhöhen bei jeder Änderung
+        const version = '1.2.89';
 
         // Initialise user info with fallback placeholders
         const userInfoEl = document.getElementById('user-info');
