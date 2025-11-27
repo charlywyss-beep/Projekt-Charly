@@ -411,6 +411,7 @@
             background: #374151;
         }
 
+        /* Clear button base styles */
         .clear-btn {
             background: #EF4444;
             color: white;
@@ -420,21 +421,24 @@
             cursor: pointer;
             width: 40px;
             height: 38px;
-            opacity: 1;
             transition: all 0.2s;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
+            /* Hidden by default */
+            opacity: 0 !important;
+            pointer-events: none !important;
         }
 
         .clear-btn:hover {
-            opacity: 0.8;
             transform: scale(1.05);
         }
 
-        .clear-btn.on {
-            opacity: 1;
+        /* Visible state */
+        .clear-btn.visible {
+            opacity: 1 !important;
+            pointer-events: auto !important;
         }
 
         .month-card {
@@ -788,6 +792,96 @@
             font-size: 0.95rem;
         }
 
+        /* 📱 MOBILE: SVG Icons für touch devices (kein repeat!) - PORTRAIT UND LANDSCAPE */
+        @media (max-width: 1024px) and (hover: none) and (pointer: coarse) {
+
+            /* Zeit-Input mit SVG Uhr-Icon und Placeholder - vollständig zurücksetzen */
+            input[type="time"] {
+                -webkit-appearance: none !important;
+                appearance: none !important;
+                color: transparent !important;
+                /* Hide native placeholder */
+                background:
+                    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239CA3AF' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' /%3E%3C/svg%3E") no-repeat right 0.75rem center / 1.25rem,
+                    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='20' viewBox='0 0 60 20'%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%239CA3AF' font-family='sans-serif' font-size='14'%3E-- : --%3C/text%3E%3C/svg%3E") no-repeat center center / 60px 20px,
+                    white !important;
+            }
+
+            /* ⚡ FORCE HIDE WEBKIT NATIVE TEXT */
+            input[type="time"]::-webkit-datetime-edit {
+                color: transparent !important;
+            }
+
+            /* Show text when focused or has value */
+            input[type="time"]:focus,
+            input[type="time"].has-value {
+                color: #1F2937 !important;
+            }
+
+            /* Show text in shadow DOM when focused or has value */
+            input[type="time"]:focus::-webkit-datetime-edit,
+            input[type="time"].has-value::-webkit-datetime-edit {
+                color: #1F2937 !important;
+            }
+
+            /* Icon & Placeholder ausblenden wenn Wert vorhanden */
+            input[type="time"].has-value {
+                background-image: none !important;
+            }
+
+            /* Dark Mode: Hellere Icons/Text - vollständig zurücksetzen */
+            body.dark input[type="time"] {
+                background:
+                    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23E5E7EB' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' /%3E%3C/svg%3E") no-repeat right 0.75rem center / 1.25rem,
+                    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='20' viewBox='0 0 60 20'%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23E5E7EB' font-family='sans-serif' font-size='14'%3E-- : --%3C/text%3E%3C/svg%3E") no-repeat center center / 60px 20px,
+                    #4B5563 !important;
+            }
+
+            /* FIX: Auch im Dark Mode Hintergrundbild entfernen wenn Wert da ist! */
+            body.dark input[type="time"].has-value {
+                background-image: none !important;
+            }
+
+            /* Clear-Button Visibility mit !important für iOS */
+            .clear-btn {
+                opacity: 0 !important;
+                pointer-events: none !important;
+            }
+
+            .clear-btn.visible {
+                opacity: 1 !important;
+                pointer-events: auto !important;
+                transition: opacity 0.2s ease !important;
+            }
+        }
+
+        /* iPad/Mobile Portrait: Kacheln stapeln, Buttons dazwischen */
+        @media (max-width: 768px) and (orientation: portrait) {
+            .kachel-grid {
+                grid-template-columns: 1fr !important;
+                display: flex !important;
+                flex-direction: column !important;
+            }
+
+            /* Arbeitszeiten Kachel: oben */
+            .kachel-grid>.arbeitszeit-kachel:nth-child(1) {
+                order: 1;
+            }
+
+            /* Buttons: in der Mitte */
+            .kachel-grid>.button-row {
+                order: 2;
+                grid-column: unset !important;
+                margin-top: 1.25rem !important;
+                margin-bottom: 1.25rem !important;
+            }
+
+            /* Zusatzoptionen Kachel: unten */
+            .kachel-grid>.arbeitszeit-kachel:nth-child(2) {
+                order: 3;
+            }
+        }
+
         @media (max-width: 480px) and (hover: none) and (pointer: coarse) {
             body {
                 padding: 0.75rem !important;
@@ -868,27 +962,47 @@
                 z-index: 1;
                 padding: 0.75rem !important;
                 padding-right: 0.5rem !important;
-                /* Platz für natives Icon, aber nicht zu viel */
-                /* Reduziert für iOS Time-Picker */
                 font-size: 0.9rem !important;
                 border-radius: 0.5rem !important;
                 text-align: center !important;
-                /* Text zentrieren */
+                -webkit-appearance: none;
+                /* iOS Styling entfernen */
+                appearance: none;
 
-                /* Uhrzeit-Icon für leere Felder */
-                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239CA3AF' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' /%3E%3C/svg%3E") !important;
-                background-repeat: no-repeat !important;
-                background-position: right 0.75rem center !important;
-                background-size: 1.25rem !important;
+                /* Uhrzeit-Icon (rechts) UND Placeholder-Text (mitte) als Hintergrundbilder */
+                background-image:
+                    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239CA3AF' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' /%3E%3C/svg%3E"),
+                    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='20' viewBox='0 0 60 20'%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%239CA3AF' font-family='sans-serif' font-size='14'%3E-- : --%3C/text%3E%3C/svg%3E") !important;
+
+                background-repeat: no-repeat, no-repeat !important;
+                background-position: right 0.75rem center, center center !important;
+                background-size: 1.25rem, 60px 20px !important;
             }
 
-            /* Icon ausblenden wenn Wert vorhanden (damit X-Button Platz hat) */
+            /* Icon & Placeholder ausblenden wenn Wert vorhanden */
             input[type="time"].has-value {
                 background-image: none !important;
             }
 
             body.dark input[type="time"] {
-                background: #374151 !important;
+                background-color: #374151 !important;
+                /* Dark Mode: Hellere Icons/Text */
+                background-image:
+                    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23E5E7EB' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' /%3E%3C/svg%3E"),
+                    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='20' viewBox='0 0 60 20'%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23E5E7EB' font-family='sans-serif' font-size='14'%3E-- : --%3C/text%3E%3C/svg%3E") !important;
+                background-repeat: no-repeat, no-repeat !important;
+            }
+
+            /* Show text when focused or has value in Dark Mode */
+            body.dark input[type="time"]:focus,
+            body.dark input[type="time"].has-value {
+                color: #F3F4F6 !important;
+            }
+
+            /* Show text in shadow DOM when focused or has value in Dark Mode */
+            body.dark input[type="time"]:focus::-webkit-datetime-edit,
+            body.dark input[type="time"].has-value::-webkit-datetime-edit {
+                color: #F3F4F6 !important;
             }
 
             /* Clear-Buttons sehr klein */
@@ -900,15 +1014,20 @@
                 font-size: 0.8rem !important;
                 z-index: 20 !important;
                 position: relative !important;
-                visibility: hidden;
+                visibility: visible !important;
+                /* Always visible to keep layout stable */
                 display: flex !important;
                 top: auto !important;
                 right: auto !important;
                 transform: none !important;
+                opacity: 0;
+                /* Hidden by default */
+                pointer-events: none;
             }
 
             .clear-btn.visible {
-                visibility: visible !important;
+                opacity: 1 !important;
+                pointer-events: auto !important;
             }
 
             /* NUR Mobile: Flex-wrap Layout für Zeitfelder */
@@ -1130,6 +1249,35 @@
             div[style*="background-color"][style*="FEF3C7"]>input {
                 text-align: center !important;
             }
+
+            /* 🔥 NEU: Arbeitszeiten Kachel - Label und Input vertikal stapeln */
+            .arbeitszeit-kachel>div>div[style*="grid-row"] {
+                display: flex !important;
+                flex-wrap: wrap !important;
+                align-items: center !important;
+                height: auto !important;
+                margin-bottom: 0.5rem !important;
+            }
+
+            /* Label nimmt volle Breite (Zeilenumbruch erzwingen) */
+            .arbeitszeit-kachel label {
+                width: 100% !important;
+                flex-basis: 100% !important;
+                margin-bottom: 0.25rem !important;
+                text-align: left !important;
+                display: block !important;
+            }
+
+            /* Input nimmt verfügbaren Platz */
+            .arbeitszeit-kachel input[type="time"] {
+                flex: 1 !important;
+                min-width: 0 !important;
+            }
+
+            /* Clear Button Abstand */
+            .arbeitszeit-kachel .clear-btn {
+                margin-left: 0.5rem !important;
+            }
         }
 
         /* Desktop: Zeit-Input Container */
@@ -1185,6 +1333,8 @@
             text-align: center !important;
             padding-right: 0.75rem !important;
             padding-left: 0.75rem !important;
+            min-width: 0 !important;
+            /* Fix für Flexbox Overflow */
         }
 
         /* Clear Button */
@@ -1251,7 +1401,7 @@
                     <div>
                         <h1><span>🕐</span>Arbeitszeiten</h1>
                         <div style="font-size: 0.65rem; color: #9CA3AF; margin-top: 0.5rem; margin-left: 0.5rem;">
-                            v1.2.71
+                            v1.2.89
                         </div>
                     </div>
                     <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;"></span>
@@ -1323,7 +1473,7 @@
             </div>
             <input type="date" id="selDate" style="display: none;">
 
-            <div class="kachel-grid">
+            <div class="kachel-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
 
                 <div class="arbeitszeit-kachel">
                     <h3 class="arbeitszeit-kachel-title">⏰ Arbeitszeiten</h3>
@@ -1337,7 +1487,9 @@
                         <!-- Zeile 3: Morgen Kommen -->
                         <div style="grid-row: 3;">
                             <label for="mk" id="label-mk">Morgen Kommen</label>
-                            <input type="time" id="mk" oninput="toggleLabel('mk')" onchange="toggleLabel('mk')">
+                            <input type="time" id="mk"
+                                style="width: auto; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;"
+                                oninput="toggleLabel('mk')" onchange="toggleLabel('mk')">
                             <button class="clear-btn" id="c-mk" onclick="clearField('mk')">✕</button>
                         </div>
 
@@ -1345,7 +1497,7 @@
                         <div style="grid-row: 4;">
                             <label for="mg" id="label-mg">Morgen Gehen</label>
                             <input type="time" id="mg"
-                                style="width: 100%; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;"
+                                style="width: auto; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;"
                                 oninput="toggleLabel('mg')" onchange="toggleLabel('mg')">
                             <button class="clear-btn" id="c-mg" onclick="clearField('mg')">✕</button>
                         </div>
@@ -1354,7 +1506,7 @@
                         <div style="grid-row: 5;">
                             <label for="mittk" id="label-mittk">Mittag Kommen</label>
                             <input type="time" id="mittk"
-                                style="width: 100%; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;"
+                                style="width: auto; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;"
                                 oninput="toggleLabel('mittk')" onchange="toggleLabel('mittk')">
                             <button class="clear-btn" id="c-mittk" onclick="clearField('mittk')">✕</button>
                         </div>
@@ -1363,7 +1515,7 @@
                         <div style="grid-row: 6;">
                             <label for="ag" id="label-ag">Abend Gehen</label>
                             <input type="time" id="ag"
-                                style="width: 100%; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;"
+                                style="width: auto; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;"
                                 oninput="toggleLabel('ag')" onchange="toggleLabel('ag')">
                             <button class="clear-btn" id="c-ag" onclick="clearField('ag')">✕</button>
                         </div>
@@ -1449,15 +1601,17 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Zurücksetzen und Speichern Buttons -->
+                <div class="button-row" style="grid-column: 1 / -1; display: flex; gap: 0.5rem; margin-top: 1.25rem;">
+                    <button class="btn btn-danger" style="flex: 1;" onclick="reset()">↻ Zurücksetzen</button>
+                    <button class="btn btn-success" id="btn-save" style="flex: 1;" onclick="save()">💾
+                        Speichern</button>
+                </div>
             </div>
 
             <!-- Platzhalter für Warnbox (wird dynamisch eingefügt) -->
             <div id="tagtyp-warning-container"></div>
-
-            <div style="display: flex; gap: 0.5rem; margin-top: 1.25rem;">
-                <button class="btn btn-danger" style="flex: 1;" onclick="reset()">↻ Zurücksetzen</button>
-                <button class="btn btn-success" id="btn-save" style="flex: 1;" onclick="save()">💾 Speichern</button>
-            </div>
 
             <div id="compact-result"
                 style="margin-top: 1rem; padding: 1rem; background: rgba(99, 102, 241, 0.1); border-radius: 0.5rem; display: none;">
@@ -2832,9 +2986,11 @@
             switchView(view);
             calc(); updateClear();
 
+            // Zusätzlicher updateClear-Aufruf nach kurzer Verzögerung für sicheres Layout
             setTimeout(() => {
                 calc();
-            }, 500);
+                updateClear();
+            }, 100);
 
             if ('Notification' in window && Notification.permission === 'default') {
                 Notification.requestPermission();
@@ -3098,8 +3254,18 @@
 
         function updateClear() {
             ['mk', 'mg', 'mittk', 'ag'].forEach(id => {
-                const btn = document.getElementById('c-' + id);
-                btn.classList.toggle('on', document.getElementById(id).value !== '');
+                const input = document.getElementById(id);
+                const clearBtn = document.getElementById('c-' + id);
+
+                if (input && clearBtn) {
+                    if (input.value) {
+                        input.classList.add('has-value');
+                        clearBtn.classList.add('visible');
+                    } else {
+                        input.classList.remove('has-value');
+                        clearBtn.classList.remove('visible');
+                    }
+                }
             });
         }
 
@@ -5188,12 +5354,27 @@
             document.getElementById('icon').textContent = '☀️';
         }
 
+        // Globaler Click-Listener zum Schließen des Menüs
+        function closeExportMenuOutside(event) {
+            const menu = document.getElementById('export-menu');
+            const toggleBtn = event.target.closest('button[onclick="toggleExport()"]');
+
+            // Wenn Klick NICHT im Menü und NICHT auf dem Toggle-Button
+            if (menu && !menu.contains(event.target) && !toggleBtn) {
+                menu.classList.add('hidden');
+                document.removeEventListener('click', closeExportMenuOutside);
+            }
+        }
+
         function toggleExport() {
             const menu = document.getElementById('export-menu');
-            menu.classList.toggle('hidden');
+            const isHidden = menu.classList.contains('hidden');
 
-            // Update visibility based on current view
-            if (!menu.classList.contains('hidden')) {
+            if (isHidden) {
+                // Menü öffnen
+                menu.classList.remove('hidden');
+
+                // Update visibility based on current view
                 const isSettings = view === 'einstellungen';
                 const timeExports = menu.querySelectorAll('.time-export');
                 const settingsExports = menu.querySelectorAll('.settings-export');
@@ -5207,6 +5388,16 @@
                 settingsExports.forEach(el => {
                     el.style.display = '';
                 });
+
+                // Event Listener hinzufügen (mit kleiner Verzögerung, damit der aktuelle Klick nicht sofort schließt)
+                setTimeout(() => {
+                    document.addEventListener('click', closeExportMenuOutside);
+                }, 0);
+
+            } else {
+                // Menü schließen
+                menu.classList.add('hidden');
+                document.removeEventListener('click', closeExportMenuOutside);
             }
         }
 
@@ -7757,7 +7948,12 @@
             }
         });
 
-        init();
+        // Wait for DOM to be ready before initializing
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
     </script>
 
     <!-- ⏱ Automatischer Reload bei neuer Version -->
@@ -7779,28 +7975,23 @@
 
         function updateClear() {
             ['mk', 'mg', 'mittk', 'ag'].forEach(id => {
-                const clearBtn = document.getElementById(`c-${id}`);
                 const input = document.getElementById(id);
+                const clearBtn = document.getElementById(`c-${id}`);
 
                 if (input && clearBtn) {
-                    // Nutze visibility statt display, damit Layout stabil bleibt
                     if (input.value) {
-                        input.classList.add('has-value'); // Klasse für CSS hinzufügen
-                        clearBtn.style.visibility = 'visible';
+                        input.classList.add('has-value');
                         clearBtn.classList.add('visible');
                     } else {
-                        input.classList.remove('has-value'); // Klasse entfernen
-                        clearBtn.style.visibility = 'hidden';
+                        input.classList.remove('has-value');
                         clearBtn.classList.remove('visible');
                     }
-                    // Stelle sicher, dass display immer flex ist
-                    clearBtn.style.display = 'flex';
                 }
             });
         }
 
-        // Version 1.2.71 - Manuell erhöhen bei jeder Änderung
-        const version = '1.2.71';
+        // Version 1.2.89 - Manuell erhöhen bei jeder Änderung
+        const version = '1.2.89';
 
         // Initialise user info with fallback placeholders
         const userInfoEl = document.getElementById('user-info');
