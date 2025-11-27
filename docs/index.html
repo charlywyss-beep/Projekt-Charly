@@ -839,10 +839,12 @@
                 flex-direction: column !important;
             }
 
-            .kachel-grid>.arbeitszeit-kachel:first-child {
+            /* Arbeitszeiten Kachel: oben */
+            .kachel-grid>.arbeitszeit-kachel:nth-child(1) {
                 order: 1;
             }
 
+            /* Buttons: in der Mitte */
             .kachel-grid>.button-row {
                 order: 2;
                 grid-column: unset !important;
@@ -850,7 +852,8 @@
                 margin-bottom: 1.25rem !important;
             }
 
-            .kachel-grid>.arbeitszeit-kachel:last-of-type {
+            /* Zusatzoptionen Kachel: unten */
+            .kachel-grid>.arbeitszeit-kachel:nth-child(2) {
                 order: 3;
             }
         }
