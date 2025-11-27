@@ -1282,9 +1282,6 @@
             .kachel-grid>.arbeitszeit-kachel:first-child>div>div[style*="grid-row: 2"]>label {
                 grid-row: 1 !important;
                 margin-bottom: 0 !important;
-                justify-self: start !important;
-                /* Links ausrichten */
-                text-align: left !important;
             }
 
             .kachel-grid>.arbeitszeit-kachel:first-child>div>div[style*="grid-row: 2"]>input {
@@ -1349,7 +1346,8 @@
             }
 
             /* Label nimmt volle Breite (Zeilenumbruch erzwingen) */
-            .arbeitszeit-kachel label {
+            /* ONLY apply to RIGHT kachel - left kachel uses grid placement */
+            .kachel-grid>.arbeitszeit-kachel:not(:first-child) label {
                 width: 100% !important;
                 flex-basis: 100% !important;
                 margin-bottom: 0.25rem !important;
@@ -1492,7 +1490,7 @@
                     <div>
                         <h1><span>🕐</span>Arbeitszeiten</h1>
                         <div style="font-size: 0.65rem; color: #9CA3AF; margin-top: 0.5rem; margin-left: 0.5rem;">
-                            v1.2.104
+                            v1.2.106
                         </div>
                     </div>
                     <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;"></span>
@@ -8080,8 +8078,8 @@
             });
         }
 
-        // Version 1.2.104 - Manuell erhöhen bei jeder Änderung
-        const version = '1.2.104';
+        // Version 1.2.106 - Manuell erhöhen bei jeder Änderung
+        const version = '1.2.106';
 
         // Initialise user info with fallback placeholders
         const userInfoEl = document.getElementById('user-info');
