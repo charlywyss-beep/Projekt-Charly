@@ -1262,9 +1262,9 @@
                 /* Right kachel: Alternating pattern: 24px (label) + 54px (input/radio) */
             }
 
-            /* Left kachel: Override to 7 rows */
+            /* Left kachel: Override to 8 rows (same as right kachel) */
             .kachel-grid>.arbeitszeit-kachel:first-child>div[style*="grid-template-rows"] {
-                grid-template-rows: 54px 54px 54px 54px 54px 54px 54px !important;
+                grid-template-rows: 24px 54px 54px 54px 54px 54px 54px 54px !important;
             }
 
             /* Right kachel: Keep 8 rows */
@@ -1288,8 +1288,8 @@
                 display: contents !important;
             }
 
-            /* Morgen Kommen: grid-row: 1 in HTML, but place in grid row 2 to align with right kachel */
-            .kachel-grid>.arbeitszeit-kachel:first-child>div>div[style*="grid-row: 1"]>label {
+            /* Morgen Kommen: grid-row: 2 in HTML, align label to grid row 1 to match Tag-Typ */
+            .kachel-grid>.arbeitszeit-kachel:first-child>div>div[style*="grid-row: 2"]>label {
                 grid-row: 1 !important;
                 margin-bottom: 0 !important;
                 /* Override desktop styling */
@@ -1297,55 +1297,61 @@
                 min-width: 0 !important;
                 padding: 0 !important;
                 text-align: left !important;
+                font-size: 0.875rem !important;
             }
 
-            .kachel-grid>.arbeitszeit-kachel:first-child>div>div[style*="grid-row: 1"]>input {
+            /* Tag-Typ label: match font-size to Morgen Kommen */
+            .kachel-grid>.arbeitszeit-kachel:not(:first-child)>div>label[style*="grid-row: 1"] {
+                font-size: 0.875rem !important;
+            }
+
+            .kachel-grid>.arbeitszeit-kachel:first-child>div>div[style*="grid-row: 2"]>input {
                 grid-row: 2 !important;
             }
 
-            .kachel-grid>.arbeitszeit-kachel:first-child>div>div[style*="grid-row: 1"]>.clear-btn {
+            .kachel-grid>.arbeitszeit-kachel:first-child>div>div[style*="grid-row: 2"]>.clear-btn {
                 grid-row: 2 !important;
             }
 
             /* Morgen Gehen: Label Row 3, Input Row 4 */
-            .kachel-grid>.arbeitszeit-kachel:first-child>div>div[style*="grid-row: 2"]>label {
+            .kachel-grid>.arbeitszeit-kachel:first-child>div>div[style*="grid-row: 3"]>label {
                 grid-row: 3 !important;
                 margin-bottom: 0 !important;
             }
 
-            .kachel-grid>.arbeitszeit-kachel:first-child>div>div[style*="grid-row: 2"]>input {
+            .kachel-grid>.arbeitszeit-kachel:first-child>div>div[style*="grid-row: 3"]>input {
                 grid-row: 4 !important;
             }
 
-            .kachel-grid>.arbeitszeit-kachel:first-child>div>div[style*="grid-row: 2"]>.clear-btn {
+            .kachel-grid>.arbeitszeit-kachel:first-child>div>div[style*="grid-row: 3"]>.clear-btn {
                 grid-row: 4 !important;
             }
 
             /* Mittag Kommen: Label Row 5, Input Row 6 */
-            .kachel-grid>.arbeitszeit-kachel:first-child>div>div[style*="grid-row: 3"]>label {
+            .kachel-grid>.arbeitszeit-kachel:first-child>div>div[style*="grid-row: 4"]>label {
                 grid-row: 5 !important;
                 margin-bottom: 0 !important;
             }
 
-            .kachel-grid>.arbeitszeit-kachel:first-child>div>div[style*="grid-row: 3"]>input {
+            .kachel-grid>.arbeitszeit-kachel:first-child>div>div[style*="grid-row: 4"]>input {
                 grid-row: 6 !important;
             }
 
-            .kachel-grid>.arbeitszeit-kachel:first-child>div>div[style*="grid-row: 3"]>.clear-btn {
+            .kachel-grid>.arbeitszeit-kachel:first-child>div>div[style*="grid-row: 4"]>.clear-btn {
                 grid-row: 6 !important;
             }
 
             /* Abend Gehen: Label Row 7, Input Row 8 */
-            .kachel-grid>.arbeitszeit-kachel:first-child>div>div[style*="grid-row: 4"]>label {
+            .kachel-grid>.arbeitszeit-kachel:first-child>div>div[style*="grid-row: 5"]>label {
                 grid-row: 7 !important;
                 margin-bottom: 0 !important;
             }
 
-            .kachel-grid>.arbeitszeit-kachel:first-child>div>div[style*="grid-row: 4"]>input {
+            .kachel-grid>.arbeitszeit-kachel:first-child>div>div[style*="grid-row: 5"]>input {
                 grid-row: 8 !important;
             }
 
-            .kachel-grid>.arbeitszeit-kachel:first-child>div>div[style*="grid-row: 4"]>.clear-btn {
+            .kachel-grid>.arbeitszeit-kachel:first-child>div>div[style*="grid-row: 5"]>.clear-btn {
                 grid-row: 8 !important;
             }
 
@@ -1505,7 +1511,7 @@
                     <div>
                         <h1><span>🕐</span>Arbeitszeiten</h1>
                         <div style="font-size: 0.65rem; color: #9CA3AF; margin-top: 0.5rem; margin-left: 0.5rem;">
-                            v1.2.108
+                            v1.2.110
                         </div>
                     </div>
                     <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;"></span>
@@ -1581,9 +1587,14 @@
 
                 <div class="arbeitszeit-kachel">
                     <h3 class="arbeitszeit-kachel-title">⏰ Arbeitszeiten</h3>
-                    <div style="display: grid; grid-template-rows: 54px 54px 54px 54px 54px 54px 54px; gap: 0.75rem;">
-                        <!-- Zeile 1: Morgen Kommen (auf gleicher Höhe wie "Normaler Arbeitstag" rechts) -->
-                        <div style="grid-row: 1;">
+                    <div
+                        style="display: grid; grid-template-rows: 24px 54px 54px 54px 54px 54px 54px 54px; gap: 0.75rem;">
+                        <!-- Zeile 1: Label (for Desktop layout) -->
+                        <label
+                            style="grid-row: 1; font-weight: 600; font-size: 0.9375rem; line-height: 24px; align-self: start;">Zeiten</label>
+
+                        <!-- Zeile 2: Morgen Kommen (auf gleicher Höhe wie "Normaler Arbeitstag" rechts) -->
+                        <div style="grid-row: 2;">
                             <label for="mk" id="label-mk">Morgen Kommen</label>
                             <input type="time" id="mk"
                                 style="width: auto; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;"
@@ -1591,8 +1602,8 @@
                             <button class="clear-btn" id="c-mk" onclick="clearField('mk')">✕</button>
                         </div>
 
-                        <!-- Zeile 2: Morgen Gehen -->
-                        <div style="grid-row: 2;">
+                        <!-- Zeile 3: Morgen Gehen -->
+                        <div style="grid-row: 3;">
                             <label for="mg" id="label-mg">Morgen Gehen</label>
                             <input type="time" id="mg"
                                 style="width: auto; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;"
@@ -1600,8 +1611,8 @@
                             <button class="clear-btn" id="c-mg" onclick="clearField('mg')">✕</button>
                         </div>
 
-                        <!-- Zeile 3: Mittag Kommen -->
-                        <div style="grid-row: 3;">
+                        <!-- Zeile 4: Mittag Kommen -->
+                        <div style="grid-row: 4;">
                             <label for="mittk" id="label-mittk">Mittag Kommen</label>
                             <input type="time" id="mittk"
                                 style="width: auto; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;"
@@ -1609,8 +1620,8 @@
                             <button class="clear-btn" id="c-mittk" onclick="clearField('mittk')">✕</button>
                         </div>
 
-                        <!-- Zeile 4: Abend Gehen -->
-                        <div style="grid-row: 4;">
+                        <!-- Zeile 5: Abend Gehen -->
+                        <div style="grid-row: 5;">
                             <label for="ag" id="label-ag">Abend Gehen</label>
                             <input type="time" id="ag"
                                 style="width: auto; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;"
@@ -1618,7 +1629,7 @@
                             <button class="clear-btn" id="c-ag" onclick="clearField('ag')">✕</button>
                         </div>
 
-                        <!-- Zeile 5-7: LEER (entspricht weitere Optionen rechts) -->
+                        <!-- Zeile 6-8: LEER (entspricht weitere Optionen rechts) -->
                     </div>
 
                     <!-- Fehlermeldung innerhalb der Kachel -->
@@ -8088,8 +8099,8 @@
             });
         }
 
-        // Version 1.2.108 - Manuell erhöhen bei jeder Änderung
-        const version = '1.2.108';
+        // Version 1.2.110 - Manuell erhöhen bei jeder Änderung
+        const version = '1.2.110';
 
         // Initialise user info with fallback placeholders
         const userInfoEl = document.getElementById('user-info');
