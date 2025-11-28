@@ -3101,6 +3101,86 @@
             return ft ? (ft.typ || 'feiertag') : null;
         }
 
+        function checkAndSwitchToNormal(inputField) {
+            const tagTypRadios = document.getElementsByName('tagTyp');
+            let currentTyp = 'normal';
+            for (const radio of tagTypRadios) {
+                if (radio.checked) {
+                    currentTyp = radio.value;
+                    break;
+                }
+            }
+
+            if (currentTyp !== 'normal') {
+                // Zeige Warnbox
+                const container = document.getElementById('tagtyp-warning-container');
+                if (container) {
+                    container.innerHTML = `
+                        <div id="tagtyp-warning" 
+                            style="margin-top: 1rem; padding: 1rem; background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%); border: 2px solid #F59E0B; border-radius: 0.5rem;">
+                            <div style="font-weight: 700; font-size: 1rem; color: #92400E; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                                ⚠️ Zeiteingabe erkannt
+                            </div>
+                            <div style="color: #78350F; font-size: 0.875rem; line-height: 1.5; margin-bottom: 1rem;">
+                                <strong>Bei Zeiteingabe wird zu "Normaler Arbeitstag" gewechselt!</strong><br>
+                                Möchten Sie fortfahren?
+                            </div>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <button class="btn btn-success" onclick="confirmTimeInput(true, '${inputField.id}')" style="flex: 1;">Ja - Normaler Arbeitstag</button>
+                                <button class="btn btn-sec" onclick="confirmTimeInput(false, '${inputField.id}')" style="flex: 1;">Nein - Abbrechen</button>
+                            </div>
+                        </div>
+                    `;
+
+                    // Speichere den aktuellen Typ und die eingegebene Zeit
+                    window.pendingTimeInput = {
+                        fieldId: inputField.id,
+                        value: inputField.value,
+                        oldTyp: currentTyp
+                    };
+                }
+            }
+        }
+
+        function confirmTimeInput(confirmed, fieldId) {
+            // Warnbox entfernen
+            const container = document.getElementById('tagtyp-warning-container');
+            if (container) {
+                container.innerHTML = '';
+            }
+
+            if (confirmed) {
+                // OK geklickt: Wechsel zu "Normaler Arbeitstag"
+                const normalRadio = document.querySelector('input[name="tagTyp"][value="normal"]');
+                if (normalRadio) {
+                    normalRadio.checked = true;
+                    updateTagTyp();
+                }
+                // Zeit bleibt erhalten
+                showMsg('✓ Zu "Normaler Arbeitstag" gewechselt', true);
+            } else {
+                // Abbrechen geklickt: Zeit löschen und bei altem Typ bleiben
+                const field = document.getElementById(fieldId);
+                if (field) {
+                    field.value = '';
+                    calc();
+                    updateClear();
+                }
+
+                // Stelle sicher, dass der alte Typ ausgewählt bleibt
+                if (window.pendingTimeInput && window.pendingTimeInput.oldTyp) {
+                    const oldRadio = document.querySelector(`input[name="tagTyp"][value="${window.pendingTimeInput.oldTyp}"]`);
+                    if (oldRadio) {
+                        oldRadio.checked = true;
+                        updateTagTyp();
+                    }
+                }
+            }
+
+            // Lösche pending data
+            delete window.pendingTimeInput;
+        }
+
         function init() {
             loadFromStorage();
             checkYearChange(); // Prüfe ob Jahreswechsel stattgefunden hat
@@ -3119,7 +3199,11 @@
             ['mk', 'mg', 'mittk', 'ag'].forEach((id, idx) => {
                 const field = document.getElementById(id);
 
-                field.oninput = () => { calc(); updateClear(); };
+                field.oninput = () => {
+                    if (field.value) checkAndSwitchToNormal(field);
+                    calc();
+                    updateClear();
+                };
                 field.onchange = () => { calc(); updateClear(); };
                 field.onblur = () => { calc(); updateClear(); };
                 field.onkeydown = (e) => {
@@ -3142,6 +3226,9 @@
                         const hours = String(now.getHours()).padStart(2, '0');
                         const minutes = String(now.getMinutes()).padStart(2, '0');
                         field.value = `${hours}:${minutes}`;
+
+                        checkAndSwitchToNormal(field);
+
                         calc();
                         updateClear();
                     }
@@ -8164,8 +8251,8 @@
             });
         }
 
-        // Version 1.2.121 - Manuell erhöhen bei jeder Änderung
-        const version = '1.2.121';
+        // Version 1.2.122 - Manuell erhöhen bei jeder Änderung
+        const version = '1.2.122';
 
         // Initialise user info with fallback placeholders
         const userInfoEl = document.getElementById('user-info');
