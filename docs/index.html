@@ -1576,7 +1576,7 @@
                     <div>
                         <h1><span>🕐</span>Arbeitszeiten</h1>
                         <div style="font-size: 0.65rem; color: #9CA3AF; margin-top: 0.5rem; margin-left: 0.5rem;">
-                            v1.2.121
+                            v1.2.125
                         </div>
                     </div>
                     <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;"></span>
@@ -1700,6 +1700,9 @@
                     <!-- Fehlermeldung innerhalb der Kachel -->
                     <!-- Fehlermeldungen / Erfolg -->
                     <div id="msg" class="message msg-ok hidden" style="margin-top: 0.75rem; text-align: center;"></div>
+
+                    <!-- Platzhalter für Warnbox (innerhalb der Kachel, damit Grid nicht bricht) -->
+                    <div id="tagtyp-warning-container"></div>
                 </div>
 
                 <div class="arbeitszeit-kachel">
@@ -1783,9 +1786,6 @@
                         Speichern</button>
                 </div>
             </div>
-
-            <!-- Platzhalter für Warnbox (wird dynamisch eingefügt) -->
-            <div id="tagtyp-warning-container"></div>
 
             <div id="compact-result"
                 style="margin-top: 1rem; padding: 1rem; background: rgba(99, 102, 241, 0.1); border-radius: 0.5rem; display: none;">
@@ -8247,8 +8247,8 @@
             });
         }
 
-        // Version 1.2.122 - Manuell erhöhen bei jeder Änderung
-        const version = '1.2.122';
+        // Version 1.2.125 - Manuell erhöhen bei jeder Änderung
+        const version = '1.2.125';
 
         // Initialise user info with fallback placeholders
         const userInfoEl = document.getElementById('user-info');
