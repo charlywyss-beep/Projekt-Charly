@@ -3118,16 +3118,12 @@
                     container.innerHTML = `
                         <div id="tagtyp-warning" 
                             style="margin-top: 1rem; padding: 1rem; background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%); border: 2px solid #F59E0B; border-radius: 0.5rem;">
-                            <div style="font-weight: 700; font-size: 1rem; color: #92400E; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
-                                ⚠️ Zeiteingabe erkannt
-                            </div>
-                            <div style="color: #78350F; font-size: 0.875rem; line-height: 1.5; margin-bottom: 1rem;">
-                                <strong>Bei Zeiteingabe wird zu "Normaler Arbeitstag" gewechselt!</strong><br>
-                                Möchten Sie fortfahren?
+                            <div style="font-weight: 700; font-size: 1rem; color: #92400E; margin-bottom: 1rem; white-space: normal; word-wrap: break-word; text-align: center;">
+                                ⚠️ Zeiteingabe wechselt zu "Normaler Arbeitstag". Fortfahren?
                             </div>
                             <div style="display: flex; gap: 0.5rem;">
                                 <button class="btn btn-success" onclick="confirmTimeInput(true, '${inputField.id}')" style="flex: 1;">Ja - Normaler Arbeitstag</button>
-                                <button class="btn btn-sec" onclick="confirmTimeInput(false, '${inputField.id}')" style="flex: 1;">Nein - Abbrechen</button>
+                                <button class="btn btn-danger" onclick="confirmTimeInput(false, '${inputField.id}')" style="flex: 1;">Nein - Abbrechen</button>
                             </div>
                         </div>
                     `;
