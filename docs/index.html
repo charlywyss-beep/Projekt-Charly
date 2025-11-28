@@ -1576,7 +1576,7 @@
                     <div>
                         <h1><span>🕐</span>Arbeitszeiten</h1>
                         <div style="font-size: 0.65rem; color: #9CA3AF; margin-top: 0.5rem; margin-left: 0.5rem;">
-                            v1.2.125
+                            v1.2.126
                         </div>
                     </div>
                     <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;"></span>
@@ -2794,6 +2794,23 @@
                                 onchange="updateSettings()"
                                 style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #D1D5DB; border-radius: 0.5rem; font-size: 0.875rem;"
                                 data-ddg-inputtype="unknown">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-sm">
+                    <h3 style="margin-bottom: 1rem; font-size: 1.125rem;">Datensicherung & Sync</h3>
+                    <div class="flex-col">
+                        <div style="font-size: 0.875rem; color: #6B7280; margin-bottom: 0.5rem;">
+                            Für manuellen Abgleich zwischen Geräten (z.B. PC ↔ iPad) via OneDrive.
+                        </div>
+                        <div>
+                            <button class="btn btn-primary" style="width: 100%; margin-bottom: 0.5rem;"
+                                onclick="exportBackup()">💾 Backup erstellen (Download)</button>
+                            <button class="btn btn-sec" style="width: 100%;" onclick="importBackup()">📂 Backup laden
+                                (Restore)</button>
+                            <input type="file" id="backup-upload-file" accept=".json" style="display: none;"
+                                onchange="handleBackupFileSelect(event)">
                         </div>
                     </div>
                 </div>
@@ -5342,6 +5359,66 @@
 
         function closeMassenUrlaub() {
             document.getElementById('massenurlaub-modal').classList.add('hidden');
+        }
+
+        // ==========================================
+        // BACKUP & RESTORE (OneDrive Sync Support)
+        // ==========================================
+
+        function exportBackup() {
+            const backup = {
+                version: '1.0',
+                timestamp: new Date().toISOString(),
+                settings: settings,
+                data: data,
+                feiertage: feiertage
+            };
+
+            const json = JSON.stringify(backup, null, 2);
+            const blob = new Blob([json], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `arbeitszeit_backup_${new Date().toISOString().slice(0, 10)}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function importBackup() {
+            document.getElementById('backup-upload-file').click();
+        }
+
+        function handleBackupFileSelect(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                try {
+                    const backup = JSON.parse(e.target.result);
+
+                    if (!backup.data || !backup.settings) {
+                        alert('Ungültige Backup-Datei! (data oder settings fehlen)');
+                        return;
+                    }
+
+                    if (confirm(`Backup vom ${new Date(backup.timestamp).toLocaleString()} laden?\nACHTUNG: Alle aktuellen Daten werden überschrieben!`)) {
+                        data = backup.data;
+                        settings = backup.settings;
+                        if (backup.feiertage) feiertage = backup.feiertage;
+
+                        saveToStorage();
+                        location.reload(); // Seite neu laden um alles zu aktualisieren
+                    }
+                } catch (err) {
+                    alert('Fehler beim Laden des Backups: ' + err.message);
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = ''; // Reset input
         }
 
         function updateUrlaubBisDatum() {
