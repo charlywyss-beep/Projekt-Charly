@@ -274,7 +274,8 @@
         body.dark input[type="number"],
         body.dark select {
             background: #4B5563;
-            border-color: #6B7280;
+            border-color: #9CA3AF !important;
+            /* Lighter border for better visibility */
             color: white !important;
             color-scheme: dark;
         }
@@ -1440,12 +1441,15 @@
                 font-size: 0.9rem !important;
                 font-weight: normal !important;
                 border-radius: 0.5rem !important;
+                /* Ensure consistent height */
+                height: 54px !important;
             }
 
             body.dark .arbeitszeit-kachel input[type="time"] {
                 background-color: #374151 !important;
                 /* Match mobile portrait dark mode */
-                border-color: #4B5563 !important;
+                border-color: #9CA3AF !important;
+                /* Unified lighter border */
                 color: white !important;
             }
         }
@@ -1572,7 +1576,7 @@
                     <div>
                         <h1><span>🕐</span>Arbeitszeiten</h1>
                         <div style="font-size: 0.65rem; color: #9CA3AF; margin-top: 0.5rem; margin-left: 0.5rem;">
-                            v1.2.119
+                            v1.2.121
                         </div>
                     </div>
                     <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;"></span>
@@ -8160,8 +8164,8 @@
             });
         }
 
-        // Version 1.2.119 - Manuell erhöhen bei jeder Änderung
-        const version = '1.2.119';
+        // Version 1.2.121 - Manuell erhöhen bei jeder Änderung
+        const version = '1.2.121';
 
         // Initialise user info with fallback placeholders
         const userInfoEl = document.getElementById('user-info');
