@@ -2,7 +2,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>Arbeitszeiten & Ferien – Projekt-Charly</title>
 
     <!-- 🔲 App-Icon einfügen -->
@@ -1565,6 +1565,45 @@
             }
         }
     </style>
+    <style>
+        /* ========================================== */
+        /* MOBILE OPTIMIERUNGEN v1.3.00             */
+        /* Safe Area Support + Android Touch        */
+        /* ========================================== */
+
+        /* Safe Area für iPhone X und neuer - Notch/Dynamic Island Support */
+        @supports (padding: env(safe-area-inset-top)) {
+            body {
+                padding-top: max(1.5rem, env(safe-area-inset-top));
+                padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+                padding-left: max(1.5rem, env(safe-area-inset-left));
+                padding-right: max(1.5rem, env(safe-area-inset-right));
+            }
+        }
+
+        /* Android Material Design - 48px Touch-Targets */
+        @media (hover: none) and (pointer: coarse) {
+
+            /* Buttons mindestens 48px hoch (außer clear-btn) */
+            .btn:not(.clear-btn) {
+                min-height: 48px;
+            }
+
+            /* Alle Inputs mindestens 48px hoch */
+            input[type="time"],
+            input[type="date"],
+            input[type="text"],
+            input[type="number"],
+            select {
+                min-height: 48px;
+            }
+
+            /* Tab-Buttons auch 48px */
+            .tab {
+                min-height: 48px;
+            }
+        }
+    </style>
 </head>
 
 <body class="dark">
@@ -1576,7 +1615,7 @@
                     <div>
                         <h1><span>🕐</span>Arbeitszeiten</h1>
                         <div style="font-size: 0.65rem; color: #9CA3AF; margin-top: 0.5rem; margin-left: 0.5rem;">
-                            v1.2.126
+                            v1.3.00
                         </div>
                     </div>
                     <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;"></span>
