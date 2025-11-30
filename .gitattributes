@@ -1,0 +1,48 @@
+# Standard: Textdateien automatisch behandeln
+* text=auto
+
+# Markdown-Dateien als Text
+*.md text
+
+# Registry-Dateien als INI anzeigen (für GitHub Syntax-Highlighting)
+*.reg linguist-language=INI
+
+# Binärdateien schützen (keine Zeilenend-Konvertierung, keine Merge-Versuche)
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.exe binary
+*.dll binary
+# Zeilenenden normalisieren
+*.md     text eol=lf
+*.reg    text eol=crlf
+*.sh     text eol=lf
+*.bat    text eol=crlf
+
+# Syntax-Highlighting auf GitHub
+*.reg    linguist-language=INI
+*.bat    linguist-language=Batchfile
+*.ps1    linguist-language=PowerShell
+
+# Binärdateien schützen
+*.png    binary
+*.jpg    binary
+*.exe    binary
+*.zip    binary
+# Zeilenenden normalisieren
+*.md     text eol=lf
+*.reg    text eol=crlf
+*.sh     text eol=lf
+*.bat    text eol=crlf
+
+# Syntax-Highlighting auf GitHub
+*.reg    linguist-language=INI
+*.bat    linguist-language=Batchfile
+*.ps1    linguist-language=PowerShell
+
+# Binärdateien schützen
+*.png    binary
+*.jpg    binary
+*.exe    binary
+*.zip    binary

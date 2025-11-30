@@ -1,0 +1,17 @@
+Windows Registry Editor Version 5.00
+
+; ============================================
+; Projekt-Charly – Registry-Backup
+; Zweck: Gesamten Thunderbird-Zweig sichern
+; Autor: Charly
+; ============================================
+
+; ⚠️ Hinweis:
+; Diese Datei dient nur als Platzhalter für manuelle Backups.
+; Um ein echtes Backup zu erstellen:
+; → Öffne regedit
+; → Navigiere zu: HKEY_CURRENT_USER\Software\Mozilla\Thunderbird
+; → Rechtsklick auf "Thunderbird" → Exportieren → Datei speichern
+
+; Diese .reg-Datei enthält KEINE echten Daten!
+; Sie dient nur zur Dokumentation und als Reminder.

@@ -1,0 +1,11 @@
+Windows Registry Editor Version 5.00
+
+; ============================================
+; Projekt-Charly – Registry-Tweak
+; Zweck: ClearType-Schriftglättung aktivieren
+; Autor: Charly
+; ============================================
+
+[HKEY_CURRENT_USER\Control Panel\Desktop]
+"FontSmoothing"="2"
+"FontSmoothingType"=dword:00000002

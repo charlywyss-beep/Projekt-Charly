@@ -1,0 +1,75 @@
+# Thunderbird-spezifisch
+*.msf
+*.dat
+*.sqlite
+*.json
+*.bak
+*.tmp
+*.log
+ImapMail/
+Mail/
+cache2/
+startupCache/
+minidumps/
+Crash Reports/
+saved-telemetry-pings/
+
+# Windows-Systemreste
+Thumbs.db
+desktop.ini
+ehthumbs.db
+$RECYCLE.BIN/
+
+# Editor- und IDE-Dateien
+*.swp
+*.swo
+*.~ 
+*.orig
+*.idea/
+.vscode/
+*.DS_Store
+
+# Git-spezifisch
+.git/
+.gitignore
+
+# Backup-Dateien
+*.bak
+*.old
+*.tmp
+
+# Logs
+*.log
+
+# Node/npm (falls du mal Skripte einbindest)
+node_modules/
+npm-debug.log*
+
+# Python (falls du mal was visualisierst)
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+
+# Backup & temporäre Dateien
+*.bak
+*.tmp
+*.log
+
+# Systemdateien
+.DS_Store
+Thumbs.db
+
+# Editor-Dateien
+*.swp
+*.swo
+*.~lock.*
+~$*
+
+# Thunderbird-spezifisch
+*.msf
+*.dat
+*.sqlite
+
+
