@@ -1,0 +1,109 @@
+{
+  "jahr": 2025,
+  "land": "Schweiz",
+  "feiertage": [
+    {
+      "name": "Neujahr",
+      "datum": "2025-01-01",
+      "kantone": ["alle"]
+    },
+    {
+      "name": "Berchtoldstag",
+      "datum": "2025-01-02",
+      "kantone": ["ZH", "BE", "LU", "OW", "GL", "ZG", "SO", "SH", "TG", "VD", "NE", "GE", "JU"]
+    },
+    {
+      "name": "Heilige Drei Könige",
+      "datum": "2025-01-06",
+      "kantone": ["UR", "SZ", "GR", "TI"]
+    },
+    {
+      "name": "Karfreitag",
+      "datum": "2025-04-18",
+      "kantone": ["alle_ausser", "VS", "TI"]
+    },
+    {
+      "name": "Ostermontag",
+      "datum": "2025-04-21",
+      "kantone": ["alle_ausser", "VS"]
+    },
+    {
+      "name": "Tag der Arbeit",
+      "datum": "2025-05-01",
+      "kantone": ["ZH", "FR", "SO", "BL", "SH", "AG", "TG", "TI", "NE", "JU"]
+    },
+    {
+      "name": "Auffahrt",
+      "datum": "2025-05-29",
+      "kantone": ["alle"]
+    },
+    {
+      "name": "Pfingstmontag",
+      "datum": "2025-06-09",
+      "kantone": ["alle_ausser", "VS"]
+    },
+    {
+      "name": "Fronleichnam",
+      "datum": "2025-06-19",
+      "kantone": ["LU", "UR", "SZ", "OW", "NW", "ZG", "FR", "SO", "AI", "AG", "TI", "VS", "NE", "JU"]
+    },
+    {
+      "name": "Bundesfeier",
+      "datum": "2025-08-01",
+      "kantone": ["alle"]
+    },
+    {
+      "name": "Mariä Himmelfahrt",
+      "datum": "2025-08-15",
+      "kantone": ["LU", "UR", "SZ", "OW", "NW", "ZG", "FR", "SO", "AI", "AG", "TI", "VS", "JU"]
+    },
+    {
+      "name": "Allerheiligen",
+      "datum": "2025-11-01",
+      "kantone": ["LU", "UR", "SZ", "OW", "NW", "GL", "ZG", "FR", "SO", "AI", "SG", "AG", "TI", "VS", "JU"]
+    },
+    {
+      "name": "Mariä Empfängnis",
+      "datum": "2025-12-08",
+      "kantone": ["LU", "UR", "SZ", "OW", "NW", "ZG", "FR", "SO", "AI", "AG", "TI", "VS"]
+    },
+    {
+      "name": "Weihnachten",
+      "datum": "2025-12-25",
+      "kantone": ["alle"]
+    },
+    {
+      "name": "Stephanstag",
+      "datum": "2025-12-26",
+      "kantone": ["alle_ausser", "VD", "VS", "GE"]
+    }
+  ],
+  "kantone": {
+    "ZH": "Zürich",
+    "BE": "Bern",
+    "LU": "Luzern",
+    "UR": "Uri",
+    "SZ": "Schwyz",
+    "OW": "Obwalden",
+    "NW": "Nidwalden",
+    "GL": "Glarus",
+    "ZG": "Zug",
+    "FR": "Freiburg",
+    "SO": "Solothurn",
+    "BS": "Basel-Stadt",
+    "BL": "Basel-Landschaft",
+    "SH": "Schaffhausen",
+    "AR": "Appenzell Ausserrhoden",
+    "AI": "Appenzell Innerrhoden",
+    "SG": "St. Gallen",
+    "GR": "Graubünden",
+    "AG": "Aargau",
+    "TG": "Thurgau",
+    "TI": "Tessin",
+    "VD": "Waadt",
+    "VS": "Wallis",
+    "NE": "Neuenburg",
+    "GE": "Genf",
+    "JU": "Jura"
+  }
+}
