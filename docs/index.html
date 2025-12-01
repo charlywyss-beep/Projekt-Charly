@@ -5568,103 +5568,50 @@
             reader.readAsText(file);
             event.target.value = ''; // Reset input
         }
+        const timestamp = now.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
 
-        // ========================================
-        // FEIERTAGE iCALENDAR EXPORT
-        // ========================================
+        // Build ICS header
+        let ics = 'BEGIN:VCALENDAR\r\n';
+        ics += 'VERSION:2.0\r\n';
+        ics += 'PRODID:-//Arbeitszeitrechner//Feiertage//DE\r\n';
+        ics += `CALNAME:Feiertage ${startYear}-${endYear}\r\n`;
+        ics += `X-WR-CALNAME:Feiertage ${startYear}-${endYear}\r\n`;
+        ics += 'X-WR-TIMEZONE:Europe/Zurich\r\n';
 
-        function exportFeiertageICS() {
-            const yearRange = document.getElementById('ics-year-range').value.trim();
+        let eventCount = 0;
 
-            if (!yearRange) {
-                showMsg('Bitte Jahresbereich eingeben (z.B. 2025-2026)', 'error');
-                return;
+        // Add events for each holiday in range
+        for (const [dateStr, holiday] of Object.entries(feiertage)) {
+            const year = parseInt(dateStr.substring(0, 4));
+
+            // Filter by year range
+            if (year >= startYear && year <= endYear) {
+                // Format date for iCalendar (YYYYMMDD)
+                const dateFormatted = dateStr.replace(/-/g, '');
+
+                // Add bezahlt status to summary
+                const bezahltText = holiday.bezahlt ? ' (bezahlt)' : ' (unbezahlt)';
+                const summary = `${holiday.name}${bezahltText}`;
+
+                // Build event
+                ics += 'BEGIN:VEVENT\r\n';
+                ics += `UID:${dateStr}@arbeitszeitrechner\r\n`;
+                ics += `DTSTAMP:${timestamp}\r\n`;
+                ics += `DTSTART;VALUE=DATE:${dateFormatted}\r\n`;
+                ics += `SUMMARY:${summary}\r\n`;
+                ics += 'DESCRIPTION:Feiertag aus Arbeitszeitrechner\r\n';
+                ics += 'STATUS:CONFIRMED\r\n';
+                ics += 'TRANSP:TRANSPARENT\r\n';
+                ics += 'END:VEVENT\r\n';
+
+                eventCount++;
             }
-
-            // Parse year range
-            const parts = yearRange.split('-');
-            if (parts.length !== 2) {
-                showMsg('Ungültiges Format! Verwende: JAHR-JAHR (z.B. 2025-2026)', 'error');
-                return;
-            }
-
-            const startYear = parseInt(parts[0].trim());
-            const endYear = parseInt(parts[1].trim());
-
-            if (isNaN(startYear) || isNaN(endYear)) {
-                showMsg('Ungültige Jahreszahlen!', 'error');
-                return;
-            }
-
-            if (startYear > endYear) {
-                showMsg('Startjahr muss <= Endjahr sein!', 'error');
-                return;
-            }
-
-            // Check if we have any holidays
-            const holidayCount = Object.keys(feiertage).length;
-            if (holidayCount === 0) {
-                showMsg('Keine Feiertage geladen! Bitte erst Feiertags-JSON importieren.', 'error');
-                return;
-            }
-
-            // Generate ICS content
-            const icsContent = generateICS(startYear, endYear);
-
-            // Download file
-            const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
-            saveAs(blob, `Feiertage_${startYear}-${endYear}.ics`);
-
-            showMsg(`✅ Feiertage_${startYear}-${endYear}.ics erfolgreich exportiert!`, 'success');
         }
 
-        function generateICS(startYear, endYear) {
-            // Current timestamp for DTSTAMP
-            const now = new Date();
-            const timestamp = now.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+        // Close calendar
+        ics += 'END:VCALENDAR\r\n';
 
-            // Build ICS header
-            let ics = 'BEGIN:VCALENDAR\r\n';
-            ics += 'VERSION:2.0\r\n';
-            ics += 'PRODID:-//Arbeitszeitrechner//Feiertage//DE\r\n';
-            ics += `CALNAME:Feiertage ${startYear}-${endYear}\r\n`;
-            ics += `X-WR-CALNAME:Feiertage ${startYear}-${endYear}\r\n`;
-            ics += 'X-WR-TIMEZONE:Europe/Zurich\r\n';
-
-            let eventCount = 0;
-
-            // Add events for each holiday in range
-            for (const [dateStr, holiday] of Object.entries(feiertage)) {
-                const year = parseInt(dateStr.substring(0, 4));
-
-                // Filter by year range
-                if (year >= startYear && year <= endYear) {
-                    // Format date for iCalendar (YYYYMMDD)
-                    const dateFormatted = dateStr.replace(/-/g, '');
-
-                    // Add bezahlt status to summary
-                    const bezahltText = holiday.bezahlt ? ' (bezahlt)' : ' (unbezahlt)';
-                    const summary = `${holiday.name}${bezahltText}`;
-
-                    // Build event
-                    ics += 'BEGIN:VEVENT\r\n';
-                    ics += `UID:${dateStr}@arbeitszeitrechner\r\n`;
-                    ics += `DTSTAMP:${timestamp}\r\n`;
-                    ics += `DTSTART;VALUE=DATE:${dateFormatted}\r\n`;
-                    ics += `SUMMARY:${summary}\r\n`;
-                    ics += 'DESCRIPTION:Feiertag aus Arbeitszeitrechner\r\n';
-                    ics += 'STATUS:CONFIRMED\r\n';
-                    ics += 'TRANSP:TRANSPARENT\r\n';
-                    ics += 'END:VEVENT\r\n';
-
-                    eventCount++;
-                }
-            }
-
-            // Close calendar
-            ics += 'END:VCALENDAR\r\n';
-
-            return ics;
+        return ics;
         }
 
 
