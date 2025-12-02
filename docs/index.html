@@ -8489,29 +8489,74 @@
         }
 
         function showAddFeiertagDialog() {
-            document.getElementById('modal-title').textContent = 'Feiertag hinzufügen';
-            document.getElementById('modal-datum').value = '';
-            document.getElementById('modal-bis-datum').value = '';
-            document.getElementById('modal-name').value = '';
-            document.getElementById('modal-typ').value = 'feiertag';
-            document.getElementById('modal-bezahlt').checked = true;
-            document.getElementById('modal-mehrere-tage').checked = false;
-            document.getElementById('bis-datum-container').style.display = 'none';
-            currentEditingDatum = null;
-            document.getElementById('feiertag-modal').classList.remove('hidden');
+            try {
+                const modal = document.getElementById('feiertag-modal');
+                if (!modal) {
+                    alert('Fehler: Modal-Element nicht gefunden!');
+                    return;
+                }
+
+                const elTitle = document.getElementById('modal-title');
+                if (elTitle) elTitle.textContent = 'Feiertag hinzufügen';
+
+                const elDatum = document.getElementById('modal-datum');
+                if (elDatum) elDatum.value = '';
+
+                const elBisDatum = document.getElementById('modal-bis-datum');
+                if (elBisDatum) elBisDatum.value = '';
+
+                const elName = document.getElementById('modal-name');
+                if (elName) elName.value = '';
+
+                const elTyp = document.getElementById('modal-typ');
+                if (elTyp) elTyp.value = 'feiertag';
+
+                const elBezahlt = document.getElementById('modal-bezahlt');
+                if (elBezahlt) elBezahlt.checked = true;
+
+                const elMehrere = document.getElementById('modal-mehrere-tage');
+                if (elMehrere) elMehrere.checked = false;
+
+                const elContainer = document.getElementById('bis-datum-container');
+                if (elContainer) elContainer.style.display = 'none';
+
+                currentEditingDatum = null;
+
+                modal.classList.remove('hidden');
+                modal.style.display = 'flex'; // Erzwinge Sichtbarkeit
+            } catch (e) {
+                alert('Fehler beim Öffnen: ' + e.message);
+                console.error(e);
+            }
         }
 
         function editFeiertag(datum) {
-            const ft = feiertage[datum];
-            if (!ft) return;
+            try {
+                const ft = feiertage[datum];
+                if (!ft) return;
 
-            document.getElementById('modal-title').textContent = 'Feiertag bearbeiten';
-            document.getElementById('modal-datum').value = datum;
-            document.getElementById('modal-name').value = ft.name || ft;
-            document.getElementById('modal-typ').value = ft.typ || 'feiertag';
-            document.getElementById('modal-bezahlt').checked = ft.bezahlt !== undefined ? ft.bezahlt : true;
-            currentEditingDatum = datum;
-            document.getElementById('feiertag-modal').classList.remove('hidden');
+                const modal = document.getElementById('feiertag-modal');
+
+                document.getElementById('modal-title').textContent = 'Feiertag bearbeiten';
+                document.getElementById('modal-datum').value = datum;
+                document.getElementById('modal-name').value = ft.name || ft;
+                document.getElementById('modal-typ').value = ft.typ || 'feiertag';
+                document.getElementById('modal-bezahlt').checked = ft.bezahlt !== undefined ? ft.bezahlt : true;
+
+                // Reset new fields for edit mode (single day)
+                const elMehrere = document.getElementById('modal-mehrere-tage');
+                if (elMehrere) elMehrere.checked = false;
+
+                const elContainer = document.getElementById('bis-datum-container');
+                if (elContainer) elContainer.style.display = 'none';
+
+                currentEditingDatum = datum;
+
+                modal.classList.remove('hidden');
+                modal.style.display = 'flex';
+            } catch (e) {
+                console.error(e);
+            }
         }
 
         function deleteFeiertag(datum) {
