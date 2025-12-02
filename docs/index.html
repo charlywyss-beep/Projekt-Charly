@@ -2990,9 +2990,7 @@
                                 Feiertags-JSON importieren</button>
                             <input type="file" id="feiertag-file" accept=".json" style="display: none;"
                                 onchange="handleFeiertagImport(event)">
-                            <button class="btn btn-sec" style="width: 100%; margin-top: 0.5rem;"
-                                onclick="showAddFeiertagDialog()">➕
-                                Feiertag manuell hinzufügen</button>
+
                         </div>
 
                         <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #E5E7EB;">
@@ -3264,8 +3262,21 @@
             <h3 style="margin-bottom: 1rem;" id="modal-title">Feiertag hinzufügen</h3>
             <div class="flex-col">
                 <div>
-                    <label>Datum</label>
+                    <label
+                        style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; margin-bottom: 1rem;">
+                        <input type="checkbox" id="modal-mehrere-tage" onchange="toggleBisDatum()"
+                            style="width: 1.25rem; height: 1.25rem; cursor: pointer;">
+                        <span>🗓️ Mehrere Tage (Bereich)</span>
+                    </label>
+                </div>
+                <div>
+                    <label>Von Datum</label>
                     <input type="date" id="modal-datum"
+                        style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #D1D5DB; border-radius: 0.5rem;">
+                </div>
+                <div id="bis-datum-container" style="display: none;">
+                    <label>Bis Datum</label>
+                    <input type="date" id="modal-bis-datum"
                         style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #D1D5DB; border-radius: 0.5rem;">
                 </div>
                 <div>
@@ -3281,6 +3292,8 @@
                         data-ddg-inputtype="unknown">
                         <option value="feiertag">Feiertag</option>
                         <option value="brueckentag">Brückentag</option>
+                        <option value="kompensation">Überzeit-Kompensation</option>
+                        <option value="unbezahlt">Sonstiges</option>
                     </select>
                 </div>
                 <div>
@@ -8461,12 +8474,29 @@
 
         let currentEditingDatum = null;
 
+        function toggleBisDatum() {
+            const checkbox = document.getElementById('modal-mehrere-tage');
+            const container = document.getElementById('bis-datum-container');
+            container.style.display = checkbox.checked ? 'block' : 'none';
+
+            // Setze "Bis Datum" auf "Von Datum" wenn aktiviert
+            if (checkbox.checked) {
+                const vonDatum = document.getElementById('modal-datum').value;
+                if (vonDatum) {
+                    document.getElementById('modal-bis-datum').value = vonDatum;
+                }
+            }
+        }
+
         function showAddFeiertagDialog() {
             document.getElementById('modal-title').textContent = 'Feiertag hinzufügen';
             document.getElementById('modal-datum').value = '';
+            document.getElementById('modal-bis-datum').value = '';
             document.getElementById('modal-name').value = '';
             document.getElementById('modal-typ').value = 'feiertag';
             document.getElementById('modal-bezahlt').checked = true;
+            document.getElementById('modal-mehrere-tage').checked = false;
+            document.getElementById('bis-datum-container').style.display = 'none';
             currentEditingDatum = null;
             document.getElementById('feiertag-modal').classList.remove('hidden');
         }
@@ -8504,25 +8534,67 @@
         }
 
         function saveFeiertagFromModal() {
-            const datum = document.getElementById('modal-datum').value;
+            const vonDatum = document.getElementById('modal-datum').value;
+            const bisDatum = document.getElementById('modal-bis-datum').value;
             const name = document.getElementById('modal-name').value.trim();
             const typ = document.getElementById('modal-typ').value;
             const bezahlt = document.getElementById('modal-bezahlt').checked;
+            const mehrereTage = document.getElementById('modal-mehrere-tage').checked;
 
-            if (!datum || !name) {
+            if (!vonDatum || !name) {
                 alert('Bitte Datum und Name eingeben!');
                 return;
             }
 
-            if (currentEditingDatum && currentEditingDatum !== datum) {
-                delete feiertage[currentEditingDatum];
+            if (mehrereTage && !bisDatum) {
+                alert('Bitte gib ein End-Datum ein.');
+                return;
             }
 
-            feiertage[datum] = {
-                name: name,
-                bezahlt: bezahlt,
-                typ: typ
-            };
+            // Wenn Datumsbereich, iteriere über alle Tage
+            if (mehrereTage) {
+                const start = new Date(vonDatum + 'T00:00:00');
+                const end = new Date(bisDatum + 'T00:00:00');
+
+                if (start > end) {
+                    alert('Das End-Datum muss nach dem Start-Datum liegen.');
+                    return;
+                }
+
+                let count = 0;
+                const currentDate = new Date(start);
+
+                while (currentDate <= end) {
+                    const year = currentDate.getFullYear();
+                    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+                    const day = String(currentDate.getDate()).padStart(2, '0');
+                    const dateStr = `${year}-${month}-${day}`;
+
+                    feiertage[dateStr] = {
+                        name: name,
+                        bezahlt: bezahlt,
+                        typ: typ
+                    };
+                    count++;
+
+                    // Increment by one day
+                    currentDate.setDate(currentDate.getDate() + 1);
+                }
+
+                alert(`✅ ${count} Tage als "${name}" gespeichert.`);
+            } else {
+                // Einzelner Tag
+                if (currentEditingDatum && currentEditingDatum !== vonDatum) {
+                    delete feiertage[currentEditingDatum];
+                }
+
+                feiertage[vonDatum] = {
+                    name: name,
+                    bezahlt: bezahlt,
+                    typ: typ
+                };
+                // alert(`✅ "${name}" am ${vonDatum} gespeichert.`);
+            }
 
             saveToStorage();
             closeFeiertagModal();
