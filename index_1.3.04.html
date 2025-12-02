@@ -2990,7 +2990,6 @@
                                 Feiertags-JSON importieren</button>
                             <input type="file" id="feiertag-file" accept=".json" style="display: none;"
                                 onchange="handleFeiertagImport(event)">
-
                         </div>
 
                         <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #E5E7EB;">
@@ -3290,10 +3289,9 @@
                     <select id="modal-typ"
                         style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #D1D5DB; border-radius: 0.5rem;"
                         data-ddg-inputtype="unknown">
-                        <option value="feiertag">Feiertag</option>
-                        <option value="brueckentag">Brückentag</option>
+                        <option value="feiertag">Feiertag (bezahlt)</option>
                         <option value="kompensation">Überzeit-Kompensation</option>
-                        <option value="unbezahlt">Sonstiges</option>
+                        <option value="unbezahlt">Feiertag unbezahlt</option>
                     </select>
                 </div>
                 <div>
@@ -8479,7 +8477,6 @@
             const container = document.getElementById('bis-datum-container');
             container.style.display = checkbox.checked ? 'block' : 'none';
 
-            // Setze "Bis Datum" auf "Von Datum" wenn aktiviert
             if (checkbox.checked) {
                 const vonDatum = document.getElementById('modal-datum').value;
                 if (vonDatum) {
@@ -8489,80 +8486,29 @@
         }
 
         function showAddFeiertagDialog() {
-            try {
-                // DEBUG: Bestätigung dass Funktion aufgerufen wird
-                // alert('Debug: Öffne Dialog...'); 
-
-                const modal = document.getElementById('feiertag-modal');
-                if (!modal) {
-                    alert('Fehler: Modal-Element nicht gefunden!');
-                    return;
-                }
-
-                const elTitle = document.getElementById('modal-title');
-                if (elTitle) elTitle.textContent = 'Feiertag hinzufügen';
-
-                const elDatum = document.getElementById('modal-datum');
-                if (elDatum) elDatum.value = '';
-
-                const elBisDatum = document.getElementById('modal-bis-datum');
-                if (elBisDatum) elBisDatum.value = '';
-
-                const elName = document.getElementById('modal-name');
-                if (elName) elName.value = '';
-
-                const elTyp = document.getElementById('modal-typ');
-                if (elTyp) elTyp.value = 'feiertag';
-
-                const elBezahlt = document.getElementById('modal-bezahlt');
-                if (elBezahlt) elBezahlt.checked = true;
-
-                const elMehrere = document.getElementById('modal-mehrere-tage');
-                if (elMehrere) elMehrere.checked = false;
-
-                const elContainer = document.getElementById('bis-datum-container');
-                if (elContainer) elContainer.style.display = 'none';
-
-                currentEditingDatum = null;
-
-                // Aggressives Anzeigen
-                modal.classList.remove('hidden');
-                modal.style.setProperty('display', 'flex', 'important');
-                modal.style.zIndex = '10000';
-
-            } catch (e) {
-                alert('Fehler beim Öffnen: ' + e.message);
-                console.error(e);
-            }
+            document.getElementById('modal-title').textContent = 'Feiertag hinzufügen';
+            document.getElementById('modal-datum').value = '';
+            document.getElementById('modal-bis-datum').value = '';
+            document.getElementById('modal-name').value = '';
+            document.getElementById('modal-typ').value = 'feiertag';
+            document.getElementById('modal-bezahlt').checked = true;
+            document.getElementById('modal-mehrere-tage').checked = false;
+            document.getElementById('bis-datum-container').style.display = 'none';
+            currentEditingDatum = null;
+            document.getElementById('feiertag-modal').classList.remove('hidden');
         }
 
         function editFeiertag(datum) {
-            try {
-                const ft = feiertage[datum];
-                if (!ft) return;
+            const ft = feiertage[datum];
+            if (!ft) return;
 
-                const modal = document.getElementById('feiertag-modal');
-
-                document.getElementById('modal-title').textContent = 'Feiertag bearbeiten';
-                document.getElementById('modal-datum').value = datum;
-                document.getElementById('modal-name').value = ft.name || ft;
-                document.getElementById('modal-typ').value = ft.typ || 'feiertag';
-                document.getElementById('modal-bezahlt').checked = ft.bezahlt !== undefined ? ft.bezahlt : true;
-
-                // Reset new fields for edit mode (single day)
-                const elMehrere = document.getElementById('modal-mehrere-tage');
-                if (elMehrere) elMehrere.checked = false;
-
-                const elContainer = document.getElementById('bis-datum-container');
-                if (elContainer) elContainer.style.display = 'none';
-
-                currentEditingDatum = datum;
-
-                modal.classList.remove('hidden');
-                modal.style.display = 'flex';
-            } catch (e) {
-                console.error(e);
-            }
+            document.getElementById('modal-title').textContent = 'Feiertag bearbeiten';
+            document.getElementById('modal-datum').value = datum;
+            document.getElementById('modal-name').value = ft.name || ft;
+            document.getElementById('modal-typ').value = ft.typ || 'feiertag';
+            document.getElementById('modal-bezahlt').checked = ft.bezahlt !== undefined ? ft.bezahlt : true;
+            currentEditingDatum = datum;
+            document.getElementById('feiertag-modal').classList.remove('hidden');
         }
 
         function deleteFeiertag(datum) {
@@ -8589,10 +8535,18 @@
             const bisDatum = document.getElementById('modal-bis-datum').value;
             const name = document.getElementById('modal-name').value.trim();
             const typ = document.getElementById('modal-typ').value;
-            const bezahlt = document.getElementById('modal-bezahlt').checked;
             const mehrereTage = document.getElementById('modal-mehrere-tage').checked;
 
-            if (!vonDatum || !name) {
+            // Auto-set bezahlt based on typ
+            let bezahlt = true;
+            if (typ === 'kompensation' || typ === 'unbezahlt') {
+                bezahlt = false; // Belasten Überzeit-Konto
+            } else {
+                bezahlt = document.getElementById('modal-bezahlt').checked;
+            }
+
+            if (!vonDatum ||
+                !name) {
                 alert('Bitte Datum und Name eingeben!');
                 return;
             }
@@ -8602,7 +8556,7 @@
                 return;
             }
 
-            // Wenn Datumsbereich, iteriere über alle Tage
+            // Datumsbereich
             if (mehrereTage) {
                 const start = new Date(vonDatum + 'T00:00:00');
                 const end = new Date(bisDatum + 'T00:00:00');
@@ -8628,7 +8582,6 @@
                     };
                     count++;
 
-                    // Increment by one day
                     currentDate.setDate(currentDate.getDate() + 1);
                 }
 
@@ -8644,7 +8597,6 @@
                     bezahlt: bezahlt,
                     typ: typ
                 };
-                // alert(`✅ "${name}" am ${vonDatum} gespeichert.`);
             }
 
             saveToStorage();
@@ -9029,180 +8981,10 @@
                 }
             }
         });
-
-        // ========== FEIERTAG MODAL FUNCTIONS ==========
-
-        function toggleBisDatum() {
-            const checkbox = document.getElementById('modal-mehrere-tage');
-            const container = document.getElementById('bis-datum-container');
-            container.style.display = checkbox.checked ? 'block' : 'none';
-
-            // Setze "Bis Datum" auf "Von Datum" wenn aktiviert
-            if (checkbox.checked) {
-                const vonDatum = document.getElementById('modal-datum').value;
-                if (vonDatum) {
-                    document.getElementById('modal-bis-datum').value = vonDatum;
-                }
-            }
-        }
-
-        function showAddFeiertagDialog() {
-            const modal = document.getElementById('feiertag-modal');
-            document.getElementById('feiertag-modal-title').textContent = 'Feiertag hinzufügen';
-            document.getElementById('modal-datum').value = '';
-            document.getElementById('modal-bis-datum').value = '';
-            document.getElementById('modal-name').value = '';
-            document.getElementById('modal-typ').value = 'feiertag';
-            document.getElementById('modal-bezahlt').checked = true;
-            document.getElementById('modal-mehrere-tage').checked = false;
-            document.getElementById('bis-datum-container').style.display = 'none';
-            modal.style.display = 'flex';
-        }
-
-        function closeFeiertagModal() {
-            document.getElementById('feiertag-modal').style.display = 'none';
-        }
-
-        function saveFeiertagFromModal() {
-            const vonDatum = document.getElementById('modal-datum').value;
-            const bisDatum = document.getElementById('modal-bis-datum').value;
-            const name = document.getElementById('modal-name').value;
-            const typ = document.getElementById('modal-typ').value;
-            const bezahlt = document.getElementById('modal-bezahlt').checked;
-            const mehrereTage = document.getElementById('modal-mehrere-tage').checked;
-
-            if (!vonDatum || !name) {
-                alert('Bitte fülle alle Pflichtfelder aus.');
-                return;
-            }
-
-            if (mehrereTage && !bisDatum) {
-                alert('Bitte gib ein End-Datum ein.');
-                return;
-            }
-
-            // Initialisiere feiertage object falls noch nicht vorhanden
-            if (typeof feiertage === 'undefined') {
-                window.feiertage = {};
-            }
-
-            // Wenn Datumsbereich, iteriere über alle Tage
-            if (mehrereTage) {
-                const start = new Date(vonDatum + 'T00:00:00');
-                const end = new Date(bisDatum + 'T00:00:00');
-
-                if (start > end) {
-                    alert('Das End-Datum muss nach dem Start-Datum liegen.');
-                    return;
-                }
-
-                let count = 0;
-                const currentDate = new Date(start);
-
-                while (currentDate <= end) {
-                    const year = currentDate.getFullYear();
-                    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-                    const day = String(currentDate.getDate()).padStart(2, '0');
-                    const dateStr = `${year}-${month}-${day}`;
-
-                    feiertage[dateStr] = {
-                        name: name,
-                        bezahlt: bezahlt,
-                        typ: typ
-                    };
-                    count++;
-
-                    // Increment by one day
-                    currentDate.setDate(currentDate.getDate() + 1);
-                }
-
-                alert(`✅ ${count} Tage als "${name}" gespeichert.`);
-            } else {
-                // Einzelner Tag
-                feiertage[vonDatum] = {
-                    name: name,
-                    bezahlt: bezahlt,
-                    typ: typ
-                };
-                alert(`✅ "${name}" am ${vonDatum} gespeichert.`);
-            }
-
-            saveFeiertage();
-            closeFeiertagModal();
-            updateFeiertageUI();
-        }
-
-        function saveFeiertage() {
-            if (typeof feiertage !== 'undefined') {
-                localStorage.setItem('feiertage', JSON.stringify(feiertage));
-            }
-        }
-
-        function updateFeiertageUI() {
-            // UI aktualisieren falls erforderlich
-            // (wird erweitert wenn Feiertage-Display existiert)
-            saveToStorage();
-        }
-
     </script>
 
 
 
-
-    <!-- Feiertag Modal -->
-    <div id="feiertag-modal"
-        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
-        <div
-            style="background: var(--card-bg); padding: 2rem; border-radius: 1rem; max-width: 500px; width: 90%; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);">
-            <h2 id="feiertag-modal-title" style="margin-bottom: 1.5rem;">Feiertag hinzufügen</h2>
-            <div style="display: flex; flex-direction: column; gap: 1rem;">
-                <div>
-                    <label
-                        style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; margin-bottom: 1rem;">
-                        <input type="checkbox" id="modal-mehrere-tage" onchange="toggleBisDatum()"
-                            style="width: 1.25rem; height: 1.25rem; cursor: pointer;">
-                        <span>🗓️ Mehrere Tage (Bereich)</span>
-                    </label>
-                </div>
-                <div>
-                    <label>Von Datum</label>
-                    <input type="date" id="modal-datum"
-                        style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #D1D5DB; border-radius: 0.5rem;">
-                </div>
-                <div id="bis-datum-container" style="display: none;">
-                    <label>Bis Datum</label>
-                    <input type="date" id="modal-bis-datum"
-                        style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #D1D5DB; border-radius: 0.5rem;">
-                </div>
-                <div>
-                    <label>Name</label>
-                    <input type="text" id="modal-name" placeholder="z.B. Neujahr"
-                        style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #D1D5DB; border-radius: 0.5rem;">
-                </div>
-                <div>
-                    <label>Typ</label>
-                    <select id="modal-typ"
-                        style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #D1D5DB; border-radius: 0.5rem;">
-                        <option value="feiertag">Feiertag</option>
-                        <option value="brueckentag">Brückentag</option>
-                        <option value="kompensation">Überzeit-Kompensation</option>
-                        <option value="unbezahlt">Sonstiges</option>
-                    </select>
-                </div>
-                <div>
-                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-                        <input type="checkbox" id="modal-bezahlt" checked
-                            style="width: 1.25rem; height: 1.25rem; cursor: pointer;">
-                        <span>Bezahlt (zählt nicht als Fehlzeit)</span>
-                    </label>
-                </div>
-            </div>
-            <div style="display: flex; gap: 0.5rem; margin-top: 1.5rem;">
-                <button class="btn btn-sec" style="flex: 1;" onclick="closeFeiertagModal()">Abbrechen</button>
-                <button class="btn btn-success" style="flex: 1;" onclick="saveFeiertagFromModal()">Speichern</button>
-            </div>
-        </div>
-    </div>
 
 </body>
 
