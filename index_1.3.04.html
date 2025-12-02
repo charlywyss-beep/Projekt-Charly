@@ -3777,8 +3777,19 @@
                 // Prüfe, ob der Tag ein Feiertag ist
                 let defaultTyp = 'normal';
                 if (isFeiertag(date)) {
-                    const istBezahlt = isFeiertagBezahlt(date);
-                    defaultTyp = istBezahlt ? 'feiertag-bezahlt' : 'feiertag-unbezahlt';
+                    const ft = feiertage[date];
+                    const ftTyp = ft ? (ft.typ || 'feiertag') : 'feiertag';
+
+                    // Map feiertage typ to tag typ
+                    if (ftTyp === 'brueckentag') {
+                        defaultTyp = 'kompensation';
+                    } else if (ftTyp === 'unbezahlt') {
+                        defaultTyp = 'feiertag-unbezahlt';
+                    } else {
+                        // feiertag type - check if bezahlt
+                        const istBezahlt = isFeiertagBezahlt(date);
+                        defaultTyp = istBezahlt ? 'feiertag-bezahlt' : 'feiertag-unbezahlt';
+                    }
                 }
 
                 const tagTypRadios = document.getElementsByName('tagTyp');
