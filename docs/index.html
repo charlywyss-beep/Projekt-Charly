@@ -8490,6 +8490,9 @@
 
         function showAddFeiertagDialog() {
             try {
+                // DEBUG: Bestätigung dass Funktion aufgerufen wird
+                // alert('Debug: Öffne Dialog...'); 
+
                 const modal = document.getElementById('feiertag-modal');
                 if (!modal) {
                     alert('Fehler: Modal-Element nicht gefunden!');
@@ -8522,8 +8525,11 @@
 
                 currentEditingDatum = null;
 
+                // Aggressives Anzeigen
                 modal.classList.remove('hidden');
-                modal.style.display = 'flex'; // Erzwinge Sichtbarkeit
+                modal.style.setProperty('display', 'flex', 'important');
+                modal.style.zIndex = '10000';
+
             } catch (e) {
                 alert('Fehler beim Öffnen: ' + e.message);
                 console.error(e);
