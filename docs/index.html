@@ -3290,8 +3290,8 @@
                         style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #D1D5DB; border-radius: 0.5rem;"
                         data-ddg-inputtype="unknown">
                         <option value="feiertag">Feiertag (bezahlt)</option>
-                        <option value="kompensation">Überzeit-Kompensation</option>
                         <option value="unbezahlt">Feiertag unbezahlt</option>
+                        <option value="brueckentag">Brückentag</option>
                     </select>
                 </div>
                 <div>
@@ -8537,13 +8537,7 @@
             const typ = document.getElementById('modal-typ').value;
             const mehrereTage = document.getElementById('modal-mehrere-tage').checked;
 
-            // Auto-set bezahlt based on typ
-            let bezahlt = true;
-            if (typ === 'kompensation' || typ === 'unbezahlt') {
-                bezahlt = false; // Belasten Überzeit-Konto
-            } else {
-                bezahlt = document.getElementById('modal-bezahlt').checked;
-            }
+            const bezahlt = document.getElementById('modal-bezahlt').checked;
 
             if (!vonDatum ||
                 !name) {
