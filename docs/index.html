@@ -3356,6 +3356,10 @@
 
                     /* Purple */
 
+                    body.dark .mini-cal-day {
+                        color: #E5E7EB;
+                    }
+
                     body.dark .mini-cal-header {
                         background: #374151 !important;
                         color: #E5E7EB;
@@ -3374,16 +3378,30 @@
                     body.dark .mini-cal-day:hover {
                         background-color: #374151;
                     }
+
+                    /* Active Input Highlight */
+                    .input-active {
+                        border-color: #3B82F6 !important;
+                        background-color: #EFF6FF !important;
+                        box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+                    }
+
+                    body.dark .input-active {
+                        background-color: #1F2937 !important;
+                        border-color: #60A5FA !important;
+                    }
                 </style>
                 <div>
                     <label>Von Datum</label>
                     <input type="text" readonly id="modal-datum" placeholder="Bitte im Kalender wählen"
-                        style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #D1D5DB; border-radius: 0.5rem; background-color: #F3F4F6; cursor: not-allowed;">
+                        onclick="setActiveInput('modal-datum')"
+                        style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #D1D5DB; border-radius: 0.5rem; background-color: #F3F4F6; cursor: pointer;">
                 </div>
                 <div id="bis-datum-container" style="display: none;">
                     <label>Bis Datum</label>
                     <input type="text" readonly id="modal-bis-datum" placeholder="Bitte im Kalender wählen"
-                        style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #D1D5DB; border-radius: 0.5rem; background-color: #F3F4F6; cursor: not-allowed;">
+                        onclick="setActiveInput('modal-bis-datum')"
+                        style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #D1D5DB; border-radius: 0.5rem; background-color: #F3F4F6; cursor: pointer;">
                 </div>
                 <div>
                     <label>Name</label>
@@ -8614,6 +8632,30 @@
         // ==========================================
         let miniCalYear = new Date().getFullYear();
         let miniCalMonth = new Date().getMonth(); // 0-11
+        let activeDateInputId = 'modal-datum';
+
+        function formatDateCH(dateStr) {
+            if (!dateStr) return '';
+            const [y, m, d] = dateStr.split('-');
+            return `${d}.${m}.${y}`;
+        }
+
+        function parseDateCH(dateStr) {
+            if (!dateStr) return '';
+            const [d, m, y] = dateStr.split('.');
+            return `${y}-${m}-${d}`;
+        }
+
+        function setActiveInput(id) {
+            activeDateInputId = id;
+
+            // Visual feedback
+            document.getElementById('modal-datum').classList.remove('input-active');
+            document.getElementById('modal-bis-datum').classList.remove('input-active');
+
+            const el = document.getElementById(id);
+            if (el) el.classList.add('input-active');
+        }
 
         function initMiniCalendar() {
             const today = new Date();
@@ -8666,7 +8708,9 @@
             }
 
             // Days of month
-            const currentSelectedDate = document.getElementById('modal-datum').value;
+            // Get raw values (DD.MM.YYYY) and parse to YYYY-MM-DD for comparison
+            const rawVon = document.getElementById('modal-datum').value;
+            const currentSelectedDate = parseDateCH(rawVon);
 
             for (let d = 1; d <= daysInMonth; d++) {
                 const cell = document.createElement('div');
@@ -8700,10 +8744,33 @@
                 }
 
                 cell.onclick = () => {
-                    document.getElementById('modal-datum').value = dateStr;
+                    // 1. Set Date to Active Input
+                    const formattedDate = formatDateCH(dateStr);
+                    document.getElementById(activeDateInputId).value = formattedDate;
 
-                    // If multi-day is checked, we might want to handle range selection logic here later
-                    // For now, just set the start date and update UI
+                    // 2. If clicking an existing holiday -> Load it!
+                    // BUT only if we are setting the "Von" date (primary date)
+                    if (activeDateInputId === 'modal-datum' && feiertage[dateStr]) {
+                        const ft = feiertage[dateStr];
+                        document.getElementById('modal-name').value = ft.name || '';
+                        document.getElementById('modal-typ').value = ft.typ || 'feiertag';
+                        document.getElementById('modal-bezahlt').checked = ft.bezahlt !== undefined ? ft.bezahlt : true;
+                        currentEditingDatum = dateStr; // Set editing mode
+                    }
+                    // If clicking empty date -> Reset editing mode if we were editing
+                    else if (activeDateInputId === 'modal-datum') {
+                        // Optional: Clear fields if we want to start fresh
+                        // document.getElementById('modal-name').value = '';
+                        currentEditingDatum = null;
+                    }
+
+                    // 3. Auto-advance logic
+                    const mehrereTage = document.getElementById('modal-mehrere-tage').checked;
+                    if (mehrereTage && activeDateInputId === 'modal-datum') {
+                        // Switch to 'bis-datum' automatically
+                        setActiveInput('modal-bis-datum');
+                    }
+
                     renderMiniCalendar(); // Re-render to show selection
                 };
 
@@ -8721,6 +8788,10 @@
                 if (vonDatum) {
                     document.getElementById('modal-bis-datum').value = vonDatum;
                 }
+                // Activate Bis-Datum input
+                setActiveInput('modal-bis-datum');
+            } else {
+                setActiveInput('modal-datum');
             }
         }
 
@@ -8735,6 +8806,9 @@
             document.getElementById('bis-datum-container').style.display = 'none';
             currentEditingDatum = null;
 
+            // Reset Active Input
+            setActiveInput('modal-datum');
+
             // Init Calendar
             initMiniCalendar();
 
@@ -8746,7 +8820,7 @@
             if (!ft) return;
 
             document.getElementById('modal-title').textContent = 'Feiertag bearbeiten';
-            document.getElementById('modal-datum').value = datum;
+            document.getElementById('modal-datum').value = formatDateCH(datum);
             document.getElementById('modal-name').value = ft.name || ft;
             document.getElementById('modal-typ').value = ft.typ || 'feiertag';
             document.getElementById('modal-bezahlt').checked = ft.bezahlt !== undefined ? ft.bezahlt : true;
@@ -8783,8 +8857,12 @@
         }
 
         function saveFeiertagFromModal() {
-            const vonDatum = document.getElementById('modal-datum').value;
-            const bisDatum = document.getElementById('modal-bis-datum').value;
+            const rawVon = document.getElementById('modal-datum').value;
+            const rawBis = document.getElementById('modal-bis-datum').value;
+
+            const vonDatum = parseDateCH(rawVon);
+            const bisDatum = parseDateCH(rawBis);
+
             const name = document.getElementById('modal-name').value.trim();
             const typ = document.getElementById('modal-typ').value;
             const mehrereTage = document.getElementById('modal-mehrere-tage').checked;
