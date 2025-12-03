@@ -4130,21 +4130,10 @@
             if (msg) {
                 msg.innerHTML = text; // innerHTML statt textContent für <br>
                 msg.className = 'message ' + (ok ? 'msg-ok' : 'msg-err');
-                // Init Calendar
-                initMiniCalendar();
+                msg.classList.remove('hidden');
+                msg.style.display = 'block';
 
-                // Set current date in calendar if editing
-                if (document.getElementById('modal-datum').value) {
-                    const d = new Date(document.getElementById('modal-datum').value);
-                    if (!isNaN(d.getTime())) {
-                        miniCalYear = d.getFullYear();
-                        miniCalMonth = d.getMonth();
-                        renderMiniCalendar();
-                    }
-                }
-
-                modal.classList.remove('hidden');
-                modal.style.display = 'flex'; // Force flex display             // Nur Erfolgs-Nachrichten nach 3 Sekunden ausblenden
+                // Nur Erfolgs-Nachrichten nach 3 Sekunden ausblenden
                 if (ok) {
                     setTimeout(() => {
                         msg.classList.add('hidden');
@@ -8638,6 +8627,10 @@
             document.getElementById('modal-mehrere-tage').checked = false;
             document.getElementById('bis-datum-container').style.display = 'none';
             currentEditingDatum = null;
+
+            // Init Calendar
+            initMiniCalendar();
+
             document.getElementById('feiertag-modal').classList.remove('hidden');
         }
 
@@ -8651,6 +8644,15 @@
             document.getElementById('modal-typ').value = ft.typ || 'feiertag';
             document.getElementById('modal-bezahlt').checked = ft.bezahlt !== undefined ? ft.bezahlt : true;
             currentEditingDatum = datum;
+
+            // Init Calendar with specific date
+            const d = new Date(datum);
+            if (!isNaN(d.getTime())) {
+                miniCalYear = d.getFullYear();
+                miniCalMonth = d.getMonth();
+            }
+            renderMiniCalendar();
+
             document.getElementById('feiertag-modal').classList.remove('hidden');
         }
 
