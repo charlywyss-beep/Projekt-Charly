@@ -3389,6 +3389,28 @@
                     body.dark .input-active {
                         background-color: #1F2937 !important;
                         border-color: #60A5FA !important;
+                        color: #E5E7EB !important;
+                    }
+
+                    /* Dark Mode Input Overrides */
+                    body.dark input[type="text"],
+                    body.dark input[type="date"],
+                    body.dark select {
+                        background-color: #374151 !important;
+                        color: #E5E7EB !important;
+                        border-color: #4B5563 !important;
+                    }
+
+                    body.dark input[readonly] {
+                        background-color: #4B5563 !important;
+                        color: #D1D5DB !important;
+                        cursor: pointer;
+                        /* Ensure pointer cursor for readonly inputs in dark mode too */
+                    }
+
+                    /* Ensure placeholder color is readable in dark mode */
+                    body.dark input::placeholder {
+                        color: #9CA3AF !important;
                     }
                 </style>
                 <div>
