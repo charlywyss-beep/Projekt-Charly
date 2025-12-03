@@ -8650,6 +8650,14 @@
         let currentEditingDatum = null;
         let currentEditingRange = { start: null, end: null }; // Track if editing a range
 
+        // Helper function to convert Date object to YYYY-MM-DD string (LOCAL timezone, not UTC!)
+        function dateToYMD(dateObj) {
+            const y = dateObj.getFullYear();
+            const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+            const d = String(dateObj.getDate()).padStart(2, '0');
+            return `${y}-${m}-${d}`;
+        }
+
         // Helper function to detect if a date is part of a consecutive range
         function detectHolidayRange(dateStr) {
             const ft = feiertage[dateStr];
@@ -8665,7 +8673,7 @@
             checkDate.setDate(checkDate.getDate() - 1);
 
             while (true) {
-                const checkStr = checkDate.toISOString().split('T')[0];
+                const checkStr = dateToYMD(checkDate);
                 const checkFt = feiertage[checkStr];
 
                 if (!checkFt ||
@@ -8685,7 +8693,7 @@
             checkDate.setDate(checkDate.getDate() + 1);
 
             while (true) {
-                const checkStr = checkDate.toISOString().split('T')[0];
+                const checkStr = dateToYMD(checkDate);
                 const checkFt = feiertage[checkStr];
 
                 if (!checkFt ||
@@ -8699,8 +8707,8 @@
                 checkDate.setDate(checkDate.getDate() + 1);
             }
 
-            const startStr = startDate.toISOString().split('T')[0];
-            const endStr = endDate.toISOString().split('T')[0];
+            const startStr = dateToYMD(startDate);
+            const endStr = dateToYMD(endDate);
 
             // If start and end are the same, it's a single day
             if (startStr === endStr) {
@@ -8718,7 +8726,7 @@
 
             const deletedDates = [];
             while (current <= end) {
-                const dateStr = current.toISOString().split('T')[0];
+                const dateStr = dateToYMD(current);
                 if (feiertage[dateStr]) {
                     delete feiertage[dateStr];
                     deletedDates.push(dateStr);
