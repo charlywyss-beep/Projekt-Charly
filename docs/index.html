@@ -4821,7 +4821,16 @@
                 let tagTypIcon = '';
 
                 if (isFT) {
-                    bgClass = ftBezahlt ? 'feiertag' : 'feiertag-unbezahlt';
+                    const ft = feiertage[dateStr];
+                    const ftTyp = ft ? (ft.typ || 'feiertag') : 'feiertag';
+
+                    if (ftTyp === 'brueckentag') {
+                        bgClass = 'tag-kompensation';
+                    } else if (ftTyp === 'unbezahlt') {
+                        bgClass = 'feiertag-unbezahlt';
+                    } else {
+                        bgClass = ftBezahlt ? 'feiertag' : 'feiertag-unbezahlt';
+                    }
                 } else if (d && d.tagTyp) {
                     switch (d.tagTyp) {
                         case 'urlaub':
@@ -5042,7 +5051,17 @@
                 let tagTypIcon = '';
 
                 if (isFT) {
-                    bgClass = ftBezahlt ? 'feiertag' : 'feiertag-unbezahlt';
+                    const ft = feiertage[dateStr];
+                    const ftTyp = ft ? (ft.typ || 'feiertag') : 'feiertag';
+
+                    if (ftTyp === 'brueckentag') {
+                        bgClass = 'tag-kompensation';
+                        tagTypIcon = '<span class="emoji-medium">⏰</span>';
+                    } else if (ftTyp === 'unbezahlt') {
+                        bgClass = 'feiertag-unbezahlt';
+                    } else {
+                        bgClass = ftBezahlt ? 'feiertag' : 'feiertag-unbezahlt';
+                    }
                 } else if (d && d.tagTyp) {
                     switch (d.tagTyp) {
                         case 'urlaub':
