@@ -8869,6 +8869,9 @@
                         document.getElementById('modal-bezahlt').checked = ft.bezahlt !== undefined ? ft.bezahlt : true;
                         currentEditingDatum = dateStr; // Set editing mode
 
+                        // Show delete button (we're editing an existing holiday)
+                        document.getElementById('delete-feiertag-btn').style.display = 'block';
+
                         // DETECT RANGE: Check if this is part of a multi-day holiday
                         const range = detectHolidayRange(dateStr);
                         if (range && !range.isSingleDay) {
@@ -8889,6 +8892,8 @@
                     else if (activeDateInputId === 'modal-datum') {
                         currentEditingDatum = null;
                         currentEditingRange = { start: null, end: null };
+                        // Hide delete button (we're adding a new holiday)
+                        document.getElementById('delete-feiertag-btn').style.display = 'none';
                     }
 
                     // 3. Auto-advance logic
