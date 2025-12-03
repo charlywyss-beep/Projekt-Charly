@@ -8648,6 +8648,86 @@
         }
 
         let currentEditingDatum = null;
+        let currentEditingRange = { start: null, end: null }; // Track if editing a range
+
+        // Helper function to detect if a date is part of a consecutive range
+        function detectHolidayRange(dateStr) {
+            const ft = feiertage[dateStr];
+            if (!ft) return null;
+
+            const name = ft.name || '';
+            const typ = ft.typ || 'feiertag';
+            const bezahlt = ft.bezahlt !== undefined ? ft.bezahlt : true;
+
+            // Find the start of the range (go backwards)
+            let startDate = new Date(dateStr + 'T00:00:00');
+            let checkDate = new Date(startDate);
+            checkDate.setDate(checkDate.getDate() - 1);
+
+            while (true) {
+                const checkStr = checkDate.toISOString().split('T')[0];
+                const checkFt = feiertage[checkStr];
+
+                if (!checkFt ||
+                    checkFt.name !== name ||
+                    checkFt.typ !== typ ||
+                    checkFt.bezahlt !== bezahlt) {
+                    break;
+                }
+
+                startDate = new Date(checkDate);
+                checkDate.setDate(checkDate.getDate() - 1);
+            }
+
+            // Find the end of the range (go forwards)
+            let endDate = new Date(dateStr + 'T00:00:00');
+            checkDate = new Date(endDate);
+            checkDate.setDate(checkDate.getDate() + 1);
+
+            while (true) {
+                const checkStr = checkDate.toISOString().split('T')[0];
+                const checkFt = feiertage[checkStr];
+
+                if (!checkFt ||
+                    checkFt.name !== name ||
+                    checkFt.typ !== typ ||
+                    checkFt.bezahlt !== bezahlt) {
+                    break;
+                }
+
+                endDate = new Date(checkDate);
+                checkDate.setDate(checkDate.getDate() + 1);
+            }
+
+            const startStr = startDate.toISOString().split('T')[0];
+            const endStr = endDate.toISOString().split('T')[0];
+
+            // If start and end are the same, it's a single day
+            if (startStr === endStr) {
+                return { isSingleDay: true, start: startStr, end: null };
+            }
+
+            return { isSingleDay: false, start: startStr, end: endStr };
+        }
+
+        // Helper function to delete all days in a range
+        function deleteRangeDays(startDate, endDate) {
+            const start = new Date(startDate + 'T00:00:00');
+            const end = new Date(endDate + 'T00:00:00');
+            const current = new Date(start);
+
+            const deletedDates = [];
+            while (current <= end) {
+                const dateStr = current.toISOString().split('T')[0];
+                if (feiertage[dateStr]) {
+                    delete feiertage[dateStr];
+                    deletedDates.push(dateStr);
+                }
+                current.setDate(current.getDate() + 1);
+            }
+
+            return deletedDates;
+        }
 
         // ==========================================
         // MINI-CALENDAR LOGIC
@@ -8778,18 +8858,33 @@
                         document.getElementById('modal-typ').value = ft.typ || 'feiertag';
                         document.getElementById('modal-bezahlt').checked = ft.bezahlt !== undefined ? ft.bezahlt : true;
                         currentEditingDatum = dateStr; // Set editing mode
+
+                        // DETECT RANGE: Check if this is part of a multi-day holiday
+                        const range = detectHolidayRange(dateStr);
+                        if (range && !range.isSingleDay) {
+                            // It's a range! Load the full range
+                            document.getElementById('modal-datum').value = formatDateCH(range.start);
+                            document.getElementById('modal-bis-datum').value = formatDateCH(range.end);
+                            document.getElementById('modal-mehrere-tage').checked = true;
+                            document.getElementById('bis-datum-container').style.display = 'block';
+
+                            // Store the range for deletion later
+                            currentEditingRange = { start: range.start, end: range.end };
+                        } else {
+                            // Single day
+                            currentEditingRange = { start: null, end: null };
+                        }
                     }
                     // If clicking empty date -> Reset editing mode if we were editing
                     else if (activeDateInputId === 'modal-datum') {
-                        // Optional: Clear fields if we want to start fresh
-                        // document.getElementById('modal-name').value = '';
                         currentEditingDatum = null;
+                        currentEditingRange = { start: null, end: null };
                     }
 
                     // 3. Auto-advance logic
                     const mehrereTage = document.getElementById('modal-mehrere-tage').checked;
-                    if (mehrereTage && activeDateInputId === 'modal-datum') {
-                        // Switch to 'bis-datum' automatically
+                    if (mehrereTage && activeDateInputId === 'modal-datum' && !feiertage[dateStr]) {
+                        // Only auto-advance if NOT loading an existing holiday
                         setActiveInput('modal-bis-datum');
                     }
 
@@ -8827,6 +8922,7 @@
             document.getElementById('modal-mehrere-tage').checked = false;
             document.getElementById('bis-datum-container').style.display = 'none';
             currentEditingDatum = null;
+            currentEditingRange = { start: null, end: null };
 
             // Reset Active Input
             setActiveInput('modal-datum');
@@ -8842,7 +8938,25 @@
             if (!ft) return;
 
             document.getElementById('modal-title').textContent = 'Feiertag bearbeiten';
-            document.getElementById('modal-datum').value = formatDateCH(datum);
+
+            // Detect if this is part of a range
+            const range = detectHolidayRange(datum);
+
+            if (range && !range.isSingleDay) {
+                // It's a range!
+                document.getElementById('modal-datum').value = formatDateCH(range.start);
+                document.getElementById('modal-bis-datum').value = formatDateCH(range.end);
+                document.getElementById('modal-mehrere-tage').checked = true;
+                document.getElementById('bis-datum-container').style.display = 'block';
+                currentEditingRange = { start: range.start, end: range.end };
+            } else {
+                // Single day
+                document.getElementById('modal-datum').value = formatDateCH(datum);
+                document.getElementById('modal-mehrere-tage').checked = false;
+                document.getElementById('bis-datum-container').style.display = 'none';
+                currentEditingRange = { start: null, end: null };
+            }
+
             document.getElementById('modal-name').value = ft.name || ft;
             document.getElementById('modal-typ').value = ft.typ || 'feiertag';
             document.getElementById('modal-bezahlt').checked = ft.bezahlt !== undefined ? ft.bezahlt : true;
@@ -8891,8 +9005,7 @@
 
             const bezahlt = document.getElementById('modal-bezahlt').checked;
 
-            if (!vonDatum ||
-                !name) {
+            if (!vonDatum || !name) {
                 alert('Bitte Datum und Name eingeben!');
                 return;
             }
@@ -8900,6 +9013,16 @@
             if (mehrereTage && !bisDatum) {
                 alert('Bitte gib ein End-Datum ein.');
                 return;
+            }
+
+            // FIRST: Delete old range days if we're editing a range
+            if (currentEditingRange.start && currentEditingRange.end) {
+                deleteRangeDays(currentEditingRange.start, currentEditingRange.end);
+                currentEditingRange = { start: null, end: null };
+            }
+            // Or delete old single day if editing
+            else if (currentEditingDatum && currentEditingDatum !== vonDatum) {
+                delete feiertage[currentEditingDatum];
             }
 
             // Datumsbereich
