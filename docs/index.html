@@ -3451,6 +3451,8 @@
             </div>
             <div style="display: flex; gap: 0.5rem; margin-top: 1.5rem;">
                 <button class="btn btn-sec" style="flex: 1;" onclick="closeFeiertagModal()">Abbrechen</button>
+                <button id="delete-feiertag-btn" class="btn btn-danger" style="flex: 1; display: none;"
+                    onclick="deleteCurrentFeiertag()">Löschen</button>
                 <button class="btn btn-success" style="flex: 1;" onclick="saveFeiertagFromModal()">Speichern</button>
             </div>
         </div>
@@ -8932,6 +8934,9 @@
             currentEditingDatum = null;
             currentEditingRange = { start: null, end: null };
 
+            // Hide delete button (we're adding, not editing)
+            document.getElementById('delete-feiertag-btn').style.display = 'none';
+
             // Reset Active Input
             setActiveInput('modal-datum');
 
@@ -8970,6 +8975,9 @@
             document.getElementById('modal-bezahlt').checked = ft.bezahlt !== undefined ? ft.bezahlt : true;
             currentEditingDatum = datum;
 
+            // Show delete button (we're editing)
+            document.getElementById('delete-feiertag-btn').style.display = 'block';
+
             // Init Calendar with specific date
             const d = new Date(datum);
             if (!isNaN(d.getTime())) {
@@ -8998,6 +9006,42 @@
         function closeFeiertagModal() {
             document.getElementById('feiertag-modal').classList.add('hidden');
             currentEditingDatum = null;
+        }
+
+        function deleteCurrentFeiertag() {
+            const ft = currentEditingDatum ? feiertage[currentEditingDatum] : null;
+            if (!ft) return;
+
+            const name = ft.name || 'dieser Feiertag';
+
+            // Determine what we're deleting
+            let confirmMsg = '';
+            if (currentEditingRange.start && currentEditingRange.end) {
+                // Deleting a range
+                const rawStart = formatDateCH(currentEditingRange.start);
+                const rawEnd = formatDateCH(currentEditingRange.end);
+                confirmMsg = `Möchten Sie den Bereich "${name}" von ${rawStart} bis ${rawEnd} wirklich löschen?`;
+            } else {
+                // Deleting a single day
+                const rawDate = formatDateCH(currentEditingDatum);
+                confirmMsg = `Möchten Sie "${name}" am ${rawDate} wirklich löschen?`;
+            }
+
+            if (confirm(confirmMsg)) {
+                // Delete range or single day
+                if (currentEditingRange.start && currentEditingRange.end) {
+                    deleteRangeDays(currentEditingRange.start, currentEditingRange.end);
+                } else {
+                    delete feiertage[currentEditingDatum];
+                }
+
+                saveToStorage();
+                closeFeiertagModal();
+                renderEinstellungen();
+
+                if (view === 'monat') renderMonat();
+                if (view === 'jahr') renderJahr();
+            }
         }
 
         function saveFeiertagFromModal() {
