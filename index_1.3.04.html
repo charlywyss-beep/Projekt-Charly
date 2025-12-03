@@ -4130,10 +4130,21 @@
             if (msg) {
                 msg.innerHTML = text; // innerHTML statt textContent für <br>
                 msg.className = 'message ' + (ok ? 'msg-ok' : 'msg-err');
-                msg.classList.remove('hidden');
-                msg.style.display = 'block';
+                // Init Calendar
+                initMiniCalendar();
 
-                // Nur Erfolgs-Nachrichten nach 3 Sekunden ausblenden
+                // Set current date in calendar if editing
+                if (document.getElementById('modal-datum').value) {
+                    const d = new Date(document.getElementById('modal-datum').value);
+                    if (!isNaN(d.getTime())) {
+                        miniCalYear = d.getFullYear();
+                        miniCalMonth = d.getMonth();
+                        renderMiniCalendar();
+                    }
+                }
+
+                modal.classList.remove('hidden');
+                modal.style.display = 'flex'; // Force flex display             // Nur Erfolgs-Nachrichten nach 3 Sekunden ausblenden
                 if (ok) {
                     setTimeout(() => {
                         msg.classList.add('hidden');
@@ -8501,6 +8512,108 @@
         }
 
         let currentEditingDatum = null;
+
+        // ==========================================
+        // MINI-CALENDAR LOGIC
+        // ==========================================
+        let miniCalYear = new Date().getFullYear();
+        let miniCalMonth = new Date().getMonth(); // 0-11
+
+        function initMiniCalendar() {
+            const today = new Date();
+            miniCalYear = today.getFullYear();
+            miniCalMonth = today.getMonth();
+            renderMiniCalendar();
+        }
+
+        function prevMiniCalMonth() {
+            miniCalMonth--;
+            if (miniCalMonth < 0) {
+                miniCalMonth = 11;
+                miniCalYear--;
+            }
+            renderMiniCalendar();
+        }
+
+        function nextMiniCalMonth() {
+            miniCalMonth++;
+            if (miniCalMonth > 11) {
+                miniCalMonth = 0;
+                miniCalYear++;
+            }
+            renderMiniCalendar();
+        }
+
+        function renderMiniCalendar() {
+            const grid = document.getElementById('mini-cal-grid');
+            const label = document.getElementById('mini-cal-month-year');
+            if (!grid || !label) return;
+
+            const months = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
+            label.textContent = `${months[miniCalMonth]} ${miniCalYear}`;
+
+            grid.innerHTML = '';
+
+            const firstDay = new Date(miniCalYear, miniCalMonth, 1);
+            const lastDay = new Date(miniCalYear, miniCalMonth + 1, 0); // Last day of current month
+            const daysInMonth = lastDay.getDate();
+
+            // Adjust start day: 0 (Sun) -> 6, 1 (Mon) -> 0
+            let startDay = firstDay.getDay() - 1;
+            if (startDay === -1) startDay = 6;
+
+            // Empty cells for days before start of month
+            for (let i = 0; i < startDay; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'mini-cal-day empty';
+                grid.appendChild(cell);
+            }
+
+            // Days of month
+            const currentSelectedDate = document.getElementById('modal-datum').value;
+
+            for (let d = 1; d <= daysInMonth; d++) {
+                const cell = document.createElement('div');
+                cell.className = 'mini-cal-day';
+                cell.textContent = d;
+
+                const dateStr = `${miniCalYear}-${String(miniCalMonth + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+
+                // Check if selected
+                if (dateStr === currentSelectedDate) {
+                    cell.classList.add('selected');
+                }
+
+                // Check for existing holiday
+                if (feiertage[dateStr]) {
+                    cell.classList.add('has-holiday');
+                    const ft = feiertage[dateStr];
+                    const type = ft.typ || 'feiertag';
+
+                    if (type === 'brueckentag') {
+                        cell.classList.add('holiday-kompensation');
+                    } else if (type === 'unbezahlt') {
+                        cell.classList.add('holiday-unbezahlt');
+                    } else if (ft.bezahlt !== false) {
+                        cell.classList.add('holiday-bezahlt');
+                    } else {
+                        cell.classList.add('holiday-unbezahlt');
+                    }
+
+                    cell.title = ft.name || 'Feiertag';
+                }
+
+                cell.onclick = () => {
+                    document.getElementById('modal-datum').value = dateStr;
+
+                    // If multi-day is checked, we might want to handle range selection logic here later
+                    // For now, just set the start date and update UI
+                    renderMiniCalendar(); // Re-render to show selection
+                };
+
+                grid.appendChild(cell);
+            }
+        }
 
         function toggleBisDatum() {
             const checkbox = document.getElementById('modal-mehrere-tage');
