@@ -3269,8 +3269,106 @@
                     </label>
                 </div>
 
+                <!-- Mini-Calendar Container (Moved to Top) -->
+                <div id="modal-calendar-container"
+                    style="margin-bottom: 1rem; border: 1px solid #D1D5DB; border-radius: 0.5rem; overflow: hidden;">
+                    <div class="mini-cal-header"
+                        style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; background: #F3F4F6;">
+                        <button type="button" onclick="prevMiniCalMonth()"
+                            style="border: none; background: none; cursor: pointer; padding: 0.25rem 0.5rem;">◀</button>
+                        <span id="mini-cal-month-year" style="font-weight: 600; font-size: 0.9rem;">Dezember 2025</span>
+                        <button type="button" onclick="nextMiniCalMonth()"
+                            style="border: none; background: none; cursor: pointer; padding: 0.25rem 0.5rem;">▶</button>
+                    </div>
+                    <div class="mini-cal-weekdays"
+                        style="display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-size: 0.75rem; font-weight: 600; background: #F9FAFB; padding: 0.25rem 0; border-bottom: 1px solid #E5E7EB;">
+                        <div>Mo</div>
+                        <div>Di</div>
+                        <div>Mi</div>
+                        <div>Do</div>
+                        <div>Fr</div>
+                        <div>Sa</div>
+                        <div>So</div>
+                    </div>
+                    <div id="mini-cal-grid" class="mini-cal-grid"
+                        style="display: grid; grid-template-columns: repeat(7, 1fr); padding: 0.5rem;">
+                        <!-- Days will be rendered here -->
+                    </div>
+                </div>
+
                 <style>
-                    border-color: #374151 !important;
+                    .mini-cal-day {
+                        aspect-ratio: 1;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 0.85rem;
+                        cursor: pointer;
+                        border-radius: 50%;
+                        margin: 1px;
+                        position: relative;
+                    }
+
+                    .mini-cal-day:hover {
+                        background-color: #E5E7EB;
+                    }
+
+                    .mini-cal-day.empty {
+                        cursor: default;
+                        background: none !important;
+                    }
+
+                    .mini-cal-day.selected {
+                        background-color: #3B82F6 !important;
+                        color: white !important;
+                        font-weight: bold;
+                    }
+
+                    .mini-cal-day.has-holiday {
+                        font-weight: bold;
+                    }
+
+                    /* Dots for existing holidays */
+                    .mini-cal-day.has-holiday::after {
+                        content: '';
+                        position: absolute;
+                        bottom: 2px;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        width: 4px;
+                        height: 4px;
+                        border-radius: 50%;
+                    }
+
+                    .mini-cal-day.holiday-bezahlt::after {
+                        background-color: #3B82F6;
+                    }
+
+                    /* Blue */
+                    .mini-cal-day.holiday-unbezahlt::after {
+                        background-color: #F97316;
+                    }
+
+                    /* Orange */
+                    .mini-cal-day.holiday-kompensation::after {
+                        background-color: #8B5CF6;
+                    }
+
+                    /* Purple */
+
+                    body.dark .mini-cal-header {
+                        background: #374151 !important;
+                        color: #E5E7EB;
+                    }
+
+                    body.dark .mini-cal-weekdays {
+                        background: #1F2937 !important;
+                        color: #9CA3AF;
+                        border-color: #374151 !important;
+                    }
+
+                    body.dark #modal-calendar-container {
+                        border-color: #374151 !important;
                     }
 
                     body.dark .mini-cal-day:hover {
@@ -3279,13 +3377,13 @@
                 </style>
                 <div>
                     <label>Von Datum</label>
-                    <input type="date" id="modal-datum"
-                        style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #D1D5DB; border-radius: 0.5rem;">
+                    <input type="text" readonly id="modal-datum" placeholder="Bitte im Kalender wählen"
+                        style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #D1D5DB; border-radius: 0.5rem; background-color: #F3F4F6; cursor: not-allowed;">
                 </div>
                 <div id="bis-datum-container" style="display: none;">
                     <label>Bis Datum</label>
-                    <input type="date" id="modal-bis-datum"
-                        style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #D1D5DB; border-radius: 0.5rem;">
+                    <input type="text" readonly id="modal-bis-datum" placeholder="Bitte im Kalender wählen"
+                        style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #D1D5DB; border-radius: 0.5rem; background-color: #F3F4F6; cursor: not-allowed;">
                 </div>
                 <div>
                     <label>Name</label>
