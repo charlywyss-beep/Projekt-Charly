@@ -989,19 +989,20 @@
 
         @media (max-width: 480px) and (hover: none) and (pointer: coarse) {
             body {
-                padding-top: max(2.75rem, calc(env(safe-area-inset-top, 0px) + 0.5rem)) !important;
-                padding-bottom: max(0.75rem, env(safe-area-inset-bottom, 0px)) !important;
-                padding-left: max(0.75rem, env(safe-area-inset-left, 0px)) !important;
-                padding-right: max(0.75rem, env(safe-area-inset-right, 0px)) !important;
+                padding-top: max(1.25rem, calc(env(safe-area-inset-top, 0px) + 0.25rem)) !important;
+                padding-bottom: max(0.5rem, env(safe-area-inset-bottom, 0px)) !important;
+                padding-left: max(0.5rem, env(safe-area-inset-left, 0px)) !important;
+                padding-right: max(0.5rem, env(safe-area-inset-right, 0px)) !important;
             }
 
             .container {
                 max-width: 100% !important;
                 overflow-x: hidden !important;
+                gap: 0.4rem !important;
             }
 
             h1 {
-                font-size: 1.55rem;
+                font-size: 1.35rem !important;
             }
 
             .header {
@@ -1009,27 +1010,26 @@
                 align-items: stretch;
             }
 
-            /* Mobile Spacing & Compact Tabs für iPhone */
-            .container {
-                gap: 0.75rem !important;
+            .card {
+                padding: 0.55rem 0.75rem !important;
             }
 
-            .card {
-                padding: 0.85rem !important;
+            #digital-clock {
+                padding: 0.4rem 0.6rem !important;
             }
 
             .tabs {
                 display: flex !important;
                 flex-direction: row !important;
                 flex-wrap: nowrap !important;
-                gap: 0.3rem !important;
+                gap: 0.25rem !important;
                 width: 100% !important;
             }
 
             .tab {
                 flex: 1 !important;
                 min-width: 0 !important;
-                padding: 0.55rem 0.15rem !important;
+                padding: 0.4rem 0.1rem !important;
                 font-size: 0.78rem !important;
                 text-align: center !important;
                 justify-content: center !important;
@@ -1047,26 +1047,35 @@
 
             /* Tagesansicht Kompakte Abstände auf mobile */
             #v-tag > div:first-child {
-                margin-bottom: 0.35rem !important;
+                margin-bottom: 0.25rem !important;
             }
 
             #tag-typ-anzeige {
-                margin-top: 0.35rem !important;
-                padding: 0.4rem 0.65rem !important;
-                font-size: 0.9rem !important;
+                margin-top: 0.25rem !important;
+                padding: 0.35rem 0.6rem !important;
+                font-size: 0.88rem !important;
             }
 
             /* Mobile Fixes für iPhone */
             .kachel-grid {
                 grid-template-columns: 1fr !important;
-                gap: 0.65rem !important;
+                gap: 0.4rem !important;
             }
 
             .arbeitszeit-kachel {
                 width: 100% !important;
                 max-width: 100% !important;
                 box-sizing: border-box !important;
-                padding: 0.65rem !important;
+                padding: 0.5rem 0.65rem !important;
+            }
+
+            .arbeitszeit-kachel-title {
+                margin-bottom: 0.25rem !important;
+                font-size: 0.95rem !important;
+            }
+
+            .kachel-grid > .arbeitszeit-kachel:first-child > div[style*="grid-template-rows"] {
+                gap: 0.35rem !important;
             }
 
             /* Zeiten & Tag-Typ Labels auf Mobile verbergen für mehr Platz */
@@ -1075,8 +1084,9 @@
             }
 
             .arbeitszeit-kachel input[type="time"] {
-                height: 46px !important;
-                min-height: 46px !important;
+                height: 40px !important;
+                min-height: 40px !important;
+                padding: 0.4rem 0.5rem !important;
             }
 
             /* Fix für Labels im Dark Mode - WEISS für Sichtbarkeit */
@@ -1864,7 +1874,7 @@
                             onmouseover="this.style.color='#6366F1'; this.style.transform='scale(1.05)';"
                             onmouseout="this.style.color='#9CA3AF'; this.style.transform='scale(1)';"
                             class="version-badge">
-                            v1.3.15 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
+                            v1.3.16 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
                         </div>
                     </div>
                     <div class="header-actions" style="display: flex; gap: 0.5rem; align-items: center;">
