@@ -803,21 +803,17 @@
             top: 60px !important;
         }
 
-        /* 📱 PORTRAIT MODE: Header-Buttons (Dark/Hell & Speicher) rechts platzieren */
+        /* 📱 PORTRAIT MODE: Header-Buttons (Dark/Hell & Speicher) über dem Namen platzieren */
         .header-actions {
             display: flex;
             gap: 0.5rem;
             align-items: center;
             justify-content: flex-end;
-            align-self: flex-end;
-            margin-left: auto;
         }
 
         @media (max-width: 768px) and (orientation: portrait) {
             .header-actions {
-                width: 100% !important;
                 justify-content: flex-end !important;
-                align-self: flex-end !important;
             }
 
             .export-menu {
@@ -1821,40 +1817,42 @@
                     <div id="digital-clock-time">00:00:00</div>
                     <div id="digital-clock-date">-- --.--.----</div>
                 </div>
-                <div id="user-info" style="text-align: right; font-size: 0.875rem; color: #6B7280; line-height: 1.4;">
-                    <div class="user-info-name">Wyss Charly</div>
-                    <div class="user-info-persnr">Pers. Nr. 1972</div>
-                </div>
-            </div>
-            <div class="header-actions">
-                <button class="btn btn-sec card-sm" onclick="toggleDark()"><span id="icon">☀️</span></button>
-                <div style="position: relative;">
-                    <button class="btn btn-sec card-sm" onclick="toggleExport()">📥</button>
-                    <div id="export-menu" class="export-menu hidden">
-                        <button class="export-btn time-export" onclick="exportBoth()" style="display: none;">📦 Excel +
-                            PDF</button>
-                        <button class="export-btn time-export" onclick="exportExcel()" style="display: none;">📊 Excel
-                            (.xlsx)</button>
-                        <button class="export-btn time-export" onclick="exportCSV()" style="display: none;">📄 CSV
-                            (Deutsch)</button>
-                        <button class="export-btn time-export" onclick="exportPDF()" style="display: none;">📕
-                            PDF</button>
-                        <div class="time-export"
-                            style="border-top: 1px solid rgb(229, 231, 235); margin: 0.5rem 0px; display: none;"></div>
-                        <button class="export-btn settings-export" onclick="exportVollbackup()"
-                            style="color: #10B981; font-weight: 600;">💾 Voll-Backup erstellen</button>
-                        <button class="export-btn settings-export" onclick="importVollbackup()"
-                            style="color: #6366F1; font-weight: 600;">📥 Voll-Backup einlesen</button>
-                        <div class="settings-export" style="border-top: 1px solid #E5E7EB; margin: 0.5rem 0;"></div>
-                        <button class="export-btn time-export" onclick="importData()" style="display: none;">📊
-                            Excel/CSV importieren (nur
-                            Zeiten)</button>
-                        <button class="export-btn settings-export" onclick="downloadHTML()">💾 HTML speichern</button>
+                <div class="header-right-block" style="display: flex; flex-direction: column; align-items: flex-end; gap: 0.35rem;">
+                    <div class="header-actions">
+                        <button class="btn btn-sec card-sm" onclick="toggleDark()"><span id="icon">☀️</span></button>
+                        <div style="position: relative;">
+                            <button class="btn btn-sec card-sm" onclick="toggleExport()">📥</button>
+                            <div id="export-menu" class="export-menu hidden">
+                                <button class="export-btn time-export" onclick="exportBoth()" style="display: none;">📦 Excel +
+                                    PDF</button>
+                                <button class="export-btn time-export" onclick="exportExcel()" style="display: none;">📊 Excel
+                                    (.xlsx)</button>
+                                <button class="export-btn time-export" onclick="exportCSV()" style="display: none;">📄 CSV
+                                    (Deutsch)</button>
+                                <button class="export-btn time-export" onclick="exportPDF()" style="display: none;">📕
+                                    PDF</button>
+                                <div class="time-export"
+                                    style="border-top: 1px solid rgb(229, 231, 235); margin: 0.5rem 0px; display: none;"></div>
+                                <button class="export-btn settings-export" onclick="exportVollbackup()"
+                                    style="color: #10B981; font-weight: 600;">💾 Voll-Backup erstellen</button>
+                                <button class="export-btn settings-export" onclick="importVollbackup()"
+                                    style="color: #6366F1; font-weight: 600;">📥 Voll-Backup einlesen</button>
+                                <div class="settings-export" style="border-top: 1px solid #E5E7EB; margin: 0.5rem 0;"></div>
+                                <button class="export-btn time-export" onclick="importData()" style="display: none;">📊
+                                    Excel/CSV importieren (nur
+                                    Zeiten)</button>
+                                <button class="export-btn settings-export" onclick="downloadHTML()">💾 HTML speichern</button>
+                            </div>
+                            <input type="file" id="import-file" accept=".xlsx,.csv" style="display: none;"
+                                onchange="handleImport(event)">
+                            <input type="file" id="backup-file" accept=".json" style="display: none;"
+                                onchange="handleBackupImport(event)">
+                        </div>
                     </div>
-                    <input type="file" id="import-file" accept=".xlsx,.csv" style="display: none;"
-                        onchange="handleImport(event)">
-                    <input type="file" id="backup-file" accept=".json" style="display: none;"
-                        onchange="handleBackupImport(event)">
+                    <div id="user-info" style="text-align: right; font-size: 0.875rem; color: #6B7280; line-height: 1.4;">
+                        <div class="user-info-name">Wyss Charly</div>
+                        <div class="user-info-persnr">Pers. Nr. 1972</div>
+                    </div>
                 </div>
             </div>
         </div>
