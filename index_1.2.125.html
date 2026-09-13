@@ -114,44 +114,46 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: rgba(99, 102, 241, 0.1);
-            border: 1px solid rgba(99, 102, 241, 0.3);
-            border-radius: 0.75rem;
-            padding: 0.35rem 0.85rem;
-            margin: 0 0.5rem;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(129, 140, 248, 0.08));
+            border: 1px solid rgba(99, 102, 241, 0.35);
+            border-radius: 0.85rem;
+            padding: 0.5rem 1.25rem;
+            margin: 0 auto;
             font-family: 'Consolas', 'Courier New', monospace;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.12);
+            text-align: center;
+            min-width: 145px;
         }
 
         body.dark #digital-clock {
-            background: rgba(99, 102, 241, 0.2);
-            border-color: rgba(129, 140, 248, 0.4);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.25), rgba(79, 70, 229, 0.18));
+            border-color: rgba(129, 140, 248, 0.5);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
         }
 
         #digital-clock-time {
-            font-size: 1.35rem;
-            font-weight: 700;
+            font-size: 1.85rem;
+            font-weight: 800;
             color: #4F46E5;
-            letter-spacing: 1.5px;
+            letter-spacing: 2px;
             line-height: 1.1;
         }
 
         body.dark #digital-clock-time {
             color: #818CF8;
-            text-shadow: 0 0 10px rgba(129, 140, 248, 0.4);
+            text-shadow: 0 0 12px rgba(129, 140, 248, 0.6);
         }
 
         #digital-clock-date {
-            font-size: 0.65rem;
+            font-size: 0.8rem;
             font-weight: 600;
-            color: #6B7280;
-            letter-spacing: 0.5px;
+            color: #4B5563;
+            letter-spacing: 1px;
             margin-top: 2px;
         }
 
         body.dark #digital-clock-date {
-            color: #9CA3AF;
+            color: #C7D2FE;
         }
 
         h1 {
@@ -1781,18 +1783,16 @@
     <div class="container">
         <div class="header">
             <div class="card"
-                style="flex: 1; min-width: 300px; margin: 0; display: flex; justify-content: space-between; align-items: center; position: relative;">
-                <div style="flex: 1; display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
-                    <div>
-                        <h1><span>🕐</span>Arbeitszeiten</h1>
-                        <div style="font-size: 0.65rem; color: #9CA3AF; margin-top: 0.5rem; margin-left: 0.5rem;">
-                            v1.3.09
-                        </div>
+                style="flex: 1; min-width: 300px; margin: 0; display: flex; justify-content: space-between; align-items: center; position: relative; gap: 1rem; flex-wrap: wrap;">
+                <div style="display: flex; flex-direction: column;">
+                    <h1><span>🕐</span>Arbeitszeiten</h1>
+                    <div style="font-size: 0.65rem; color: #9CA3AF; margin-top: 0.25rem; margin-left: 0.5rem;">
+                        v1.3.09
                     </div>
-                    <div id="digital-clock">
-                        <div id="digital-clock-time">00:00:00</div>
-                        <div id="digital-clock-date">-- --.--.----</div>
-                    </div>
+                </div>
+                <div id="digital-clock">
+                    <div id="digital-clock-time">00:00:00</div>
+                    <div id="digital-clock-date">-- --.--.----</div>
                 </div>
                 <div id="user-info" style="text-align: right; font-size: 0.875rem; color: #6B7280; line-height: 1.4;">
                     <div class="user-info-name">Wyss Charly</div>
