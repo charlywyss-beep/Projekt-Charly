@@ -1790,8 +1790,13 @@
                 style="flex: 1; min-width: 300px; margin: 0; display: flex; justify-content: space-between; align-items: center; position: relative; gap: 1rem; flex-wrap: wrap;">
                 <div style="display: flex; flex-direction: column;">
                     <h1><span>🕐</span>Arbeitszeiten</h1>
-                    <div style="font-size: 0.65rem; color: #9CA3AF; margin-top: 0.25rem; margin-left: 0.5rem;">
-                        v1.3.10
+                    <div onclick="forceVersionUpdate()"
+                        title="Klicken, um ein Versions-Update zu erzwingen"
+                        style="font-size: 0.65rem; color: #9CA3AF; margin-top: 0.25rem; margin-left: 0.5rem; cursor: pointer; display: inline-flex; align-items: center; gap: 0.25rem; user-select: none; transition: all 0.2s ease;"
+                        onmouseover="this.style.color='#6366F1'; this.style.transform='scale(1.05)';"
+                        onmouseout="this.style.color='#9CA3AF'; this.style.transform='scale(1)';"
+                        class="version-badge">
+                        v1.3.10 <span style="font-size: 0.65rem; opacity: 0.8;">🔄</span>
                     </div>
                 </div>
                 <div id="digital-clock">
@@ -9599,6 +9604,52 @@
                 }
             }
         });
+
+        // Versions-Update erzwingen
+        async function forceVersionUpdate() {
+            try {
+                const toast = document.createElement('div');
+                toast.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background: #6366F1;
+                    color: white;
+                    padding: 12px 24px;
+                    border-radius: 12px;
+                    font-weight: 600;
+                    font-size: 0.9rem;
+                    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+                    z-index: 999999;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                `;
+                toast.innerHTML = `🔄 Update wird erzwungen... Seite wird neu geladen`;
+                document.body.appendChild(toast);
+
+                if ('serviceWorker' in navigator) {
+                    const registrations = await navigator.serviceWorker.getRegistrations();
+                    for (let registration of registrations) {
+                        await registration.unregister();
+                    }
+                }
+
+                if ('caches' in window) {
+                    const cacheNames = await caches.keys();
+                    await Promise.all(cacheNames.map(name => caches.delete(name)));
+                }
+
+                setTimeout(() => {
+                    const cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+                    window.location.href = cleanUrl + '?v=' + Date.now();
+                }, 500);
+            } catch (e) {
+                console.error('Update force error:', e);
+                window.location.reload(true);
+            }
+        }
 
         // Digital Clock Live Update
         function startDigitalClock() {
