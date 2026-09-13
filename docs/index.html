@@ -1,5 +1,5 @@
 <html lang="de">
-<!-- Version 1.3.18 - Centered Clock Box between Left Margin & User Info -->
+<!-- Version 1.3.19 - Mobile Clock Centering only, Restore Desktop Header -->
 
 <head>
     <meta charset="utf-8">
@@ -1016,6 +1016,7 @@
 
             #digital-clock {
                 padding: 0.4rem 0.6rem !important;
+                margin: 0 auto !important;
             }
 
             .tabs {
@@ -1891,7 +1892,7 @@
                             onmouseover="this.style.color='#6366F1'; this.style.transform='scale(1.05)';"
                             onmouseout="this.style.color='#9CA3AF'; this.style.transform='scale(1)';"
                             class="version-badge">
-                            v1.3.18 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
+                            v1.3.19 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
                         </div>
                     </div>
                     <div class="header-actions" style="display: flex; gap: 0.5rem; align-items: center;">
@@ -1927,9 +1928,9 @@
                     </div>
                 </div>
 
-                <!-- Untere Zeile: Digital-Uhr (Zentriert zwischen rechtem & linkem Rand) & User Info (Rechts) -->
+                <!-- Untere Zeile: Digital-Uhr (Links im Browser, Zentriert in Mobile) & User Info (Rechts) -->
                 <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                    <div id="digital-clock" style="margin: 0 auto;">
+                    <div id="digital-clock" style="margin: 0;">
                         <div id="digital-clock-time">00:00:00</div>
                         <div id="digital-clock-date">-- --.--.----</div>
                     </div>
@@ -9658,8 +9659,8 @@
             });
         }
 
-        // Version 1.3.18 - Manuell erhöhen bei jeder Änderung
-        const APP_VERSION = '1.3.18';
+        // Version 1.3.19 - Manuell erhöhen bei jeder Änderung
+        const APP_VERSION = '1.3.19';
         const version = APP_VERSION;
 
         // Initialise user info with fallback placeholders
