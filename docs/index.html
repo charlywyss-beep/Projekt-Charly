@@ -803,11 +803,26 @@
             top: 60px !important;
         }
 
-        /* 📱 PORTRAIT MODE: Export-Menü nach LINKS ausklappen (statt rechts) */
-        @media (max-width: 480px) and (orientation: portrait) and (hover: none) and (pointer: coarse) {
+        /* 📱 PORTRAIT MODE: Header-Buttons (Dark/Hell & Speicher) rechts platzieren */
+        .header-actions {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            justify-content: flex-end;
+            align-self: flex-end;
+            margin-left: auto;
+        }
+
+        @media (max-width: 768px) and (orientation: portrait) {
+            .header-actions {
+                width: 100% !important;
+                justify-content: flex-end !important;
+                align-self: flex-end !important;
+            }
+
             .export-menu {
-                left: 0 !important;
-                right: auto !important;
+                right: 0 !important;
+                left: auto !important;
                 max-width: calc(100vw - 1rem) !important;
                 min-width: 200px !important;
             }
@@ -1811,7 +1826,7 @@
                     <div class="user-info-persnr">Pers. Nr. 1972</div>
                 </div>
             </div>
-            <div style="display: flex; gap: 0.5rem;">
+            <div class="header-actions">
                 <button class="btn btn-sec card-sm" onclick="toggleDark()"><span id="icon">☀️</span></button>
                 <div style="position: relative;">
                     <button class="btn btn-sec card-sm" onclick="toggleExport()">📥</button>
