@@ -998,7 +998,7 @@
             }
 
             h1 {
-                font-size: 1.25rem;
+                font-size: 1.55rem;
             }
 
             .header {
@@ -1801,24 +1801,21 @@
     <div class="container">
         <div class="header">
             <div class="card"
-                style="flex: 1; min-width: 300px; margin: 0; display: flex; justify-content: space-between; align-items: center; position: relative; gap: 1rem; flex-wrap: wrap;">
-                <div style="display: flex; flex-direction: column;">
-                    <h1><span>🕐</span>Arbeitszeiten</h1>
-                    <div onclick="forceVersionUpdate()"
-                        title="Klicken, um ein Versions-Update zu erzwingen"
-                        style="font-size: 0.65rem; color: #9CA3AF; margin-top: 0.25rem; margin-left: 0.5rem; cursor: pointer; display: inline-flex; align-items: center; gap: 0.25rem; user-select: none; transition: all 0.2s ease;"
-                        onmouseover="this.style.color='#6366F1'; this.style.transform='scale(1.05)';"
-                        onmouseout="this.style.color='#9CA3AF'; this.style.transform='scale(1)';"
-                        class="version-badge">
-                        v1.3.10 <span style="font-size: 0.65rem; opacity: 0.8;">🔄</span>
+                style="flex: 1; margin: 0; display: flex; flex-direction: column; gap: 0.85rem; width: 100%;">
+                <!-- Obere Zeile: Titel (Links) & Action Buttons ☀️ 📥 (Rechts, auf gleicher Höhe wie Arbeitszeiten) -->
+                <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                    <div style="display: flex; align-items: baseline; gap: 0.5rem; flex-wrap: wrap;">
+                        <h1 style="margin: 0;"><span>🕐</span>Arbeitszeiten</h1>
+                        <div onclick="forceVersionUpdate()"
+                            title="Klicken, um ein Versions-Update zu erzwingen"
+                            style="font-size: 0.7rem; color: #9CA3AF; cursor: pointer; display: inline-flex; align-items: center; gap: 0.25rem; user-select: none; transition: all 0.2s ease;"
+                            onmouseover="this.style.color='#6366F1'; this.style.transform='scale(1.05)';"
+                            onmouseout="this.style.color='#9CA3AF'; this.style.transform='scale(1)';"
+                            class="version-badge">
+                            v1.3.10 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
+                        </div>
                     </div>
-                </div>
-                <div id="digital-clock">
-                    <div id="digital-clock-time">00:00:00</div>
-                    <div id="digital-clock-date">-- --.--.----</div>
-                </div>
-                <div class="header-right-block" style="display: flex; flex-direction: column; align-items: flex-end; gap: 0.35rem;">
-                    <div class="header-actions">
+                    <div class="header-actions" style="display: flex; gap: 0.5rem; align-items: center;">
                         <button class="btn btn-sec card-sm" onclick="toggleDark()"><span id="icon">☀️</span></button>
                         <div style="position: relative;">
                             <button class="btn btn-sec card-sm" onclick="toggleExport()">📥</button>
@@ -1848,6 +1845,14 @@
                             <input type="file" id="backup-file" accept=".json" style="display: none;"
                                 onchange="handleBackupImport(event)">
                         </div>
+                    </div>
+                </div>
+
+                <!-- Untere Zeile: Digital-Uhr (Links) & User Info (Rechts) -->
+                <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                    <div id="digital-clock" style="margin: 0;">
+                        <div id="digital-clock-time">00:00:00</div>
+                        <div id="digital-clock-date">-- --.--.----</div>
                     </div>
                     <div id="user-info" style="text-align: right; font-size: 0.875rem; color: #6B7280; line-height: 1.4;">
                         <div class="user-info-name">Wyss Charly</div>
