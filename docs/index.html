@@ -1,5 +1,5 @@
 <html lang="de">
-<!-- Version 1.3.19 - Mobile Clock Centering only, Restore Desktop Header -->
+<!-- Version 1.3.20 - Fix User Info Fallback (Wyss Charly / Pers. Nr. 1972) -->
 
 <head>
     <meta charset="utf-8">
@@ -1892,7 +1892,7 @@
                             onmouseover="this.style.color='#6366F1'; this.style.transform='scale(1.05)';"
                             onmouseout="this.style.color='#9CA3AF'; this.style.transform='scale(1)';"
                             class="version-badge">
-                            v1.3.19 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
+                            v1.3.20 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
                         </div>
                     </div>
                     <div class="header-actions" style="display: flex; gap: 0.5rem; align-items: center;">
@@ -3717,8 +3717,8 @@
             resturlaubVorjahr: 0,
             sollWoche: 42,
             kanton: '',
-            name: '',
-            personalnummer: '',
+            name: 'Wyss Charly',
+            personalnummer: '1972',
             ueberzeitStartJahr: new Date().getFullYear(),
             ueberzeitStartDatum: new Date().getFullYear() + '-01-01',
             ueberzeitStartStand: 0,
@@ -6507,17 +6507,13 @@
             const userInfoEl = document.getElementById('user-info');
             if (!userInfoEl) return;
 
-            const name = settings.name || '';
-            const persNr = settings.personalnummer || '';
+            const name = (settings && settings.name) ? settings.name : 'Wyss Charly';
+            const persNr = (settings && settings.personalnummer !== undefined && settings.personalnummer !== null && settings.personalnummer !== '') ? settings.personalnummer : '1972';
 
-            if (name || persNr) {
-                let html = '';
-                if (name) html += `<div class="user-info-name">${name}</div>`;
-                if (persNr) html += `<div class="user-info-persnr">Pers. Nr. ${persNr}</div>`;
-                userInfoEl.innerHTML = html;
-            } else {
-                userInfoEl.innerHTML = '';
-            }
+            let html = '';
+            if (name) html += `<div class="user-info-name">${name}</div>`;
+            if (persNr) html += `<div class="user-info-persnr">Pers. Nr. ${persNr}</div>`;
+            userInfoEl.innerHTML = html;
         }
 
         function toggleDark() {
@@ -9659,18 +9655,18 @@
             });
         }
 
-        // Version 1.3.19 - Manuell erhöhen bei jeder Änderung
-        const APP_VERSION = '1.3.19';
+        // Version 1.3.20 - Manuell erhöhen bei jeder Änderung
+        const APP_VERSION = '1.3.20';
         const version = APP_VERSION;
 
         // Initialise user info with fallback placeholders
         const userInfoEl = document.getElementById('user-info');
         if (userInfoEl) {
-            const name = localStorage.getItem('user_name');
-            const persNr = localStorage.getItem('user_persnr');
+            const name = (settings && settings.name) ? settings.name : 'Wyss Charly';
+            const persNr = (settings && settings.personalnummer) ? settings.personalnummer : '1972';
             let html = '';
-            html += `<div class="user-info-name">${name ? name : 'Name'}</div>`;
-            html += `<div class="user-info-persnr">Pers. Nr. ${persNr ? persNr : ''}</div>`;
+            html += `<div class="user-info-name">${name}</div>`;
+            html += `<div class="user-info-persnr">Pers. Nr. ${persNr}</div>`;
             userInfoEl.innerHTML = html;
         }
 
