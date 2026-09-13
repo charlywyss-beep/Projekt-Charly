@@ -1047,26 +1047,36 @@
 
             /* Tagesansicht Kompakte Abstände auf mobile */
             #v-tag > div:first-child {
-                margin-bottom: 0.75rem !important;
+                margin-bottom: 0.35rem !important;
             }
 
             #tag-typ-anzeige {
-                margin-top: 0.5rem !important;
-                padding: 0.55rem 0.75rem !important;
-                font-size: 0.95rem !important;
+                margin-top: 0.35rem !important;
+                padding: 0.4rem 0.65rem !important;
+                font-size: 0.9rem !important;
             }
 
             /* Mobile Fixes für iPhone */
             .kachel-grid {
                 grid-template-columns: 1fr !important;
-                gap: 1rem !important;
+                gap: 0.65rem !important;
             }
 
             .arbeitszeit-kachel {
                 width: 100% !important;
                 max-width: 100% !important;
                 box-sizing: border-box !important;
-                padding: 1rem !important;
+                padding: 0.65rem !important;
+            }
+
+            /* Zeiten & Tag-Typ Labels auf Mobile verbergen für mehr Platz */
+            .arbeitszeit-kachel label[style*="grid-row: 1"] {
+                display: none !important;
+            }
+
+            .arbeitszeit-kachel input[type="time"] {
+                height: 46px !important;
+                min-height: 46px !important;
             }
 
             /* Fix für Labels im Dark Mode - WEISS für Sichtbarkeit */
@@ -1854,7 +1864,7 @@
                             onmouseover="this.style.color='#6366F1'; this.style.transform='scale(1.05)';"
                             onmouseout="this.style.color='#9CA3AF'; this.style.transform='scale(1)';"
                             class="version-badge">
-                            v1.3.14 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
+                            v1.3.15 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
                         </div>
                     </div>
                     <div class="header-actions" style="display: flex; gap: 0.5rem; align-items: center;">
@@ -1948,7 +1958,7 @@
                         style="display: grid; grid-template-rows: 24px 54px 54px 54px 54px 54px 54px 54px; gap: 0.75rem;">
                         <!-- Zeile 1: Label (for Desktop layout) -->
                         <label
-                            style="grid-row: 1; font-weight: 600; font-size: 0.9375rem; line-height: 24px; align-self: start;">Zeiten</label>
+                            style="grid-row: 1; font-weight: 600; font-size: 0.9375rem; line-height: 24px; align-self: start;" class="desktop-only-inline">Zeiten</label>
 
                         <!-- Zeile 2: Morgen Kommen (auf gleicher Höhe wie "Normaler Arbeitstag" rechts) -->
                         <div style="grid-row: 2;">
@@ -2005,7 +2015,7 @@
                         style="display: grid; grid-template-rows: 24px 54px 54px 54px 54px 54px 54px 54px; gap: 0.75rem;">
                         <!-- Zeile 1: Label -->
                         <label
-                            style="grid-row: 1; font-weight: 600; font-size: 0.9375rem; line-height: 24px; align-self: start;">Tag-Typ</label>
+                            style="grid-row: 1; font-weight: 600; font-size: 0.9375rem; line-height: 24px; align-self: start;" class="desktop-only-inline">Tag-Typ</label>
 
                         <!-- Zeile 2: Normaler Arbeitstag -->
                         <label class="tag-typ-label tag-typ-normal"
