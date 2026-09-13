@@ -1,6 +1,4 @@
-<html lang="de">
-
-<head>
+<html lang="de"><head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>Arbeitszeiten &amp; Ferien – Projekt-Charly</title>
@@ -882,25 +880,6 @@
             .kachel-grid>.arbeitszeit-kachel:nth-child(2) {
                 order: 3;
             }
-
-            /* Mobile: Reduce calendar tile sizes to fit 7 columns */
-            .cal {
-                gap: 0.25rem !important;
-            }
-
-            .card-sm.cal-day {
-                padding: 0.5rem 0.4rem !important;
-                min-height: 60px !important;
-                font-size: 0.875rem !important;
-            }
-
-            .card-sm.cal-day .emoji-medium {
-                font-size: 0.75rem !important;
-            }
-
-            .card-sm.cal-day>div>div {
-                font-size: 0.65rem !important;
-            }
         }
 
         @media (max-width: 480px) and (hover: none) and (pointer: coarse) {
@@ -1716,51 +1695,37 @@
 <body class="dark">
     <div class="container">
         <div class="header">
-            <div class="card"
-                style="flex: 1; min-width: 300px; margin: 0; display: flex; justify-content: space-between; align-items: center; position: relative;">
+            <div class="card" style="flex: 1; min-width: 300px; margin: 0; display: flex; justify-content: space-between; align-items: center; position: relative;">
                 <div style="flex: 1; display: flex; justify-content: space-between; align-items: center;">
                     <div>
                         <h1><span>🕐</span>Arbeitszeiten</h1>
                         <div style="font-size: 0.65rem; color: #9CA3AF; margin-top: 0.5rem; margin-left: 0.5rem;">
-                            v1.3.04
+                            v1.3.02
                         </div>
                     </div>
                     <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;"></span>
                 </div>
-                <div id="user-info" style="text-align: right; font-size: 0.875rem; color: #6B7280; line-height: 1.4;">
-                    <div class="user-info-name">Wyss Charly</div>
-                    <div class="user-info-persnr">Pers. Nr. 1972</div>
-                </div>
+                <div id="user-info" style="text-align: right; font-size: 0.875rem; color: #6B7280; line-height: 1.4;"><div class="user-info-name">Wyss  Charly</div><div class="user-info-persnr">Pers. Nr. 1972</div></div>
             </div>
             <div style="display: flex; gap: 0.5rem;">
                 <button class="btn btn-sec card-sm" onclick="toggleDark()"><span id="icon">☀️</span></button>
                 <div style="position: relative;">
                     <button class="btn btn-sec card-sm" onclick="toggleExport()">📥</button>
-                    <div id="export-menu" class="export-menu hidden">
-                        <button class="export-btn time-export" onclick="exportBoth()" style="display: none;">📦 Excel +
-                            PDF</button>
-                        <button class="export-btn time-export" onclick="exportExcel()" style="display: none;">📊 Excel
-                            (.xlsx)</button>
-                        <button class="export-btn time-export" onclick="exportCSV()" style="display: none;">📄 CSV
-                            (Deutsch)</button>
-                        <button class="export-btn time-export" onclick="exportPDF()" style="display: none;">📕
-                            PDF</button>
-                        <div class="time-export"
-                            style="border-top: 1px solid rgb(229, 231, 235); margin: 0.5rem 0px; display: none;"></div>
-                        <button class="export-btn settings-export" onclick="exportVollbackup()"
-                            style="color: #10B981; font-weight: 600;">💾 Voll-Backup erstellen</button>
-                        <button class="export-btn settings-export" onclick="importVollbackup()"
-                            style="color: #6366F1; font-weight: 600;">📥 Voll-Backup einlesen</button>
+                    <div id="export-menu" class="export-menu">
+                        <button class="export-btn time-export" onclick="exportBoth()" style="display: none;">📦 Excel + PDF</button>
+                        <button class="export-btn time-export" onclick="exportExcel()" style="display: none;">📊 Excel (.xlsx)</button>
+                        <button class="export-btn time-export" onclick="exportCSV()" style="display: none;">📄 CSV (Deutsch)</button>
+                        <button class="export-btn time-export" onclick="exportPDF()" style="display: none;">📕 PDF</button>
+                        <div class="time-export" style="border-top: 1px solid rgb(229, 231, 235); margin: 0.5rem 0px; display: none;"></div>
+                        <button class="export-btn settings-export" onclick="exportVollbackup()" style="color: #10B981; font-weight: 600;">💾 Voll-Backup erstellen</button>
+                        <button class="export-btn settings-export" onclick="importVollbackup()" style="color: #6366F1; font-weight: 600;">📥 Voll-Backup einlesen</button>
                         <div class="settings-export" style="border-top: 1px solid #E5E7EB; margin: 0.5rem 0;"></div>
-                        <button class="export-btn time-export" onclick="importData()" style="display: none;">📊
-                            Excel/CSV importieren (nur
+                        <button class="export-btn time-export" onclick="importData()" style="display: none;">📊 Excel/CSV importieren (nur
                             Zeiten)</button>
                         <button class="export-btn settings-export" onclick="downloadHTML()">💾 HTML speichern</button>
                     </div>
-                    <input type="file" id="import-file" accept=".xlsx,.csv" style="display: none;"
-                        onchange="handleImport(event)">
-                    <input type="file" id="backup-file" accept=".json" style="display: none;"
-                        onchange="handleBackupImport(event)">
+                    <input type="file" id="import-file" accept=".xlsx,.csv" style="display: none;" onchange="handleImport(event)">
+                    <input type="file" id="backup-file" accept=".json" style="display: none;" onchange="handleBackupImport(event)">
                 </div>
             </div>
         </div>
@@ -1771,8 +1736,7 @@
                 <button class="btn tab" onclick="switchView('woche')">📅 Woche</button>
                 <button class="btn tab" onclick="switchView('monat')">📅 Monat</button>
                 <button class="btn tab" onclick="switchView('jahr')">📅 Jahr</button>
-                <button class="btn tab active" onclick="switchView('einstellungen')"><span
-                        class="emoji-medium">⚙️</span>
+                <button class="btn tab active" onclick="switchView('einstellungen')"><span class="emoji-medium">⚙️</span>
                     Einstellungen</button>
             </div>
         </div>
@@ -1783,18 +1747,13 @@
                     <h2 style="margin: 0;">Tagesansicht</h2>
                     <button class="btn btn-primary" onclick="goToday()" style="min-width: 70px;">Heute</button>
                 </div>
-                <div class="nav-controls"
-                    style="display: flex; gap: 0.5rem; align-items: center; justify-content: center;">
-                    <button class="btn btn-primary" onclick="prevDay()"
-                        style="min-width: 44px; flex-shrink: 0;">←</button>
-                    <span id="curr-date" class="datums-anzeige" style="flex: 1; text-align: center; min-width: 0;">KW
-                        49&nbsp;&nbsp;&nbsp;&nbsp;Mo 01.12.2025</span>
-                    <button class="btn btn-primary" onclick="nextDay()"
-                        style="min-width: 44px; flex-shrink: 0;">→</button>
+                <div class="nav-controls" style="display: flex; gap: 0.5rem; align-items: center; justify-content: center;">
+                    <button class="btn btn-primary" onclick="prevDay()" style="min-width: 44px; flex-shrink: 0;">←</button>
+                    <span id="curr-date" class="datums-anzeige" style="flex: 1; text-align: center; min-width: 0;">KW 49&nbsp;&nbsp;&nbsp;&nbsp;Mo 01.12.2025</span>
+                    <button class="btn btn-primary" onclick="nextDay()" style="min-width: 44px; flex-shrink: 0;">→</button>
                 </div>
 
-                <div id="tag-typ-anzeige" class=""
-                    style="text-align: center; margin-top: 1rem; padding: 1rem; border-radius: 0.75rem; font-weight: 600; font-size: 1.125rem; background: linear-gradient(135deg, rgb(107, 114, 128) 0%, rgb(156, 163, 175) 100%) !important; color: rgb(255, 255, 255); border: 2px solid rgb(209, 213, 219); opacity: 0.9;">
+                <div id="tag-typ-anzeige" class="" style="text-align: center; margin-top: 1rem; padding: 1rem; border-radius: 0.75rem; font-weight: 600; font-size: 1.125rem; background: linear-gradient(135deg, rgb(107, 114, 128) 0%, rgb(156, 163, 175) 100%) !important; color: rgb(255, 255, 255); border: 2px solid rgb(209, 213, 219); opacity: 0.9;">
                     <span id="tag-typ-icon" style="font-size: 1.5rem; margin-right: 0.5rem;">⚙️</span>
                     <span id="tag-typ-text">Normaler Arbeitstag</span>
                 </div>
@@ -1805,45 +1764,35 @@
 
                 <div class="arbeitszeit-kachel">
                     <h3 class="arbeitszeit-kachel-title">⏰ Arbeitszeiten</h3>
-                    <div
-                        style="display: grid; grid-template-rows: 24px 54px 54px 54px 54px 54px 54px 54px; gap: 0.75rem;">
+                    <div style="display: grid; grid-template-rows: 24px 54px 54px 54px 54px 54px 54px 54px; gap: 0.75rem;">
                         <!-- Zeile 1: Label (for Desktop layout) -->
-                        <label
-                            style="grid-row: 1; font-weight: 600; font-size: 0.9375rem; line-height: 24px; align-self: start;">Zeiten</label>
+                        <label style="grid-row: 1; font-weight: 600; font-size: 0.9375rem; line-height: 24px; align-self: start;">Zeiten</label>
 
                         <!-- Zeile 2: Morgen Kommen (auf gleicher Höhe wie "Normaler Arbeitstag" rechts) -->
                         <div style="grid-row: 2;">
                             <label for="mk" id="label-mk">Morgen Kommen</label>
-                            <input type="time" id="mk"
-                                style="width: auto; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;"
-                                oninput="toggleLabel('mk')" onchange="toggleLabel('mk')">
+                            <input type="time" id="mk" style="width: auto; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;" oninput="toggleLabel('mk')" onchange="toggleLabel('mk')">
                             <button class="clear-btn" id="c-mk" onclick="clearField('mk')">✕</button>
                         </div>
 
                         <!-- Zeile 3: Morgen Gehen -->
                         <div style="grid-row: 3;">
                             <label for="mg" id="label-mg">Morgen Gehen</label>
-                            <input type="time" id="mg"
-                                style="width: auto; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;"
-                                oninput="toggleLabel('mg')" onchange="toggleLabel('mg')">
+                            <input type="time" id="mg" style="width: auto; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;" oninput="toggleLabel('mg')" onchange="toggleLabel('mg')">
                             <button class="clear-btn" id="c-mg" onclick="clearField('mg')">✕</button>
                         </div>
 
                         <!-- Zeile 4: Mittag Kommen -->
                         <div style="grid-row: 4;">
                             <label for="mittk" id="label-mittk">Mittag Kommen</label>
-                            <input type="time" id="mittk"
-                                style="width: auto; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;"
-                                oninput="toggleLabel('mittk')" onchange="toggleLabel('mittk')">
+                            <input type="time" id="mittk" style="width: auto; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;" oninput="toggleLabel('mittk')" onchange="toggleLabel('mittk')">
                             <button class="clear-btn" id="c-mittk" onclick="clearField('mittk')">✕</button>
                         </div>
 
                         <!-- Zeile 5: Abend Gehen -->
                         <div style="grid-row: 5;">
                             <label for="ag" id="label-ag">Abend Gehen</label>
-                            <input type="time" id="ag"
-                                style="width: auto; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;"
-                                oninput="toggleLabel('ag')" onchange="toggleLabel('ag')">
+                            <input type="time" id="ag" style="width: auto; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;" oninput="toggleLabel('ag')" onchange="toggleLabel('ag')">
                             <button class="clear-btn" id="c-ag" onclick="clearField('ag')">✕</button>
                         </div>
 
@@ -1852,9 +1801,7 @@
 
                     <!-- Fehlermeldung innerhalb der Kachel -->
                     <!-- Fehlermeldungen / Erfolg -->
-                    <div id="msg" class="message msg-ok hidden"
-                        style="margin-top: 0.75rem; text-align: center; display: none;">✅ Feiertage_2025-2026.ics
-                        erfolgreich exportiert!</div>
+                    <div id="msg" class="message msg-ok hidden" style="margin-top: 0.75rem; text-align: center; display: none;">✅ Feiertage_2025-2026.ics erfolgreich exportiert!</div>
 
                     <!-- Platzhalter für Warnbox (innerhalb der Kachel, damit Grid nicht bricht) -->
                     <div id="tagtyp-warning-container"></div>
@@ -1862,72 +1809,55 @@
 
                 <div class="arbeitszeit-kachel">
                     <h3 class="arbeitszeit-kachel-title">📋 Zusatzoptionen</h3>
-                    <div
-                        style="display: grid; grid-template-rows: 24px 54px 54px 54px 54px 54px 54px 54px; gap: 0.75rem;">
+                    <div style="display: grid; grid-template-rows: 24px 54px 54px 54px 54px 54px 54px 54px; gap: 0.75rem;">
                         <!-- Zeile 1: Label -->
-                        <label
-                            style="grid-row: 1; font-weight: 600; font-size: 0.9375rem; line-height: 24px; align-self: start;">Tag-Typ</label>
+                        <label style="grid-row: 1; font-weight: 600; font-size: 0.9375rem; line-height: 24px; align-self: start;">Tag-Typ</label>
 
                         <!-- Zeile 2: Normaler Arbeitstag -->
-                        <label class="tag-typ-label tag-typ-normal"
-                            style="grid-row: 2; display: flex; align-items: center; cursor: pointer; padding: 0.75rem; border-radius: 0.5rem; height: 54px;">
-                            <input type="radio" name="tagTyp" value="normal" checked="" onchange="updateTagTyp()"
-                                style="margin-right: 0.5rem;">
+                        <label class="tag-typ-label tag-typ-normal" style="grid-row: 2; display: flex; align-items: center; cursor: pointer; padding: 0.75rem; border-radius: 0.5rem; height: 54px;">
+                            <input type="radio" name="tagTyp" value="normal" checked="" onchange="updateTagTyp()" style="margin-right: 0.5rem;">
                             <span class="emoji-medium">⚙️</span> <span>Normaler Arbeitstag</span>
                         </label>
 
                         <!-- Zeile 3: Bezahlter Feiertag -->
-                        <label class="tag-typ-label feiertag"
-                            style="grid-row: 3; display: flex; align-items: center; cursor: pointer; padding: 0.75rem; border-radius: 0.5rem; height: 54px;">
-                            <input type="radio" name="tagTyp" value="feiertag-bezahlt" onchange="updateTagTyp()"
-                                style="margin-right: 0.5rem;">
+                        <label class="tag-typ-label feiertag" style="grid-row: 3; display: flex; align-items: center; cursor: pointer; padding: 0.75rem; border-radius: 0.5rem; height: 54px;">
+                            <input type="radio" name="tagTyp" value="feiertag-bezahlt" onchange="updateTagTyp()" style="margin-right: 0.5rem;">
                             <span class="emoji-medium">🔵</span> <span>Bezahlter Feiertag</span>
                         </label>
 
                         <!-- Zeile 4: Unbezahlter Feiertag -->
-                        <label class="tag-typ-label feiertag-unbezahlt"
-                            style="grid-row: 4; display: flex; align-items: center; cursor: pointer; padding: 0.75rem; border-radius: 0.5rem; height: 54px;">
-                            <input type="radio" name="tagTyp" value="feiertag-unbezahlt" onchange="updateTagTyp()"
-                                style="margin-right: 0.5rem;">
+                        <label class="tag-typ-label feiertag-unbezahlt" style="grid-row: 4; display: flex; align-items: center; cursor: pointer; padding: 0.75rem; border-radius: 0.5rem; height: 54px;">
+                            <input type="radio" name="tagTyp" value="feiertag-unbezahlt" onchange="updateTagTyp()" style="margin-right: 0.5rem;">
                             <span class="emoji-medium">🟠</span> <span>Unbezahlter Feiertag</span>
                         </label>
 
                         <!-- Zeile 5: Urlaub -->
-                        <label class="tag-typ-label tag-urlaub"
-                            style="grid-row: 5; display: flex; align-items: center; cursor: pointer; padding: 0.75rem; border-radius: 0.5rem; height: 54px;">
-                            <input type="radio" name="tagTyp" value="urlaub" onchange="updateTagTyp()"
-                                style="margin-right: 0.5rem;">
+                        <label class="tag-typ-label tag-urlaub" style="grid-row: 5; display: flex; align-items: center; cursor: pointer; padding: 0.75rem; border-radius: 0.5rem; height: 54px;">
+                            <input type="radio" name="tagTyp" value="urlaub" onchange="updateTagTyp()" style="margin-right: 0.5rem;">
                             <span class="emoji-medium">🏖️</span> <span>Urlaub</span>
                         </label>
 
                         <!-- Zeile 6: Krankheit -->
-                        <label class="tag-typ-label tag-krank"
-                            style="grid-row: 6; display: flex; align-items: center; cursor: pointer; padding: 0.75rem; border-radius: 0.5rem; height: 54px;">
-                            <input type="radio" name="tagTyp" value="krank" onchange="updateTagTyp()"
-                                style="margin-right: 0.5rem;">
+                        <label class="tag-typ-label tag-krank" style="grid-row: 6; display: flex; align-items: center; cursor: pointer; padding: 0.75rem; border-radius: 0.5rem; height: 54px;">
+                            <input type="radio" name="tagTyp" value="krank" onchange="updateTagTyp()" style="margin-right: 0.5rem;">
                             <span class="emoji-medium">🤒</span> <span>Krankheit</span>
                         </label>
 
                         <!-- Zeile 7: Unbezahlter Urlaub -->
-                        <label class="tag-typ-label tag-unbezahlt"
-                            style="grid-row: 7; display: flex; align-items: center; cursor: pointer; padding: 0.75rem; border-radius: 0.5rem; height: 54px;">
-                            <input type="radio" name="tagTyp" value="unbezahlt" onchange="updateTagTyp()"
-                                style="margin-right: 0.5rem;">
+                        <label class="tag-typ-label tag-unbezahlt" style="grid-row: 7; display: flex; align-items: center; cursor: pointer; padding: 0.75rem; border-radius: 0.5rem; height: 54px;">
+                            <input type="radio" name="tagTyp" value="unbezahlt" onchange="updateTagTyp()" style="margin-right: 0.5rem;">
                             <span class="emoji-medium">📅</span> <span>Unbezahlter Urlaub</span>
                         </label>
 
                         <!-- Zeile 8: Überzeit-Kompensation -->
-                        <label class="tag-typ-label tag-kompensation"
-                            style="grid-row: 8; display: flex; align-items: center; cursor: pointer; padding: 0.75rem; border-radius: 0.5rem; height: 54px;">
-                            <input type="radio" name="tagTyp" value="kompensation" onchange="updateTagTyp()"
-                                style="margin-right: 0.5rem;">
+                        <label class="tag-typ-label tag-kompensation" style="grid-row: 8; display: flex; align-items: center; cursor: pointer; padding: 0.75rem; border-radius: 0.5rem; height: 54px;">
+                            <input type="radio" name="tagTyp" value="kompensation" onchange="updateTagTyp()" style="margin-right: 0.5rem;">
                             <span class="emoji-medium">⏰</span> <span>Überzeit-Kompensation</span>
                         </label>
 
                         <!-- Notiz am Ende außerhalb des Grids -->
                         <div style="margin-top: 1rem;">
-                            <label
-                                style="display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.9375rem;">Notiz
+                            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.9375rem;">Notiz
                                 (optional)</label>
                             <input type="text" id="notiz" placeholder="z.B. Projektname, Grund, etc." maxlength="100">
                         </div>
@@ -1942,8 +1872,7 @@
                 </div>
             </div>
 
-            <div id="compact-result"
-                style="margin-top: 1rem; padding: 1rem; background: rgba(99, 102, 241, 0.1); border-radius: 0.5rem; display: none;">
+            <div id="compact-result" style="margin-top: 1rem; padding: 1rem; background: rgba(99, 102, 241, 0.1); border-radius: 0.5rem; display: none;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
                     <span style="font-weight: 600; color: #6366F1;">⏱️ Arbeitszeit:</span>
                     <span id="compact-arb" style="font-weight: bold; font-size: 1.125rem;">--:--</span>
@@ -1954,44 +1883,33 @@
                 </div>
             </div>
 
-            <div
-                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1.5rem;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1.5rem;">
 
                 <div class="grad-blue">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                         <div style="flex: 1;">
                             <div style="font-size: 0.875rem; opacity: 0.9;">Arbeitszeit</div>
-                            <div style="font-size: 2rem; font-weight: bold; margin-top: 0.5rem; line-height: 1;"
-                                id="r-arb">--:--</div>
+                            <div style="font-size: 2rem; font-weight: bold; margin-top: 0.5rem; line-height: 1;" id="r-arb">--:--</div>
                         </div>
-                        <div
-                            style="display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-end; height: 100%;">
-                            <div id="pause-info"
-                                style="font-size: 0.75rem; font-style: italic; opacity: 0.75; margin-top: auto;">&nbsp;
-                            </div>
+                        <div style="display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-end; height: 100%;">
+                            <div id="pause-info" style="font-size: 0.75rem; font-style: italic; opacity: 0.75; margin-top: auto;">&nbsp;</div>
                         </div>
                     </div>
                 </div>
 
                 <div id="r-soll-card" class="grad-purple" style="position: relative;">
-                    <button onclick="toggleSollModus()"
-                        style="position: absolute; top: 50%; right: 1.5rem; transform: translateY(-50%); background: rgba(255,255,255,0.3); border: none; border-radius: 0.5rem; padding: 0.75rem 1rem; cursor: pointer; color: white; font-size: 1.5rem; font-weight: 700; transition: all 0.2s; box-shadow: 0 2px 6px rgba(0,0,0,0.15);"
-                        onmouseover="this.style.background='rgba(255,255,255,0.45)'"
-                        onmouseout="this.style.background='rgba(255,255,255,0.3)'">⇄</button>
+                    <button onclick="toggleSollModus()" style="position: absolute; top: 50%; right: 1.5rem; transform: translateY(-50%); background: rgba(255,255,255,0.3); border: none; border-radius: 0.5rem; padding: 0.75rem 1rem; cursor: pointer; color: white; font-size: 1.5rem; font-weight: 700; transition: all 0.2s; box-shadow: 0 2px 6px rgba(0,0,0,0.15);" onmouseover="this.style.background='rgba(255,255,255,0.45)'" onmouseout="this.style.background='rgba(255,255,255,0.3)'">⇄</button>
                     <div style="padding-right: 80px;">
                         <div style="font-size: 0.875rem; opacity: 0.9;" id="soll-label">Sollzeit</div>
-                        <div style="font-size: 2rem; font-weight: bold; margin-top: 0.5rem; line-height: 1;"
-                            id="r-soll-display">08:24</div>
-                        <div style="font-size: 0.875rem; opacity: 0.85; margin-top: 0.5rem; text-align: right;"
-                            id="soll-info">&nbsp;</div>
+                        <div style="font-size: 2rem; font-weight: bold; margin-top: 0.5rem; line-height: 1;" id="r-soll-display">08:24</div>
+                        <div style="font-size: 0.875rem; opacity: 0.85; margin-top: 0.5rem; text-align: right;" id="soll-info">&nbsp;</div>
                     </div>
                 </div>
 
                 <div id="r-diff-card" class="grad-orange">
                     <div>
                         <div style="font-size: 0.875rem; opacity: 0.9;" id="r-diff-lbl">Fehlzeit Soll</div>
-                        <div style="font-size: 2rem; font-weight: bold; margin-top: 0.5rem; line-height: 1;"
-                            id="r-diff">08:24</div>
+                        <div style="font-size: 2rem; font-weight: bold; margin-top: 0.5rem; line-height: 1;" id="r-diff">08:24</div>
                     </div>
                 </div>
             </div>
@@ -2049,8 +1967,7 @@
                             <div>
                                 <div style="font-weight: 600;">Di 18.11.2025</div>
 
-                                <div
-                                    style="font-size: 0.75rem; opacity: 0.75; margin-top: 0.25rem; font-style: italic;">
+                                <div style="font-size: 0.75rem; opacity: 0.75; margin-top: 0.25rem; font-style: italic;">
                                     📝 LS8- ACM</div>
                             </div>
                             <div style="text-align: right;">
@@ -2064,8 +1981,7 @@
                             <div>
                                 <div style="font-weight: 600;"><span class="emoji-medium">🤒</span> Mi 19.11.2025</div>
 
-                                <div
-                                    style="font-size: 0.75rem; opacity: 0.75; margin-top: 0.25rem; font-style: italic;">
+                                <div style="font-size: 0.75rem; opacity: 0.75; margin-top: 0.25rem; font-style: italic;">
                                     📝 Rückenschmerzen Krank geschri...</div>
                             </div>
                             <div style="text-align: right;">
@@ -2079,8 +1995,7 @@
                             <div>
                                 <div style="font-weight: 600;"><span class="emoji-medium">🤒</span> Do 20.11.2025</div>
 
-                                <div
-                                    style="font-size: 0.75rem; opacity: 0.75; margin-top: 0.25rem; font-style: italic;">
+                                <div style="font-size: 0.75rem; opacity: 0.75; margin-top: 0.25rem; font-style: italic;">
                                     📝 Rückenschmerzen</div>
                             </div>
                             <div style="text-align: right;">
@@ -2094,8 +2009,7 @@
                             <div>
                                 <div style="font-weight: 600;"><span class="emoji-medium">🤒</span> Fr 21.11.2025</div>
 
-                                <div
-                                    style="font-size: 0.75rem; opacity: 0.75; margin-top: 0.25rem; font-style: italic;">
+                                <div style="font-size: 0.75rem; opacity: 0.75; margin-top: 0.25rem; font-style: italic;">
                                     📝 Rückenschmerzen</div>
                             </div>
                             <div style="text-align: right;">
@@ -2139,8 +2053,7 @@
                 <h2>Monatsansicht</h2>
                 <div class="nav-controls" style="display: flex; gap: 0.5rem; align-items: center;">
                     <button class="btn btn-primary" onclick="monatVor()">←</button>
-                    <span id="m-name"
-                        style="padding: 0.5rem 1rem; font-weight: 600; min-width: 200px; text-align: center; display: inline-block;">November
+                    <span id="m-name" style="padding: 0.5rem 1rem; font-weight: 600; min-width: 200px; text-align: center; display: inline-block;">November
                         2025</span>
                     <button class="btn btn-primary" onclick="monatWeiter()">→</button>
                 </div>
@@ -2168,15 +2081,12 @@
                     </div>
                 </div>
             </div>
-            <div
-                style="display: flex; justify-content: space-between; margin-top: 0.75rem; padding: 0.75rem; background: rgba(99, 102, 241, 0.1); border-radius: 0.5rem;">
+            <div style="display: flex; justify-content: space-between; margin-top: 0.75rem; padding: 0.75rem; background: rgba(99, 102, 241, 0.1); border-radius: 0.5rem;">
                 <div style="text-align: center; flex: 1;">
-                    <div style="font-size: 0.75rem; color: #6B7280;" id="m-urlaub-jahr-label">Urlaubstage im Jahr 2025
-                    </div>
+                    <div style="font-size: 0.75rem; color: #6B7280;" id="m-urlaub-jahr-label">Urlaubstage im Jahr 2025</div>
                     <div style="font-size: 1.25rem; font-weight: 700; color: #6366F1;" id="m-urlaub-gesamt">27</div>
                 </div>
-                <div
-                    style="text-align: center; flex: 1; border-left: 1px solid #D1D5DB; border-right: 1px solid #D1D5DB;">
+                <div style="text-align: center; flex: 1; border-left: 1px solid #D1D5DB; border-right: 1px solid #D1D5DB;">
                     <div style="font-size: 0.75rem; color: #6B7280;">bezogene Tage</div>
                     <div style="font-size: 1.25rem; font-weight: 700; color: #EF4444;" id="m-urlaub-verbraucht">5</div>
                 </div>
@@ -2188,8 +2098,7 @@
             <div style="margin-top: 1rem; margin-bottom: 1rem; display: flex; gap: 0.5rem;">
                 <button class="btn btn-primary" onclick="showMassenUrlaubDialog()" style="flex: 1;">📅 Urlaub über
                     Zeitraum eintragen</button>
-                <button class="btn btn-danger" onclick="toggleUrlaubLoeschModus()" style="flex: 1;"
-                    id="urlaub-loeschen-btn-monat">🗑️ Mehrere Urlaubstage löschen</button>
+                <button class="btn btn-danger" onclick="toggleUrlaubLoeschModus()" style="flex: 1;" id="urlaub-loeschen-btn-monat">🗑️ Mehrere Urlaubstage löschen</button>
             </div>
             <div class="cal" id="m-cal">
                 <div style="text-align: center; font-weight: 600; padding: 0.5rem; color: #6B7280;">Mo</div>
@@ -2204,9 +2113,7 @@
                 <div></div>
                 <div></div>
                 <div></div>
-                <div class="card-sm cal-day feiertag" data-date="2025-11-01"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-01')">
+                <div class="card-sm cal-day feiertag" data-date="2025-11-01" style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;" onclick="jumpToDate('2025-11-01')">
                     <div style="font-weight: 600;">1</div>
                     <div style="text-align: right;">
                         <div style="font-size: 0.7rem; opacity: 0.85; line-height: 1.1; margin-bottom: 0.15rem;">🔵
@@ -2215,9 +2122,7 @@
 
                     </div>
                 </div>
-                <div class="card-sm cal-day weekend" data-date="2025-11-02"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-02')">
+                <div class="card-sm cal-day weekend" data-date="2025-11-02" style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;" onclick="jumpToDate('2025-11-02')">
                     <div style="font-weight: 600;">2</div>
                     <div style="text-align: right;">
 
@@ -2225,9 +2130,7 @@
 
                     </div>
                 </div>
-                <div class="card-sm cal-day tag-urlaub" data-date="2025-11-03"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-03')">
+                <div class="card-sm cal-day tag-urlaub" data-date="2025-11-03" style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;" onclick="jumpToDate('2025-11-03')">
                     <div style="font-weight: 600;">3</div>
                     <div style="text-align: right;">
                         <div style="font-size: 0.875rem; margin-bottom: 0.15rem;"><span class="emoji-medium">🏖️</span>
@@ -2236,9 +2139,7 @@
 
                     </div>
                 </div>
-                <div class="card-sm cal-day tag-urlaub" data-date="2025-11-04"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-04')">
+                <div class="card-sm cal-day tag-urlaub" data-date="2025-11-04" style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;" onclick="jumpToDate('2025-11-04')">
                     <div style="font-weight: 600;">4</div>
                     <div style="text-align: right;">
                         <div style="font-size: 0.875rem; margin-bottom: 0.15rem;"><span class="emoji-medium">🏖️</span>
@@ -2247,9 +2148,7 @@
 
                     </div>
                 </div>
-                <div class="card-sm cal-day tag-urlaub" data-date="2025-11-05"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-05')">
+                <div class="card-sm cal-day tag-urlaub" data-date="2025-11-05" style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;" onclick="jumpToDate('2025-11-05')">
                     <div style="font-weight: 600;">5</div>
                     <div style="text-align: right;">
                         <div style="font-size: 0.875rem; margin-bottom: 0.15rem;"><span class="emoji-medium">🏖️</span>
@@ -2258,9 +2157,7 @@
 
                     </div>
                 </div>
-                <div class="card-sm cal-day " data-date="2025-11-06"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-06')">
+                <div class="card-sm cal-day " data-date="2025-11-06" style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;" onclick="jumpToDate('2025-11-06')">
                     <div style="font-weight: 600;">6</div>
                     <div style="text-align: right;">
 
@@ -2268,9 +2165,7 @@
 
                     </div>
                 </div>
-                <div class="card-sm cal-day " data-date="2025-11-07"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-07')">
+                <div class="card-sm cal-day " data-date="2025-11-07" style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;" onclick="jumpToDate('2025-11-07')">
                     <div style="font-weight: 600;">7</div>
                     <div style="text-align: right;">
 
@@ -2278,9 +2173,7 @@
 
                     </div>
                 </div>
-                <div class="card-sm cal-day weekend" data-date="2025-11-08"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-08')">
+                <div class="card-sm cal-day weekend" data-date="2025-11-08" style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;" onclick="jumpToDate('2025-11-08')">
                     <div style="font-weight: 600;">8</div>
                     <div style="text-align: right;">
 
@@ -2288,9 +2181,7 @@
 
                     </div>
                 </div>
-                <div class="card-sm cal-day weekend" data-date="2025-11-09"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-09')">
+                <div class="card-sm cal-day weekend" data-date="2025-11-09" style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;" onclick="jumpToDate('2025-11-09')">
                     <div style="font-weight: 600;">9</div>
                     <div style="text-align: right;">
 
@@ -2298,9 +2189,7 @@
 
                     </div>
                 </div>
-                <div class="card-sm cal-day " data-date="2025-11-10"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-10')">
+                <div class="card-sm cal-day " data-date="2025-11-10" style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;" onclick="jumpToDate('2025-11-10')">
                     <div style="font-weight: 600;">10</div>
                     <div style="text-align: right;">
 
@@ -2308,9 +2197,7 @@
 
                     </div>
                 </div>
-                <div class="card-sm cal-day " data-date="2025-11-11"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-11')">
+                <div class="card-sm cal-day " data-date="2025-11-11" style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;" onclick="jumpToDate('2025-11-11')">
                     <div style="font-weight: 600;">11</div>
                     <div style="text-align: right;">
 
@@ -2318,9 +2205,7 @@
 
                     </div>
                 </div>
-                <div class="card-sm cal-day " data-date="2025-11-12"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-12')">
+                <div class="card-sm cal-day " data-date="2025-11-12" style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;" onclick="jumpToDate('2025-11-12')">
                     <div style="font-weight: 600;">12</div>
                     <div style="text-align: right;">
 
@@ -2328,9 +2213,7 @@
 
                     </div>
                 </div>
-                <div class="card-sm cal-day " data-date="2025-11-13"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-13')">
+                <div class="card-sm cal-day " data-date="2025-11-13" style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;" onclick="jumpToDate('2025-11-13')">
                     <div style="font-weight: 600;">13</div>
                     <div style="text-align: right;">
 
@@ -2338,9 +2221,7 @@
 
                     </div>
                 </div>
-                <div class="card-sm cal-day " data-date="2025-11-14"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-14')">
+                <div class="card-sm cal-day " data-date="2025-11-14" style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;" onclick="jumpToDate('2025-11-14')">
                     <div style="font-weight: 600;">14</div>
                     <div style="text-align: right;">
 
@@ -2348,9 +2229,7 @@
 
                     </div>
                 </div>
-                <div class="card-sm cal-day weekend" data-date="2025-11-15"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-15')">
+                <div class="card-sm cal-day weekend" data-date="2025-11-15" style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;" onclick="jumpToDate('2025-11-15')">
                     <div style="font-weight: 600;">15</div>
                     <div style="text-align: right;">
 
@@ -2358,9 +2237,7 @@
 
                     </div>
                 </div>
-                <div class="card-sm cal-day weekend" data-date="2025-11-16"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-16')">
+                <div class="card-sm cal-day weekend" data-date="2025-11-16" style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;" onclick="jumpToDate('2025-11-16')">
                     <div style="font-weight: 600;">16</div>
                     <div style="text-align: right;">
 
@@ -2368,9 +2245,7 @@
 
                     </div>
                 </div>
-                <div class="card-sm cal-day " data-date="2025-11-17"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-17')">
+                <div class="card-sm cal-day " data-date="2025-11-17" style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;" onclick="jumpToDate('2025-11-17')">
                     <div style="font-weight: 600;">17</div>
                     <div style="text-align: right;">
 
@@ -2378,9 +2253,7 @@
                         <div style="font-size: 0.75rem; color: #10B981;">+01:04</div>
                     </div>
                 </div>
-                <div class="card-sm cal-day " data-date="2025-11-18"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-18')">
+                <div class="card-sm cal-day " data-date="2025-11-18" style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;" onclick="jumpToDate('2025-11-18')">
                     <div style="font-weight: 600;">18</div>
                     <div style="text-align: right;">
 
@@ -2388,9 +2261,7 @@
                         <div style="font-size: 0.75rem; color: #EF4444;">-00:24</div>
                     </div>
                 </div>
-                <div class="card-sm cal-day tag-krank" data-date="2025-11-19"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-19')">
+                <div class="card-sm cal-day tag-krank" data-date="2025-11-19" style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;" onclick="jumpToDate('2025-11-19')">
                     <div style="font-weight: 600;">19</div>
                     <div style="text-align: right;">
                         <div style="font-size: 0.875rem; margin-bottom: 0.15rem;"><span class="emoji-medium">🤒</span>
@@ -2399,9 +2270,7 @@
 
                     </div>
                 </div>
-                <div class="card-sm cal-day tag-krank" data-date="2025-11-20"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-20')">
+                <div class="card-sm cal-day tag-krank" data-date="2025-11-20" style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;" onclick="jumpToDate('2025-11-20')">
                     <div style="font-weight: 600;">20</div>
                     <div style="text-align: right;">
                         <div style="font-size: 0.875rem; margin-bottom: 0.15rem;"><span class="emoji-medium">🤒</span>
@@ -2410,9 +2279,7 @@
 
                     </div>
                 </div>
-                <div class="card-sm cal-day tag-krank" data-date="2025-11-21"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-21')">
+                <div class="card-sm cal-day tag-krank" data-date="2025-11-21" style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;" onclick="jumpToDate('2025-11-21')">
                     <div style="font-weight: 600;">21</div>
                     <div style="text-align: right;">
                         <div style="font-size: 0.875rem; margin-bottom: 0.15rem;"><span class="emoji-medium">🤒</span>
@@ -2421,9 +2288,7 @@
 
                     </div>
                 </div>
-                <div class="card-sm cal-day weekend" data-date="2025-11-22"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-22')">
+                <div class="card-sm cal-day weekend" data-date="2025-11-22" style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;" onclick="jumpToDate('2025-11-22')">
                     <div style="font-weight: 600;">22</div>
                     <div style="text-align: right;">
 
@@ -2431,9 +2296,7 @@
 
                     </div>
                 </div>
-                <div class="card-sm cal-day weekend" data-date="2025-11-23"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-23')">
+                <div class="card-sm cal-day weekend" data-date="2025-11-23" style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;" onclick="jumpToDate('2025-11-23')">
                     <div style="font-weight: 600;">23</div>
                     <div style="text-align: right;">
 
@@ -2441,9 +2304,7 @@
 
                     </div>
                 </div>
-                <div class="card-sm cal-day tag-urlaub" data-date="2025-11-24"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-24')">
+                <div class="card-sm cal-day tag-urlaub" data-date="2025-11-24" style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;" onclick="jumpToDate('2025-11-24')">
                     <div style="font-weight: 600;">24</div>
                     <div style="text-align: right;">
                         <div style="font-size: 0.875rem; margin-bottom: 0.15rem;"><span class="emoji-medium">🏖️</span>
@@ -2452,9 +2313,7 @@
 
                     </div>
                 </div>
-                <div class="card-sm cal-day tag-urlaub" data-date="2025-11-25"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-25')">
+                <div class="card-sm cal-day tag-urlaub" data-date="2025-11-25" style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;" onclick="jumpToDate('2025-11-25')">
                     <div style="font-weight: 600;">25</div>
                     <div style="text-align: right;">
                         <div style="font-size: 0.875rem; margin-bottom: 0.15rem;"><span class="emoji-medium">🏖️</span>
@@ -2463,9 +2322,7 @@
 
                     </div>
                 </div>
-                <div class="card-sm cal-day tag-urlaub" data-date="2025-11-26"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-26')">
+                <div class="card-sm cal-day tag-urlaub" data-date="2025-11-26" style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;" onclick="jumpToDate('2025-11-26')">
                     <div style="font-weight: 600;">26</div>
                     <div style="text-align: right;">
                         <div style="font-size: 0.875rem; margin-bottom: 0.15rem;"><span class="emoji-medium">🏖️</span>
@@ -2474,9 +2331,7 @@
 
                     </div>
                 </div>
-                <div class="card-sm cal-day tag-urlaub" data-date="2025-11-27"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-27')">
+                <div class="card-sm cal-day tag-urlaub" data-date="2025-11-27" style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;" onclick="jumpToDate('2025-11-27')">
                     <div style="font-weight: 600;">27</div>
                     <div style="text-align: right;">
                         <div style="font-size: 0.875rem; margin-bottom: 0.15rem;"><span class="emoji-medium">🏖️</span>
@@ -2485,9 +2340,7 @@
 
                     </div>
                 </div>
-                <div class="card-sm cal-day tag-urlaub" data-date="2025-11-28"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-28')">
+                <div class="card-sm cal-day tag-urlaub" data-date="2025-11-28" style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;" onclick="jumpToDate('2025-11-28')">
                     <div style="font-weight: 600;">28</div>
                     <div style="text-align: right;">
                         <div style="font-size: 0.875rem; margin-bottom: 0.15rem;"><span class="emoji-medium">🏖️</span>
@@ -2496,9 +2349,7 @@
 
                     </div>
                 </div>
-                <div class="card-sm cal-day weekend" data-date="2025-11-29"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-29')">
+                <div class="card-sm cal-day weekend" data-date="2025-11-29" style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;" onclick="jumpToDate('2025-11-29')">
                     <div style="font-weight: 600;">29</div>
                     <div style="text-align: right;">
 
@@ -2506,9 +2357,7 @@
 
                     </div>
                 </div>
-                <div class="card-sm cal-day weekend" data-date="2025-11-30"
-                    style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;"
-                    onclick="jumpToDate('2025-11-30')">
+                <div class="card-sm cal-day weekend" data-date="2025-11-30" style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;" onclick="jumpToDate('2025-11-30')">
                     <div style="font-weight: 600;">30</div>
                     <div style="text-align: right;">
 
@@ -2524,8 +2373,7 @@
                 <h2>Jahresansicht</h2>
                 <div class="nav-controls" style="display: flex; gap: 0.5rem; align-items: center;">
                     <button class="btn btn-primary" onclick="jahrVor()">←</button>
-                    <span id="j-name"
-                        style="padding: 0.5rem 1rem; font-weight: 600; min-width: 100px; text-align: center; display: inline-block;">2025</span>
+                    <span id="j-name" style="padding: 0.5rem 1rem; font-weight: 600; min-width: 100px; text-align: center; display: inline-block;">2025</span>
                     <button class="btn btn-primary" onclick="jahrWeiter()">→</button>
                 </div>
             </div>
@@ -2552,15 +2400,12 @@
                     </div>
                 </div>
             </div>
-            <div
-                style="display: flex; justify-content: space-between; margin-top: 0.75rem; padding: 0.75rem; background: rgba(99, 102, 241, 0.1); border-radius: 0.5rem;">
+            <div style="display: flex; justify-content: space-between; margin-top: 0.75rem; padding: 0.75rem; background: rgba(99, 102, 241, 0.1); border-radius: 0.5rem;">
                 <div style="text-align: center; flex: 1;">
-                    <div style="font-size: 0.75rem; color: #6B7280;" id="j-urlaub-jahr-label">Urlaubstage im Jahr 2025
-                    </div>
+                    <div style="font-size: 0.75rem; color: #6B7280;" id="j-urlaub-jahr-label">Urlaubstage im Jahr 2025</div>
                     <div style="font-size: 1.25rem; font-weight: 700; color: #6366F1;" id="j-urlaub-gesamt">27</div>
                 </div>
-                <div
-                    style="text-align: center; flex: 1; border-left: 1px solid #D1D5DB; border-right: 1px solid #D1D5DB;">
+                <div style="text-align: center; flex: 1; border-left: 1px solid #D1D5DB; border-right: 1px solid #D1D5DB;">
                     <div style="font-size: 0.75rem; color: #6B7280;">bezogene Tage</div>
                     <div style="font-size: 1.25rem; font-weight: 700; color: #EF4444;" id="j-urlaub-verbraucht">5</div>
                 </div>
@@ -2569,9 +2414,7 @@
                     <div style="font-size: 1.25rem; font-weight: 700; color: #10B981;" id="j-urlaub-rest">22</div>
                 </div>
             </div>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;"
-                id="j-list">
-                <div class="card-sm month-card" onclick="jumpToMonth('2025-01')">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;" id="j-list"><div class="card-sm month-card" onclick="jumpToMonth('2025-01')">
                     <div style="font-weight: 600; margin-bottom: 0.75rem; font-size: 1.125rem;">Jan 2025</div>
                     <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
                         <span style="color: #6B7280; font-size: 0.875rem;">Arbeitszeit:</span>
@@ -2581,14 +2424,12 @@
                         <span style="color: #6B7280; font-size: 0.875rem;">Sollzeit:</span>
                         <span style="font-weight: bold;">193:12</span>
                     </div>
-                    <div
-                        style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #E5E7EB;">
+                    <div style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #E5E7EB;">
                         <span style="color: #6B7280; font-size: 0.875rem;">Fehlzeit:</span>
                         <span style="font-weight: bold; color: #EF4444;">193:12</span>
                     </div>
                     <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #6B7280;">1 / 23 Tage</div>
-                </div>
-                <div class="card-sm month-card" onclick="jumpToMonth('2025-02')">
+                </div><div class="card-sm month-card" onclick="jumpToMonth('2025-02')">
                     <div style="font-weight: 600; margin-bottom: 0.75rem; font-size: 1.125rem;">Feb 2025</div>
                     <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
                         <span style="color: #6B7280; font-size: 0.875rem;">Arbeitszeit:</span>
@@ -2598,14 +2439,12 @@
                         <span style="color: #6B7280; font-size: 0.875rem;">Sollzeit:</span>
                         <span style="font-weight: bold;">168:00</span>
                     </div>
-                    <div
-                        style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #E5E7EB;">
+                    <div style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #E5E7EB;">
                         <span style="color: #6B7280; font-size: 0.875rem;">Fehlzeit:</span>
                         <span style="font-weight: bold; color: #EF4444;">168:00</span>
                     </div>
                     <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #6B7280;">0 / 20 Tage</div>
-                </div>
-                <div class="card-sm month-card" onclick="jumpToMonth('2025-03')">
+                </div><div class="card-sm month-card" onclick="jumpToMonth('2025-03')">
                     <div style="font-weight: 600; margin-bottom: 0.75rem; font-size: 1.125rem;">Mär 2025</div>
                     <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
                         <span style="color: #6B7280; font-size: 0.875rem;">Arbeitszeit:</span>
@@ -2615,14 +2454,12 @@
                         <span style="color: #6B7280; font-size: 0.875rem;">Sollzeit:</span>
                         <span style="font-weight: bold;">176:24</span>
                     </div>
-                    <div
-                        style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #E5E7EB;">
+                    <div style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #E5E7EB;">
                         <span style="color: #6B7280; font-size: 0.875rem;">Fehlzeit:</span>
                         <span style="font-weight: bold; color: #EF4444;">176:24</span>
                     </div>
                     <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #6B7280;">0 / 21 Tage</div>
-                </div>
-                <div class="card-sm month-card" onclick="jumpToMonth('2025-04')">
+                </div><div class="card-sm month-card" onclick="jumpToMonth('2025-04')">
                     <div style="font-weight: 600; margin-bottom: 0.75rem; font-size: 1.125rem;">Apr 2025</div>
                     <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
                         <span style="color: #6B7280; font-size: 0.875rem;">Arbeitszeit:</span>
@@ -2632,14 +2469,12 @@
                         <span style="color: #6B7280; font-size: 0.875rem;">Sollzeit:</span>
                         <span style="font-weight: bold;">184:48</span>
                     </div>
-                    <div
-                        style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #E5E7EB;">
+                    <div style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #E5E7EB;">
                         <span style="color: #6B7280; font-size: 0.875rem;">Fehlzeit:</span>
                         <span style="font-weight: bold; color: #EF4444;">184:48</span>
                     </div>
                     <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #6B7280;">0 / 22 Tage</div>
-                </div>
-                <div class="card-sm month-card" onclick="jumpToMonth('2025-05')">
+                </div><div class="card-sm month-card" onclick="jumpToMonth('2025-05')">
                     <div style="font-weight: 600; margin-bottom: 0.75rem; font-size: 1.125rem;">Mai 2025</div>
                     <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
                         <span style="color: #6B7280; font-size: 0.875rem;">Arbeitszeit:</span>
@@ -2649,14 +2484,12 @@
                         <span style="color: #6B7280; font-size: 0.875rem;">Sollzeit:</span>
                         <span style="font-weight: bold;">184:48</span>
                     </div>
-                    <div
-                        style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #E5E7EB;">
+                    <div style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #E5E7EB;">
                         <span style="color: #6B7280; font-size: 0.875rem;">Fehlzeit:</span>
                         <span style="font-weight: bold; color: #EF4444;">184:48</span>
                     </div>
                     <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #6B7280;">0 / 22 Tage</div>
-                </div>
-                <div class="card-sm month-card" onclick="jumpToMonth('2025-06')">
+                </div><div class="card-sm month-card" onclick="jumpToMonth('2025-06')">
                     <div style="font-weight: 600; margin-bottom: 0.75rem; font-size: 1.125rem;">Jun 2025</div>
                     <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
                         <span style="color: #6B7280; font-size: 0.875rem;">Arbeitszeit:</span>
@@ -2666,14 +2499,12 @@
                         <span style="color: #6B7280; font-size: 0.875rem;">Sollzeit:</span>
                         <span style="font-weight: bold;">176:24</span>
                     </div>
-                    <div
-                        style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #E5E7EB;">
+                    <div style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #E5E7EB;">
                         <span style="color: #6B7280; font-size: 0.875rem;">Fehlzeit:</span>
                         <span style="font-weight: bold; color: #EF4444;">176:24</span>
                     </div>
                     <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #6B7280;">1 / 21 Tage</div>
-                </div>
-                <div class="card-sm month-card" onclick="jumpToMonth('2025-07')">
+                </div><div class="card-sm month-card" onclick="jumpToMonth('2025-07')">
                     <div style="font-weight: 600; margin-bottom: 0.75rem; font-size: 1.125rem;">Jul 2025</div>
                     <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
                         <span style="color: #6B7280; font-size: 0.875rem;">Arbeitszeit:</span>
@@ -2683,14 +2514,12 @@
                         <span style="color: #6B7280; font-size: 0.875rem;">Sollzeit:</span>
                         <span style="font-weight: bold;">193:12</span>
                     </div>
-                    <div
-                        style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #E5E7EB;">
+                    <div style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #E5E7EB;">
                         <span style="color: #6B7280; font-size: 0.875rem;">Fehlzeit:</span>
                         <span style="font-weight: bold; color: #EF4444;">193:12</span>
                     </div>
                     <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #6B7280;">0 / 23 Tage</div>
-                </div>
-                <div class="card-sm month-card" onclick="jumpToMonth('2025-08')">
+                </div><div class="card-sm month-card" onclick="jumpToMonth('2025-08')">
                     <div style="font-weight: 600; margin-bottom: 0.75rem; font-size: 1.125rem;">Aug 2025</div>
                     <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
                         <span style="color: #6B7280; font-size: 0.875rem;">Arbeitszeit:</span>
@@ -2700,14 +2529,12 @@
                         <span style="color: #6B7280; font-size: 0.875rem;">Sollzeit:</span>
                         <span style="font-weight: bold;">176:24</span>
                     </div>
-                    <div
-                        style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #E5E7EB;">
+                    <div style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #E5E7EB;">
                         <span style="color: #6B7280; font-size: 0.875rem;">Fehlzeit:</span>
                         <span style="font-weight: bold; color: #EF4444;">176:24</span>
                     </div>
                     <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #6B7280;">1 / 21 Tage</div>
-                </div>
-                <div class="card-sm month-card" onclick="jumpToMonth('2025-09')">
+                </div><div class="card-sm month-card" onclick="jumpToMonth('2025-09')">
                     <div style="font-weight: 600; margin-bottom: 0.75rem; font-size: 1.125rem;">Sep 2025</div>
                     <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
                         <span style="color: #6B7280; font-size: 0.875rem;">Arbeitszeit:</span>
@@ -2717,14 +2544,12 @@
                         <span style="color: #6B7280; font-size: 0.875rem;">Sollzeit:</span>
                         <span style="font-weight: bold;">184:48</span>
                     </div>
-                    <div
-                        style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #E5E7EB;">
+                    <div style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #E5E7EB;">
                         <span style="color: #6B7280; font-size: 0.875rem;">Fehlzeit:</span>
                         <span style="font-weight: bold; color: #EF4444;">184:48</span>
                     </div>
                     <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #6B7280;">0 / 22 Tage</div>
-                </div>
-                <div class="card-sm month-card" onclick="jumpToMonth('2025-10')">
+                </div><div class="card-sm month-card" onclick="jumpToMonth('2025-10')">
                     <div style="font-weight: 600; margin-bottom: 0.75rem; font-size: 1.125rem;">Okt 2025</div>
                     <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
                         <span style="color: #6B7280; font-size: 0.875rem;">Arbeitszeit:</span>
@@ -2734,14 +2559,12 @@
                         <span style="color: #6B7280; font-size: 0.875rem;">Sollzeit:</span>
                         <span style="font-weight: bold;">193:12</span>
                     </div>
-                    <div
-                        style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #E5E7EB;">
+                    <div style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #E5E7EB;">
                         <span style="color: #6B7280; font-size: 0.875rem;">Fehlzeit:</span>
                         <span style="font-weight: bold; color: #EF4444;">193:12</span>
                     </div>
                     <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #6B7280;">0 / 23 Tage</div>
-                </div>
-                <div class="card-sm month-card" onclick="jumpToMonth('2025-11')">
+                </div><div class="card-sm month-card" onclick="jumpToMonth('2025-11')">
                     <div style="font-weight: 600; margin-bottom: 0.75rem; font-size: 1.125rem;">Nov 2025</div>
                     <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
                         <span style="color: #6B7280; font-size: 0.875rem;">Arbeitszeit:</span>
@@ -2751,14 +2574,12 @@
                         <span style="color: #6B7280; font-size: 0.875rem;">Sollzeit:</span>
                         <span style="font-weight: bold;">168:00</span>
                     </div>
-                    <div
-                        style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #E5E7EB;">
+                    <div style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #E5E7EB;">
                         <span style="color: #6B7280; font-size: 0.875rem;">Fehlzeit:</span>
                         <span style="font-weight: bold; color: #EF4444;">87:04</span>
                     </div>
                     <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #6B7280;">8 / 20 Tage</div>
-                </div>
-                <div class="card-sm month-card" onclick="jumpToMonth('2025-12')">
+                </div><div class="card-sm month-card" onclick="jumpToMonth('2025-12')">
                     <div style="font-weight: 600; margin-bottom: 0.75rem; font-size: 1.125rem;">Dez 2025</div>
                     <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
                         <span style="color: #6B7280; font-size: 0.875rem;">Arbeitszeit:</span>
@@ -2768,14 +2589,12 @@
                         <span style="color: #6B7280; font-size: 0.875rem;">Sollzeit:</span>
                         <span style="font-weight: bold;">193:12</span>
                     </div>
-                    <div
-                        style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #E5E7EB;">
+                    <div style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #E5E7EB;">
                         <span style="color: #6B7280; font-size: 0.875rem;">Fehlzeit:</span>
                         <span style="font-weight: bold; color: #EF4444;">193:12</span>
                     </div>
                     <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #6B7280;">3 / 23 Tage</div>
-                </div>
-            </div>
+                </div></div>
         </div>
 
         <div id="v-einstellungen" class="card">
@@ -2788,10 +2607,7 @@
                     <div class="flex-col">
                         <div>
                             <label>Sollzeit pro Woche (Stunden)</label>
-                            <input type="number" id="soll-woche" min="0" max="60" step="0.5" value="42"
-                                onchange="updateSollFromWoche()"
-                                style="width: 100%; padding: 0.75rem 1rem; font-size: 1rem;"
-                                data-ddg-inputtype="unknown">
+                            <input type="number" id="soll-woche" min="0" max="60" step="0.5" value="42" onchange="updateSollFromWoche()" style="width: 100%; padding: 0.75rem 1rem; font-size: 1rem;" data-ddg-inputtype="unknown">
                         </div>
                         <div>
                             <label>Standard-Sollzeit pro Tag (berechnet aus Woche ÷ 5)</label>
@@ -2802,50 +2618,37 @@
                         </div>
                         <div>
                             <label>Pausendauer (ab 6h Arbeitszeit)</label>
-                            <input type="time" id="pause" value="00:30" onchange="updateSettings()"
-                                style="width: 100%;">
+                            <input type="time" id="pause" value="00:30" onchange="updateSettings()" style="width: 100%;">
                         </div>
                         <div>
                             <label>Überzeit-Vorgabe (z.B. 09:00)</label>
-                            <input type="time" id="ueberzeit-vorgabe" value="09:00" onchange="updateSettings()"
-                                style="width: 100%;">
+                            <input type="time" id="ueberzeit-vorgabe" value="09:00" onchange="updateSettings()" style="width: 100%;">
                         </div>
                         <div>
                             <label>Resturlaub aus Vorjahr</label>
-                            <input type="number" id="settings-resturlaub" min="0" max="50" value="0"
-                                onchange="updateSettings()" style="width: 100%; padding: 0.75rem 1rem; font-size: 1rem;"
-                                data-ddg-inputtype="unknown">
+                            <input type="number" id="settings-resturlaub" min="0" max="50" value="0" onchange="updateSettings()" style="width: 100%; padding: 0.75rem 1rem; font-size: 1rem;" data-ddg-inputtype="unknown">
                         </div>
                         <div>
                             <label>Urlaubstage pro Jahr</label>
-                            <input type="number" id="settings-urlaub" min="0" max="50" value="25"
-                                onchange="updateSettings()" style="width: 100%; padding: 0.75rem 1rem; font-size: 1rem;"
-                                data-ddg-inputtype="unknown">
-                            <div
-                                style="display: flex; justify-content: space-between; margin-top: 0.75rem; padding: 0.75rem; background: rgba(99, 102, 241, 0.1); border-radius: 0.5rem;">
+                            <input type="number" id="settings-urlaub" min="0" max="50" value="25" onchange="updateSettings()" style="width: 100%; padding: 0.75rem 1rem; font-size: 1rem;" data-ddg-inputtype="unknown">
+                            <div style="display: flex; justify-content: space-between; margin-top: 0.75rem; padding: 0.75rem; background: rgba(99, 102, 241, 0.1); border-radius: 0.5rem;">
                                 <div style="text-align: center; flex: 1;">
-                                    <div style="font-size: 0.75rem; color: #6B7280;" id="urlaub-jahr-label">Urlaubstage
-                                        im Jahr 2025</div>
-                                    <div style="font-size: 1.25rem; font-weight: 700; color: #6366F1;"
-                                        id="urlaub-gesamt">27</div>
+                                    <div style="font-size: 0.75rem; color: #6B7280;" id="urlaub-jahr-label">Urlaubstage im Jahr 2025</div>
+                                    <div style="font-size: 1.25rem; font-weight: 700; color: #6366F1;" id="urlaub-gesamt">27</div>
                                 </div>
-                                <div
-                                    style="text-align: center; flex: 1; border-left: 1px solid #D1D5DB; border-right: 1px solid #D1D5DB;">
+                                <div style="text-align: center; flex: 1; border-left: 1px solid #D1D5DB; border-right: 1px solid #D1D5DB;">
                                     <div style="font-size: 0.75rem; color: #6B7280;">bezogene Tage</div>
-                                    <div style="font-size: 1.25rem; font-weight: 700; color: #EF4444;"
-                                        id="urlaub-verbraucht">5</div>
+                                    <div style="font-size: 1.25rem; font-weight: 700; color: #EF4444;" id="urlaub-verbraucht">5</div>
                                 </div>
                                 <div style="text-align: center; flex: 1;">
                                     <div style="font-size: 0.75rem; color: #6B7280;">verfügbare Tage</div>
-                                    <div style="font-size: 1.25rem; font-weight: 700; color: #10B981;" id="urlaub-rest">
-                                        22</div>
+                                    <div style="font-size: 1.25rem; font-weight: 700; color: #10B981;" id="urlaub-rest">22</div>
                                 </div>
                             </div>
                             <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
                                 <button class="btn btn-primary" onclick="showMassenUrlaubDialog()" style="flex: 1;">📅
                                     Urlaub über Zeitraum eintragen</button>
-                                <button class="btn btn-danger" onclick="toggleUrlaubLoeschModus()" style="flex: 1;"
-                                    id="urlaub-loeschen-btn">🗑️ Mehrere Urlaubstage löschen</button>
+                                <button class="btn btn-danger" onclick="toggleUrlaubLoeschModus()" style="flex: 1;" id="urlaub-loeschen-btn">🗑️ Mehrere Urlaubstage löschen</button>
                             </div>
                         </div>
                     </div>
@@ -2855,77 +2658,57 @@
                     <h3 style="margin-bottom: 0.4rem; font-size: 1rem;">⏰ Überzeit-Verwaltung</h3>
 
                     <!-- Eingabefelder mit absoluter Positionierung - PASSEN SIE DIE PX-WERTE AN -->
-                    <div
-                        style="background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%); border-radius: 0.4rem; padding: 0.4rem 0.6rem; border: 1px solid #FBBF24; margin-bottom: 0.5rem; position: relative; height: 45px;">
+                    <div style="background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%); border-radius: 0.4rem; padding: 0.4rem 0.6rem; border: 1px solid #FBBF24; margin-bottom: 0.5rem; position: relative; height: 45px;">
                         <!-- STAND per : Horizontal=130px, Vertikal=zentriert -->
-                        <div
-                            style="position: absolute; left: 125px; top: 50%; transform: translateY(-50%); display: flex; align-items: center; gap: 0.3rem;">
-                            <label
-                                style="font-size: 0.7rem; color: #92400E; font-weight: 700; white-space: nowrap; line-height: 26px;">per
+                        <div style="position: absolute; left: 125px; top: 50%; transform: translateY(-50%); display: flex; align-items: center; gap: 0.3rem;">
+                            <label style="font-size: 0.7rem; color: #92400E; font-weight: 700; white-space: nowrap; line-height: 26px;">per
                                 STAND:</label>
-                            <input type="date" id="settings-ueberzeit-datum" value="" onchange="updateSettings()"
-                                style="height: 26px; padding: 0 0.3rem; font-size: 0.85rem; font-weight: 700; border: 1px solid #F59E0B; border-radius: 0.25rem; background: white; width: 110px; text-align: center;">
+                            <input type="date" id="settings-ueberzeit-datum" value="" onchange="updateSettings()" style="height: 26px; padding: 0 0.3rem; font-size: 0.85rem; font-weight: 700; border: 1px solid #F59E0B; border-radius: 0.25rem; background: white; width: 110px; text-align: center;">
                         </div>
                         <!-- ÜBERZEIT: Horizontal=500px, Vertikal=zentriert -->
-                        <div
-                            style="position: absolute; left: 500px; top: 50%; transform: translateY(-50%); display: flex; align-items: center; gap: 0.3rem;">
-                            <label
-                                style="font-size: 0.7rem; color: #92400E; font-weight: 700; text-transform: uppercase; white-space: nowrap; line-height: 26px;">ÜBERZEIT:</label>
-                            <input type="text" id="settings-ueberzeit-start" placeholder="+131:23"
-                                onkeydown="handleUeberzeitKeydown(event)" onblur="updateSettings()"
-                                style="height: 26px; padding: 0 0.4rem; font-size: 0.85rem; font-weight: 700; border: 1px solid #F59E0B; border-radius: 0.25rem; background: white; width: 90px; text-align: center; font-family: monospace;"
-                                data-ddg-inputtype="unknown">
+                        <div style="position: absolute; left: 500px; top: 50%; transform: translateY(-50%); display: flex; align-items: center; gap: 0.3rem;">
+                            <label style="font-size: 0.7rem; color: #92400E; font-weight: 700; text-transform: uppercase; white-space: nowrap; line-height: 26px;">ÜBERZEIT:</label>
+                            <input type="text" id="settings-ueberzeit-start" placeholder="+131:23" onkeydown="handleUeberzeitKeydown(event)" onblur="updateSettings()" style="height: 26px; padding: 0 0.4rem; font-size: 0.85rem; font-weight: 700; border: 1px solid #F59E0B; border-radius: 0.25rem; background: white; width: 90px; text-align: center; font-family: monospace;" data-ddg-inputtype="unknown">
                         </div>
                         <!-- Hilfetext rechts unten -->
-                        <div
-                            style="position: absolute; right: 25px; bottom: 15px; font-size: 0.65rem; color: #92400E; opacity: 1;">
+                        <div style="position: absolute; right: 25px; bottom: 15px; font-size: 0.65rem; color: #92400E; opacity: 1;">
                             ( Eingabe: z.B. 12:45 ⏎ oder wenn minus -15:25 ⏎ )
                         </div>
                     </div>
 
                     <!-- Übersicht-Box -->
-                    <div id="ueberzeit-stats"
-                        style="padding: 0.5rem; background: rgba(99, 102, 241, 0.08); border-radius: 0.5rem; border: 1px solid rgba(99, 102, 241, 0.2);">
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                    <div id="ueberzeit-stats" style="padding: 0.5rem; background: rgba(99, 102, 241, 0.08); border-radius: 0.5rem; border: 1px solid rgba(99, 102, 241, 0.2);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
                             <!-- Stand - Positioniert an erster roter Linie -->
                             <div style="text-align: center; min-width: 100px;">
                                 <div style="font-size: 0.65rem; margin-bottom: 0.2rem; font-weight: 600; opacity: 0.7;">
                                     Stand <span id="stats-datum-display">25.03.2025</span></div>
-                                <div style="font-weight: 700; font-size: 1.25rem; margin-bottom: 0.1rem;"
-                                    id="ueberzeit-start-display">+00:35</div>
-                                <div style="font-size: 0.65rem; opacity: 0.6; font-family: monospace;"
-                                    id="ueberzeit-start-industrial">+0.58h</div>
+                                <div style="font-weight: 700; font-size: 1.25rem; margin-bottom: 0.1rem;" id="ueberzeit-start-display">+00:35</div>
+                                <div style="font-size: 0.65rem; opacity: 0.6; font-family: monospace;" id="ueberzeit-start-industrial">+0.58h</div>
                             </div>
                             <div style="font-size: 1.2rem; opacity: 0.4; font-weight: 300;">→</div>
                             <!-- Erarbeitet - Positioniert an zweiter roter Linie -->
                             <div style="text-align: center; min-width: 100px;">
                                 <div style="font-size: 0.65rem; margin-bottom: 0.2rem; font-weight: 600; opacity: 0.7;">
                                     Erarbeitet</div>
-                                <div style="font-weight: 700; font-size: 1.25rem; margin-bottom: 0.1rem; color: #10B981;"
-                                    id="ueberzeit-erarbeitet">-11:28</div>
-                                <div style="font-size: 0.65rem; opacity: 0.6; font-family: monospace;"
-                                    id="ueberzeit-erarbeitet-industrial">-11.47h</div>
+                                <div style="font-weight: 700; font-size: 1.25rem; margin-bottom: 0.1rem; color: #10B981;" id="ueberzeit-erarbeitet">-11:28</div>
+                                <div style="font-size: 0.65rem; opacity: 0.6; font-family: monospace;" id="ueberzeit-erarbeitet-industrial">-11.47h</div>
                             </div>
                             <div style="font-size: 1.2rem; opacity: 0.4; font-weight: 300;">−</div>
                             <!-- Bezogen - Positioniert an dritter roter Linie -->
                             <div style="text-align: center; min-width: 100px;">
                                 <div style="font-size: 0.65rem; margin-bottom: 0.2rem; font-weight: 600; opacity: 0.7;">
                                     Bezogen</div>
-                                <div style="font-weight: 700; font-size: 1.25rem; margin-bottom: 0.1rem; color: #EF4444;"
-                                    id="ueberzeit-bezogen">00:00</div>
-                                <div style="font-size: 0.65rem; opacity: 0.6; font-family: monospace;"
-                                    id="ueberzeit-bezogen-industrial">0.00h</div>
+                                <div style="font-weight: 700; font-size: 1.25rem; margin-bottom: 0.1rem; color: #EF4444;" id="ueberzeit-bezogen">00:00</div>
+                                <div style="font-size: 0.65rem; opacity: 0.6; font-family: monospace;" id="ueberzeit-bezogen-industrial">0.00h</div>
                             </div>
                             <div style="font-size: 1.2rem; opacity: 0.4; font-weight: 300;">=</div>
                             <!-- Aktuell - Positioniert an vierter roter Linie -->
                             <div style="text-align: center; min-width: 100px;">
                                 <div style="font-size: 0.65rem; margin-bottom: 0.2rem; font-weight: 600; opacity: 0.7;">
                                     Aktuell</div>
-                                <div style="font-weight: 700; font-size: 1.25rem; margin-bottom: 0.1rem; color: rgb(239, 68, 68);"
-                                    id="ueberzeit-aktuell">-10:53</div>
-                                <div style="font-size: 0.65rem; opacity: 0.6; font-family: monospace;"
-                                    id="ueberzeit-aktuell-industrial">-10.88h</div>
+                                <div style="font-weight: 700; font-size: 1.25rem; margin-bottom: 0.1rem; color: rgb(239, 68, 68);" id="ueberzeit-aktuell">-10:53</div>
+                                <div style="font-size: 0.65rem; opacity: 0.6; font-family: monospace;" id="ueberzeit-aktuell-industrial">-10.88h</div>
                             </div>
                         </div>
                     </div>
@@ -2936,16 +2719,11 @@
                     <div class="flex-col">
                         <div>
                             <label>Name</label>
-                            <input type="text" id="settings-name" placeholder="Ihr Name" onchange="updateSettings()"
-                                style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #D1D5DB; border-radius: 0.5rem; font-size: 0.875rem;"
-                                data-ddg-inputtype="identities.fullName" data-ddg-autofill="true">
+                            <input type="text" id="settings-name" placeholder="Ihr Name" onchange="updateSettings()" style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #D1D5DB; border-radius: 0.5rem; font-size: 0.875rem;" data-ddg-inputtype="identities.fullName" data-ddg-autofill="true">
                         </div>
                         <div>
                             <label>Personalnummer</label>
-                            <input type="text" id="settings-personalnummer" placeholder="12345"
-                                onchange="updateSettings()"
-                                style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #D1D5DB; border-radius: 0.5rem; font-size: 0.875rem;"
-                                data-ddg-inputtype="unknown">
+                            <input type="text" id="settings-personalnummer" placeholder="12345" onchange="updateSettings()" style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #D1D5DB; border-radius: 0.5rem; font-size: 0.875rem;" data-ddg-inputtype="unknown">
                         </div>
                     </div>
                 </div>
@@ -2957,12 +2735,10 @@
                             Für manuellen Abgleich zwischen Geräten (z.B. PC ↔ iPad) via OneDrive.
                         </div>
                         <div>
-                            <button class="btn btn-primary" style="width: 100%; margin-bottom: 0.5rem;"
-                                onclick="exportBackup()">💾 Backup erstellen (Download)</button>
+                            <button class="btn btn-primary" style="width: 100%; margin-bottom: 0.5rem;" onclick="exportBackup()">💾 Backup erstellen (Download)</button>
                             <button class="btn btn-sec" style="width: 100%;" onclick="importBackup()">📂 Backup laden
                                 (Restore)</button>
-                            <input type="file" id="backup-upload-file" accept=".json" style="display: none;"
-                                onchange="handleBackupFileSelect(event)">
+                            <input type="file" id="backup-upload-file" accept=".json" style="display: none;" onchange="handleBackupFileSelect(event)">
                         </div>
                     </div>
                 </div>
@@ -2972,9 +2748,7 @@
                     <div class="flex-col">
                         <div>
                             <label>Kanton</label>
-                            <select id="settings-kanton" onchange="updateSettings()"
-                                style="width: 100%; padding: 0.5rem; border: 1px solid #D1D5DB; border-radius: 0.5rem; font-size: 0.875rem;"
-                                data-ddg-inputtype="unknown">
+                            <select id="settings-kanton" onchange="updateSettings()" style="width: 100%; padding: 0.5rem; border: 1px solid #D1D5DB; border-radius: 0.5rem; font-size: 0.875rem;" data-ddg-inputtype="unknown">
                                 <option value="">-- Kanton wählen --</option>
                                 <option value="ZH">Zürich</option>
                                 <option value="BE">Bern</option>
@@ -3007,36 +2781,13 @@
                         <div>
                             <button class="btn btn-primary" style="width: 100%;" onclick="importFeiertage()">📂
                                 Feiertags-JSON importieren</button>
-                            <input type="file" id="feiertag-file" accept=".json" style="display: none;"
-                                onchange="handleFeiertagImport(event)">
+                            <input type="file" id="feiertag-file" accept=".json" style="display: none;" onchange="handleFeiertagImport(event)">
                         </div>
-
-                        <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #E5E7EB;">
-                            <h4 style="margin-bottom: 0.5rem; font-size: 1rem;">🌍 Feiertage Online-Import</h4>
-                            <div style="font-size: 0.8rem; color: #6B7280; margin-bottom: 0.5rem;">
-                                Automatisch von date.nager.at laden
-                            </div>
-                            <div style="display: flex; gap: 0.5rem; align-items: flex-end;">
-                                <div style="flex: 1;">
-                                    <label for="import-year"
-                                        style="display: block; margin-bottom: 0.25rem; font-weight:600; font-size: 0.8rem;">Jahr</label>
-                                    <input type="number" id="import-year" value="2026"
-                                        style="width: 100%; padding: 0.5rem; border: 1px solid #D1D5DB; border-radius: 0.5rem; font-size: 0.9rem;"
-                                        data-ddg-inputtype="unknown">
-                                </div>
-                                <div style="flex: 2;">
-                                    <button class="btn btn-primary" style="width: 100%;"
-                                        onclick="importFeiertageOnline()">🌍 Online laden</button>
-                                </div>
-                            </div>
-                        </div>
-
                         <div>
                             <button class="btn btn-success" style="width: 100%;" onclick="showAddFeiertagDialog()">➕
                                 Feiertag manuell hinzufügen</button>
                         </div>
-                        <div id="feiertag-info" style="font-size: 0.875rem; color: #6B7280;">14 Feiertage geladen (10
-                            bezahlt, 4 unbezahlt)</div>
+                        <div id="feiertag-info" style="font-size: 0.875rem; color: #6B7280;">14 Feiertage geladen (10 bezahlt, 4 unbezahlt)</div>
                     </div>
                 </div>
 
@@ -3047,11 +2798,8 @@
                             Exportiere geladene Feiertage als .ics-Datei für Outlook, Google Calendar, etc.
                         </div>
                         <div>
-                            <label for="ics-year-range"
-                                style="display: block; margin-bottom: 0.25rem; font-weight:600; font-size: 0.875rem;">Jahresbereich</label>
-                            <input type="text" id="ics-year-range" placeholder="z.B. 2025-2026"
-                                style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #D1D5DB; border-radius: 0.5rem; font-size: 0.875rem; margin-bottom: 0.75rem;"
-                                data-ddg-inputtype="unknown">
+                            <label for="ics-year-range" style="display: block; margin-bottom: 0.25rem; font-weight:600; font-size: 0.875rem;">Jahresbereich</label>
+                            <input type="text" id="ics-year-range" placeholder="z.B. 2025-2026" style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #D1D5DB; border-radius: 0.5rem; font-size: 0.875rem; margin-bottom: 0.75rem;" data-ddg-inputtype="unknown">
                         </div>
                         <div>
                             <button class="btn btn-primary" style="width: 100%;" onclick="exportFeiertageICS()">📅 .ics
@@ -3063,201 +2811,151 @@
             </div>
 
             <div class="card-sm" style="margin-top: 1.5rem;">
-                <h3 style="margin-bottom: 1rem; font-size: 1.125rem;">Geladene Feiertage <span id="feiertag-jahr">(2025
-                        - 2026)</span>
+                <h3 style="margin-bottom: 1rem; font-size: 1.125rem;">Geladene Feiertage <span id="feiertag-jahr">(2025 - 2026)</span>
                 </h3>
-                <div id="feiertag-list" style="max-height: 400px; overflow-y: auto;">
-                    <div style="margin-bottom: 1rem;">
-                        <div style="font-weight: 600; margin-bottom: 0.5rem; color: #6B7280; font-size: 0.875rem;">Jahr
-                            2026</div>
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-radius: 0.5rem; margin-bottom: 0.5rem; background: rgba(0,0,0,0.02);">
-                            <div>
-                                <span style="font-weight: 600;">01.01.2026</span>
-                                <span style="margin-left: 0.5rem;">Neujahr</span>
-                                <span class="feiertag-badge badge-bezahlt">Bezahlt</span>
-                            </div>
-                            <div style="display: flex; gap: 0.5rem;">
-                                <button class="btn btn-sec" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;"
-                                    onclick="editFeiertag('2026-01-01')">✏️</button>
-                                <button class="del-btn" onclick="deleteFeiertag('2026-01-01')">✕</button>
-                            </div>
+                <div id="feiertag-list" style="max-height: 400px; overflow-y: auto;"><div style="margin-bottom: 1rem;">
+                    <div style="font-weight: 600; margin-bottom: 0.5rem; color: #6B7280; font-size: 0.875rem;">Jahr 2026</div><div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-radius: 0.5rem; margin-bottom: 0.5rem; background: rgba(0,0,0,0.02);">
+                        <div>
+                            <span style="font-weight: 600;">01.01.2026</span>
+                            <span style="margin-left: 0.5rem;">Neujahr</span>
+                            <span class="feiertag-badge badge-bezahlt">Bezahlt</span>
                         </div>
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-radius: 0.5rem; margin-bottom: 0.5rem; background: rgba(0,0,0,0.02);">
-                            <div>
-                                <span style="font-weight: 600;">02.01.2026</span>
-                                <span style="margin-left: 0.5rem;">Berchtoldstag</span>
-                                <span class="feiertag-badge badge-unbezahlt">Unbezahlt</span>
-                            </div>
-                            <div style="display: flex; gap: 0.5rem;">
-                                <button class="btn btn-sec" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;"
-                                    onclick="editFeiertag('2026-01-02')">✏️</button>
-                                <button class="del-btn" onclick="deleteFeiertag('2026-01-02')">✕</button>
-                            </div>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="btn btn-sec" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;" onclick="editFeiertag('2026-01-01')">✏️</button>
+                            <button class="del-btn" onclick="deleteFeiertag('2026-01-01')">✕</button>
                         </div>
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-radius: 0.5rem; margin-bottom: 0.5rem; background: rgba(0,0,0,0.02);">
-                            <div>
-                                <span style="font-weight: 600;">04.06.2026</span>
-                                <span style="margin-left: 0.5rem;">Fronleichnam</span>
-                                <span class="feiertag-badge badge-bezahlt">Bezahlt</span>
-                            </div>
-                            <div style="display: flex; gap: 0.5rem;">
-                                <button class="btn btn-sec" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;"
-                                    onclick="editFeiertag('2026-06-04')">✏️</button>
-                                <button class="del-btn" onclick="deleteFeiertag('2026-06-04')">✕</button>
-                            </div>
+                    </div><div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-radius: 0.5rem; margin-bottom: 0.5rem; background: rgba(0,0,0,0.02);">
+                        <div>
+                            <span style="font-weight: 600;">02.01.2026</span>
+                            <span style="margin-left: 0.5rem;">Berchtoldstag</span>
+                            <span class="feiertag-badge badge-unbezahlt">Unbezahlt</span>
                         </div>
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-radius: 0.5rem; margin-bottom: 0.5rem; background: rgba(0,0,0,0.02);">
-                            <div>
-                                <span style="font-weight: 600;">15.08.2026</span>
-                                <span style="margin-left: 0.5rem;">Mariä Himmelfahrt</span>
-                                <span class="feiertag-badge badge-unbezahlt">Unbezahlt</span>
-                            </div>
-                            <div style="display: flex; gap: 0.5rem;">
-                                <button class="btn btn-sec" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;"
-                                    onclick="editFeiertag('2026-08-15')">✏️</button>
-                                <button class="del-btn" onclick="deleteFeiertag('2026-08-15')">✕</button>
-                            </div>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="btn btn-sec" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;" onclick="editFeiertag('2026-01-02')">✏️</button>
+                            <button class="del-btn" onclick="deleteFeiertag('2026-01-02')">✕</button>
                         </div>
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-radius: 0.5rem; margin-bottom: 0.5rem; background: rgba(0,0,0,0.02);">
-                            <div>
-                                <span style="font-weight: 600;">01.11.2026</span>
-                                <span style="margin-left: 0.5rem;">Allerheiligen</span>
-                                <span class="feiertag-badge badge-bezahlt">Bezahlt</span>
-                            </div>
-                            <div style="display: flex; gap: 0.5rem;">
-                                <button class="btn btn-sec" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;"
-                                    onclick="editFeiertag('2026-11-01')">✏️</button>
-                                <button class="del-btn" onclick="deleteFeiertag('2026-11-01')">✕</button>
-                            </div>
+                    </div><div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-radius: 0.5rem; margin-bottom: 0.5rem; background: rgba(0,0,0,0.02);">
+                        <div>
+                            <span style="font-weight: 600;">04.06.2026</span>
+                            <span style="margin-left: 0.5rem;">Fronleichnam</span>
+                            <span class="feiertag-badge badge-bezahlt">Bezahlt</span>
                         </div>
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-radius: 0.5rem; margin-bottom: 0.5rem; background: rgba(0,0,0,0.02);">
-                            <div>
-                                <span style="font-weight: 600;">08.12.2026</span>
-                                <span style="margin-left: 0.5rem;">Mariä Empfängnis</span>
-                                <span class="feiertag-badge badge-unbezahlt">Unbezahlt</span>
-                            </div>
-                            <div style="display: flex; gap: 0.5rem;">
-                                <button class="btn btn-sec" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;"
-                                    onclick="editFeiertag('2026-12-08')">✏️</button>
-                                <button class="del-btn" onclick="deleteFeiertag('2026-12-08')">✕</button>
-                            </div>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="btn btn-sec" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;" onclick="editFeiertag('2026-06-04')">✏️</button>
+                            <button class="del-btn" onclick="deleteFeiertag('2026-06-04')">✕</button>
                         </div>
-                    </div>
-                    <div style="margin-bottom: 1rem;">
-                        <div style="font-weight: 600; margin-bottom: 0.5rem; color: #6B7280; font-size: 0.875rem;">Jahr
-                            2025</div>
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-radius: 0.5rem; margin-bottom: 0.5rem; background: rgba(0,0,0,0.02);">
-                            <div>
-                                <span style="font-weight: 600;">02.01.2025</span>
-                                <span style="margin-left: 0.5rem;">Berchtoldstag</span>
-                                <span class="feiertag-badge badge-bezahlt">Bezahlt</span>
-                            </div>
-                            <div style="display: flex; gap: 0.5rem;">
-                                <button class="btn btn-sec" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;"
-                                    onclick="editFeiertag('2025-01-02')">✏️</button>
-                                <button class="del-btn" onclick="deleteFeiertag('2025-01-02')">✕</button>
-                            </div>
+                    </div><div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-radius: 0.5rem; margin-bottom: 0.5rem; background: rgba(0,0,0,0.02);">
+                        <div>
+                            <span style="font-weight: 600;">15.08.2026</span>
+                            <span style="margin-left: 0.5rem;">Mariä Himmelfahrt</span>
+                            <span class="feiertag-badge badge-unbezahlt">Unbezahlt</span>
                         </div>
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-radius: 0.5rem; margin-bottom: 0.5rem; background: rgba(0,0,0,0.02);">
-                            <div>
-                                <span style="font-weight: 600;">19.06.2025</span>
-                                <span style="margin-left: 0.5rem;">Fronleichnam</span>
-                                <span class="feiertag-badge badge-bezahlt">Bezahlt</span>
-                            </div>
-                            <div style="display: flex; gap: 0.5rem;">
-                                <button class="btn btn-sec" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;"
-                                    onclick="editFeiertag('2025-06-19')">✏️</button>
-                                <button class="del-btn" onclick="deleteFeiertag('2025-06-19')">✕</button>
-                            </div>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="btn btn-sec" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;" onclick="editFeiertag('2026-08-15')">✏️</button>
+                            <button class="del-btn" onclick="deleteFeiertag('2026-08-15')">✕</button>
                         </div>
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-radius: 0.5rem; margin-bottom: 0.5rem; background: rgba(0,0,0,0.02);">
-                            <div>
-                                <span style="font-weight: 600;">15.08.2025</span>
-                                <span style="margin-left: 0.5rem;">Mariä Himmelfahrt</span>
-                                <span class="feiertag-badge badge-bezahlt">Bezahlt</span>
-                            </div>
-                            <div style="display: flex; gap: 0.5rem;">
-                                <button class="btn btn-sec" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;"
-                                    onclick="editFeiertag('2025-08-15')">✏️</button>
-                                <button class="del-btn" onclick="deleteFeiertag('2025-08-15')">✕</button>
-                            </div>
+                    </div><div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-radius: 0.5rem; margin-bottom: 0.5rem; background: rgba(0,0,0,0.02);">
+                        <div>
+                            <span style="font-weight: 600;">01.11.2026</span>
+                            <span style="margin-left: 0.5rem;">Allerheiligen</span>
+                            <span class="feiertag-badge badge-bezahlt">Bezahlt</span>
                         </div>
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-radius: 0.5rem; margin-bottom: 0.5rem; background: rgba(0,0,0,0.02);">
-                            <div>
-                                <span style="font-weight: 600;">01.11.2025</span>
-                                <span style="margin-left: 0.5rem;">Allerheiligen</span>
-                                <span class="feiertag-badge badge-bezahlt">Bezahlt</span>
-                            </div>
-                            <div style="display: flex; gap: 0.5rem;">
-                                <button class="btn btn-sec" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;"
-                                    onclick="editFeiertag('2025-11-01')">✏️</button>
-                                <button class="del-btn" onclick="deleteFeiertag('2025-11-01')">✕</button>
-                            </div>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="btn btn-sec" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;" onclick="editFeiertag('2026-11-01')">✏️</button>
+                            <button class="del-btn" onclick="deleteFeiertag('2026-11-01')">✕</button>
                         </div>
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-radius: 0.5rem; margin-bottom: 0.5rem; background: rgba(0,0,0,0.02);">
-                            <div>
-                                <span style="font-weight: 600;">08.12.2025</span>
-                                <span style="margin-left: 0.5rem;">Mariä Empfängnis</span>
-                                <span class="feiertag-badge badge-unbezahlt">Unbezahlt</span>
-                            </div>
-                            <div style="display: flex; gap: 0.5rem;">
-                                <button class="btn btn-sec" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;"
-                                    onclick="editFeiertag('2025-12-08')">✏️</button>
-                                <button class="del-btn" onclick="deleteFeiertag('2025-12-08')">✕</button>
-                            </div>
+                    </div><div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-radius: 0.5rem; margin-bottom: 0.5rem; background: rgba(0,0,0,0.02);">
+                        <div>
+                            <span style="font-weight: 600;">08.12.2026</span>
+                            <span style="margin-left: 0.5rem;">Mariä Empfängnis</span>
+                            <span class="feiertag-badge badge-unbezahlt">Unbezahlt</span>
                         </div>
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-radius: 0.5rem; margin-bottom: 0.5rem; background: rgba(0,0,0,0.02);">
-                            <div>
-                                <span style="font-weight: 600;">25.12.2025</span>
-                                <span style="margin-left: 0.5rem;">Weihnachten</span>
-                                <span class="feiertag-badge badge-bezahlt">Bezahlt</span>
-                            </div>
-                            <div style="display: flex; gap: 0.5rem;">
-                                <button class="btn btn-sec" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;"
-                                    onclick="editFeiertag('2025-12-25')">✏️</button>
-                                <button class="del-btn" onclick="deleteFeiertag('2025-12-25')">✕</button>
-                            </div>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="btn btn-sec" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;" onclick="editFeiertag('2026-12-08')">✏️</button>
+                            <button class="del-btn" onclick="deleteFeiertag('2026-12-08')">✕</button>
                         </div>
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-radius: 0.5rem; margin-bottom: 0.5rem; background: rgba(0,0,0,0.02);">
-                            <div>
-                                <span style="font-weight: 600;">26.12.2025</span>
-                                <span style="margin-left: 0.5rem;">Stephanstag</span>
-                                <span class="feiertag-badge badge-bezahlt">Bezahlt</span>
-                            </div>
-                            <div style="display: flex; gap: 0.5rem;">
-                                <button class="btn btn-sec" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;"
-                                    onclick="editFeiertag('2025-12-26')">✏️</button>
-                                <button class="del-btn" onclick="deleteFeiertag('2025-12-26')">✕</button>
-                            </div>
+                    </div></div><div style="margin-bottom: 1rem;">
+                    <div style="font-weight: 600; margin-bottom: 0.5rem; color: #6B7280; font-size: 0.875rem;">Jahr 2025</div><div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-radius: 0.5rem; margin-bottom: 0.5rem; background: rgba(0,0,0,0.02);">
+                        <div>
+                            <span style="font-weight: 600;">02.01.2025</span>
+                            <span style="margin-left: 0.5rem;">Berchtoldstag</span>
+                            <span class="feiertag-badge badge-bezahlt">Bezahlt</span>
                         </div>
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-radius: 0.5rem; margin-bottom: 0.5rem; background: rgba(0,0,0,0.02);">
-                            <div>
-                                <span style="font-weight: 600;">31.12.2025</span>
-                                <span style="margin-left: 0.5rem;">Sylvester</span>
-                                <span class="feiertag-badge badge-bezahlt">Bezahlt</span>
-                            </div>
-                            <div style="display: flex; gap: 0.5rem;">
-                                <button class="btn btn-sec" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;"
-                                    onclick="editFeiertag('2025-12-31')">✏️</button>
-                                <button class="del-btn" onclick="deleteFeiertag('2025-12-31')">✕</button>
-                            </div>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="btn btn-sec" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;" onclick="editFeiertag('2025-01-02')">✏️</button>
+                            <button class="del-btn" onclick="deleteFeiertag('2025-01-02')">✕</button>
                         </div>
-                    </div>
-                </div>
+                    </div><div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-radius: 0.5rem; margin-bottom: 0.5rem; background: rgba(0,0,0,0.02);">
+                        <div>
+                            <span style="font-weight: 600;">19.06.2025</span>
+                            <span style="margin-left: 0.5rem;">Fronleichnam</span>
+                            <span class="feiertag-badge badge-bezahlt">Bezahlt</span>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="btn btn-sec" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;" onclick="editFeiertag('2025-06-19')">✏️</button>
+                            <button class="del-btn" onclick="deleteFeiertag('2025-06-19')">✕</button>
+                        </div>
+                    </div><div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-radius: 0.5rem; margin-bottom: 0.5rem; background: rgba(0,0,0,0.02);">
+                        <div>
+                            <span style="font-weight: 600;">15.08.2025</span>
+                            <span style="margin-left: 0.5rem;">Mariä Himmelfahrt</span>
+                            <span class="feiertag-badge badge-bezahlt">Bezahlt</span>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="btn btn-sec" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;" onclick="editFeiertag('2025-08-15')">✏️</button>
+                            <button class="del-btn" onclick="deleteFeiertag('2025-08-15')">✕</button>
+                        </div>
+                    </div><div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-radius: 0.5rem; margin-bottom: 0.5rem; background: rgba(0,0,0,0.02);">
+                        <div>
+                            <span style="font-weight: 600;">01.11.2025</span>
+                            <span style="margin-left: 0.5rem;">Allerheiligen</span>
+                            <span class="feiertag-badge badge-bezahlt">Bezahlt</span>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="btn btn-sec" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;" onclick="editFeiertag('2025-11-01')">✏️</button>
+                            <button class="del-btn" onclick="deleteFeiertag('2025-11-01')">✕</button>
+                        </div>
+                    </div><div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-radius: 0.5rem; margin-bottom: 0.5rem; background: rgba(0,0,0,0.02);">
+                        <div>
+                            <span style="font-weight: 600;">08.12.2025</span>
+                            <span style="margin-left: 0.5rem;">Mariä Empfängnis</span>
+                            <span class="feiertag-badge badge-unbezahlt">Unbezahlt</span>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="btn btn-sec" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;" onclick="editFeiertag('2025-12-08')">✏️</button>
+                            <button class="del-btn" onclick="deleteFeiertag('2025-12-08')">✕</button>
+                        </div>
+                    </div><div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-radius: 0.5rem; margin-bottom: 0.5rem; background: rgba(0,0,0,0.02);">
+                        <div>
+                            <span style="font-weight: 600;">25.12.2025</span>
+                            <span style="margin-left: 0.5rem;">Weihnachten</span>
+                            <span class="feiertag-badge badge-bezahlt">Bezahlt</span>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="btn btn-sec" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;" onclick="editFeiertag('2025-12-25')">✏️</button>
+                            <button class="del-btn" onclick="deleteFeiertag('2025-12-25')">✕</button>
+                        </div>
+                    </div><div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-radius: 0.5rem; margin-bottom: 0.5rem; background: rgba(0,0,0,0.02);">
+                        <div>
+                            <span style="font-weight: 600;">26.12.2025</span>
+                            <span style="margin-left: 0.5rem;">Stephanstag</span>
+                            <span class="feiertag-badge badge-bezahlt">Bezahlt</span>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="btn btn-sec" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;" onclick="editFeiertag('2025-12-26')">✏️</button>
+                            <button class="del-btn" onclick="deleteFeiertag('2025-12-26')">✕</button>
+                        </div>
+                    </div><div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-radius: 0.5rem; margin-bottom: 0.5rem; background: rgba(0,0,0,0.02);">
+                        <div>
+                            <span style="font-weight: 600;">31.12.2025</span>
+                            <span style="margin-left: 0.5rem;">Sylvester</span>
+                            <span class="feiertag-badge badge-bezahlt">Bezahlt</span>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="btn btn-sec" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;" onclick="editFeiertag('2025-12-31')">✏️</button>
+                            <button class="del-btn" onclick="deleteFeiertag('2025-12-31')">✕</button>
+                        </div>
+                    </div></div></div>
             </div>
 
             <div class="info-box" style="margin-top: 1.5rem;">
@@ -3274,235 +2972,58 @@
         </div>
     </div>
 
-    <div id="feiertag-modal" class="hidden"
-        style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 9999;">
+    <div id="feiertag-modal" class="hidden" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 9999;">
         <div class="card" style="width: 100%; max-width: 500px; margin: 1rem;">
             <h3 style="margin-bottom: 1rem;" id="modal-title">Feiertag hinzufügen</h3>
             <div class="flex-col">
                 <div>
-                    <label
-                        style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; margin-bottom: 1rem;">
-                        <input type="checkbox" id="modal-mehrere-tage" onchange="toggleBisDatum()"
-                            style="width: 1.25rem; height: 1.25rem; cursor: pointer;">
-                        <span>🗓️ Mehrere Tage (Bereich)</span>
-                    </label>
-                </div>
-
-                <!-- Mini-Calendar Container (Moved to Top) -->
-                <div id="modal-calendar-container"
-                    style="margin-bottom: 1rem; border: 1px solid #D1D5DB; border-radius: 0.5rem; overflow: hidden;">
-                    <div class="mini-cal-header"
-                        style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; background: #F3F4F6;">
-                        <button type="button" onclick="prevMiniCalMonth()"
-                            style="border: none; background: none; cursor: pointer; padding: 0.25rem 0.5rem;">◀</button>
-                        <span id="mini-cal-month-year" style="font-weight: 600; font-size: 0.9rem;">Dezember 2025</span>
-                        <button type="button" onclick="nextMiniCalMonth()"
-                            style="border: none; background: none; cursor: pointer; padding: 0.25rem 0.5rem;">▶</button>
-                    </div>
-                    <div class="mini-cal-weekdays"
-                        style="display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-size: 0.75rem; font-weight: 600; background: #F9FAFB; padding: 0.25rem 0; border-bottom: 1px solid #E5E7EB;">
-                        <div>Mo</div>
-                        <div>Di</div>
-                        <div>Mi</div>
-                        <div>Do</div>
-                        <div>Fr</div>
-                        <div>Sa</div>
-                        <div>So</div>
-                    </div>
-                    <div id="mini-cal-grid" class="mini-cal-grid"
-                        style="display: grid; grid-template-columns: repeat(7, 1fr); padding: 0.5rem;">
-                        <!-- Days will be rendered here -->
-                    </div>
-                </div>
-
-                <style>
-                    .mini-cal-day {
-                        aspect-ratio: 1;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        font-size: 0.85rem;
-                        cursor: pointer;
-                        border-radius: 50%;
-                        margin: 1px;
-                        position: relative;
-                    }
-
-                    .mini-cal-day:hover {
-                        background-color: #E5E7EB;
-                    }
-
-                    .mini-cal-day.empty {
-                        cursor: default;
-                        background: none !important;
-                    }
-
-                    .mini-cal-day.selected {
-                        background-color: #3B82F6 !important;
-                        color: white !important;
-                        font-weight: bold;
-                    }
-
-                    .mini-cal-day.has-holiday {
-                        font-weight: bold;
-                    }
-
-                    /* Dots for existing holidays */
-                    .mini-cal-day.has-holiday::after {
-                        content: '';
-                        position: absolute;
-                        bottom: 2px;
-                        left: 50%;
-                        transform: translateX(-50%);
-                        width: 4px;
-                        height: 4px;
-                        border-radius: 50%;
-                    }
-
-                    .mini-cal-day.holiday-bezahlt::after {
-                        background-color: #3B82F6;
-                    }
-
-                    /* Blue */
-                    .mini-cal-day.holiday-unbezahlt::after {
-                        background-color: #F97316;
-                    }
-
-                    /* Orange */
-                    .mini-cal-day.holiday-kompensation::after {
-                        background-color: #8B5CF6;
-                    }
-
-                    /* Purple */
-
-                    body.dark .mini-cal-day {
-                        color: #E5E7EB;
-                    }
-
-                    body.dark .mini-cal-header {
-                        background: #374151 !important;
-                        color: #E5E7EB;
-                    }
-
-                    body.dark .mini-cal-weekdays {
-                        background: #1F2937 !important;
-                        color: #9CA3AF;
-                        border-color: #374151 !important;
-                    }
-
-                    body.dark #modal-calendar-container {
-                        border-color: #374151 !important;
-                    }
-
-                    body.dark .mini-cal-day:hover {
-                        background-color: #374151;
-                    }
-
-                    /* Active Input Highlight */
-                    .input-active {
-                        border-color: #3B82F6 !important;
-                        background-color: #EFF6FF !important;
-                        box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
-                    }
-
-                    body.dark .input-active {
-                        background-color: #1F2937 !important;
-                        border-color: #60A5FA !important;
-                        color: #E5E7EB !important;
-                    }
-
-                    /* Dark Mode Input Overrides */
-                    body.dark input[type="text"],
-                    body.dark input[type="date"],
-                    body.dark select {
-                        background-color: #374151 !important;
-                        color: #E5E7EB !important;
-                        border-color: #4B5563 !important;
-                    }
-
-                    body.dark input[readonly] {
-                        background-color: #4B5563 !important;
-                        color: #D1D5DB !important;
-                        cursor: pointer;
-                        /* Ensure pointer cursor for readonly inputs in dark mode too */
-                    }
-
-                    /* Ensure placeholder color is readable in dark mode */
-                    body.dark input::placeholder {
-                        color: #9CA3AF !important;
-                    }
-                </style>
-                <div>
-                    <label>Von Datum</label>
-                    <input type="text" readonly id="modal-datum" placeholder="Bitte im Kalender wählen"
-                        onclick="setActiveInput('modal-datum')"
-                        style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #D1D5DB; border-radius: 0.5rem; background-color: #F3F4F6; cursor: pointer;">
-                </div>
-                <div id="bis-datum-container" style="display: none;">
-                    <label>Bis Datum</label>
-                    <input type="text" readonly id="modal-bis-datum" placeholder="Bitte im Kalender wählen"
-                        onclick="setActiveInput('modal-bis-datum')"
-                        style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #D1D5DB; border-radius: 0.5rem; background-color: #F3F4F6; cursor: pointer;">
+                    <label>Datum</label>
+                    <input type="date" id="modal-datum" style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #D1D5DB; border-radius: 0.5rem;">
                 </div>
                 <div>
                     <label>Name</label>
-                    <input type="text" id="modal-name" placeholder="z.B. Neujahr"
-                        style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #D1D5DB; border-radius: 0.5rem;"
-                        data-ddg-inputtype="identities.fullName" data-ddg-autofill="true">
+                    <input type="text" id="modal-name" placeholder="z.B. Neujahr" style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #D1D5DB; border-radius: 0.5rem;" data-ddg-inputtype="identities.fullName" data-ddg-autofill="true">
                 </div>
                 <div>
                     <label>Typ</label>
-                    <select id="modal-typ"
-                        style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #D1D5DB; border-radius: 0.5rem;"
-                        data-ddg-inputtype="unknown">
-                        <option value="feiertag">Feiertag (bezahlt)</option>
-                        <option value="unbezahlt">Feiertag unbezahlt</option>
+                    <select id="modal-typ" style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #D1D5DB; border-radius: 0.5rem;" data-ddg-inputtype="unknown">
+                        <option value="feiertag">Feiertag</option>
                         <option value="brueckentag">Brückentag</option>
                     </select>
                 </div>
                 <div>
                     <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-                        <input type="checkbox" id="modal-bezahlt" checked=""
-                            style="width: 1.25rem; height: 1.25rem; cursor: pointer;">
+                        <input type="checkbox" id="modal-bezahlt" checked="" style="width: 1.25rem; height: 1.25rem; cursor: pointer;">
                         <span>Bezahlt (zählt nicht als Fehlzeit)</span>
                     </label>
                 </div>
             </div>
             <div style="display: flex; gap: 0.5rem; margin-top: 1.5rem;">
                 <button class="btn btn-sec" style="flex: 1;" onclick="closeFeiertagModal()">Abbrechen</button>
-                <button id="delete-feiertag-btn" class="btn btn-danger" style="flex: 1; display: none;"
-                    onclick="deleteCurrentFeiertag()">Löschen</button>
                 <button class="btn btn-success" style="flex: 1;" onclick="saveFeiertagFromModal()">Speichern</button>
             </div>
         </div>
     </div>
 
-    <div id="massenurlaub-modal" class="hidden"
-        style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 9999;">
+    <div id="massenurlaub-modal" class="hidden" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 9999;">
         <div class="card" style="width: 100%; max-width: 500px; margin: 1rem;">
             <h3 style="margin-bottom: 1rem;">📅 Urlaub über Zeitraum eintragen</h3>
             <div class="flex-col">
                 <div>
                     <label>Von (Datum)</label>
-                    <input type="date" id="urlaub-von"
-                        style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #D1D5DB; border-radius: 0.5rem;"
-                        onchange="updateUrlaubBisDatum(); updateUrlaubVorschau()">
+                    <input type="date" id="urlaub-von" style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #D1D5DB; border-radius: 0.5rem;" onchange="updateUrlaubBisDatum(); updateUrlaubVorschau()">
                 </div>
                 <div>
                     <label>Bis (Datum)</label>
-                    <input type="date" id="urlaub-bis"
-                        style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #D1D5DB; border-radius: 0.5rem;"
-                        onchange="updateUrlaubVorschau()">
+                    <input type="date" id="urlaub-bis" style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #D1D5DB; border-radius: 0.5rem;" onchange="updateUrlaubVorschau()">
                 </div>
                 <div>
                     <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-                        <input type="checkbox" id="urlaub-wochenende" checked=""
-                            style="width: 1.25rem; height: 1.25rem; cursor: pointer;" onchange="updateUrlaubVorschau()">
+                        <input type="checkbox" id="urlaub-wochenende" checked="" style="width: 1.25rem; height: 1.25rem; cursor: pointer;" onchange="updateUrlaubVorschau()">
                         <span>Wochenenden auslassen</span>
                     </label>
                 </div>
-                <div id="urlaub-vorschau"
-                    style="padding: 0.75rem; background: #F3F4F6; border-radius: 0.5rem; font-size: 0.875rem; color: #374151; display: none;">
+                <div id="urlaub-vorschau" style="padding: 0.75rem; background: #F3F4F6; border-radius: 0.5rem; font-size: 0.875rem; color: #374151; display: none;">
                     <strong>Vorschau:</strong> <span id="urlaub-anzahl">0</span> Arbeitage werden als Urlaub markiert
                 </div>
             </div>
@@ -3513,8 +3034,7 @@
         </div>
     </div>
 
-    <div id="confirm-modal" class="hidden"
-        style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 9999;">
+    <div id="confirm-modal" class="hidden" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 9999;">
         <div class="card" style="width: 100%; max-width: 400px; margin: 1rem;">
             <h3 style="margin-bottom: 1rem;" id="confirm-message">Bestätigung</h3>
             <div style="display: flex; gap: 0.5rem; margin-top: 1.5rem;">
@@ -3945,19 +3465,8 @@
                 // Prüfe, ob der Tag ein Feiertag ist
                 let defaultTyp = 'normal';
                 if (isFeiertag(date)) {
-                    const ft = feiertage[date];
-                    const ftTyp = ft ? (ft.typ || 'feiertag') : 'feiertag';
-
-                    // Map feiertage typ to tag typ
-                    if (ftTyp === 'brueckentag') {
-                        defaultTyp = 'kompensation';
-                    } else if (ftTyp === 'unbezahlt') {
-                        defaultTyp = 'feiertag-unbezahlt';
-                    } else {
-                        // feiertag type - check if bezahlt
-                        const istBezahlt = isFeiertagBezahlt(date);
-                        defaultTyp = istBezahlt ? 'feiertag-bezahlt' : 'feiertag-unbezahlt';
-                    }
+                    const istBezahlt = isFeiertagBezahlt(date);
+                    defaultTyp = istBezahlt ? 'feiertag-bezahlt' : 'feiertag-unbezahlt';
                 }
 
                 const tagTypRadios = document.getElementsByName('tagTyp');
@@ -4989,16 +4498,7 @@
                 let tagTypIcon = '';
 
                 if (isFT) {
-                    const ft = feiertage[dateStr];
-                    const ftTyp = ft ? (ft.typ || 'feiertag') : 'feiertag';
-
-                    if (ftTyp === 'brueckentag') {
-                        bgClass = 'tag-kompensation';
-                    } else if (ftTyp === 'unbezahlt') {
-                        bgClass = 'feiertag-unbezahlt';
-                    } else {
-                        bgClass = ftBezahlt ? 'feiertag' : 'feiertag-unbezahlt';
-                    }
+                    bgClass = ftBezahlt ? 'feiertag' : 'feiertag-unbezahlt';
                 } else if (d && d.tagTyp) {
                     switch (d.tagTyp) {
                         case 'urlaub':
@@ -5219,17 +4719,7 @@
                 let tagTypIcon = '';
 
                 if (isFT) {
-                    const ft = feiertage[dateStr];
-                    const ftTyp = ft ? (ft.typ || 'feiertag') : 'feiertag';
-
-                    if (ftTyp === 'brueckentag') {
-                        bgClass = 'tag-kompensation';
-                        tagTypIcon = '<span class="emoji-medium">⏰</span>';
-                    } else if (ftTyp === 'unbezahlt') {
-                        bgClass = 'feiertag-unbezahlt';
-                    } else {
-                        bgClass = ftBezahlt ? 'feiertag' : 'feiertag-unbezahlt';
-                    }
+                    bgClass = ftBezahlt ? 'feiertag' : 'feiertag-unbezahlt';
                 } else if (d && d.tagTyp) {
                     switch (d.tagTyp) {
                         case 'urlaub':
@@ -6008,14 +5498,14 @@
             const yearRange = document.getElementById('ics-year-range').value.trim();
 
             if (!yearRange) {
-                alert('Bitte Jahresbereich eingeben (z.B. 2025-2026)');
+                showMsg('Bitte Jahresbereich eingeben (z.B. 2025-2026)', 'error');
                 return;
             }
 
             // Parse year range
             const parts = yearRange.split('-');
             if (parts.length !== 2) {
-                alert('Ungültiges Format! Verwende: JAHR-JAHR (z.B. 2025-2026)');
+                showMsg('Ungültiges Format! Verwende: JAHR-JAHR (z.B. 2025-2026)', 'error');
                 return;
             }
 
@@ -6023,19 +5513,19 @@
             const endYear = parseInt(parts[1].trim());
 
             if (isNaN(startYear) || isNaN(endYear)) {
-                alert('Ungültige Jahreszahlen!');
+                showMsg('Ungültige Jahreszahlen!', 'error');
                 return;
             }
 
             if (startYear > endYear) {
-                alert('Startjahr muss <= Endjahr sein!');
+                showMsg('Startjahr muss <= Endjahr sein!', 'error');
                 return;
             }
 
             // Check if we have any holidays
             const holidayCount = Object.keys(feiertage).length;
             if (holidayCount === 0) {
-                alert('Keine Feiertage geladen!\n\nBitte erst Feiertage importieren:\n- Kanton wählen ODER\n- Feiertags-JSON importieren');
+                showMsg('Keine Feiertage geladen! Bitte erst Feiertags-JSON importieren.', 'error');
                 return;
             }
 
@@ -6046,7 +5536,7 @@
             const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
             saveAs(blob, `Feiertage_${startYear}-${endYear}.ics`);
 
-            alert(`✅ Erfolgreich exportiert!\n\nDatei: Feiertage_${startYear}-${endYear}.ics`);
+            showMsg(`✅ Feiertage_${startYear}-${endYear}.ics erfolgreich exportiert!`, 'success');
         }
 
         function generateICS(startYear, endYear) {
@@ -7822,7 +7312,7 @@
                     } else if (d.tagTyp === 'unbezahlt') {
                         fillColor = [254, 202, 202];
                         unbezahlteTage++;
-                    } else if (d.tagTyp === 'kompensation' || (isFT && feiertage[dateStr] && feiertage[dateStr].typ === 'brueckentag')) {
+                    } else if (d.tagTyp === 'kompensation') {
                         fillColor = [196, 181, 253];
                         kompensationsTage++;
                         sollMin = sollProTag;
@@ -7888,7 +7378,7 @@
                     body: tableData.map(row => row.data),
                     theme: 'grid',
                     tableWidth: 165,
-                    margin: { left: 20, right: 20 },
+                    margin: { left: 20, right: 115 },
                     pageBreak: 'avoid',
                     styles: {
                         fontSize: 6,
@@ -8046,8 +7536,7 @@
                     body: summaryData,
                     theme: 'plain',
                     tableWidth: 165,
-                    margin: { left: 20, right: 20 },
-                    pageBreak: 'avoid',
+                    margin: { left: 20, right: 115 },
                     styles: {
                         fontSize: 6,
                         cellPadding: 0.8,
@@ -8184,11 +7673,11 @@
                         fillColor = [209, 250, 229];
                     } else if (d.tagTyp === 'krank') {
                         fillColor = [254, 243, 199];
-                        krankheitageGesamt++;
+                        krankheitstageGesamt++;
                     } else if (d.tagTyp === 'unbezahlt') {
                         fillColor = [254, 202, 202];
                         unbezahlteTage++;
-                    } else if (d.tagTyp === 'kompensation' || (isFT && feiertage[dateStr] && feiertage[dateStr].typ === 'brueckentag')) {
+                    } else if (d.tagTyp === 'kompensation') {
                         fillColor = [196, 181, 253];
                         kompensationsTage++;
                         sollMin = sollProTag;
@@ -8246,10 +7735,10 @@
                     body: tableData.map(row => row.data),
                     theme: 'grid',
                     tableWidth: 165,
-                    margin: { left: 20, right: 20 },
+                    margin: { left: 20, right: 115 },
                     styles: {
-                        fontSize: 6,
-                        cellPadding: 0.8,
+                        fontSize: 6.5,
+                        cellPadding: 1.2,
                         halign: 'center',
                         valign: 'top',
                         lineWidth: 0.1
@@ -8260,7 +7749,7 @@
                         fontStyle: 'bold',
                         halign: 'center',
                         valign: 'top',
-                        fontSize: 6,
+                        fontSize: 6.5,
                         valign: 'middle'
                     },
                     columnStyles: {
@@ -8341,11 +7830,10 @@
                     body: summaryData,
                     theme: 'plain',
                     tableWidth: 165,
-                    margin: { left: 20, right: 20 },
-                    pageBreak: 'avoid',
+                    margin: { left: 20, right: 115 },
                     styles: {
-                        fontSize: 6,
-                        cellPadding: 0.8,
+                        fontSize: 6.5,
+                        cellPadding: 1.2,
                         halign: 'center',
                         valign: 'top',
                         fontStyle: 'italic'
@@ -8536,73 +8024,6 @@
             });
         }
 
-        async function importFeiertageOnline() {
-            const jahr = document.getElementById('import-year').value;
-            const kanton = settings.kanton;
-
-            if (!kanton) {
-                alert('Bitte wählen Sie zuerst oben einen Kanton aus!');
-                return;
-            }
-
-            if (!jahr || jahr < 2000 || jahr > 2100) {
-                alert('Bitte geben Sie ein gültiges Jahr ein (2000-2100).');
-                return;
-            }
-
-            const btn = event.target;
-            const originalText = btn.innerText;
-            btn.innerText = '⏳ Lade...';
-            btn.disabled = true;
-
-            try {
-                // API Call zu date.nager.at
-                const response = await fetch(`https://date.nager.at/api/v3/PublicHolidays/${jahr}/CH`);
-
-                if (!response.ok) {
-                    throw new Error(`API Fehler: ${response.status}`);
-                }
-
-                const data = await response.json();
-                let count = 0;
-
-                // Filter für Kanton und Global
-                const kantonCode = `CH-${kanton}`;
-
-                data.forEach(holiday => {
-                    // Prüfen ob Feiertag für diesen Kanton gilt
-                    // global: true ODER counties enthält den Kantonscode
-                    const isRelevant = holiday.global || (holiday.counties && holiday.counties.includes(kantonCode));
-
-                    if (isRelevant) {
-                        // Datum formatieren (YYYY-MM-DD ist bereits Standard)
-                        const date = holiday.date;
-
-                        // Nur hinzufügen/überschreiben
-                        feiertage[date] = {
-                            name: holiday.localName,
-                            bezahlt: true // Standardmäßig bezahlt annehmen
-                        };
-                        count++;
-                    }
-                });
-
-                saveToStorage();
-                renderEinstellungen(); // Update the UI where feiertage are displayed
-                if (view === 'monat') renderMonat();
-                if (view === 'jahr') renderJahr();
-
-                alert(`✅ Erfolgreich ${count} Feiertage für ${jahr} (Kanton ${kanton}) importiert!`);
-
-            } catch (error) {
-                console.error('Import Fehler:', error);
-                alert(`❌ Fehler beim Importieren:\n${error.message}\n\nBitte prüfen Sie Ihre Internetverbindung.`);
-            } finally {
-                btn.innerText = originalText;
-                btn.disabled = false;
-            }
-        }
-
         function importFeiertage() {
             document.getElementById('feiertag-file').click();
         }
@@ -8671,304 +8092,14 @@
         }
 
         let currentEditingDatum = null;
-        let currentEditingRange = { start: null, end: null }; // Track if editing a range
-
-        // Helper function to convert Date object to YYYY-MM-DD string (LOCAL timezone, not UTC!)
-        function dateToYMD(dateObj) {
-            const y = dateObj.getFullYear();
-            const m = String(dateObj.getMonth() + 1).padStart(2, '0');
-            const d = String(dateObj.getDate()).padStart(2, '0');
-            return `${y}-${m}-${d}`;
-        }
-
-        // Helper function to detect if a date is part of a consecutive range
-        function detectHolidayRange(dateStr) {
-            const ft = feiertage[dateStr];
-            if (!ft) return null;
-
-            const name = ft.name || '';
-            const typ = ft.typ || 'feiertag';
-            const bezahlt = ft.bezahlt !== undefined ? ft.bezahlt : true;
-
-            // Find the start of the range (go backwards)
-            let startDate = new Date(dateStr + 'T00:00:00');
-            let checkDate = new Date(startDate);
-            checkDate.setDate(checkDate.getDate() - 1);
-
-            while (true) {
-                const checkStr = dateToYMD(checkDate);
-                const checkFt = feiertage[checkStr];
-
-                if (!checkFt ||
-                    checkFt.name !== name ||
-                    checkFt.typ !== typ ||
-                    checkFt.bezahlt !== bezahlt) {
-                    break;
-                }
-
-                startDate = new Date(checkDate);
-                checkDate.setDate(checkDate.getDate() - 1);
-            }
-
-            // Find the end of the range (go forwards)
-            let endDate = new Date(dateStr + 'T00:00:00');
-            checkDate = new Date(endDate);
-            checkDate.setDate(checkDate.getDate() + 1);
-
-            while (true) {
-                const checkStr = dateToYMD(checkDate);
-                const checkFt = feiertage[checkStr];
-
-                if (!checkFt ||
-                    checkFt.name !== name ||
-                    checkFt.typ !== typ ||
-                    checkFt.bezahlt !== bezahlt) {
-                    break;
-                }
-
-                endDate = new Date(checkDate);
-                checkDate.setDate(checkDate.getDate() + 1);
-            }
-
-            const startStr = dateToYMD(startDate);
-            const endStr = dateToYMD(endDate);
-
-            // If start and end are the same, it's a single day
-            if (startStr === endStr) {
-                return { isSingleDay: true, start: startStr, end: null };
-            }
-
-            return { isSingleDay: false, start: startStr, end: endStr };
-        }
-
-        // Helper function to delete all days in a range
-        function deleteRangeDays(startDate, endDate) {
-            const start = new Date(startDate + 'T00:00:00');
-            const end = new Date(endDate + 'T00:00:00');
-            const current = new Date(start);
-
-            const deletedDates = [];
-            while (current <= end) {
-                const dateStr = dateToYMD(current);
-                if (feiertage[dateStr]) {
-                    delete feiertage[dateStr];
-                    deletedDates.push(dateStr);
-                }
-                current.setDate(current.getDate() + 1);
-            }
-
-            return deletedDates;
-        }
-
-        // ==========================================
-        // MINI-CALENDAR LOGIC
-        // ==========================================
-        let miniCalYear = new Date().getFullYear();
-        let miniCalMonth = new Date().getMonth(); // 0-11
-        let activeDateInputId = 'modal-datum';
-
-        function formatDateCH(dateStr) {
-            if (!dateStr) return '';
-            const [y, m, d] = dateStr.split('-');
-            return `${d}.${m}.${y}`;
-        }
-
-        function parseDateCH(dateStr) {
-            if (!dateStr) return '';
-            const [d, m, y] = dateStr.split('.');
-            return `${y}-${m}-${d}`;
-        }
-
-        function setActiveInput(id) {
-            activeDateInputId = id;
-
-            // Visual feedback
-            document.getElementById('modal-datum').classList.remove('input-active');
-            document.getElementById('modal-bis-datum').classList.remove('input-active');
-
-            const el = document.getElementById(id);
-            if (el) el.classList.add('input-active');
-        }
-
-        function initMiniCalendar() {
-            const today = new Date();
-            miniCalYear = today.getFullYear();
-            miniCalMonth = today.getMonth();
-            renderMiniCalendar();
-        }
-
-        function prevMiniCalMonth() {
-            miniCalMonth--;
-            if (miniCalMonth < 0) {
-                miniCalMonth = 11;
-                miniCalYear--;
-            }
-            renderMiniCalendar();
-        }
-
-        function nextMiniCalMonth() {
-            miniCalMonth++;
-            if (miniCalMonth > 11) {
-                miniCalMonth = 0;
-                miniCalYear++;
-            }
-            renderMiniCalendar();
-        }
-
-        function renderMiniCalendar() {
-            const grid = document.getElementById('mini-cal-grid');
-            const label = document.getElementById('mini-cal-month-year');
-            if (!grid || !label) return;
-
-            const months = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
-            label.textContent = `${months[miniCalMonth]} ${miniCalYear}`;
-
-            grid.innerHTML = '';
-
-            const firstDay = new Date(miniCalYear, miniCalMonth, 1);
-            const lastDay = new Date(miniCalYear, miniCalMonth + 1, 0); // Last day of current month
-            const daysInMonth = lastDay.getDate();
-
-            // Adjust start day: 0 (Sun) -> 6, 1 (Mon) -> 0
-            let startDay = firstDay.getDay() - 1;
-            if (startDay === -1) startDay = 6;
-
-            // Empty cells for days before start of month
-            for (let i = 0; i < startDay; i++) {
-                const cell = document.createElement('div');
-                cell.className = 'mini-cal-day empty';
-                grid.appendChild(cell);
-            }
-
-            // Days of month
-            // Get raw values (DD.MM.YYYY) and parse to YYYY-MM-DD for comparison
-            const rawVon = document.getElementById('modal-datum').value;
-            const currentSelectedDate = parseDateCH(rawVon);
-
-            for (let d = 1; d <= daysInMonth; d++) {
-                const cell = document.createElement('div');
-                cell.className = 'mini-cal-day';
-                cell.textContent = d;
-
-                const dateStr = `${miniCalYear}-${String(miniCalMonth + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-
-                // Check if selected
-                if (dateStr === currentSelectedDate) {
-                    cell.classList.add('selected');
-                }
-
-                // Check for existing holiday
-                if (feiertage[dateStr]) {
-                    cell.classList.add('has-holiday');
-                    const ft = feiertage[dateStr];
-                    const type = ft.typ || 'feiertag';
-
-                    if (type === 'brueckentag') {
-                        cell.classList.add('holiday-kompensation');
-                    } else if (type === 'unbezahlt') {
-                        cell.classList.add('holiday-unbezahlt');
-                    } else if (ft.bezahlt !== false) {
-                        cell.classList.add('holiday-bezahlt');
-                    } else {
-                        cell.classList.add('holiday-unbezahlt');
-                    }
-
-                    cell.title = ft.name || 'Feiertag';
-                }
-
-                cell.onclick = () => {
-                    // 1. Set Date to Active Input
-                    const formattedDate = formatDateCH(dateStr);
-                    document.getElementById(activeDateInputId).value = formattedDate;
-
-                    // 2. If clicking an existing holiday -> Load it!
-                    // BUT only if we are setting the "Von" date (primary date)
-                    if (activeDateInputId === 'modal-datum' && feiertage[dateStr]) {
-                        const ft = feiertage[dateStr];
-                        document.getElementById('modal-name').value = ft.name || '';
-                        document.getElementById('modal-typ').value = ft.typ || 'feiertag';
-                        document.getElementById('modal-bezahlt').checked = ft.bezahlt !== undefined ? ft.bezahlt : true;
-                        currentEditingDatum = dateStr; // Set editing mode
-
-                        // Show delete button (we're editing an existing holiday)
-                        document.getElementById('delete-feiertag-btn').style.display = 'block';
-
-                        // DETECT RANGE: Check if this is part of a multi-day holiday
-                        const range = detectHolidayRange(dateStr);
-                        if (range && !range.isSingleDay) {
-                            // It's a range! Load the full range
-                            document.getElementById('modal-datum').value = formatDateCH(range.start);
-                            document.getElementById('modal-bis-datum').value = formatDateCH(range.end);
-                            document.getElementById('modal-mehrere-tage').checked = true;
-                            document.getElementById('bis-datum-container').style.display = 'block';
-
-                            // Store the range for deletion later
-                            currentEditingRange = { start: range.start, end: range.end };
-                        } else {
-                            // Single day
-                            currentEditingRange = { start: null, end: null };
-                        }
-                    }
-                    // If clicking empty date -> Reset editing mode if we were editing
-                    else if (activeDateInputId === 'modal-datum') {
-                        currentEditingDatum = null;
-                        currentEditingRange = { start: null, end: null };
-                        // Hide delete button (we're adding a new holiday)
-                        document.getElementById('delete-feiertag-btn').style.display = 'none';
-                    }
-
-                    // 3. Auto-advance logic
-                    const mehrereTage = document.getElementById('modal-mehrere-tage').checked;
-                    if (mehrereTage && activeDateInputId === 'modal-datum' && !feiertage[dateStr]) {
-                        // Only auto-advance if NOT loading an existing holiday
-                        setActiveInput('modal-bis-datum');
-                    }
-
-                    renderMiniCalendar(); // Re-render to show selection
-                };
-
-                grid.appendChild(cell);
-            }
-        }
-
-        function toggleBisDatum() {
-            const checkbox = document.getElementById('modal-mehrere-tage');
-            const container = document.getElementById('bis-datum-container');
-            container.style.display = checkbox.checked ? 'block' : 'none';
-
-            if (checkbox.checked) {
-                const vonDatum = document.getElementById('modal-datum').value;
-                if (vonDatum) {
-                    document.getElementById('modal-bis-datum').value = vonDatum;
-                }
-                // Activate Bis-Datum input
-                setActiveInput('modal-bis-datum');
-            } else {
-                setActiveInput('modal-datum');
-            }
-        }
 
         function showAddFeiertagDialog() {
             document.getElementById('modal-title').textContent = 'Feiertag hinzufügen';
             document.getElementById('modal-datum').value = '';
-            document.getElementById('modal-bis-datum').value = '';
             document.getElementById('modal-name').value = '';
             document.getElementById('modal-typ').value = 'feiertag';
             document.getElementById('modal-bezahlt').checked = true;
-            document.getElementById('modal-mehrere-tage').checked = false;
-            document.getElementById('bis-datum-container').style.display = 'none';
             currentEditingDatum = null;
-            currentEditingRange = { start: null, end: null };
-
-            // Hide delete button (we're adding, not editing)
-            document.getElementById('delete-feiertag-btn').style.display = 'none';
-
-            // Reset Active Input
-            setActiveInput('modal-datum');
-
-            // Init Calendar
-            initMiniCalendar();
-
             document.getElementById('feiertag-modal').classList.remove('hidden');
         }
 
@@ -8977,41 +8108,11 @@
             if (!ft) return;
 
             document.getElementById('modal-title').textContent = 'Feiertag bearbeiten';
-
-            // Detect if this is part of a range
-            const range = detectHolidayRange(datum);
-
-            if (range && !range.isSingleDay) {
-                // It's a range!
-                document.getElementById('modal-datum').value = formatDateCH(range.start);
-                document.getElementById('modal-bis-datum').value = formatDateCH(range.end);
-                document.getElementById('modal-mehrere-tage').checked = true;
-                document.getElementById('bis-datum-container').style.display = 'block';
-                currentEditingRange = { start: range.start, end: range.end };
-            } else {
-                // Single day
-                document.getElementById('modal-datum').value = formatDateCH(datum);
-                document.getElementById('modal-mehrere-tage').checked = false;
-                document.getElementById('bis-datum-container').style.display = 'none';
-                currentEditingRange = { start: null, end: null };
-            }
-
+            document.getElementById('modal-datum').value = datum;
             document.getElementById('modal-name').value = ft.name || ft;
             document.getElementById('modal-typ').value = ft.typ || 'feiertag';
             document.getElementById('modal-bezahlt').checked = ft.bezahlt !== undefined ? ft.bezahlt : true;
             currentEditingDatum = datum;
-
-            // Show delete button (we're editing)
-            document.getElementById('delete-feiertag-btn').style.display = 'block';
-
-            // Init Calendar with specific date
-            const d = new Date(datum);
-            if (!isNaN(d.getTime())) {
-                miniCalYear = d.getFullYear();
-                miniCalMonth = d.getMonth();
-            }
-            renderMiniCalendar();
-
             document.getElementById('feiertag-modal').classList.remove('hidden');
         }
 
@@ -9034,117 +8135,26 @@
             currentEditingDatum = null;
         }
 
-        function deleteCurrentFeiertag() {
-            const ft = currentEditingDatum ? feiertage[currentEditingDatum] : null;
-            if (!ft) return;
-
-            const name = ft.name || 'dieser Feiertag';
-
-            // Determine what we're deleting
-            let confirmMsg = '';
-            if (currentEditingRange.start && currentEditingRange.end) {
-                // Deleting a range
-                const rawStart = formatDateCH(currentEditingRange.start);
-                const rawEnd = formatDateCH(currentEditingRange.end);
-                confirmMsg = `Möchten Sie den Bereich "${name}" von ${rawStart} bis ${rawEnd} wirklich löschen?`;
-            } else {
-                // Deleting a single day
-                const rawDate = formatDateCH(currentEditingDatum);
-                confirmMsg = `Möchten Sie "${name}" am ${rawDate} wirklich löschen?`;
-            }
-
-            if (confirm(confirmMsg)) {
-                // Delete range or single day
-                if (currentEditingRange.start && currentEditingRange.end) {
-                    deleteRangeDays(currentEditingRange.start, currentEditingRange.end);
-                } else {
-                    delete feiertage[currentEditingDatum];
-                }
-
-                saveToStorage();
-                closeFeiertagModal();
-                renderEinstellungen();
-
-                if (view === 'monat') renderMonat();
-                if (view === 'jahr') renderJahr();
-            }
-        }
-
         function saveFeiertagFromModal() {
-            const rawVon = document.getElementById('modal-datum').value;
-            const rawBis = document.getElementById('modal-bis-datum').value;
-
-            const vonDatum = parseDateCH(rawVon);
-            const bisDatum = parseDateCH(rawBis);
-
+            const datum = document.getElementById('modal-datum').value;
             const name = document.getElementById('modal-name').value.trim();
             const typ = document.getElementById('modal-typ').value;
-            const mehrereTage = document.getElementById('modal-mehrere-tage').checked;
-
             const bezahlt = document.getElementById('modal-bezahlt').checked;
 
-            if (!vonDatum || !name) {
+            if (!datum || !name) {
                 alert('Bitte Datum und Name eingeben!');
                 return;
             }
 
-            if (mehrereTage && !bisDatum) {
-                alert('Bitte gib ein End-Datum ein.');
-                return;
-            }
-
-            // FIRST: Delete old range days if we're editing a range
-            if (currentEditingRange.start && currentEditingRange.end) {
-                deleteRangeDays(currentEditingRange.start, currentEditingRange.end);
-                currentEditingRange = { start: null, end: null };
-            }
-            // Or delete old single day if editing
-            else if (currentEditingDatum && currentEditingDatum !== vonDatum) {
+            if (currentEditingDatum && currentEditingDatum !== datum) {
                 delete feiertage[currentEditingDatum];
             }
 
-            // Datumsbereich
-            if (mehrereTage) {
-                const start = new Date(vonDatum + 'T00:00:00');
-                const end = new Date(bisDatum + 'T00:00:00');
-
-                if (start > end) {
-                    alert('Das End-Datum muss nach dem Start-Datum liegen.');
-                    return;
-                }
-
-                let count = 0;
-                const currentDate = new Date(start);
-
-                while (currentDate <= end) {
-                    const year = currentDate.getFullYear();
-                    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-                    const day = String(currentDate.getDate()).padStart(2, '0');
-                    const dateStr = `${year}-${month}-${day}`;
-
-                    feiertage[dateStr] = {
-                        name: name,
-                        bezahlt: bezahlt,
-                        typ: typ
-                    };
-                    count++;
-
-                    currentDate.setDate(currentDate.getDate() + 1);
-                }
-
-                alert(`✅ ${count} Tage als "${name}" gespeichert.`);
-            } else {
-                // Einzelner Tag
-                if (currentEditingDatum && currentEditingDatum !== vonDatum) {
-                    delete feiertage[currentEditingDatum];
-                }
-
-                feiertage[vonDatum] = {
-                    name: name,
-                    bezahlt: bezahlt,
-                    typ: typ
-                };
-            }
+            feiertage[datum] = {
+                name: name,
+                bezahlt: bezahlt,
+                typ: typ
+            };
 
             saveToStorage();
             closeFeiertagModal();
@@ -9530,9 +8540,7 @@
         });
     </script>
 
+    
 
 
-
-</body>
-
-</html>
+</body></html>

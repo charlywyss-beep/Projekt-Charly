@@ -1,18 +1,16 @@
 <html lang="de">
-<!-- Version 1.3.07 - Vacation Label Alignment Fix -->
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <title>Arbeitszeiten &amp; Ferien – Projekt-Charly</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Arbeitszeiten & Ferien – Projekt-Charly</title>
 
-    <!-- 🔲 App-Icons -->
+    <!-- 🔲 App-Icon einfügen -->
     <link rel="icon" type="image/png" href="logo.png">
     <link rel="apple-touch-icon" href="logo.png">
 
-    <!-- 🎨 Browser Theme Color -->
-    <meta name="theme-color" content="#6366F1" media="(prefers-color-scheme: light)">
-    <meta name="theme-color" content="#1F2937" media="(prefers-color-scheme: dark)">
+    <!-- Optional: Theme-Farbe für Mobile -->
+    <meta name="theme-color" content="#0f172a">
 
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -276,8 +274,7 @@
         body.dark input[type="number"],
         body.dark select {
             background: #4B5563;
-            border-color: #9CA3AF !important;
-            /* Lighter border for better visibility */
+            border-color: #6B7280;
             color: white !important;
             color-scheme: dark;
         }
@@ -326,13 +323,8 @@
             color: #E5E7EB;
         }
 
-        #user-info {
-            display: flex !important;
-            flex-shrink: 0 !important;
-            min-width: auto !important;
-            flex-direction: column;
-            align-items: flex-end;
-            margin-left: 1rem;
+        .user-info-persnr {
+            color: #6B7280;
         }
 
         body.dark .user-info-persnr {
@@ -342,8 +334,6 @@
         .hidden {
             display: none !important;
         }
-
-
 
         .message {
             margin-top: 0.5rem;
@@ -361,14 +351,6 @@
         .msg-err {
             background: #FEE2E2;
             color: #991B1B;
-        }
-
-        /* WICHTIG: Verstecke Nachricht IMMER wenn sie leer ist */
-        #msg:empty {
-            display: none !important;
-            padding: 0 !important;
-            margin: 0 !important;
-            border: none !important;
         }
 
         .del-btn {
@@ -414,7 +396,6 @@
             background: #374151;
         }
 
-        /* Clear button base styles */
         .clear-btn {
             background: #EF4444;
             color: white;
@@ -424,24 +405,21 @@
             cursor: pointer;
             width: 40px;
             height: 38px;
+            opacity: 1;
             transition: all 0.2s;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            /* Hidden by default */
-            opacity: 0 !important;
-            pointer-events: none !important;
         }
 
         .clear-btn:hover {
+            opacity: 0.8;
             transform: scale(1.05);
         }
 
-        /* Visible state */
-        .clear-btn.visible {
-            opacity: 1 !important;
-            pointer-events: auto !important;
+        .clear-btn.on {
+            opacity: 1;
         }
 
         .month-card {
@@ -633,23 +611,6 @@
             }
         }
 
-        /* ✅ Überzeit-Eingabefelder - Textfarbe sichtbar halten */
-        #settings-ueberzeit-datum,
-        #settings-ueberzeit-start {
-            color: #1F2937 !important;
-            /* Dunkler Text für Light Mode */
-        }
-
-        /* Überzeit-Eingabefelder - Dark Mode */
-        body.dark #settings-ueberzeit-datum,
-        body.dark #settings-ueberzeit-start {
-            color: #1F2937 !important;
-            /* Dunkler Text auch im Dark Mode (wegen gelbem Hintergrund) */
-            background: #FEF3C7 !important;
-            /* Heller gelber/beige Hintergrund */
-            border-color: #F59E0B !important;
-        }
-
         .tab {
             min-width: 120px;
             padding: 0.875rem 1rem;
@@ -747,16 +708,6 @@
             top: 60px !important;
         }
 
-        /* 📱 PORTRAIT MODE: Export-Menü nach LINKS ausklappen (statt rechts) */
-        @media (max-width: 480px) and (orientation: portrait) and (hover: none) and (pointer: coarse) {
-            .export-menu {
-                left: 0 !important;
-                right: auto !important;
-                max-width: calc(100vw - 1rem) !important;
-                min-width: 200px !important;
-            }
-        }
-
         .view-navigation {
             flex-direction: column !important;
             align-items: stretch !important;
@@ -795,124 +746,7 @@
             font-size: 0.95rem;
         }
 
-        /* 📱 MOBILE: SVG Icons für touch devices (kein repeat!) - PORTRAIT UND LANDSCAPE */
-        @media (max-width: 1024px) and (hover: none) and (pointer: coarse) {
-
-            /* Zeit-Input mit SVG Uhr-Icon und Placeholder - vollständig zurücksetzen */
-            input[type="time"] {
-                -webkit-appearance: none !important;
-                appearance: none !important;
-                color: transparent !important;
-                /* Hide native placeholder */
-                background:
-                    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239CA3AF' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' /%3E%3C/svg%3E") no-repeat right 0.75rem center / 1.25rem,
-                    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='20' viewBox='0 0 60 20'%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%239CA3AF' font-family='sans-serif' font-size='14'%3E-- : --%3C/text%3E%3C/svg%3E") no-repeat center center / 60px 20px,
-                    white !important;
-            }
-
-            /* ⚡ FORCE HIDE WEBKIT NATIVE TEXT */
-            input[type="time"]::-webkit-datetime-edit {
-                color: transparent !important;
-            }
-
-            /* Show text when focused or has value */
-            input[type="time"]:focus,
-            input[type="time"].has-value {
-                color: #1F2937 !important;
-            }
-
-            /* Show text in shadow DOM when focused or has value */
-            input[type="time"]:focus::-webkit-datetime-edit,
-            input[type="time"].has-value::-webkit-datetime-edit {
-                color: #1F2937 !important;
-            }
-
-            /* Icon & Placeholder ausblenden wenn Wert vorhanden */
-            input[type="time"].has-value {
-                background-image: none !important;
-            }
-
-            /* Dark Mode: Hellere Icons/Text - vollständig zurücksetzen */
-            body.dark input[type="time"] {
-                background:
-                    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23E5E7EB' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' /%3E%3C/svg%3E") no-repeat right 0.75rem center / 1.25rem,
-                    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='20' viewBox='0 0 60 20'%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23E5E7EB' font-family='sans-serif' font-size='14'%3E-- : --%3C/text%3E%3C/svg%3E") no-repeat center center / 60px 20px,
-                    #4B5563 !important;
-            }
-
-            /* FIX: Auch im Dark Mode Hintergrundbild entfernen wenn Wert da ist! */
-            body.dark input[type="time"].has-value {
-                background-image: none !important;
-            }
-
-            /* Clear-Button Visibility mit !important für iOS */
-            .clear-btn {
-                opacity: 0 !important;
-                pointer-events: none !important;
-            }
-
-            .clear-btn.visible {
-                opacity: 1 !important;
-                pointer-events: auto !important;
-                transition: opacity 0.2s ease !important;
-            }
-        }
-
-        /* iPad/Mobile Portrait: Kacheln stapeln, Buttons dazwischen */
-        @media (max-width: 768px) and (orientation: portrait) {
-            .kachel-grid {
-                grid-template-columns: 1fr !important;
-                display: flex !important;
-                flex-direction: column !important;
-            }
-
-            /* Arbeitszeiten Kachel: oben */
-            .kachel-grid>.arbeitszeit-kachel:nth-child(1) {
-                order: 1;
-            }
-
-            /* Buttons: in der Mitte */
-            .kachel-grid>.button-row {
-                order: 2;
-                grid-column: unset !important;
-                margin-top: 1.25rem !important;
-                margin-bottom: 1.25rem !important;
-            }
-
-            /* Zusatzoptionen Kachel: unten */
-            .kachel-grid>.arbeitszeit-kachel:nth-child(2) {
-                order: 3;
-            }
-
-            /* Mobile: Reduce calendar tile sizes to fit 7 columns */
-            .cal {
-                gap: 0.1rem !important;
-            }
-
-            .card-sm.cal-day {
-                padding: 0.25rem 0.2rem !important;
-                min-height: 50px !important;
-                font-size: 0.75rem !important;
-                border-radius: 0.5rem !important;
-            }
-
-            /* Day number font size */
-            .card-sm.cal-day>div:first-child {
-                font-size: 1rem !important;
-                font-weight: 700 !important;
-            }
-
-            .card-sm.cal-day .emoji-medium {
-                font-size: 0.7rem !important;
-            }
-
-            .card-sm.cal-day>div>div {
-                font-size: 0.6rem !important;
-                line-height: 1.1 !important;
-            }
-        }
-
-        @media (max-width: 480px) and (hover: none) and (pointer: coarse) {
+        @media (max-width: 480px) {
             body {
                 padding: 0.75rem !important;
             }
@@ -958,10 +792,8 @@
             label[for="mittk"],
             label[for="ag"] {
                 color: #6B7280 !important;
-                z-index: 10 !important;
-                pointer-events: none !important;
+                z-index: 0 !important;
                 font-size: 0.875rem !important;
-                transition: opacity 0.2s !important;
             }
 
             body.dark label[for="mk"],
@@ -972,67 +804,22 @@
                 opacity: 0.9 !important;
             }
 
-            /* Label ausblenden wenn Input Wert hat */
-            label[for="mk"].hidden,
-            label[for="mg"].hidden,
-            label[for="mittk"].hidden,
-            label[for="ag"].hidden {
-                display: none !important;
-            }
-
             /* Zeit-Input Rows: minimales gap */
             .arbeitszeit-kachel>div>div[style*="grid-row"] {
                 gap: 0.125rem !important;
             }
 
-            /* Fix für time inputs - zentriert mit gleichem Abstand */
+            /* Fix für time inputs - schmaler */
             input[type="time"] {
                 background: white !important;
                 position: relative;
                 z-index: 1;
-                padding: 0.75rem !important;
-                padding-right: 0.5rem !important;
+                padding: 0.4rem !important;
                 font-size: 0.9rem !important;
-                border-radius: 0.5rem !important;
-                text-align: center !important;
-                -webkit-appearance: none;
-                /* iOS Styling entfernen */
-                appearance: none;
-
-                /* Uhrzeit-Icon (rechts) UND Placeholder-Text (mitte) als Hintergrundbilder */
-                background-image:
-                    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239CA3AF' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' /%3E%3C/svg%3E"),
-                    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='20' viewBox='0 0 60 20'%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%239CA3AF' font-family='sans-serif' font-size='14'%3E-- : --%3C/text%3E%3C/svg%3E") !important;
-
-                background-repeat: no-repeat, no-repeat !important;
-                background-position: right 0.75rem center, center center !important;
-                background-size: 1.25rem, 60px 20px !important;
-            }
-
-            /* Icon & Placeholder ausblenden wenn Wert vorhanden */
-            input[type="time"].has-value {
-                background-image: none !important;
             }
 
             body.dark input[type="time"] {
-                background-color: #374151 !important;
-                /* Dark Mode: Hellere Icons/Text */
-                background-image:
-                    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23E5E7EB' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' /%3E%3C/svg%3E"),
-                    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='20' viewBox='0 0 60 20'%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23E5E7EB' font-family='sans-serif' font-size='14'%3E-- : --%3C/text%3E%3C/svg%3E") !important;
-                background-repeat: no-repeat, no-repeat !important;
-            }
-
-            /* Show text when focused or has value in Dark Mode */
-            body.dark input[type="time"]:focus,
-            body.dark input[type="time"].has-value {
-                color: #F3F4F6 !important;
-            }
-
-            /* Show text in shadow DOM when focused or has value in Dark Mode */
-            body.dark input[type="time"]:focus::-webkit-datetime-edit,
-            body.dark input[type="time"].has-value::-webkit-datetime-edit {
-                color: #F3F4F6 !important;
+                background: #374151 !important;
             }
 
             /* Clear-Buttons sehr klein */
@@ -1042,527 +829,32 @@
                 min-width: 30px !important;
                 flex-shrink: 0 !important;
                 font-size: 0.8rem !important;
-                z-index: 20 !important;
-                position: relative !important;
-                visibility: visible !important;
-                /* Always visible to keep layout stable */
-                display: flex !important;
-                top: auto !important;
-                right: auto !important;
-                transform: none !important;
-                opacity: 0;
-                /* Hidden by default */
-                pointer-events: none;
-            }
-
-            .clear-btn.visible {
-                opacity: 1 !important;
-                pointer-events: auto !important;
-            }
-
-            /* NUR Mobile: Flex-wrap Layout für Zeitfelder */
-            div[style*="grid-row: 2"],
-            div[style*="grid-row: 3"],
-            div[style*="grid-row: 4"],
-            div[style*="grid-row: 5"],
-            div[style*="grid-row: 6"] {
-                display: flex !important;
-                flex-wrap: wrap !important;
-                align-items: center !important;
-                gap: 1rem !important;
-                /* Abstand Input <-> Button vergrößert */
-                margin-bottom: 0 !important;
-                /* Vertikaler Abstand zum nächsten Feld */
-                padding-top: 0 !important;
-            }
-
-            /* WICHTIG: Grid-Rows auf auto setzen, damit Platz für Label + Input ist */
-            .arbeitszeit-kachel>div {
-                grid-template-rows: auto auto auto auto auto auto !important;
-                gap: 0.5rem !important;
-                /* Abstand zwischen den Grid-Zeilen vergrößert */
-                display: flex !important;
-                flex-direction: column !important;
-            }
-
-            /* Label nimmt volle Breite - erscheint in erster Zeile */
-            div[style*="grid-row: 2"] label,
-            div[style*="grid-row: 3"] label,
-            div[style*="grid-row: 4"] label,
-            div[style*="grid-row: 5"] label,
-            div[style*="grid-row: 6"] label {
-                flex-basis: 100% !important;
-                position: static !important;
-                transform: none !important;
-                left: auto !important;
-                top: auto !important;
-                font-size: 0.75rem !important;
-                color: #9CA3AF !important;
-                margin-bottom: 0 !important;
-                display: block !important;
-            }
-
-            body.dark div[style*="grid-row: 3"] label,
-            body.dark div[style*="grid-row: 4"] label,
-            body.dark div[style*="grid-row: 5"] label,
-            body.dark div[style*="grid-row: 6"] label {
-                color: #D1D5DB !important;
-            }
-
-            /* Input in zweiter Zeile - nimmt verfügbaren Platz */
-            div[style*="grid-row: 2"] input,
-            div[style*="grid-row: 3"] input,
-            div[style*="grid-row: 4"] input,
-            div[style*="grid-row: 5"] input,
-            div[style*="grid-row: 6"] input {
-                flex: 1 !important;
-                width: auto !important;
-                max-width: none !important;
-            }
-
-            /* Button neben Input in zweiter Zeile */
-            div[style*="grid-row: 2"] .clear-btn,
-            div[style*="grid-row: 3"] .clear-btn,
-            div[style*="grid-row: 4"] .clear-btn,
-            div[style*="grid-row: 5"] .clear-btn,
-            div[style*="grid-row: 6"] .clear-btn {
-                flex: 0 0 auto !important;
-                flex: 0 0 auto !important;
-                margin-left: 1.25rem !important;
-                /* Erzwingt Abstand zum Input */
-            }
-
-            /* ✅ Überzeit-Verwaltung Mobile Portrait Fix */
-            /* Stelle sicher, dass die gelben Input-Felder vertikal stacken */
-            #settings-ueberzeit-datum,
-            #settings-ueberzeit-start {
-                width: 100% !important;
-                max-width: 100% !important;
-                display: block !important;
-                margin-bottom: 0.75rem !important;
-                box-sizing: border-box !important;
-                font-size: 0.75rem !important;
-                padding: 0.65rem !important;
-                overflow: hidden !important;
-                text-overflow: ellipsis !important;
-                position: relative !important;
-            }
-
-            /* 🔥🔥 ULTRA-AGGRESSIVE: Überschreibe ALLE inline-styles */
-            /* Target: Gelbe Boxen + alle ihre Kinder */
-            div[style*="background"][style*="FEF3C7"],
-            div[style*="background"][style*="fef3c7"],
-            div[style*="background"][style*="254, 243, 199"],
-            div[style*="background-color"][style*="FEF3C7"],
-            div[style*="background-color"][style*="fef3c7"],
-            div[style*="background"][style*="rgb(254, 243, 199)"],
-            div[style*="background"][style*="rgba(254, 243, 199"] {
-                display: flex !important;
-                flex-direction: column !important;
-                align-items: center !important;
-                /* 🎯 ZENTRIEREN */
-                justify-content: center !important;
-                flex-wrap: wrap !important;
-                gap: 0.5rem !important;
-                width: 100% !important;
-                max-width: 100% !important;
-                height: auto !important;
-                /* ⚡ KRITISCH: Überschreibe feste Höhe */
-                min-height: 60px !important;
-                max-height: none !important;
-                box-sizing: border-box !important;
-                padding: 0.75rem !important;
-                overflow: visible !important;
-                position: relative !important;
-                /* Überschreibe absolute positioning */
-                text-align: center !important;
-                /* Text zentrieren */
-            }
-
-            /* Alle Kinder: volle Breite, vertical layout, KEINE absolute Position */
-            div[style*="background"][style*="FEF3C7"]>*,
-            div[style*="background"][style*="fef3c7"]>*,
-            div[style*="background-color"][style*="FEF3C7"]>*,
-            div[style*="background"][style*="rgb(254, 243, 199)"]>* {
-                width: 85% !important;
-                /* 🎯 Etwas Platz lassen für Zentrierung */
-                max-width: 350px !important;
-                /* 🎯 Begrenzte Breite wie gewünscht */
-                box-sizing: border-box !important;
-                margin-bottom: 0.5rem !important;
-                display: block !important;
-                position: relative !important;
-                /* ⚡ KRITISCH: Reset alle Position-Properties */
-                left: auto !important;
-                right: auto !important;
-                top: auto !important;
-                bottom: auto !important;
-                float: none !important;
-                transform: none !important;
-                text-align: center !important;
-                /* Text in Labels zentrieren */
-                margin-left: auto !important;
-                margin-right: auto !important;
-            }
-
-            /* Generische Regel: ALLE inputs in Einstellungen - MUSS AUCH BEGRENZT SEIN */
-            #v-einstellungen input[type="text"],
-            #v-einstellungen input[type="date"],
-            #v-einstellungen input[type="time"],
-            #v-einstellungen input:not([type]) {
-                max-width: 350px !important;
-                /* 🎯 Fix für Specificity Issue */
-                width: 85% !important;
-                /* 🎯 Fix für Specificity Issue */
-                box-sizing: border-box !important;
-                font-size: 0.875rem !important;
-                position: relative !important;
-                text-align: center !important;
-                /* Inputs zentrieren */
-                margin-left: auto !important;
-                margin-right: auto !important;
             }
         }
-
-        /* 📱 LANDSCAPE MODE: Gleiche Regeln für Querformat auf mobilen Geräten */
-        /* FIXED: Changed from max-height: 500px to max-width: 1024px to cover ALL iPhones */
-        @media (max-width: 1024px) and (orientation: landscape) and (hover: none) and (pointer: coarse) {
-
-            /* ✅ Überzeit-Verwaltung auch im Querformat vertikal */
-            div[style*="background"][style*="FEF3C7"],
-            div[style*="background"][style*="fef3c7"],
-            div[style*="background"][style*="254, 243, 199"],
-            div[style*="background-color"][style*="FEF3C7"],
-            div[style*="background-color"][style*="fef3c7"],
-            div[style*="background"][style*="rgb(254, 243, 199)"],
-            div[style*="background"][style*="rgba(254, 243, 199"] {
-                display: flex !important;
-                flex-direction: column !important;
-                align-items: center !important;
-                /* 🎯 ZENTRIEREN */
-                justify-content: center !important;
-                flex-wrap: wrap !important;
-                gap: 0.5rem !important;
-                width: 100% !important;
-                max-width: 100% !important;
-                height: auto !important;
-                min-height: 60px !important;
-                max-height: none !important;
-                box-sizing: border-box !important;
-                padding: 0.75rem !important;
-                overflow: visible !important;
-                position: relative !important;
-                text-align: center !important;
-                /* Text zentrieren */
-            }
-
-            /* Alle Kinder: begrenzte Breite, zentriert */
-            div[style*="background"][style*="FEF3C7"]>*,
-            div[style*="background"][style*="fef3c7"]>*,
-            div[style*="background-color"][style*="FEF3C7"]>*,
-            div[style*="background"][style*="rgb(254, 243, 199)"]>* {
-                width: 100% !important;
-                max-width: 400px !important;
-                /* 🎯 Nicht zu breit werden lassen */
-                box-sizing: border-box !important;
-                margin-bottom: 0.5rem !important;
-                display: block !important;
-                position: relative !important;
-                left: auto !important;
-                right: auto !important;
-                top: auto !important;
-                bottom: auto !important;
-                float: none !important;
-                transform: none !important;
-                text-align: center !important;
-                /* Text in Labels zentrieren */
-            }
-
-            /* Inputs Text zentriert lassen */
-            div[style*="background"][style*="FEF3C7"]>input,
-            div[style*="background"][style*="fef3c7"]>input,
-            div[style*="background-color"][style*="FEF3C7"]>input {
-                text-align: center !important;
-            }
-
-            /* 🔥 OVERRIDE INLINE STYLES: Force gap on container */
-            .arbeitszeit-kachel>div[style*="grid-template-rows"] {
-                gap: 0.75rem !important;
-                /* Left kachel: Override to 8 rows (same as right kachel) to match alignment */
-                /* Right kachel: Alternating pattern: 24px (label) + 54px (input/radio) */
-            }
-
-            /* Left kachel: Override to 8 rows (same as right kachel) to match alignment */
-            .kachel-grid>.arbeitszeit-kachel:first-child>div[style*="grid-template-rows"] {
-                grid-template-rows: 24px 54px 54px 54px 54px 54px 54px 54px !important;
-                /* 🔥 NEW: 2 columns for Input + Clear Button */
-                grid-template-columns: 1fr auto !important;
-                column-gap: 0.5rem !important;
-            }
-
-            /* Right kachel: Keep 8 rows */
-            .kachel-grid>.arbeitszeit-kachel:not(:first-child)>div[style*="grid-template-rows"] {
-                grid-template-rows: 24px 54px 54px 54px 54px 54px 54px 54px !important;
-            }
-
-            /* Force left alignment for grid items in left kachel but STRETCH items */
-            .kachel-grid>.arbeitszeit-kachel:first-child>div[style*="grid-template-rows"] {
-                align-items: start !important;
-                justify-items: stretch !important;
-                /* CRITICAL: Ensure full width for inputs */
-            }
-
-            /* Hide "Zeiten" header in left kachel (Row 1 in HTML) - FIXED SELECTOR */
-            .kachel-grid>.arbeitszeit-kachel:first-child>div>label[style*="grid-row: 1"] {
-                display: none !important;
-            }
-
-            /* Flatten ALL wrappers in left kachel to allow direct grid placement */
-            .kachel-grid>.arbeitszeit-kachel:first-child>div>div[style*="grid-row"] {
-                display: contents !important;
-            }
-
-            /* Morgen Kommen: HTML Row 2 -> CSS Row 1 (Label) & 2 (Input) */
-            .kachel-grid>.arbeitszeit-kachel:first-child>div>div[style*="grid-row: 2"]>label {
-                grid-row: 1 !important;
-                grid-column: 1 / span 2 !important;
-                /* Span full width */
-                margin-bottom: 0 !important;
-                /* Override desktop styling */
-                width: 100% !important;
-                min-width: 0 !important;
-                padding: 0 !important;
-                text-align: left !important;
-                font-size: 0.875rem !important;
-                align-self: end !important;
-                /* Align to bottom of 24px row */
-            }
-
-            .kachel-grid>.arbeitszeit-kachel:first-child>div>div[style*="grid-row: 2"]>input {
-                grid-row: 2 !important;
-                grid-column: 1 !important;
-                width: 100% !important;
-                height: 54px !important;
-            }
-
-            .kachel-grid>.arbeitszeit-kachel:first-child>div>div[style*="grid-row: 2"]>.clear-btn {
-                grid-row: 2 !important;
-                grid-column: 2 !important;
-                align-self: center !important;
-                /* Vertically center in 54px row */
-                margin: 0 !important;
-                position: static !important;
-                /* Reset absolute positioning */
-            }
-
-            /* Tag-Typ label: match font-size to Morgen Kommen */
-            .kachel-grid>.arbeitszeit-kachel:not(:first-child)>div>label[style*="grid-row: 1"] {
-                font-size: 0.875rem !important;
-            }
-
-            /* Morgen Gehen: HTML Row 3 -> CSS Row 3 (Label) & 4 (Input) */
-            .kachel-grid>.arbeitszeit-kachel:first-child>div>div[style*="grid-row: 3"]>label {
-                grid-row: 3 !important;
-                grid-column: 1 / span 2 !important;
-                margin-bottom: 0 !important;
-                align-self: end !important;
-                /* Align to bottom of 54px row */
-            }
-
-            .kachel-grid>.arbeitszeit-kachel:first-child>div>div[style*="grid-row: 3"]>input {
-                grid-row: 4 !important;
-                grid-column: 1 !important;
-                width: 100% !important;
-                height: 54px !important;
-            }
-
-            .kachel-grid>.arbeitszeit-kachel:first-child>div>div[style*="grid-row: 3"]>.clear-btn {
-                grid-row: 4 !important;
-                grid-column: 2 !important;
-                align-self: center !important;
-                margin: 0 !important;
-                position: static !important;
-            }
-
-            /* Mittag Kommen: HTML Row 4 -> CSS Row 5 (Label) & 6 (Input) */
-            .kachel-grid>.arbeitszeit-kachel:first-child>div>div[style*="grid-row: 4"]>label {
-                grid-row: 5 !important;
-                grid-column: 1 / span 2 !important;
-                margin-bottom: 0 !important;
-                align-self: end !important;
-                /* Align to bottom of 54px row */
-            }
-
-            .kachel-grid>.arbeitszeit-kachel:first-child>div>div[style*="grid-row: 4"]>input {
-                grid-row: 6 !important;
-                grid-column: 1 !important;
-                width: 100% !important;
-                height: 54px !important;
-            }
-
-            .kachel-grid>.arbeitszeit-kachel:first-child>div>div[style*="grid-row: 4"]>.clear-btn {
-                grid-row: 6 !important;
-                grid-column: 2 !important;
-                align-self: center !important;
-                margin: 0 !important;
-                position: static !important;
-            }
-
-            /* Abend Gehen: HTML Row 5 -> CSS Row 7 (Label) & 8 (Input) */
-            .kachel-grid>.arbeitszeit-kachel:first-child>div>div[style*="grid-row: 5"]>label {
-                grid-row: 7 !important;
-                grid-column: 1 / span 2 !important;
-                margin-bottom: 0 !important;
-                align-self: end !important;
-                /* Align to bottom of 54px row */
-            }
-
-            .kachel-grid>.arbeitszeit-kachel:first-child>div>div[style*="grid-row: 5"]>input {
-                grid-row: 8 !important;
-                grid-column: 1 !important;
-                width: 100% !important;
-                height: 54px !important;
-            }
-
-            .kachel-grid>.arbeitszeit-kachel:first-child>div>div[style*="grid-row: 5"]>.clear-btn {
-                grid-row: 8 !important;
-                grid-column: 2 !important;
-                align-self: center !important;
-                margin: 0 !important;
-                position: static !important;
-            }
-
-            /* 🔥 NEU: Arbeitszeiten Kachel - Label und Input vertikal stapeln */
-            /* ONLY apply to RIGHT kachel - left kachel uses display: contents */
-            .kachel-grid>.arbeitszeit-kachel:not(:first-child)>div>div[style*="grid-row"] {
-                display: flex !important;
-                flex-wrap: wrap !important;
-                align-items: center !important;
-                height: auto !important;
-                margin-bottom: 2rem !important;
-                /* INCREASED: Space between input groups */
-            }
-
-            /* Label nimmt volle Breite (Zeilenumbruch erzwingen) */
-            /* ONLY apply to RIGHT kachel - left kachel uses grid placement */
-            .kachel-grid>.arbeitszeit-kachel:not(:first-child) label {
-                width: 100% !important;
-                flex-basis: 100% !important;
-                margin-bottom: 0.25rem !important;
-                /* BACK to original - label to input spacing */
-                text-align: left !important;
-                display: block !important;
-            }
-
-            /* Input nimmt verfügbaren Platz */
-            .arbeitszeit-kachel input[type="time"] {
-                flex: 1 !important;
-                min-width: 0 !important;
-            }
-
-            /* Clear Button Abstand */
-            .arbeitszeit-kachel .clear-btn {
-                margin-left: 0.5rem !important;
-            }
-
-            /* 🔥 FIX: Input Styling in Landscape to match Portrait (Darker Gray, Smaller Font) */
-            .arbeitszeit-kachel input[type="time"] {
-                font-size: 0.9rem !important;
-                font-weight: normal !important;
-                border-radius: 0.5rem !important;
-                /* Ensure consistent height */
-                height: 54px !important;
-            }
-
-            body.dark .arbeitszeit-kachel input[type="time"] {
-                background-color: #374151 !important;
-                /* Match mobile portrait dark mode */
-                border-color: #9CA3AF !important;
-                /* Unified lighter border */
-                color: white !important;
-            }
-        }
-
-        /* Desktop: Zeit-Input Container */
-        .arbeitszeit-kachel>div>div[style*="grid-row: 2"],
-        .arbeitszeit-kachel>div>div[style*="grid-row: 3"],
-        .arbeitszeit-kachel>div>div[style*="grid-row: 4"],
-        .arbeitszeit-kachel>div>div[style*="grid-row: 5"],
-        .arbeitszeit-kachel>div>div[style*="grid-row: 6"] {
-            display: flex !important;
-            align-items: center !important;
-            justify-content: flex-start !important;
-            gap: 0.5rem !important;
-            position: relative !important;
-        }
-
-        /* Label Styling */
-        .arbeitszeit-kachel label[for="mk"],
-        .arbeitszeit-kachel label[for="mg"],
-        .arbeitszeit-kachel label[for="mittk"],
-        .arbeitszeit-kachel label[for="ag"] {
-            /* Position & Layout */
-            position: static !important;
-            transform: none !important;
-            display: block !important;
-
-            /* Spacing */
-            margin: 0 !important;
-            padding: 0 0.5rem !important;
-
-            /* Sizing */
-            width: auto !important;
-            min-width: 140px !important;
-            white-space: nowrap !important;
-
-            /* Appearance */
-            pointer-events: none !important;
-            z-index: 10 !important;
-            opacity: 1 !important;
-            color: #6B7280 !important;
-            font-size: 0.875rem !important;
-        }
-
-        /* Dark Mode Labels */
-        body.dark .arbeitszeit-kachel label[for="mk"],
-        body.dark .arbeitszeit-kachel label[for="mg"],
-        body.dark .arbeitszeit-kachel label[for="mittk"],
-        body.dark .arbeitszeit-kachel label[for="ag"] {
-            color: #E5E7EB !important;
-        }
-
-        /* Zeit-Input */
-        .arbeitszeit-kachel input[type="time"] {
-            flex: 1 !important;
-            text-align: center !important;
-            padding-right: 0.75rem !important;
-            padding-left: 0.75rem !important;
-            min-width: 0 !important;
-            /* Fix für Flexbox Overflow */
-        }
-
-        /* Clear Button */
-        .arbeitszeit-kachel .clear-btn {
-            position: static !important;
-            transform: none !important;
-            margin: 0 !important;
-            margin-left: 1.5rem !important;
-            /* 0.5rem gap + 1.5rem margin = 2rem zum Input */
-            margin-right: 0.5rem !important;
-            flex-shrink: 0 !important;
-        }
-
-        .google-one-tap__module,
-        .google-one-tap-modal-div,
-        #amp_floatingAdDiv,
-        #ez-content-blocker-container {
+    </style>
+    <style>
+        :is([id*='google_ads_iframe'], [id*='taboola-'], .taboolaHeight, .taboola-placeholder, #top-ad, #credential_picker_container, #credentials-picker-container, #credential_picker_iframe, [id*='google-one-tap-iframe'], #google-one-tap-popup-container, .google-one-tap__module, .google-one-tap-modal-div, #amp_floatingAdDiv, #ez-content-blocker-container) {
             display: none !important;
             min-height: 0 !important;
             height: 0 !important;
         }
     </style>
     <style>
-        :is([id*='google_ads_iframe'], [id*='taboola-'], .taboolaHeight, .taboola-placeholder, #top-ad, #credential_picker_container, #credentials-picker-container, #credential_picker_iframe, [id*='google-one-tap-iframe'], #google-one-tap-popup-container, .google-one-tap-modal-div, #amp_floatingAdDiv, #ez-content-blocker-container) {
+        :is([id*='google_ads_iframe'], [id*='taboola-'], .taboolaHeight, .taboola-placeholder, #top-ad, #credential_picker_container, #credentials-picker-container, #credential_picker_iframe, [id*='google-one-tap-iframe'], #google-one-tap-popup-container, .google-one-tap__module, .google-one-tap-modal-div, #amp_floatingAdDiv, #ez-content-blocker-container) {
+            display: none !important;
+            min-height: 0 !important;
+            height: 0 !important;
+        }
+    </style>
+    <style>
+        :is([id*='google_ads_iframe'], [id*='taboola-'], .taboolaHeight, .taboola-placeholder, #top-ad, #credential_picker_container, #credentials-picker-container, #credential_picker_iframe, [id*='google-one-tap-iframe'], #google-one-tap-popup-container, .google-one-tap__module, .google-one-tap-modal-div, #amp_floatingAdDiv, #ez-content-blocker-container) {
+            display: none !important;
+            min-height: 0 !important;
+            height: 0 !important;
+        }
+    </style>
+    <style>
+        :is([id*='google_ads_iframe'], [id*='taboola-'], .taboolaHeight, .taboola-placeholder, #top-ad, #credential_picker_container, #credentials-picker-container, #credential_picker_iframe, [id*='google-one-tap-iframe'], #google-one-tap-popup-container, .google-one-tap__module, .google-one-tap-modal-div, #amp_floatingAdDiv, #ez-content-blocker-container) {
             display: none !important;
             min-height: 0 !important;
             height: 0 !important;
@@ -1591,132 +883,6 @@
             to {
                 opacity: 1;
                 transform: translateX(-50%) translateY(0);
-            }
-        }
-    </style>
-    <style>
-        /* ========================================== */
-        /* MOBILE OPTIMIERUNGEN v1.3.00             */
-        /* Safe Area Support + Android Touch        */
-        /* ========================================== */
-
-        /* Safe Area für iPhone X und neuer - Notch/Dynamic Island Support */
-        @supports (padding: env(safe-area-inset-top)) {
-            body {
-                padding-top: max(1.5rem, env(safe-area-inset-top));
-                padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
-                padding-left: max(1.5rem, env(safe-area-inset-left));
-                padding-right: max(1.5rem, env(safe-area-inset-right));
-            }
-        }
-
-        /* Android Material Design - 48px Touch-Targets */
-        @media (hover: none) and (pointer: coarse) {
-
-            /* Buttons mindestens 48px hoch (außer clear-btn) */
-            .btn:not(.clear-btn) {
-                min-height: 48px;
-            }
-
-            /* Alle Inputs mindestens 48px hoch */
-            input[type="time"],
-            input[type="date"],
-            input[type="text"],
-            input[type="number"],
-            select {
-                min-height: 48px;
-            }
-
-            /* Tab-Buttons auch 48px */
-            .tab {
-                min-height: 48px;
-            }
-        }
-    </style>
-    <style>
-        /* ========================================== */
-        /* PRINT STYLES (Druck-Optimierung)         */
-        /* ========================================== */
-        @media print {
-            @page {
-                margin: 1cm;
-                size: auto;
-            }
-
-            body {
-                background: white !important;
-                color: black !important;
-                padding: 0 !important;
-            }
-
-            /* Verstecke UI-Elemente */
-            .header button,
-            .tabs,
-            .nav-controls button,
-            .button-row,
-            .clear-btn,
-            #export-menu,
-            .export-menu,
-            #user-info,
-            .btn {
-                display: none !important;
-            }
-
-            /* Container volle Breite */
-            .container {
-                max-width: 100% !important;
-                width: 100% !important;
-                margin: 0 !important;
-                box-shadow: none !important;
-            }
-
-            /* Cards vereinfachen */
-            .card,
-            .card-sm,
-            .arbeitszeit-kachel {
-                box-shadow: none !important;
-                border: 1px solid #ddd !important;
-                break-inside: avoid;
-                background: white !important;
-            }
-
-            /* Inputs als Text anzeigen (Rahmen weg) */
-            input,
-            select {
-                border: none !important;
-                background: transparent !important;
-                padding: 0 !important;
-                appearance: none !important;
-                -webkit-appearance: none !important;
-            }
-
-            /* Farben für Druck optimieren (Schwarz/Weiß) */
-            .grad-blue,
-            .grad-purple,
-            .grad-green,
-            .grad-orange,
-            .grad-gray {
-                background: white !important;
-                color: black !important;
-                border: 1px solid #ccc !important;
-                min-height: auto !important;
-            }
-
-            /* Header aufräumen */
-            .header {
-                margin-bottom: 1cm !important;
-                border-bottom: 2px solid black;
-                padding-bottom: 0.5rem;
-            }
-
-            h1 {
-                font-size: 24pt !important;
-                color: black !important;
-            }
-
-            /* Verstecke leere Elemente */
-            .hidden {
-                display: none !important;
             }
         }
     </style>
@@ -1726,16 +892,8 @@
     <div class="container">
         <div class="header">
             <div class="card"
-                style="flex: 1; min-width: 300px; margin: 0; display: flex; justify-content: space-between; align-items: center; position: relative;">
-                <div style="flex: 1; display: flex; justify-content: space-between; align-items: center;">
-                    <div>
-                        <h1><span>🕐</span>Arbeitszeiten</h1>
-                        <div style="font-size: 0.65rem; color: #9CA3AF; margin-top: 0.5rem; margin-left: 0.5rem;">
-                            v1.3.07
-                        </div>
-                    </div>
-                    <span style="font-size: 0.75rem; color: #9CA3AF; font-weight: normal;"></span>
-                </div>
+                style="flex: 1; min-width: 300px; margin: 0; display: flex; justify-content: space-between; align-items: center;">
+                <h1><span>🕐</span>Arbeitszeiten</h1>
                 <div id="user-info" style="text-align: right; font-size: 0.875rem; color: #6B7280; line-height: 1.4;">
                     <div class="user-info-name">Wyss Charly</div>
                     <div class="user-info-persnr">Pers. Nr. 1972</div>
@@ -1746,23 +904,17 @@
                 <div style="position: relative;">
                     <button class="btn btn-sec card-sm" onclick="toggleExport()">📥</button>
                     <div id="export-menu" class="export-menu hidden">
-                        <button class="export-btn time-export" onclick="exportBoth()" style="display: none;">📦 Excel +
-                            PDF</button>
-                        <button class="export-btn time-export" onclick="exportExcel()" style="display: none;">📊 Excel
-                            (.xlsx)</button>
-                        <button class="export-btn time-export" onclick="exportCSV()" style="display: none;">📄 CSV
-                            (Deutsch)</button>
-                        <button class="export-btn time-export" onclick="exportPDF()" style="display: none;">📕
-                            PDF</button>
-                        <div class="time-export"
-                            style="border-top: 1px solid rgb(229, 231, 235); margin: 0.5rem 0px; display: none;"></div>
+                        <button class="export-btn time-export" onclick="exportBoth()">📦 Excel + PDF</button>
+                        <button class="export-btn time-export" onclick="exportExcel()">📊 Excel (.xlsx)</button>
+                        <button class="export-btn time-export" onclick="exportCSV()">📄 CSV (Deutsch)</button>
+                        <button class="export-btn time-export" onclick="exportPDF()">📕 PDF</button>
+                        <div class="time-export" style="border-top: 1px solid #E5E7EB; margin: 0.5rem 0;"></div>
                         <button class="export-btn settings-export" onclick="exportVollbackup()"
                             style="color: #10B981; font-weight: 600;">💾 Voll-Backup erstellen</button>
                         <button class="export-btn settings-export" onclick="importVollbackup()"
                             style="color: #6366F1; font-weight: 600;">📥 Voll-Backup einlesen</button>
                         <div class="settings-export" style="border-top: 1px solid #E5E7EB; margin: 0.5rem 0;"></div>
-                        <button class="export-btn time-export" onclick="importData()" style="display: none;">📊
-                            Excel/CSV importieren (nur
+                        <button class="export-btn time-export" onclick="importData()">📊 Excel/CSV importieren (nur
                             Zeiten)</button>
                         <button class="export-btn settings-export" onclick="downloadHTML()">💾 HTML speichern</button>
                     </div>
@@ -1779,9 +931,8 @@
                 <button class="btn tab" onclick="switchView('tag')">📅 Tag</button>
                 <button class="btn tab" onclick="switchView('woche')">📅 Woche</button>
                 <button class="btn tab" onclick="switchView('monat')">📅 Monat</button>
-                <button class="btn tab" onclick="switchView('jahr')">📅 Jahr</button>
-                <button class="btn tab active" onclick="switchView('einstellungen')"><span
-                        class="emoji-medium">⚙️</span>
+                <button class="btn tab active" onclick="switchView('jahr')">📅 Jahr</button>
+                <button class="btn tab" onclick="switchView('einstellungen')"><span class="emoji-medium">⚙️</span>
                     Einstellungen</button>
             </div>
         </div>
@@ -1797,76 +948,102 @@
                     <button class="btn btn-primary" onclick="prevDay()"
                         style="min-width: 44px; flex-shrink: 0;">←</button>
                     <span id="curr-date" class="datums-anzeige" style="flex: 1; text-align: center; min-width: 0;">KW
-                        49&nbsp;&nbsp;&nbsp;&nbsp;Mo 01.12.2025</span>
+                        47&nbsp;&nbsp;&nbsp;&nbsp;Fr 21.11.2025</span>
                     <button class="btn btn-primary" onclick="nextDay()"
                         style="min-width: 44px; flex-shrink: 0;">→</button>
                 </div>
 
-                <div id="tag-typ-anzeige" class=""
-                    style="text-align: center; margin-top: 1rem; padding: 1rem; border-radius: 0.75rem; font-weight: 600; font-size: 1.125rem; background: linear-gradient(135deg, rgb(107, 114, 128) 0%, rgb(156, 163, 175) 100%) !important; color: rgb(255, 255, 255); border: 2px solid rgb(209, 213, 219); opacity: 0.9;">
-                    <span id="tag-typ-icon" style="font-size: 1.5rem; margin-right: 0.5rem;">⚙️</span>
-                    <span id="tag-typ-text">Normaler Arbeitstag</span>
+                <div id="tag-typ-anzeige" class="hidden"
+                    style="text-align: center; margin-top: 1rem; padding: 1rem; border-radius: 0.75rem; font-weight: 600; font-size: 1.125rem;">
+                    <span id="tag-typ-icon" style="font-size: 1.5rem; margin-right: 0.5rem;"></span>
+                    <span id="tag-typ-text"></span>
                 </div>
             </div>
             <input type="date" id="selDate" style="display: none;">
 
-            <div class="kachel-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+            <div class="kachel-grid">
 
                 <div class="arbeitszeit-kachel">
                     <h3 class="arbeitszeit-kachel-title">⏰ Arbeitszeiten</h3>
-                    <div
-                        style="display: grid; grid-template-rows: 24px 54px 54px 54px 54px 54px 54px 54px; gap: 0.75rem;">
-                        <!-- Zeile 1: Label (for Desktop layout) -->
+                    <div style="display: grid; grid-template-rows: 24px 54px 54px 54px 54px 54px; gap: 0.75rem;">
+                        <!-- Zeile 1: Label -->
                         <label
                             style="grid-row: 1; font-weight: 600; font-size: 0.9375rem; line-height: 24px; align-self: start;">Zeiten</label>
 
-                        <!-- Zeile 2: Morgen Kommen (auf gleicher Höhe wie "Normaler Arbeitstag" rechts) -->
-                        <div style="grid-row: 2;">
-                            <label for="mk" id="label-mk">Morgen Kommen</label>
-                            <input type="time" id="mk"
-                                style="width: auto; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;"
-                                oninput="toggleLabel('mk')" onchange="toggleLabel('mk')">
+                        <!-- Zeile 2: LEER (entspricht "Normaler Arbeitstag" rechts) -->
+
+                        <!-- Zeile 3: Morgen Kommen -->
+                        <div style="grid-row: 3; display: flex; align-items: center; gap: 0.5rem;">
+                            <div style="position: relative; flex: 1;">
+                                <label for="mk" id="label-mk"
+                                    style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: rgb(107, 114, 128); pointer-events: none; font-size: 0.875rem; white-space: nowrap; display: block;">Morgen
+                                    Kommen</label>
+                                <input type="time" id="mk" style="width: 100%; height: 54px; box-sizing: border-box;"
+                                    oninput="toggleLabel('mk')">
+                            </div>
                             <button class="clear-btn" id="c-mk" onclick="clearField('mk')">✕</button>
                         </div>
 
-                        <!-- Zeile 3: Morgen Gehen -->
-                        <div style="grid-row: 3;">
-                            <label for="mg" id="label-mg">Morgen Gehen</label>
-                            <input type="time" id="mg"
-                                style="width: auto; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;"
-                                oninput="toggleLabel('mg')" onchange="toggleLabel('mg')">
+                        <!-- Zeile 4: Morgen Gehen -->
+                        <div style="grid-row: 4; display: flex; align-items: center; gap: 0.5rem;">
+                            <div style="position: relative; flex: 1;">
+                                <label for="mg" id="label-mg"
+                                    style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: rgb(107, 114, 128); pointer-events: none; font-size: 0.875rem; white-space: nowrap; display: block;">Morgen
+                                    Gehen</label>
+                                <input type="time" id="mg" style="width: 100%; height: 54px; box-sizing: border-box;"
+                                    oninput="toggleLabel('mg')">
+                            </div>
                             <button class="clear-btn" id="c-mg" onclick="clearField('mg')">✕</button>
                         </div>
 
-                        <!-- Zeile 4: Mittag Kommen -->
-                        <div style="grid-row: 4;">
-                            <label for="mittk" id="label-mittk">Mittag Kommen</label>
-                            <input type="time" id="mittk"
-                                style="width: auto; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;"
-                                oninput="toggleLabel('mittk')" onchange="toggleLabel('mittk')">
+                        <!-- Zeile 5: Mittag Kommen -->
+                        <div style="grid-row: 5; display: flex; align-items: center; gap: 0.5rem;">
+                            <div style="position: relative; flex: 1;">
+                                <label for="mittk" id="label-mittk"
+                                    style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: rgb(107, 114, 128); pointer-events: none; font-size: 0.875rem; white-space: nowrap; display: block;">Mittag
+                                    Kommen</label>
+                                <input type="time" id="mittk" style="width: 100%; height: 54px; box-sizing: border-box;"
+                                    oninput="toggleLabel('mittk')">
+                            </div>
                             <button class="clear-btn" id="c-mittk" onclick="clearField('mittk')">✕</button>
                         </div>
 
-                        <!-- Zeile 5: Abend Gehen -->
-                        <div style="grid-row: 5;">
-                            <label for="ag" id="label-ag">Abend Gehen</label>
-                            <input type="time" id="ag"
-                                style="width: auto; height: 54px; box-sizing: border-box; padding: 0.75rem; border-radius: 0.5rem;"
-                                oninput="toggleLabel('ag')" onchange="toggleLabel('ag')">
+                        <!-- Zeile 6: Abend Gehen -->
+                        <div style="grid-row: 6; display: flex; align-items: center; gap: 0.5rem;">
+                            <div style="position: relative; flex: 1;">
+                                <label for="ag" id="label-ag"
+                                    style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: rgb(107, 114, 128); pointer-events: none; font-size: 0.875rem; white-space: nowrap; display: block;">Abend
+                                    Gehen</label>
+                                <input type="time" id="ag" style="width: 100%; height: 54px; box-sizing: border-box;"
+                                    oninput="toggleLabel('ag')">
+                            </div>
                             <button class="clear-btn" id="c-ag" onclick="clearField('ag')">✕</button>
                         </div>
 
-                        <!-- Zeile 6-8: LEER (entspricht weitere Optionen rechts) -->
+                        <!-- Zeile 8: LEER (entspricht "Überzeit-Kompensation" rechts) -->
                     </div>
 
                     <!-- Fehlermeldung innerhalb der Kachel -->
-                    <!-- Fehlermeldungen / Erfolg -->
-                    <div id="msg" class="message msg-ok hidden"
-                        style="margin-top: 0.75rem; text-align: center; display: none;">✅ Feiertage_2025-2026.ics
-                        erfolgreich exportiert!</div>
+                    <div id="msg" class="message msg-ok hidden" style="margin-top: 0.75rem; text-align: center;"></div>
 
-                    <!-- Platzhalter für Warnbox (innerhalb der Kachel, damit Grid nicht bricht) -->
-                    <div id="tagtyp-warning-container"></div>
+                    <!-- Warnbox für Tag-Typ Wechsel -->
+                    <div id="tagtyp-warning" class="hidden"
+                        style="margin-top: 1rem; padding: 1rem; background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%); border: 2px solid #F59E0B; border-radius: 0.5rem;">
+                        <div
+                            style="font-weight: 700; font-size: 1rem; color: #92400E; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                            ⚠️ Tag-Typ Wechsel
+                        </div>
+                        <div style="color: #78350F; font-size: 0.875rem; line-height: 1.5; margin-bottom: 1rem;">
+                            <strong>Bei OK werden Arbeitszeiten gelöscht!</strong><br>
+                            Bei Abbruch geht es zurück auf Normalen Arbeitstag.
+                        </div>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="btn btn-success" onclick="confirmTagTypChange(true)" style="flex: 1;">OK -
+                                Zeiten löschen</button>
+                            <button class="btn btn-sec" onclick="confirmTagTypChange(false)"
+                                style="flex: 1;">Abbrechen</button>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="arbeitszeit-kachel">
@@ -1942,13 +1119,11 @@
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Zurücksetzen und Speichern Buttons -->
-                <div class="button-row" style="grid-column: 1 / -1; display: flex; gap: 0.5rem; margin-top: 1.25rem;">
-                    <button class="btn btn-danger" style="flex: 1;" onclick="reset()">↻ Zurücksetzen</button>
-                    <button class="btn btn-success" id="btn-save" style="flex: 1;" onclick="save()">💾
-                        Speichern</button>
-                </div>
+            <div style="display: flex; gap: 0.5rem; margin-top: 1.25rem;">
+                <button class="btn btn-danger" style="flex: 1;" onclick="reset()">↻ Zurücksetzen</button>
+                <button class="btn btn-success" id="btn-save" style="flex: 1;" onclick="save()">💾 Speichern</button>
             </div>
 
             <div id="compact-result"
@@ -2186,12 +1361,12 @@
                 </div>
                 <div
                     style="text-align: center; flex: 1; border-left: 1px solid #D1D5DB; border-right: 1px solid #D1D5DB;">
-                    <div style="font-size: 0.75rem; color: #6B7280;">bezogene<br>Tage</div>
-                    <div style="font-size: 1.25rem; font-weight: 700; color: #EF4444;" id="m-urlaub-verbraucht">5</div>
+                    <div style="font-size: 0.75rem; color: #6B7280;">bezogene Tage</div>
+                    <div style="font-size: 1.25rem; font-weight: 700; color: #EF4444;" id="m-urlaub-verbraucht">8</div>
                 </div>
                 <div style="text-align: center; flex: 1;">
                     <div style="font-size: 0.75rem; color: #6B7280;">verfügbare Tage</div>
-                    <div style="font-size: 1.25rem; font-weight: 700; color: #10B981;" id="m-urlaub-rest">22</div>
+                    <div style="font-size: 1.25rem; font-weight: 700; color: #10B981;" id="m-urlaub-rest">19</div>
                 </div>
             </div>
             <div style="margin-top: 1rem; margin-bottom: 1rem; display: flex; gap: 0.5rem;">
@@ -2528,7 +1703,7 @@
             </div>
         </div>
 
-        <div id="v-jahr" class="card hidden">
+        <div id="v-jahr" class="card">
             <div class="view-navigation" style="display: flex; justify-content: space-between; margin-bottom: 1.5rem;">
                 <h2>Jahresansicht</h2>
                 <div class="nav-controls" style="display: flex; gap: 0.5rem; align-items: center;">
@@ -2542,8 +1717,8 @@
                 <div class="grad-blue">
                     <div style="font-size: 0.875rem;">Arbeitszeit Jahr</div>
                     <div style="display: flex; justify-content: space-between; align-items: flex-end;">
-                        <div style="font-size: 2rem; font-weight: bold;" id="j-arb">80:56</div>
-                        <div style="font-size: 0.75rem; font-style: italic;" id="j-info">14 / 261 Tage</div>
+                        <div style="font-size: 2rem; font-weight: bold;" id="j-arb">08:06</div>
+                        <div style="font-size: 0.75rem; font-style: italic;" id="j-info">16 / 261 Tage</div>
                     </div>
                 </div>
                 <div class="grad-purple">
@@ -2556,8 +1731,8 @@
                 <div id="j-diff-card" class="grad-orange">
                     <div style="font-size: 0.875rem;" id="j-diff-lbl">Fehlzeit Jahr</div>
                     <div style="display: flex; justify-content: space-between; align-items: flex-end;">
-                        <div style="font-size: 2rem; font-weight: bold;" id="j-diff">2111:28</div>
-                        <div style="font-size: 0.75rem; font-style: italic;" id="j-diff-info">14 / 261 Tage</div>
+                        <div style="font-size: 2rem; font-weight: bold;" id="j-diff">2184:18</div>
+                        <div style="font-size: 0.75rem; font-style: italic;" id="j-diff-info">16 / 261 Tage</div>
                     </div>
                 </div>
             </div>
@@ -2571,11 +1746,11 @@
                 <div
                     style="text-align: center; flex: 1; border-left: 1px solid #D1D5DB; border-right: 1px solid #D1D5DB;">
                     <div style="font-size: 0.75rem; color: #6B7280;">bezogene Tage</div>
-                    <div style="font-size: 1.25rem; font-weight: 700; color: #EF4444;" id="j-urlaub-verbraucht">5</div>
+                    <div style="font-size: 1.25rem; font-weight: 700; color: #EF4444;" id="j-urlaub-verbraucht">8</div>
                 </div>
                 <div style="text-align: center; flex: 1;">
                     <div style="font-size: 0.75rem; color: #6B7280;">verfügbare Tage</div>
-                    <div style="font-size: 1.25rem; font-weight: 700; color: #10B981;" id="j-urlaub-rest">22</div>
+                    <div style="font-size: 1.25rem; font-weight: 700; color: #10B981;" id="j-urlaub-rest">19</div>
                 </div>
             </div>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;"
@@ -2595,7 +1770,7 @@
                         <span style="color: #6B7280; font-size: 0.875rem;">Fehlzeit:</span>
                         <span style="font-weight: bold; color: #EF4444;">193:12</span>
                     </div>
-                    <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #6B7280;">1 / 23 Tage</div>
+                    <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #6B7280;">2 / 23 Tage</div>
                 </div>
                 <div class="card-sm month-card" onclick="jumpToMonth('2025-02')">
                     <div style="font-weight: 600; margin-bottom: 0.75rem; font-size: 1.125rem;">Feb 2025</div>
@@ -2754,7 +1929,7 @@
                     <div style="font-weight: 600; margin-bottom: 0.75rem; font-size: 1.125rem;">Nov 2025</div>
                     <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
                         <span style="color: #6B7280; font-size: 0.875rem;">Arbeitszeit:</span>
-                        <span style="font-weight: bold;">80:56</span>
+                        <span style="font-weight: bold;">08:06</span>
                     </div>
                     <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
                         <span style="color: #6B7280; font-size: 0.875rem;">Sollzeit:</span>
@@ -2763,9 +1938,9 @@
                     <div
                         style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #E5E7EB;">
                         <span style="color: #6B7280; font-size: 0.875rem;">Fehlzeit:</span>
-                        <span style="font-weight: bold; color: #EF4444;">87:04</span>
+                        <span style="font-weight: bold; color: #EF4444;">159:54</span>
                     </div>
-                    <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #6B7280;">8 / 20 Tage</div>
+                    <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #6B7280;">11 / 20 Tage</div>
                 </div>
                 <div class="card-sm month-card" onclick="jumpToMonth('2025-12')">
                     <div style="font-weight: 600; margin-bottom: 0.75rem; font-size: 1.125rem;">Dez 2025</div>
@@ -2782,12 +1957,12 @@
                         <span style="color: #6B7280; font-size: 0.875rem;">Fehlzeit:</span>
                         <span style="font-weight: bold; color: #EF4444;">193:12</span>
                     </div>
-                    <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #6B7280;">3 / 23 Tage</div>
+                    <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #6B7280;">1 / 23 Tage</div>
                 </div>
             </div>
         </div>
 
-        <div id="v-einstellungen" class="card">
+        <div id="v-einstellungen" class="card hidden">
             <h2 style="margin-bottom: 1.5rem;">⚙️ Einstellungen</h2>
 
             <div class="grid2" style="gap: 1.5rem;">
@@ -2806,7 +1981,7 @@
                             <label>Standard-Sollzeit pro Tag (berechnet aus Woche ÷ 5)</label>
                             <input type="time" id="soll" value="08:24" onchange="updateSettings()" style="width: 100%;">
                             <div style="font-size: 0.75rem; color: #6B7280; margin-top: 0.25rem;">
-                                Wird automatisch berechnet: <span id="soll-berechnet">42h ÷ 5 = 08:24</span>
+                                Wird automatisch berechnet: <span id="soll-berechnet">42h ÷ 5 = 8:24</span>
                             </div>
                         </div>
                         <div>
@@ -2842,12 +2017,12 @@
                                     style="text-align: center; flex: 1; border-left: 1px solid #D1D5DB; border-right: 1px solid #D1D5DB;">
                                     <div style="font-size: 0.75rem; color: #6B7280;">bezogene Tage</div>
                                     <div style="font-size: 1.25rem; font-weight: 700; color: #EF4444;"
-                                        id="urlaub-verbraucht">5</div>
+                                        id="urlaub-verbraucht">8</div>
                                 </div>
                                 <div style="text-align: center; flex: 1;">
                                     <div style="font-size: 0.75rem; color: #6B7280;">verfügbare Tage</div>
                                     <div style="font-size: 1.25rem; font-weight: 700; color: #10B981;" id="urlaub-rest">
-                                        22</div>
+                                        19</div>
                                 </div>
                             </div>
                             <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
@@ -2900,11 +2075,11 @@
                             <!-- Stand - Positioniert an erster roter Linie -->
                             <div style="text-align: center; min-width: 100px;">
                                 <div style="font-size: 0.65rem; margin-bottom: 0.2rem; font-weight: 600; opacity: 0.7;">
-                                    Stand <span id="stats-datum-display">25.03.2025</span></div>
+                                    Stand <span id="stats-datum-display">01.01.2025</span></div>
                                 <div style="font-weight: 700; font-size: 1.25rem; margin-bottom: 0.1rem;"
-                                    id="ueberzeit-start-display">+00:35</div>
+                                    id="ueberzeit-start-display">+131:23</div>
                                 <div style="font-size: 0.65rem; opacity: 0.6; font-family: monospace;"
-                                    id="ueberzeit-start-industrial">+0.58h</div>
+                                    id="ueberzeit-start-industrial">+131.38h</div>
                             </div>
                             <div style="font-size: 1.2rem; opacity: 0.4; font-weight: 300;">→</div>
                             <!-- Erarbeitet - Positioniert an zweiter roter Linie -->
@@ -2912,9 +2087,9 @@
                                 <div style="font-size: 0.65rem; margin-bottom: 0.2rem; font-weight: 600; opacity: 0.7;">
                                     Erarbeitet</div>
                                 <div style="font-weight: 700; font-size: 1.25rem; margin-bottom: 0.1rem; color: #10B981;"
-                                    id="ueberzeit-erarbeitet">-11:28</div>
+                                    id="ueberzeit-erarbeitet">-08:42</div>
                                 <div style="font-size: 0.65rem; opacity: 0.6; font-family: monospace;"
-                                    id="ueberzeit-erarbeitet-industrial">-11.47h</div>
+                                    id="ueberzeit-erarbeitet-industrial">-8.70h</div>
                             </div>
                             <div style="font-size: 1.2rem; opacity: 0.4; font-weight: 300;">−</div>
                             <!-- Bezogen - Positioniert an dritter roter Linie -->
@@ -2922,19 +2097,19 @@
                                 <div style="font-size: 0.65rem; margin-bottom: 0.2rem; font-weight: 600; opacity: 0.7;">
                                     Bezogen</div>
                                 <div style="font-weight: 700; font-size: 1.25rem; margin-bottom: 0.1rem; color: #EF4444;"
-                                    id="ueberzeit-bezogen">00:00</div>
+                                    id="ueberzeit-bezogen">16:48</div>
                                 <div style="font-size: 0.65rem; opacity: 0.6; font-family: monospace;"
-                                    id="ueberzeit-bezogen-industrial">0.00h</div>
+                                    id="ueberzeit-bezogen-industrial">16.88h</div>
                             </div>
                             <div style="font-size: 1.2rem; opacity: 0.4; font-weight: 300;">=</div>
                             <!-- Aktuell - Positioniert an vierter roter Linie -->
                             <div style="text-align: center; min-width: 100px;">
                                 <div style="font-size: 0.65rem; margin-bottom: 0.2rem; font-weight: 600; opacity: 0.7;">
                                     Aktuell</div>
-                                <div style="font-weight: 700; font-size: 1.25rem; margin-bottom: 0.1rem; color: rgb(239, 68, 68);"
-                                    id="ueberzeit-aktuell">-10:53</div>
+                                <div style="font-weight: 700; font-size: 1.25rem; margin-bottom: 0.1rem; color: rgb(16, 185, 129);"
+                                    id="ueberzeit-aktuell">+105:53</div>
                                 <div style="font-size: 0.65rem; opacity: 0.6; font-family: monospace;"
-                                    id="ueberzeit-aktuell-industrial">-10.88h</div>
+                                    id="ueberzeit-aktuell-industrial">+105.88h</div>
                             </div>
                         </div>
                     </div>
@@ -2955,23 +2130,6 @@
                                 onchange="updateSettings()"
                                 style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #D1D5DB; border-radius: 0.5rem; font-size: 0.875rem;"
                                 data-ddg-inputtype="unknown">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card-sm">
-                    <h3 style="margin-bottom: 1rem; font-size: 1.125rem;">Datensicherung &amp; Sync</h3>
-                    <div class="flex-col">
-                        <div style="font-size: 0.875rem; color: #6B7280; margin-bottom: 0.5rem;">
-                            Für manuellen Abgleich zwischen Geräten (z.B. PC ↔ iPad) via OneDrive.
-                        </div>
-                        <div>
-                            <button class="btn btn-primary" style="width: 100%; margin-bottom: 0.5rem;"
-                                onclick="exportBackup()">💾 Backup erstellen (Download)</button>
-                            <button class="btn btn-sec" style="width: 100%;" onclick="importBackup()">📂 Backup laden
-                                (Restore)</button>
-                            <input type="file" id="backup-upload-file" accept=".json" style="display: none;"
-                                onchange="handleBackupFileSelect(event)">
                         </div>
                     </div>
                 </div>
@@ -3019,254 +2177,19 @@
                             <input type="file" id="feiertag-file" accept=".json" style="display: none;"
                                 onchange="handleFeiertagImport(event)">
                         </div>
-
-                        <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #E5E7EB;">
-                            <h4 style="margin-bottom: 0.5rem; font-size: 1rem;">🌍 Feiertage Online-Import</h4>
-                            <div style="font-size: 0.8rem; color: #6B7280; margin-bottom: 0.5rem;">
-                                Automatisch von date.nager.at laden
-                            </div>
-                            <div style="display: flex; gap: 0.5rem; align-items: flex-end;">
-                                <div style="flex: 1;">
-                                    <label for="import-year"
-                                        style="display: block; margin-bottom: 0.25rem; font-weight:600; font-size: 0.8rem;">Jahr</label>
-                                    <input type="number" id="import-year" value="2026"
-                                        style="width: 100%; padding: 0.5rem; border: 1px solid #D1D5DB; border-radius: 0.5rem; font-size: 0.9rem;"
-                                        data-ddg-inputtype="unknown">
-                                </div>
-                                <div style="flex: 2;">
-                                    <button class="btn btn-primary" style="width: 100%;"
-                                        onclick="importFeiertageOnline()">🌍 Online laden</button>
-                                </div>
-                            </div>
-                        </div>
-
                         <div>
                             <button class="btn btn-success" style="width: 100%;" onclick="showAddFeiertagDialog()">➕
                                 Feiertag manuell hinzufügen</button>
                         </div>
-                        <div id="feiertag-info" style="font-size: 0.875rem; color: #6B7280;">14 Feiertage geladen (10
-                            bezahlt, 4 unbezahlt)</div>
+                        <div id="feiertag-info" style="font-size: 0.875rem; color: #6B7280;"></div>
                     </div>
                 </div>
-
-                <div class="card-sm">
-                    <h3 style="margin-bottom: 1rem; font-size: 1.125rem;">📅 Feiertage Export (iCalendar)</h3>
-                    <div class="flex-col">
-                        <div style="font-size: 0.875rem; color: #6B7280; margin-bottom: 0.75rem;">
-                            Exportiere geladene Feiertage als .ics-Datei für Outlook, Google Calendar, etc.
-                        </div>
-                        <div>
-                            <label for="ics-year-range"
-                                style="display: block; margin-bottom: 0.25rem; font-weight:600; font-size: 0.875rem;">Jahresbereich</label>
-                            <input type="text" id="ics-year-range" placeholder="z.B. 2025-2026"
-                                style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #D1D5DB; border-radius: 0.5rem; font-size: 0.875rem; margin-bottom: 0.75rem;"
-                                data-ddg-inputtype="unknown">
-                        </div>
-                        <div>
-                            <button class="btn btn-primary" style="width: 100%;" onclick="exportFeiertageICS()">📅 .ics
-                                exportieren</button>
-                        </div>
-                    </div>
-                </div>
-
             </div>
 
             <div class="card-sm" style="margin-top: 1.5rem;">
-                <h3 style="margin-bottom: 1rem; font-size: 1.125rem;">Geladene Feiertage <span id="feiertag-jahr">(2025
-                        - 2026)</span>
-                </h3>
-                <div id="feiertag-list" style="max-height: 400px; overflow-y: auto;">
-                    <div style="margin-bottom: 1rem;">
-                        <div style="font-weight: 600; margin-bottom: 0.5rem; color: #6B7280; font-size: 0.875rem;">Jahr
-                            2026</div>
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-radius: 0.5rem; margin-bottom: 0.5rem; background: rgba(0,0,0,0.02);">
-                            <div>
-                                <span style="font-weight: 600;">01.01.2026</span>
-                                <span style="margin-left: 0.5rem;">Neujahr</span>
-                                <span class="feiertag-badge badge-bezahlt">Bezahlt</span>
-                            </div>
-                            <div style="display: flex; gap: 0.5rem;">
-                                <button class="btn btn-sec" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;"
-                                    onclick="editFeiertag('2026-01-01')">✏️</button>
-                                <button class="del-btn" onclick="deleteFeiertag('2026-01-01')">✕</button>
-                            </div>
-                        </div>
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-radius: 0.5rem; margin-bottom: 0.5rem; background: rgba(0,0,0,0.02);">
-                            <div>
-                                <span style="font-weight: 600;">02.01.2026</span>
-                                <span style="margin-left: 0.5rem;">Berchtoldstag</span>
-                                <span class="feiertag-badge badge-unbezahlt">Unbezahlt</span>
-                            </div>
-                            <div style="display: flex; gap: 0.5rem;">
-                                <button class="btn btn-sec" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;"
-                                    onclick="editFeiertag('2026-01-02')">✏️</button>
-                                <button class="del-btn" onclick="deleteFeiertag('2026-01-02')">✕</button>
-                            </div>
-                        </div>
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-radius: 0.5rem; margin-bottom: 0.5rem; background: rgba(0,0,0,0.02);">
-                            <div>
-                                <span style="font-weight: 600;">04.06.2026</span>
-                                <span style="margin-left: 0.5rem;">Fronleichnam</span>
-                                <span class="feiertag-badge badge-bezahlt">Bezahlt</span>
-                            </div>
-                            <div style="display: flex; gap: 0.5rem;">
-                                <button class="btn btn-sec" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;"
-                                    onclick="editFeiertag('2026-06-04')">✏️</button>
-                                <button class="del-btn" onclick="deleteFeiertag('2026-06-04')">✕</button>
-                            </div>
-                        </div>
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-radius: 0.5rem; margin-bottom: 0.5rem; background: rgba(0,0,0,0.02);">
-                            <div>
-                                <span style="font-weight: 600;">15.08.2026</span>
-                                <span style="margin-left: 0.5rem;">Mariä Himmelfahrt</span>
-                                <span class="feiertag-badge badge-unbezahlt">Unbezahlt</span>
-                            </div>
-                            <div style="display: flex; gap: 0.5rem;">
-                                <button class="btn btn-sec" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;"
-                                    onclick="editFeiertag('2026-08-15')">✏️</button>
-                                <button class="del-btn" onclick="deleteFeiertag('2026-08-15')">✕</button>
-                            </div>
-                        </div>
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-radius: 0.5rem; margin-bottom: 0.5rem; background: rgba(0,0,0,0.02);">
-                            <div>
-                                <span style="font-weight: 600;">01.11.2026</span>
-                                <span style="margin-left: 0.5rem;">Allerheiligen</span>
-                                <span class="feiertag-badge badge-bezahlt">Bezahlt</span>
-                            </div>
-                            <div style="display: flex; gap: 0.5rem;">
-                                <button class="btn btn-sec" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;"
-                                    onclick="editFeiertag('2026-11-01')">✏️</button>
-                                <button class="del-btn" onclick="deleteFeiertag('2026-11-01')">✕</button>
-                            </div>
-                        </div>
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-radius: 0.5rem; margin-bottom: 0.5rem; background: rgba(0,0,0,0.02);">
-                            <div>
-                                <span style="font-weight: 600;">08.12.2026</span>
-                                <span style="margin-left: 0.5rem;">Mariä Empfängnis</span>
-                                <span class="feiertag-badge badge-unbezahlt">Unbezahlt</span>
-                            </div>
-                            <div style="display: flex; gap: 0.5rem;">
-                                <button class="btn btn-sec" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;"
-                                    onclick="editFeiertag('2026-12-08')">✏️</button>
-                                <button class="del-btn" onclick="deleteFeiertag('2026-12-08')">✕</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div style="margin-bottom: 1rem;">
-                        <div style="font-weight: 600; margin-bottom: 0.5rem; color: #6B7280; font-size: 0.875rem;">Jahr
-                            2025</div>
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-radius: 0.5rem; margin-bottom: 0.5rem; background: rgba(0,0,0,0.02);">
-                            <div>
-                                <span style="font-weight: 600;">02.01.2025</span>
-                                <span style="margin-left: 0.5rem;">Berchtoldstag</span>
-                                <span class="feiertag-badge badge-bezahlt">Bezahlt</span>
-                            </div>
-                            <div style="display: flex; gap: 0.5rem;">
-                                <button class="btn btn-sec" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;"
-                                    onclick="editFeiertag('2025-01-02')">✏️</button>
-                                <button class="del-btn" onclick="deleteFeiertag('2025-01-02')">✕</button>
-                            </div>
-                        </div>
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-radius: 0.5rem; margin-bottom: 0.5rem; background: rgba(0,0,0,0.02);">
-                            <div>
-                                <span style="font-weight: 600;">19.06.2025</span>
-                                <span style="margin-left: 0.5rem;">Fronleichnam</span>
-                                <span class="feiertag-badge badge-bezahlt">Bezahlt</span>
-                            </div>
-                            <div style="display: flex; gap: 0.5rem;">
-                                <button class="btn btn-sec" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;"
-                                    onclick="editFeiertag('2025-06-19')">✏️</button>
-                                <button class="del-btn" onclick="deleteFeiertag('2025-06-19')">✕</button>
-                            </div>
-                        </div>
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-radius: 0.5rem; margin-bottom: 0.5rem; background: rgba(0,0,0,0.02);">
-                            <div>
-                                <span style="font-weight: 600;">15.08.2025</span>
-                                <span style="margin-left: 0.5rem;">Mariä Himmelfahrt</span>
-                                <span class="feiertag-badge badge-bezahlt">Bezahlt</span>
-                            </div>
-                            <div style="display: flex; gap: 0.5rem;">
-                                <button class="btn btn-sec" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;"
-                                    onclick="editFeiertag('2025-08-15')">✏️</button>
-                                <button class="del-btn" onclick="deleteFeiertag('2025-08-15')">✕</button>
-                            </div>
-                        </div>
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-radius: 0.5rem; margin-bottom: 0.5rem; background: rgba(0,0,0,0.02);">
-                            <div>
-                                <span style="font-weight: 600;">01.11.2025</span>
-                                <span style="margin-left: 0.5rem;">Allerheiligen</span>
-                                <span class="feiertag-badge badge-bezahlt">Bezahlt</span>
-                            </div>
-                            <div style="display: flex; gap: 0.5rem;">
-                                <button class="btn btn-sec" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;"
-                                    onclick="editFeiertag('2025-11-01')">✏️</button>
-                                <button class="del-btn" onclick="deleteFeiertag('2025-11-01')">✕</button>
-                            </div>
-                        </div>
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-radius: 0.5rem; margin-bottom: 0.5rem; background: rgba(0,0,0,0.02);">
-                            <div>
-                                <span style="font-weight: 600;">08.12.2025</span>
-                                <span style="margin-left: 0.5rem;">Mariä Empfängnis</span>
-                                <span class="feiertag-badge badge-unbezahlt">Unbezahlt</span>
-                            </div>
-                            <div style="display: flex; gap: 0.5rem;">
-                                <button class="btn btn-sec" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;"
-                                    onclick="editFeiertag('2025-12-08')">✏️</button>
-                                <button class="del-btn" onclick="deleteFeiertag('2025-12-08')">✕</button>
-                            </div>
-                        </div>
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-radius: 0.5rem; margin-bottom: 0.5rem; background: rgba(0,0,0,0.02);">
-                            <div>
-                                <span style="font-weight: 600;">25.12.2025</span>
-                                <span style="margin-left: 0.5rem;">Weihnachten</span>
-                                <span class="feiertag-badge badge-bezahlt">Bezahlt</span>
-                            </div>
-                            <div style="display: flex; gap: 0.5rem;">
-                                <button class="btn btn-sec" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;"
-                                    onclick="editFeiertag('2025-12-25')">✏️</button>
-                                <button class="del-btn" onclick="deleteFeiertag('2025-12-25')">✕</button>
-                            </div>
-                        </div>
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-radius: 0.5rem; margin-bottom: 0.5rem; background: rgba(0,0,0,0.02);">
-                            <div>
-                                <span style="font-weight: 600;">26.12.2025</span>
-                                <span style="margin-left: 0.5rem;">Stephanstag</span>
-                                <span class="feiertag-badge badge-bezahlt">Bezahlt</span>
-                            </div>
-                            <div style="display: flex; gap: 0.5rem;">
-                                <button class="btn btn-sec" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;"
-                                    onclick="editFeiertag('2025-12-26')">✏️</button>
-                                <button class="del-btn" onclick="deleteFeiertag('2025-12-26')">✕</button>
-                            </div>
-                        </div>
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-radius: 0.5rem; margin-bottom: 0.5rem; background: rgba(0,0,0,0.02);">
-                            <div>
-                                <span style="font-weight: 600;">31.12.2025</span>
-                                <span style="margin-left: 0.5rem;">Sylvester</span>
-                                <span class="feiertag-badge badge-bezahlt">Bezahlt</span>
-                            </div>
-                            <div style="display: flex; gap: 0.5rem;">
-                                <button class="btn btn-sec" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;"
-                                    onclick="editFeiertag('2025-12-31')">✏️</button>
-                                <button class="del-btn" onclick="deleteFeiertag('2025-12-31')">✕</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <h3 style="margin-bottom: 1rem; font-size: 1.125rem;">Geladene Feiertage <span
+                        id="feiertag-jahr"></span></h3>
+                <div id="feiertag-list" style="max-height: 400px; overflow-y: auto;"></div>
             </div>
 
             <div class="info-box" style="margin-top: 1.5rem;">
@@ -3289,169 +2212,9 @@
             <h3 style="margin-bottom: 1rem;" id="modal-title">Feiertag hinzufügen</h3>
             <div class="flex-col">
                 <div>
-                    <label
-                        style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; margin-bottom: 1rem;">
-                        <input type="checkbox" id="modal-mehrere-tage" onchange="toggleBisDatum()"
-                            style="width: 1.25rem; height: 1.25rem; cursor: pointer;">
-                        <span>🗓️ Mehrere Tage (Bereich)</span>
-                    </label>
-                </div>
-
-                <!-- Mini-Calendar Container (Moved to Top) -->
-                <div id="modal-calendar-container"
-                    style="margin-bottom: 1rem; border: 1px solid #D1D5DB; border-radius: 0.5rem; overflow: hidden;">
-                    <div class="mini-cal-header"
-                        style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; background: #F3F4F6;">
-                        <button type="button" onclick="prevMiniCalMonth()"
-                            style="border: none; background: none; cursor: pointer; padding: 0.25rem 0.5rem;">◀</button>
-                        <span id="mini-cal-month-year" style="font-weight: 600; font-size: 0.9rem;">Dezember 2025</span>
-                        <button type="button" onclick="nextMiniCalMonth()"
-                            style="border: none; background: none; cursor: pointer; padding: 0.25rem 0.5rem;">▶</button>
-                    </div>
-                    <div class="mini-cal-weekdays"
-                        style="display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-size: 0.75rem; font-weight: 600; background: #F9FAFB; padding: 0.25rem 0; border-bottom: 1px solid #E5E7EB;">
-                        <div>Mo</div>
-                        <div>Di</div>
-                        <div>Mi</div>
-                        <div>Do</div>
-                        <div>Fr</div>
-                        <div>Sa</div>
-                        <div>So</div>
-                    </div>
-                    <div id="mini-cal-grid" class="mini-cal-grid"
-                        style="display: grid; grid-template-columns: repeat(7, 1fr); padding: 0.5rem;">
-                        <!-- Days will be rendered here -->
-                    </div>
-                </div>
-
-                <style>
-                    .mini-cal-day {
-                        aspect-ratio: 1;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        font-size: 0.85rem;
-                        cursor: pointer;
-                        border-radius: 50%;
-                        margin: 1px;
-                        position: relative;
-                    }
-
-                    .mini-cal-day:hover {
-                        background-color: #E5E7EB;
-                    }
-
-                    .mini-cal-day.empty {
-                        cursor: default;
-                        background: none !important;
-                    }
-
-                    .mini-cal-day.selected {
-                        background-color: #3B82F6 !important;
-                        color: white !important;
-                        font-weight: bold;
-                    }
-
-                    .mini-cal-day.has-holiday {
-                        font-weight: bold;
-                    }
-
-                    /* Dots for existing holidays */
-                    .mini-cal-day.has-holiday::after {
-                        content: '';
-                        position: absolute;
-                        bottom: 2px;
-                        left: 50%;
-                        transform: translateX(-50%);
-                        width: 4px;
-                        height: 4px;
-                        border-radius: 50%;
-                    }
-
-                    .mini-cal-day.holiday-bezahlt::after {
-                        background-color: #3B82F6;
-                    }
-
-                    /* Blue */
-                    .mini-cal-day.holiday-unbezahlt::after {
-                        background-color: #F97316;
-                    }
-
-                    /* Orange */
-                    .mini-cal-day.holiday-kompensation::after {
-                        background-color: #8B5CF6;
-                    }
-
-                    /* Purple */
-
-                    body.dark .mini-cal-day {
-                        color: #E5E7EB;
-                    }
-
-                    body.dark .mini-cal-header {
-                        background: #374151 !important;
-                        color: #E5E7EB;
-                    }
-
-                    body.dark .mini-cal-weekdays {
-                        background: #1F2937 !important;
-                        color: #9CA3AF;
-                        border-color: #374151 !important;
-                    }
-
-                    body.dark #modal-calendar-container {
-                        border-color: #374151 !important;
-                    }
-
-                    body.dark .mini-cal-day:hover {
-                        background-color: #374151;
-                    }
-
-                    /* Active Input Highlight */
-                    .input-active {
-                        border-color: #3B82F6 !important;
-                        background-color: #EFF6FF !important;
-                        box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
-                    }
-
-                    body.dark .input-active {
-                        background-color: #1F2937 !important;
-                        border-color: #60A5FA !important;
-                        color: #E5E7EB !important;
-                    }
-
-                    /* Dark Mode Input Overrides */
-                    body.dark input[type="text"],
-                    body.dark input[type="date"],
-                    body.dark select {
-                        background-color: #374151 !important;
-                        color: #E5E7EB !important;
-                        border-color: #4B5563 !important;
-                    }
-
-                    body.dark input[readonly] {
-                        background-color: #4B5563 !important;
-                        color: #D1D5DB !important;
-                        cursor: pointer;
-                        /* Ensure pointer cursor for readonly inputs in dark mode too */
-                    }
-
-                    /* Ensure placeholder color is readable in dark mode */
-                    body.dark input::placeholder {
-                        color: #9CA3AF !important;
-                    }
-                </style>
-                <div>
-                    <label>Von Datum</label>
-                    <input type="text" readonly id="modal-datum" placeholder="Bitte im Kalender wählen"
-                        onclick="setActiveInput('modal-datum')"
-                        style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #D1D5DB; border-radius: 0.5rem; background-color: #F3F4F6; cursor: pointer;">
-                </div>
-                <div id="bis-datum-container" style="display: none;">
-                    <label>Bis Datum</label>
-                    <input type="text" readonly id="modal-bis-datum" placeholder="Bitte im Kalender wählen"
-                        onclick="setActiveInput('modal-bis-datum')"
-                        style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #D1D5DB; border-radius: 0.5rem; background-color: #F3F4F6; cursor: pointer;">
+                    <label>Datum</label>
+                    <input type="date" id="modal-datum"
+                        style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #D1D5DB; border-radius: 0.5rem;">
                 </div>
                 <div>
                     <label>Name</label>
@@ -3464,8 +2227,7 @@
                     <select id="modal-typ"
                         style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #D1D5DB; border-radius: 0.5rem;"
                         data-ddg-inputtype="unknown">
-                        <option value="feiertag">Feiertag (bezahlt)</option>
-                        <option value="unbezahlt">Feiertag unbezahlt</option>
+                        <option value="feiertag">Feiertag</option>
                         <option value="brueckentag">Brückentag</option>
                     </select>
                 </div>
@@ -3479,8 +2241,6 @@
             </div>
             <div style="display: flex; gap: 0.5rem; margin-top: 1.5rem;">
                 <button class="btn btn-sec" style="flex: 1;" onclick="closeFeiertagModal()">Abbrechen</button>
-                <button id="delete-feiertag-btn" class="btn btn-danger" style="flex: 1; display: none;"
-                    onclick="deleteCurrentFeiertag()">Löschen</button>
                 <button class="btn btn-success" style="flex: 1;" onclick="saveFeiertagFromModal()">Speichern</button>
             </div>
         </div>
@@ -3512,7 +2272,7 @@
                 </div>
                 <div id="urlaub-vorschau"
                     style="padding: 0.75rem; background: #F3F4F6; border-radius: 0.5rem; font-size: 0.875rem; color: #374151; display: none;">
-                    <strong>Vorschau:</strong> <span id="urlaub-anzahl">0</span> Arbeitage werden als Urlaub markiert
+                    <strong>Vorschau:</strong> <span id="urlaub-anzahl">0</span> Arbeitstage werden als Urlaub markiert
                 </div>
             </div>
             <div style="display: flex; gap: 0.5rem; margin-top: 1.5rem;">
@@ -3676,82 +2436,6 @@
             return ft ? (ft.typ || 'feiertag') : null;
         }
 
-        function checkAndSwitchToNormal(inputField) {
-            const tagTypRadios = document.getElementsByName('tagTyp');
-            let currentTyp = 'normal';
-            for (const radio of tagTypRadios) {
-                if (radio.checked) {
-                    currentTyp = radio.value;
-                    break;
-                }
-            }
-
-            if (currentTyp !== 'normal') {
-                // Zeige Warnbox
-                const container = document.getElementById('tagtyp-warning-container');
-                if (container) {
-                    container.innerHTML = `
-                        <div id="tagtyp-warning" 
-                            style="margin-top: 1rem; padding: 1rem; background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%); border: 2px solid #F59E0B; border-radius: 0.5rem;">
-                            <div style="font-weight: 700; font-size: 1rem; color: #92400E; margin-bottom: 1rem; white-space: normal; word-wrap: break-word; text-align: center;">
-                                ⚠️ Zeiteingabe wechselt zu "Normaler Arbeitstag". Fortfahren?
-                            </div>
-                            <div style="display: flex; gap: 0.5rem;">
-                                <button class="btn btn-success" onclick="confirmTimeInput(true, '${inputField.id}')" style="flex: 1;">Ja - Normaler Arbeitstag</button>
-                                <button class="btn btn-danger" onclick="confirmTimeInput(false, '${inputField.id}')" style="flex: 1;">Nein - Abbrechen</button>
-                            </div>
-                        </div>
-                    `;
-
-                    // Speichere den aktuellen Typ und die eingegebene Zeit
-                    window.pendingTimeInput = {
-                        fieldId: inputField.id,
-                        value: inputField.value,
-                        oldTyp: currentTyp
-                    };
-                }
-            }
-        }
-
-        function confirmTimeInput(confirmed, fieldId) {
-            // Warnbox entfernen
-            const container = document.getElementById('tagtyp-warning-container');
-            if (container) {
-                container.innerHTML = '';
-            }
-
-            if (confirmed) {
-                // OK geklickt: Wechsel zu "Normaler Arbeitstag"
-                const normalRadio = document.querySelector('input[name="tagTyp"][value="normal"]');
-                if (normalRadio) {
-                    normalRadio.checked = true;
-                    updateTagTyp();
-                }
-                // Zeit bleibt erhalten
-                showMsg('✓ Zu "Normaler Arbeitstag" gewechselt', true);
-            } else {
-                // Abbrechen geklickt: Zeit löschen und bei altem Typ bleiben
-                const field = document.getElementById(fieldId);
-                if (field) {
-                    field.value = '';
-                    calc();
-                    updateClear();
-                }
-
-                // Stelle sicher, dass der alte Typ ausgewählt bleibt
-                if (window.pendingTimeInput && window.pendingTimeInput.oldTyp) {
-                    const oldRadio = document.querySelector(`input[name="tagTyp"][value="${window.pendingTimeInput.oldTyp}"]`);
-                    if (oldRadio) {
-                        oldRadio.checked = true;
-                        updateTagTyp();
-                    }
-                }
-            }
-
-            // Lösche pending data
-            delete window.pendingTimeInput;
-        }
-
         function init() {
             loadFromStorage();
             checkYearChange(); // Prüfe ob Jahreswechsel stattgefunden hat
@@ -3770,11 +2454,7 @@
             ['mk', 'mg', 'mittk', 'ag'].forEach((id, idx) => {
                 const field = document.getElementById(id);
 
-                field.oninput = () => {
-                    if (field.value) checkAndSwitchToNormal(field);
-                    calc();
-                    updateClear();
-                };
+                field.oninput = () => { calc(); updateClear(); };
                 field.onchange = () => { calc(); updateClear(); };
                 field.onblur = () => { calc(); updateClear(); };
                 field.onkeydown = (e) => {
@@ -3797,9 +2477,6 @@
                         const hours = String(now.getHours()).padStart(2, '0');
                         const minutes = String(now.getMinutes()).padStart(2, '0');
                         field.value = `${hours}:${minutes}`;
-
-                        checkAndSwitchToNormal(field);
-
                         calc();
                         updateClear();
                     }
@@ -3814,15 +2491,12 @@
             });
 
             // Initial load
-            clearMsg(); // Sicherstellen, dass keine alten Meldungen angezeigt werden
             switchView(view);
             calc(); updateClear();
 
-            // Zusätzlicher updateClear-Aufruf nach kurzer Verzögerung für sicheres Layout
             setTimeout(() => {
                 calc();
-                updateClear();
-            }, 100);
+            }, 500);
 
             if ('Notification' in window && Notification.permission === 'default') {
                 Notification.requestPermission();
@@ -3935,11 +2609,6 @@
                 document.getElementById('ag').value = d.ag || '';
                 document.getElementById('notiz').value = d.notiz || '';
 
-                // Warnung immer zurücksetzen beim Laden eines neuen Tages
-                const warningContainer = document.getElementById('tagtyp-warning-container');
-                if (warningContainer) warningContainer.innerHTML = '';
-
-                // Tag-Typ setzen (Radio Buttons)
                 const tagTyp = d.tagTyp || 'normal';
                 const tagTypRadios = document.getElementsByName('tagTyp');
                 for (const radio of tagTypRadios) {
@@ -3954,19 +2623,8 @@
                 // Prüfe, ob der Tag ein Feiertag ist
                 let defaultTyp = 'normal';
                 if (isFeiertag(date)) {
-                    const ft = feiertage[date];
-                    const ftTyp = ft ? (ft.typ || 'feiertag') : 'feiertag';
-
-                    // Map feiertage typ to tag typ
-                    if (ftTyp === 'brueckentag') {
-                        defaultTyp = 'kompensation';
-                    } else if (ftTyp === 'unbezahlt') {
-                        defaultTyp = 'feiertag-unbezahlt';
-                    } else {
-                        // feiertag type - check if bezahlt
-                        const istBezahlt = isFeiertagBezahlt(date);
-                        defaultTyp = istBezahlt ? 'feiertag-bezahlt' : 'feiertag-unbezahlt';
-                    }
+                    const istBezahlt = isFeiertagBezahlt(date);
+                    defaultTyp = istBezahlt ? 'feiertag-bezahlt' : 'feiertag-unbezahlt';
                 }
 
                 const tagTypRadios = document.getElementsByName('tagTyp');
@@ -4097,26 +2755,26 @@
 
         function updateClear() {
             ['mk', 'mg', 'mittk', 'ag'].forEach(id => {
-                const input = document.getElementById(id);
-                const clearBtn = document.getElementById('c-' + id);
-
-                if (input && clearBtn) {
-                    if (input.value) {
-                        input.classList.add('has-value');
-                        clearBtn.classList.add('visible');
-                    } else {
-                        input.classList.remove('has-value');
-                        clearBtn.classList.remove('visible');
-                    }
-                }
+                const btn = document.getElementById('c-' + id);
+                btn.classList.toggle('on', document.getElementById(id).value !== '');
             });
         }
 
         function clearField(id) {
             document.getElementById(id).value = '';
 
-            // Toggle label für das geänderte Feld
+            const fieldOrder = ['mk', 'mg', 'mittk', 'ag'];
+            const currentIndex = fieldOrder.indexOf(id);
+
+            for (let i = currentIndex + 1; i < fieldOrder.length; i++) {
+                document.getElementById(fieldOrder[i]).value = '';
+            }
+
+            // Toggle labels für alle geänderten Felder
             toggleLabel(id);
+            for (let i = currentIndex + 1; i < fieldOrder.length; i++) {
+                toggleLabel(fieldOrder[i]);
+            }
 
             calc();
             updateClear();
@@ -4166,11 +2824,8 @@
         }
 
         function confirmTagTypChange(confirmed) {
-            // Warnbox entfernen
-            const container = document.getElementById('tagtyp-warning-container');
-            if (container) {
-                container.innerHTML = '';
-            }
+            // Verstecke Warnbox
+            document.getElementById('tagtyp-warning').classList.add('hidden');
 
             if (confirmed) {
                 // OK geklickt: Zeiten löschen und mit neuem Tag-Typ speichern
@@ -4249,29 +2904,11 @@
 
             // Wenn von normal mit Zeiten zu speziellem Typ gewechselt wird UND noch Zeiten eingetragen sind
             if (oldTagTyp === 'normal' && hasOldTimes && specialTypes.includes(tagTyp) && hasNewTimes) {
-                // Zeige Warnbox dynamisch an
-                const container = document.getElementById('tagtyp-warning-container');
-                if (container) {
-                    container.innerHTML = `
-                        <div id="tagtyp-warning" 
-                            style="margin-top: 1rem; padding: 1rem; background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%); border: 2px solid #F59E0B; border-radius: 0.5rem;">
-                            <div style="font-weight: 700; font-size: 1rem; color: #92400E; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
-                                ⚠️ Tag-Typ Wechsel
-                            </div>
-                            <div style="color: #78350F; font-size: 0.875rem; line-height: 1.5; margin-bottom: 1rem;">
-                                <strong>Bei OK werden Arbeitszeiten gelöscht!</strong><br>
-                                Bei Abbruch geht es zurück auf Normalen Arbeitstag.
-                            </div>
-                            <div style="display: flex; gap: 0.5rem;">
-                                <button class="btn btn-success" onclick="confirmTagTypChange(true)" style="flex: 1;">OK - Zeiten löschen</button>
-                                <button class="btn btn-sec" onclick="confirmTagTypChange(false)" style="flex: 1;">Abbrechen</button>
-                            </div>
-                        </div>
-                    `;
-                    // Speichere gewünschten Tag-Typ global
-                    window.pendingTagTyp = tagTyp;
-                    return; // Stoppe save() hier - wird fortgesetzt nach Bestätigung
-                }
+                // Zeige Warnbox statt Browser-Confirm
+                document.getElementById('tagtyp-warning').classList.remove('hidden');
+                // Speichere gewünschten Tag-Typ global
+                window.pendingTagTyp = tagTyp;
+                return; // Stoppe save() hier - wird fortgesetzt nach Bestätigung
             }
 
             const notiz = document.getElementById('notiz').value.trim();
@@ -4302,33 +2939,24 @@
         }
 
         function showMsg(text, ok) {
-            if (!text) return;
             const msg = document.getElementById('msg');
-            if (msg) {
-                msg.innerHTML = text; // innerHTML statt textContent für <br>
-                msg.className = 'message ' + (ok ? 'msg-ok' : 'msg-err');
-                msg.classList.remove('hidden');
-                msg.style.display = 'block';
+            msg.textContent = text;
+            msg.className = 'message ' + (ok ? 'msg-ok' : 'msg-err');
+            msg.classList.remove('hidden');
 
-                // Nur Erfolgs-Nachrichten nach 3 Sekunden ausblenden
-                if (ok) {
-                    setTimeout(() => {
-                        msg.classList.add('hidden');
-                        msg.style.display = 'none';
-                    }, 3000);
-                }
+            // Nur Erfolgs-Nachrichten nach 3 Sekunden ausblenden
+            // Fehler-Nachrichten bleiben sichtbar bis sie manuell entfernt werden
+            if (ok) {
+                setTimeout(() => msg.classList.add('hidden'), 3000);
             }
         }
 
         // Hilfsfunktion zum Ausblenden von Fehlermeldungen
         function clearMsg() {
             const msg = document.getElementById('msg');
-            if (msg) {
-                msg.classList.add('hidden');
-                msg.style.display = 'none';
-                msg.textContent = '';
-            }
+            msg.classList.add('hidden');
         }
+
         function timeToMin(time) {
             if (!time) return 0;
             const [h, m] = time.split(':').map(Number);
@@ -4729,17 +3357,10 @@
             }
 
             if (errors.length > 0) {
-                showMsg(errors.join('<br>'), false);
+                showMsg(errors.join('. '), false);
             } else {
                 // Keine Fehler -> Fehlermeldung ausblenden, falls vorhanden
                 clearMsg();
-            }
-
-            // Sicherheitsnetz: Verstecke msg wenn leer (verhindert leeren grünen Balken)
-            const msgEl = document.getElementById('msg');
-            if (msgEl && (!msgEl.textContent || msgEl.textContent.trim() === '')) {
-                msgEl.classList.add('hidden');
-                msgEl.style.display = 'none';
             }
         }
 
@@ -4950,12 +3571,6 @@
                         (isFT && ftBezahlt)) {
                         sollTagMin = 0;
                         erfuellteTage++;
-
-                        // ⚡ NEU: Krankheit, Urlaub, Kompensation zählen als gearbeitete Zeit (8:24)
-                        if ((tagTyp === 'krank' || tagTyp === 'urlaub' || tagTyp === 'kompensation') && arb === 0) {
-                            totalArb += sollProTag;
-                        }
-
                         if (arb > 0) {
                             diffClass = 'color: #10B981; font-weight: bold;';
                             if (isFT && ftBezahlt) {
@@ -4998,16 +3613,7 @@
                 let tagTypIcon = '';
 
                 if (isFT) {
-                    const ft = feiertage[dateStr];
-                    const ftTyp = ft ? (ft.typ || 'feiertag') : 'feiertag';
-
-                    if (ftTyp === 'brueckentag') {
-                        bgClass = 'tag-kompensation';
-                    } else if (ftTyp === 'unbezahlt') {
-                        bgClass = 'feiertag-unbezahlt';
-                    } else {
-                        bgClass = ftBezahlt ? 'feiertag' : 'feiertag-unbezahlt';
-                    }
+                    bgClass = ftBezahlt ? 'feiertag' : 'feiertag-unbezahlt';
                 } else if (d && d.tagTyp) {
                     switch (d.tagTyp) {
                         case 'urlaub':
@@ -5202,12 +3808,6 @@
                         tagTyp === 'feiertag-bezahlt' ||
                         (isFT && ftBezahlt)) {
                         erfuellteTage++;
-
-                        // ⚡ NEU: Krankheit, Urlaub, Kompensation zählen als gearbeitete Zeit (8:24)
-                        if ((tagTyp === 'krank' || tagTyp === 'urlaub' || tagTyp === 'kompensation') && arb === 0) {
-                            totalArb += sollProTag;
-                        }
-
                         if (arb > 0) {
                             diff = -arb;
                             diffColor = '#10B981';
@@ -5228,17 +3828,7 @@
                 let tagTypIcon = '';
 
                 if (isFT) {
-                    const ft = feiertage[dateStr];
-                    const ftTyp = ft ? (ft.typ || 'feiertag') : 'feiertag';
-
-                    if (ftTyp === 'brueckentag') {
-                        bgClass = 'tag-kompensation';
-                        tagTypIcon = '<span class="emoji-medium">⏰</span>';
-                    } else if (ftTyp === 'unbezahlt') {
-                        bgClass = 'feiertag-unbezahlt';
-                    } else {
-                        bgClass = ftBezahlt ? 'feiertag' : 'feiertag-unbezahlt';
-                    }
+                    bgClass = ftBezahlt ? 'feiertag' : 'feiertag-unbezahlt';
                 } else if (d && d.tagTyp) {
                     switch (d.tagTyp) {
                         case 'urlaub':
@@ -5307,16 +3897,13 @@
                 document.getElementById('m-diff-info').textContent = `${erfuellteTage} / ${arbeitsTageImMonat} Tage`;
             }
 
-            // Ferientage anzeigen (mit Null-Checks)
+            // Ferientage anzeigen
             const urlaubGesamt = (settings.urlaubTage || 25) + (settings.resturlaubVorjahr || 0);
             const urlaubBisHierthin = getUrlaubBisZumMonat(m);
             const urlaubRest = urlaubGesamt - urlaubBisHierthin;
-            const mUrlaubGesamt = document.getElementById('m-urlaub-gesamt');
-            const mUrlaubBezogen = document.getElementById('m-urlaub-bezogen');
-            const mUrlaubRest = document.getElementById('m-urlaub-rest');
-            if (mUrlaubGesamt) mUrlaubGesamt.textContent = urlaubGesamt;
-            if (mUrlaubBezogen) mUrlaubBezogen.textContent = urlaubBisHierthin;
-            if (mUrlaubRest) mUrlaubRest.textContent = urlaubRest;
+            document.getElementById('m-urlaub-gesamt').textContent = urlaubGesamt;
+            document.getElementById('m-urlaub-bezogen').textContent = urlaubBisHierthin;
+            document.getElementById('m-urlaub-rest').textContent = urlaubRest;
         }
 
         function jahrVor() {
@@ -5391,11 +3978,6 @@
                             tagTyp === 'feiertag-bezahlt' ||
                             (isFT && ftBezahlt)) {
                             erfuellteTage++;
-
-                            // ⚡ NEU: Krankheit, Urlaub, Kompensation zählen als gearbeitete Zeit (8:24)
-                            if ((tagTyp === 'krank' || tagTyp === 'urlaub' || tagTyp === 'kompensation') && arb === 0) {
-                                totalArb += sollProTag;
-                            }
                         } else {
                             // Normaler Arbeitstag: Prüfe ob genug gearbeitet wurde
                             const diff = sollProTag - arb;
@@ -5949,165 +4531,6 @@
             document.getElementById('massenurlaub-modal').classList.add('hidden');
         }
 
-        // ==========================================
-        // BACKUP & RESTORE (OneDrive Sync Support)
-        // ==========================================
-
-        function exportBackup() {
-            const backup = {
-                version: '1.0',
-                timestamp: new Date().toISOString(),
-                settings: settings,
-                data: data,
-                feiertage: feiertage
-            };
-
-            const json = JSON.stringify(backup, null, 2);
-            const blob = new Blob([json], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `arbeitszeit_backup_${new Date().toISOString().slice(0, 10)}.json`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }
-
-        function importBackup() {
-            document.getElementById('backup-upload-file').click();
-        }
-
-        function handleBackupFileSelect(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                try {
-                    const backup = JSON.parse(e.target.result);
-
-                    if (!backup.data || !backup.settings) {
-                        alert('Ungültige Backup-Datei! (data oder settings fehlen)');
-                        return;
-                    }
-
-                    if (confirm(`Backup vom ${new Date(backup.timestamp).toLocaleString()} laden?\nACHTUNG: Alle aktuellen Daten werden überschrieben!`)) {
-                        data = backup.data;
-                        settings = backup.settings;
-                        if (backup.feiertage) feiertage = backup.feiertage;
-
-                        saveToStorage();
-                        location.reload(); // Seite neu laden um alles zu aktualisieren
-                    }
-                } catch (err) {
-                    alert('Fehler beim Laden des Backups: ' + err.message);
-                }
-            };
-            reader.readAsText(file);
-            event.target.value = ''; // Reset input
-        }
-
-        // ========================================
-        // FEIERTAGE iCALENDAR EXPORT
-        // ========================================
-
-        function exportFeiertageICS() {
-            const yearRange = document.getElementById('ics-year-range').value.trim();
-
-            if (!yearRange) {
-                alert('Bitte Jahresbereich eingeben (z.B. 2025-2026)');
-                return;
-            }
-
-            // Parse year range
-            const parts = yearRange.split('-');
-            if (parts.length !== 2) {
-                alert('Ungültiges Format! Verwende: JAHR-JAHR (z.B. 2025-2026)');
-                return;
-            }
-
-            const startYear = parseInt(parts[0].trim());
-            const endYear = parseInt(parts[1].trim());
-
-            if (isNaN(startYear) || isNaN(endYear)) {
-                alert('Ungültige Jahreszahlen!');
-                return;
-            }
-
-            if (startYear > endYear) {
-                alert('Startjahr muss <= Endjahr sein!');
-                return;
-            }
-
-            // Check if we have any holidays
-            const holidayCount = Object.keys(feiertage).length;
-            if (holidayCount === 0) {
-                alert('Keine Feiertage geladen!\n\nBitte erst Feiertage importieren:\n- Kanton wählen ODER\n- Feiertags-JSON importieren');
-                return;
-            }
-
-            // Generate ICS content
-            const icsContent = generateICS(startYear, endYear);
-
-            // Download file
-            const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
-            saveAs(blob, `Feiertage_${startYear}-${endYear}.ics`);
-
-            alert(`✅ Erfolgreich exportiert!\n\nDatei: Feiertage_${startYear}-${endYear}.ics`);
-        }
-
-        function generateICS(startYear, endYear) {
-            // Current timestamp for DTSTAMP
-            const now = new Date();
-            const timestamp = now.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
-
-            // Build ICS header
-            let ics = 'BEGIN:VCALENDAR\r\n';
-            ics += 'VERSION:2.0\r\n';
-            ics += 'PRODID:-//Arbeitszeitrechner//Feiertage//DE\r\n';
-            ics += `CALNAME:Feiertage ${startYear}-${endYear}\r\n`;
-            ics += `X-WR-CALNAME:Feiertage ${startYear}-${endYear}\r\n`;
-            ics += 'X-WR-TIMEZONE:Europe/Zurich\r\n';
-
-            let eventCount = 0;
-
-            // Add events for each holiday in range
-            for (const [dateStr, holiday] of Object.entries(feiertage)) {
-                const year = parseInt(dateStr.substring(0, 4));
-
-                // Filter by year range
-                if (year >= startYear && year <= endYear) {
-                    // Format date for iCalendar (YYYYMMDD)
-                    const dateFormatted = dateStr.replace(/-/g, '');
-
-                    // Add bezahlt status to summary
-                    const bezahltText = holiday.bezahlt ? ' (bezahlt)' : ' (unbezahlt)';
-                    const summary = `${holiday.name}${bezahltText}`;
-
-                    // Build event
-                    ics += 'BEGIN:VEVENT\r\n';
-                    ics += `UID:${dateStr}@arbeitszeitrechner\r\n`;
-                    ics += `DTSTAMP:${timestamp}\r\n`;
-                    ics += `DTSTART;VALUE=DATE:${dateFormatted}\r\n`;
-                    ics += `SUMMARY:${summary}\r\n`;
-                    ics += 'DESCRIPTION:Feiertag aus Arbeitszeitrechner\r\n';
-                    ics += 'STATUS:CONFIRMED\r\n';
-                    ics += 'TRANSP:TRANSPARENT\r\n';
-                    ics += 'END:VEVENT\r\n';
-
-                    eventCount++;
-                }
-            }
-
-            // Close calendar
-            ics += 'END:VCALENDAR\r\n';
-
-            return ics;
-        }
-
-
         function updateUrlaubBisDatum() {
             const vonInput = document.getElementById('urlaub-von');
             const bisInput = document.getElementById('urlaub-bis');
@@ -6375,27 +4798,12 @@
             document.getElementById('icon').textContent = '☀️';
         }
 
-        // Globaler Click-Listener zum Schließen des Menüs
-        function closeExportMenuOutside(event) {
-            const menu = document.getElementById('export-menu');
-            const toggleBtn = event.target.closest('button[onclick="toggleExport()"]');
-
-            // Wenn Klick NICHT im Menü und NICHT auf dem Toggle-Button
-            if (menu && !menu.contains(event.target) && !toggleBtn) {
-                menu.classList.add('hidden');
-                document.removeEventListener('click', closeExportMenuOutside);
-            }
-        }
-
         function toggleExport() {
             const menu = document.getElementById('export-menu');
-            const isHidden = menu.classList.contains('hidden');
+            menu.classList.toggle('hidden');
 
-            if (isHidden) {
-                // Menü öffnen
-                menu.classList.remove('hidden');
-
-                // Update visibility based on current view
+            // Update visibility based on current view
+            if (!menu.classList.contains('hidden')) {
                 const isSettings = view === 'einstellungen';
                 const timeExports = menu.querySelectorAll('.time-export');
                 const settingsExports = menu.querySelectorAll('.settings-export');
@@ -6409,16 +4817,6 @@
                 settingsExports.forEach(el => {
                     el.style.display = '';
                 });
-
-                // Event Listener hinzufügen (mit kleiner Verzögerung, damit der aktuelle Klick nicht sofort schließt)
-                setTimeout(() => {
-                    document.addEventListener('click', closeExportMenuOutside);
-                }, 0);
-
-            } else {
-                // Menü schließen
-                menu.classList.add('hidden');
-                document.removeEventListener('click', closeExportMenuOutside);
             }
         }
 
@@ -7831,7 +6229,7 @@
                     } else if (d.tagTyp === 'unbezahlt') {
                         fillColor = [254, 202, 202];
                         unbezahlteTage++;
-                    } else if (d.tagTyp === 'kompensation' || (isFT && feiertage[dateStr] && feiertage[dateStr].typ === 'brueckentag')) {
+                    } else if (d.tagTyp === 'kompensation') {
                         fillColor = [196, 181, 253];
                         kompensationsTage++;
                         sollMin = sollProTag;
@@ -7897,7 +6295,7 @@
                     body: tableData.map(row => row.data),
                     theme: 'grid',
                     tableWidth: 165,
-                    margin: { left: 20, right: 20 },
+                    margin: { left: 20, right: 115 },
                     pageBreak: 'avoid',
                     styles: {
                         fontSize: 6,
@@ -8055,8 +6453,7 @@
                     body: summaryData,
                     theme: 'plain',
                     tableWidth: 165,
-                    margin: { left: 20, right: 20 },
-                    pageBreak: 'avoid',
+                    margin: { left: 20, right: 115 },
                     styles: {
                         fontSize: 6,
                         cellPadding: 0.8,
@@ -8193,11 +6590,11 @@
                         fillColor = [209, 250, 229];
                     } else if (d.tagTyp === 'krank') {
                         fillColor = [254, 243, 199];
-                        krankheitageGesamt++;
+                        krankheitstageGesamt++;
                     } else if (d.tagTyp === 'unbezahlt') {
                         fillColor = [254, 202, 202];
                         unbezahlteTage++;
-                    } else if (d.tagTyp === 'kompensation' || (isFT && feiertage[dateStr] && feiertage[dateStr].typ === 'brueckentag')) {
+                    } else if (d.tagTyp === 'kompensation') {
                         fillColor = [196, 181, 253];
                         kompensationsTage++;
                         sollMin = sollProTag;
@@ -8255,10 +6652,10 @@
                     body: tableData.map(row => row.data),
                     theme: 'grid',
                     tableWidth: 165,
-                    margin: { left: 20, right: 20 },
+                    margin: { left: 20, right: 115 },
                     styles: {
-                        fontSize: 6,
-                        cellPadding: 0.8,
+                        fontSize: 6.5,
+                        cellPadding: 1.2,
                         halign: 'center',
                         valign: 'top',
                         lineWidth: 0.1
@@ -8269,7 +6666,7 @@
                         fontStyle: 'bold',
                         halign: 'center',
                         valign: 'top',
-                        fontSize: 6,
+                        fontSize: 6.5,
                         valign: 'middle'
                     },
                     columnStyles: {
@@ -8350,11 +6747,10 @@
                     body: summaryData,
                     theme: 'plain',
                     tableWidth: 165,
-                    margin: { left: 20, right: 20 },
-                    pageBreak: 'avoid',
+                    margin: { left: 20, right: 115 },
                     styles: {
-                        fontSize: 6,
-                        cellPadding: 0.8,
+                        fontSize: 6.5,
+                        cellPadding: 1.2,
                         halign: 'center',
                         valign: 'top',
                         fontStyle: 'italic'
@@ -8545,73 +6941,6 @@
             });
         }
 
-        async function importFeiertageOnline() {
-            const jahr = document.getElementById('import-year').value;
-            const kanton = settings.kanton;
-
-            if (!kanton) {
-                alert('Bitte wählen Sie zuerst oben einen Kanton aus!');
-                return;
-            }
-
-            if (!jahr || jahr < 2000 || jahr > 2100) {
-                alert('Bitte geben Sie ein gültiges Jahr ein (2000-2100).');
-                return;
-            }
-
-            const btn = event.target;
-            const originalText = btn.innerText;
-            btn.innerText = '⏳ Lade...';
-            btn.disabled = true;
-
-            try {
-                // API Call zu date.nager.at
-                const response = await fetch(`https://date.nager.at/api/v3/PublicHolidays/${jahr}/CH`);
-
-                if (!response.ok) {
-                    throw new Error(`API Fehler: ${response.status}`);
-                }
-
-                const data = await response.json();
-                let count = 0;
-
-                // Filter für Kanton und Global
-                const kantonCode = `CH-${kanton}`;
-
-                data.forEach(holiday => {
-                    // Prüfen ob Feiertag für diesen Kanton gilt
-                    // global: true ODER counties enthält den Kantonscode
-                    const isRelevant = holiday.global || (holiday.counties && holiday.counties.includes(kantonCode));
-
-                    if (isRelevant) {
-                        // Datum formatieren (YYYY-MM-DD ist bereits Standard)
-                        const date = holiday.date;
-
-                        // Nur hinzufügen/überschreiben
-                        feiertage[date] = {
-                            name: holiday.localName,
-                            bezahlt: true // Standardmäßig bezahlt annehmen
-                        };
-                        count++;
-                    }
-                });
-
-                saveToStorage();
-                renderEinstellungen(); // Update the UI where feiertage are displayed
-                if (view === 'monat') renderMonat();
-                if (view === 'jahr') renderJahr();
-
-                alert(`✅ Erfolgreich ${count} Feiertage für ${jahr} (Kanton ${kanton}) importiert!`);
-
-            } catch (error) {
-                console.error('Import Fehler:', error);
-                alert(`❌ Fehler beim Importieren:\n${error.message}\n\nBitte prüfen Sie Ihre Internetverbindung.`);
-            } finally {
-                btn.innerText = originalText;
-                btn.disabled = false;
-            }
-        }
-
         function importFeiertage() {
             document.getElementById('feiertag-file').click();
         }
@@ -8680,304 +7009,14 @@
         }
 
         let currentEditingDatum = null;
-        let currentEditingRange = { start: null, end: null }; // Track if editing a range
-
-        // Helper function to convert Date object to YYYY-MM-DD string (LOCAL timezone, not UTC!)
-        function dateToYMD(dateObj) {
-            const y = dateObj.getFullYear();
-            const m = String(dateObj.getMonth() + 1).padStart(2, '0');
-            const d = String(dateObj.getDate()).padStart(2, '0');
-            return `${y}-${m}-${d}`;
-        }
-
-        // Helper function to detect if a date is part of a consecutive range
-        function detectHolidayRange(dateStr) {
-            const ft = feiertage[dateStr];
-            if (!ft) return null;
-
-            const name = ft.name || '';
-            const typ = ft.typ || 'feiertag';
-            const bezahlt = ft.bezahlt !== undefined ? ft.bezahlt : true;
-
-            // Find the start of the range (go backwards)
-            let startDate = new Date(dateStr + 'T00:00:00');
-            let checkDate = new Date(startDate);
-            checkDate.setDate(checkDate.getDate() - 1);
-
-            while (true) {
-                const checkStr = dateToYMD(checkDate);
-                const checkFt = feiertage[checkStr];
-
-                if (!checkFt ||
-                    checkFt.name !== name ||
-                    checkFt.typ !== typ ||
-                    checkFt.bezahlt !== bezahlt) {
-                    break;
-                }
-
-                startDate = new Date(checkDate);
-                checkDate.setDate(checkDate.getDate() - 1);
-            }
-
-            // Find the end of the range (go forwards)
-            let endDate = new Date(dateStr + 'T00:00:00');
-            checkDate = new Date(endDate);
-            checkDate.setDate(checkDate.getDate() + 1);
-
-            while (true) {
-                const checkStr = dateToYMD(checkDate);
-                const checkFt = feiertage[checkStr];
-
-                if (!checkFt ||
-                    checkFt.name !== name ||
-                    checkFt.typ !== typ ||
-                    checkFt.bezahlt !== bezahlt) {
-                    break;
-                }
-
-                endDate = new Date(checkDate);
-                checkDate.setDate(checkDate.getDate() + 1);
-            }
-
-            const startStr = dateToYMD(startDate);
-            const endStr = dateToYMD(endDate);
-
-            // If start and end are the same, it's a single day
-            if (startStr === endStr) {
-                return { isSingleDay: true, start: startStr, end: null };
-            }
-
-            return { isSingleDay: false, start: startStr, end: endStr };
-        }
-
-        // Helper function to delete all days in a range
-        function deleteRangeDays(startDate, endDate) {
-            const start = new Date(startDate + 'T00:00:00');
-            const end = new Date(endDate + 'T00:00:00');
-            const current = new Date(start);
-
-            const deletedDates = [];
-            while (current <= end) {
-                const dateStr = dateToYMD(current);
-                if (feiertage[dateStr]) {
-                    delete feiertage[dateStr];
-                    deletedDates.push(dateStr);
-                }
-                current.setDate(current.getDate() + 1);
-            }
-
-            return deletedDates;
-        }
-
-        // ==========================================
-        // MINI-CALENDAR LOGIC
-        // ==========================================
-        let miniCalYear = new Date().getFullYear();
-        let miniCalMonth = new Date().getMonth(); // 0-11
-        let activeDateInputId = 'modal-datum';
-
-        function formatDateCH(dateStr) {
-            if (!dateStr) return '';
-            const [y, m, d] = dateStr.split('-');
-            return `${d}.${m}.${y}`;
-        }
-
-        function parseDateCH(dateStr) {
-            if (!dateStr) return '';
-            const [d, m, y] = dateStr.split('.');
-            return `${y}-${m}-${d}`;
-        }
-
-        function setActiveInput(id) {
-            activeDateInputId = id;
-
-            // Visual feedback
-            document.getElementById('modal-datum').classList.remove('input-active');
-            document.getElementById('modal-bis-datum').classList.remove('input-active');
-
-            const el = document.getElementById(id);
-            if (el) el.classList.add('input-active');
-        }
-
-        function initMiniCalendar() {
-            const today = new Date();
-            miniCalYear = today.getFullYear();
-            miniCalMonth = today.getMonth();
-            renderMiniCalendar();
-        }
-
-        function prevMiniCalMonth() {
-            miniCalMonth--;
-            if (miniCalMonth < 0) {
-                miniCalMonth = 11;
-                miniCalYear--;
-            }
-            renderMiniCalendar();
-        }
-
-        function nextMiniCalMonth() {
-            miniCalMonth++;
-            if (miniCalMonth > 11) {
-                miniCalMonth = 0;
-                miniCalYear++;
-            }
-            renderMiniCalendar();
-        }
-
-        function renderMiniCalendar() {
-            const grid = document.getElementById('mini-cal-grid');
-            const label = document.getElementById('mini-cal-month-year');
-            if (!grid || !label) return;
-
-            const months = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
-            label.textContent = `${months[miniCalMonth]} ${miniCalYear}`;
-
-            grid.innerHTML = '';
-
-            const firstDay = new Date(miniCalYear, miniCalMonth, 1);
-            const lastDay = new Date(miniCalYear, miniCalMonth + 1, 0); // Last day of current month
-            const daysInMonth = lastDay.getDate();
-
-            // Adjust start day: 0 (Sun) -> 6, 1 (Mon) -> 0
-            let startDay = firstDay.getDay() - 1;
-            if (startDay === -1) startDay = 6;
-
-            // Empty cells for days before start of month
-            for (let i = 0; i < startDay; i++) {
-                const cell = document.createElement('div');
-                cell.className = 'mini-cal-day empty';
-                grid.appendChild(cell);
-            }
-
-            // Days of month
-            // Get raw values (DD.MM.YYYY) and parse to YYYY-MM-DD for comparison
-            const rawVon = document.getElementById('modal-datum').value;
-            const currentSelectedDate = parseDateCH(rawVon);
-
-            for (let d = 1; d <= daysInMonth; d++) {
-                const cell = document.createElement('div');
-                cell.className = 'mini-cal-day';
-                cell.textContent = d;
-
-                const dateStr = `${miniCalYear}-${String(miniCalMonth + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-
-                // Check if selected
-                if (dateStr === currentSelectedDate) {
-                    cell.classList.add('selected');
-                }
-
-                // Check for existing holiday
-                if (feiertage[dateStr]) {
-                    cell.classList.add('has-holiday');
-                    const ft = feiertage[dateStr];
-                    const type = ft.typ || 'feiertag';
-
-                    if (type === 'brueckentag') {
-                        cell.classList.add('holiday-kompensation');
-                    } else if (type === 'unbezahlt') {
-                        cell.classList.add('holiday-unbezahlt');
-                    } else if (ft.bezahlt !== false) {
-                        cell.classList.add('holiday-bezahlt');
-                    } else {
-                        cell.classList.add('holiday-unbezahlt');
-                    }
-
-                    cell.title = ft.name || 'Feiertag';
-                }
-
-                cell.onclick = () => {
-                    // 1. Set Date to Active Input
-                    const formattedDate = formatDateCH(dateStr);
-                    document.getElementById(activeDateInputId).value = formattedDate;
-
-                    // 2. If clicking an existing holiday -> Load it!
-                    // BUT only if we are setting the "Von" date (primary date)
-                    if (activeDateInputId === 'modal-datum' && feiertage[dateStr]) {
-                        const ft = feiertage[dateStr];
-                        document.getElementById('modal-name').value = ft.name || '';
-                        document.getElementById('modal-typ').value = ft.typ || 'feiertag';
-                        document.getElementById('modal-bezahlt').checked = ft.bezahlt !== undefined ? ft.bezahlt : true;
-                        currentEditingDatum = dateStr; // Set editing mode
-
-                        // Show delete button (we're editing an existing holiday)
-                        document.getElementById('delete-feiertag-btn').style.display = 'block';
-
-                        // DETECT RANGE: Check if this is part of a multi-day holiday
-                        const range = detectHolidayRange(dateStr);
-                        if (range && !range.isSingleDay) {
-                            // It's a range! Load the full range
-                            document.getElementById('modal-datum').value = formatDateCH(range.start);
-                            document.getElementById('modal-bis-datum').value = formatDateCH(range.end);
-                            document.getElementById('modal-mehrere-tage').checked = true;
-                            document.getElementById('bis-datum-container').style.display = 'block';
-
-                            // Store the range for deletion later
-                            currentEditingRange = { start: range.start, end: range.end };
-                        } else {
-                            // Single day
-                            currentEditingRange = { start: null, end: null };
-                        }
-                    }
-                    // If clicking empty date -> Reset editing mode if we were editing
-                    else if (activeDateInputId === 'modal-datum') {
-                        currentEditingDatum = null;
-                        currentEditingRange = { start: null, end: null };
-                        // Hide delete button (we're adding a new holiday)
-                        document.getElementById('delete-feiertag-btn').style.display = 'none';
-                    }
-
-                    // 3. Auto-advance logic
-                    const mehrereTage = document.getElementById('modal-mehrere-tage').checked;
-                    if (mehrereTage && activeDateInputId === 'modal-datum' && !feiertage[dateStr]) {
-                        // Only auto-advance if NOT loading an existing holiday
-                        setActiveInput('modal-bis-datum');
-                    }
-
-                    renderMiniCalendar(); // Re-render to show selection
-                };
-
-                grid.appendChild(cell);
-            }
-        }
-
-        function toggleBisDatum() {
-            const checkbox = document.getElementById('modal-mehrere-tage');
-            const container = document.getElementById('bis-datum-container');
-            container.style.display = checkbox.checked ? 'block' : 'none';
-
-            if (checkbox.checked) {
-                const vonDatum = document.getElementById('modal-datum').value;
-                if (vonDatum) {
-                    document.getElementById('modal-bis-datum').value = vonDatum;
-                }
-                // Activate Bis-Datum input
-                setActiveInput('modal-bis-datum');
-            } else {
-                setActiveInput('modal-datum');
-            }
-        }
 
         function showAddFeiertagDialog() {
             document.getElementById('modal-title').textContent = 'Feiertag hinzufügen';
             document.getElementById('modal-datum').value = '';
-            document.getElementById('modal-bis-datum').value = '';
             document.getElementById('modal-name').value = '';
             document.getElementById('modal-typ').value = 'feiertag';
             document.getElementById('modal-bezahlt').checked = true;
-            document.getElementById('modal-mehrere-tage').checked = false;
-            document.getElementById('bis-datum-container').style.display = 'none';
             currentEditingDatum = null;
-            currentEditingRange = { start: null, end: null };
-
-            // Hide delete button (we're adding, not editing)
-            document.getElementById('delete-feiertag-btn').style.display = 'none';
-
-            // Reset Active Input
-            setActiveInput('modal-datum');
-
-            // Init Calendar
-            initMiniCalendar();
-
             document.getElementById('feiertag-modal').classList.remove('hidden');
         }
 
@@ -8986,41 +7025,11 @@
             if (!ft) return;
 
             document.getElementById('modal-title').textContent = 'Feiertag bearbeiten';
-
-            // Detect if this is part of a range
-            const range = detectHolidayRange(datum);
-
-            if (range && !range.isSingleDay) {
-                // It's a range!
-                document.getElementById('modal-datum').value = formatDateCH(range.start);
-                document.getElementById('modal-bis-datum').value = formatDateCH(range.end);
-                document.getElementById('modal-mehrere-tage').checked = true;
-                document.getElementById('bis-datum-container').style.display = 'block';
-                currentEditingRange = { start: range.start, end: range.end };
-            } else {
-                // Single day
-                document.getElementById('modal-datum').value = formatDateCH(datum);
-                document.getElementById('modal-mehrere-tage').checked = false;
-                document.getElementById('bis-datum-container').style.display = 'none';
-                currentEditingRange = { start: null, end: null };
-            }
-
+            document.getElementById('modal-datum').value = datum;
             document.getElementById('modal-name').value = ft.name || ft;
             document.getElementById('modal-typ').value = ft.typ || 'feiertag';
             document.getElementById('modal-bezahlt').checked = ft.bezahlt !== undefined ? ft.bezahlt : true;
             currentEditingDatum = datum;
-
-            // Show delete button (we're editing)
-            document.getElementById('delete-feiertag-btn').style.display = 'block';
-
-            // Init Calendar with specific date
-            const d = new Date(datum);
-            if (!isNaN(d.getTime())) {
-                miniCalYear = d.getFullYear();
-                miniCalMonth = d.getMonth();
-            }
-            renderMiniCalendar();
-
             document.getElementById('feiertag-modal').classList.remove('hidden');
         }
 
@@ -9043,117 +7052,26 @@
             currentEditingDatum = null;
         }
 
-        function deleteCurrentFeiertag() {
-            const ft = currentEditingDatum ? feiertage[currentEditingDatum] : null;
-            if (!ft) return;
-
-            const name = ft.name || 'dieser Feiertag';
-
-            // Determine what we're deleting
-            let confirmMsg = '';
-            if (currentEditingRange.start && currentEditingRange.end) {
-                // Deleting a range
-                const rawStart = formatDateCH(currentEditingRange.start);
-                const rawEnd = formatDateCH(currentEditingRange.end);
-                confirmMsg = `Möchten Sie den Bereich "${name}" von ${rawStart} bis ${rawEnd} wirklich löschen?`;
-            } else {
-                // Deleting a single day
-                const rawDate = formatDateCH(currentEditingDatum);
-                confirmMsg = `Möchten Sie "${name}" am ${rawDate} wirklich löschen?`;
-            }
-
-            if (confirm(confirmMsg)) {
-                // Delete range or single day
-                if (currentEditingRange.start && currentEditingRange.end) {
-                    deleteRangeDays(currentEditingRange.start, currentEditingRange.end);
-                } else {
-                    delete feiertage[currentEditingDatum];
-                }
-
-                saveToStorage();
-                closeFeiertagModal();
-                renderEinstellungen();
-
-                if (view === 'monat') renderMonat();
-                if (view === 'jahr') renderJahr();
-            }
-        }
-
         function saveFeiertagFromModal() {
-            const rawVon = document.getElementById('modal-datum').value;
-            const rawBis = document.getElementById('modal-bis-datum').value;
-
-            const vonDatum = parseDateCH(rawVon);
-            const bisDatum = parseDateCH(rawBis);
-
+            const datum = document.getElementById('modal-datum').value;
             const name = document.getElementById('modal-name').value.trim();
             const typ = document.getElementById('modal-typ').value;
-            const mehrereTage = document.getElementById('modal-mehrere-tage').checked;
-
             const bezahlt = document.getElementById('modal-bezahlt').checked;
 
-            if (!vonDatum || !name) {
+            if (!datum || !name) {
                 alert('Bitte Datum und Name eingeben!');
                 return;
             }
 
-            if (mehrereTage && !bisDatum) {
-                alert('Bitte gib ein End-Datum ein.');
-                return;
-            }
-
-            // FIRST: Delete old range days if we're editing a range
-            if (currentEditingRange.start && currentEditingRange.end) {
-                deleteRangeDays(currentEditingRange.start, currentEditingRange.end);
-                currentEditingRange = { start: null, end: null };
-            }
-            // Or delete old single day if editing
-            else if (currentEditingDatum && currentEditingDatum !== vonDatum) {
+            if (currentEditingDatum && currentEditingDatum !== datum) {
                 delete feiertage[currentEditingDatum];
             }
 
-            // Datumsbereich
-            if (mehrereTage) {
-                const start = new Date(vonDatum + 'T00:00:00');
-                const end = new Date(bisDatum + 'T00:00:00');
-
-                if (start > end) {
-                    alert('Das End-Datum muss nach dem Start-Datum liegen.');
-                    return;
-                }
-
-                let count = 0;
-                const currentDate = new Date(start);
-
-                while (currentDate <= end) {
-                    const year = currentDate.getFullYear();
-                    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-                    const day = String(currentDate.getDate()).padStart(2, '0');
-                    const dateStr = `${year}-${month}-${day}`;
-
-                    feiertage[dateStr] = {
-                        name: name,
-                        bezahlt: bezahlt,
-                        typ: typ
-                    };
-                    count++;
-
-                    currentDate.setDate(currentDate.getDate() + 1);
-                }
-
-                alert(`✅ ${count} Tage als "${name}" gespeichert.`);
-            } else {
-                // Einzelner Tag
-                if (currentEditingDatum && currentEditingDatum !== vonDatum) {
-                    delete feiertage[currentEditingDatum];
-                }
-
-                feiertage[vonDatum] = {
-                    name: name,
-                    bezahlt: bezahlt,
-                    typ: typ
-                };
-            }
+            feiertage[datum] = {
+                name: name,
+                bezahlt: bezahlt,
+                typ: typ
+            };
 
             saveToStorage();
             closeFeiertagModal();
@@ -9431,11 +7349,9 @@
 
                 if (input && clearBtn) {
                     if (input.value) {
-                        input.classList.add('has-value'); // Klasse für CSS hinzufügen
                         clearBtn.classList.add('on');
                         clearBtn.style.display = 'flex';
                     } else {
-                        input.classList.remove('has-value'); // Klasse entfernen
                         clearBtn.classList.remove('on');
                         clearBtn.style.display = 'none';
                     }
@@ -9449,98 +7365,19 @@
             }
         });
 
-        // Wait for DOM to be ready before initializing
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', init);
-        } else {
-            init();
-        }
+        init();
     </script>
 
     <!-- ⏱ Automatischer Reload bei neuer Version -->
     <script>
-        // Hilfsfunktionen für Labels und Clear-Buttons
-        function toggleLabel(id) {
-            const input = document.getElementById(id);
-            const label = document.getElementById(`label-${id}`);
+        // Version 1.0.1 - Manuell erhöhen bei jeder Änderung
+        const version = '1.0.1';
 
-            if (input && label) {
-                if (input.value) {
-                    label.classList.add('hidden');
-                } else {
-                    label.classList.remove('hidden');
-                }
-            }
-            updateClear();
-        }
-
-        function updateClear() {
-            ['mk', 'mg', 'mittk', 'ag'].forEach(id => {
-                const input = document.getElementById(id);
-                const clearBtn = document.getElementById(`c-${id}`);
-
-                if (input && clearBtn) {
-                    if (input.value) {
-                        input.classList.add('has-value');
-                        clearBtn.classList.add('visible');
-                    } else {
-                        input.classList.remove('has-value');
-                        clearBtn.classList.remove('visible');
-                    }
-                }
-            });
-        }
-
-        // Version 1.2.125 - Manuell erhöhen bei jeder Änderung
-        const version = '1.2.125';
-
-        // Initialise user info with fallback placeholders
-        const userInfoEl = document.getElementById('user-info');
-        if (userInfoEl) {
-            const name = localStorage.getItem('user_name');
-            const persNr = localStorage.getItem('user_persnr');
-            let html = '';
-            html += `<div class="user-info-name">${name ? name : 'Name'}</div>`;
-            html += `<div class="user-info-persnr">Pers. Nr. ${persNr ? persNr : ''}</div>`;
-            userInfoEl.innerHTML = html;
-        }
-
-        // Prüfe Version und erzwinge Hard-Reload wenn nötig
-        const lastVersion = localStorage.getItem('app_version');
-
-        if (lastVersion !== version) {
-            console.log(`Update erkannt: ${lastVersion} → ${version}`);
+        if (localStorage.getItem('app_version') !== version) {
             localStorage.setItem('app_version', version);
-
-            // Lösche alle Caches
-            if ('caches' in window) {
-                caches.keys().then(function (names) {
-                    for (let name of names) caches.delete(name);
-                });
-            }
-
-            // Reload mit Cache-Bypass
-            setTimeout(() => {
-                window.location.reload(true); // Hard reload
-            }, 100);
+            location.reload(); // Seite neu laden bei Versionswechsel
         }
-
-        // Zusätzlich: Prüfe beim Fokus ob Update verfügbar (optional)
-        window.addEventListener('focus', function () {
-            // Lade Seite mit Cache-Bypass-Parameter neu
-            const url = new URL(window.location);
-            const currentCheck = url.searchParams.get('v');
-            if (!currentCheck || currentCheck !== version) {
-                url.searchParams.set('v', version);
-                if (currentCheck && currentCheck !== version) {
-                    window.location.href = url.toString();
-                }
-            }
-        });
     </script>
-
-
-
 
 </body>
 
