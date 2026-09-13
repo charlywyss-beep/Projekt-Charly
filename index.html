@@ -1,5 +1,5 @@
 <html lang="de">
-<!-- Version 1.3.21 - Mobile portrait button bottom inset (Zurücksetzen & Speichern) -->
+<!-- Version 1.3.22 - Raised bottom buttons and compact mobile layout for iPhone -->
 
 <head>
     <meta charset="utf-8">
@@ -1019,8 +1019,17 @@
             }
 
             #digital-clock {
-                padding: 0.4rem 0.6rem !important;
+                padding: 0.3rem 0.5rem !important;
                 margin: 0 auto !important;
+            }
+
+            #digital-clock-time {
+                font-size: 1.45rem !important;
+            }
+
+            #digital-clock-date {
+                font-size: 0.95rem !important;
+                margin-top: 2px !important;
             }
 
             .tabs {
@@ -1052,35 +1061,35 @@
 
             /* Tagesansicht Kompakte Abstände auf mobile */
             #v-tag > div:first-child {
-                margin-bottom: 0.25rem !important;
+                margin-bottom: 0.2rem !important;
             }
 
             #tag-typ-anzeige {
-                margin-top: 0.25rem !important;
-                padding: 0.35rem 0.6rem !important;
-                font-size: 0.88rem !important;
+                margin-top: 0.2rem !important;
+                padding: 0.3rem 0.5rem !important;
+                font-size: 0.85rem !important;
             }
 
             /* Mobile Fixes für iPhone */
             .kachel-grid {
                 grid-template-columns: 1fr !important;
-                gap: 0.4rem !important;
+                gap: 0.35rem !important;
             }
 
             .arbeitszeit-kachel {
                 width: 100% !important;
                 max-width: 100% !important;
                 box-sizing: border-box !important;
-                padding: 0.5rem 0.65rem !important;
+                padding: 0.45rem 0.6rem !important;
             }
 
             .arbeitszeit-kachel-title {
-                margin-bottom: 0.25rem !important;
-                font-size: 0.95rem !important;
+                margin-bottom: 0.2rem !important;
+                font-size: 0.92rem !important;
             }
 
             .kachel-grid > .arbeitszeit-kachel:first-child > div[style*="grid-template-rows"] {
-                gap: 0.35rem !important;
+                gap: 0.25rem !important;
             }
 
             /* Zeiten & Tag-Typ Labels auf Mobile verbergen für mehr Platz */
@@ -1089,9 +1098,26 @@
             }
 
             .arbeitszeit-kachel input[type="time"] {
-                height: 40px !important;
-                min-height: 40px !important;
-                padding: 0.4rem 0.5rem !important;
+                height: 38px !important;
+                min-height: 38px !important;
+                padding: 0.3rem 0.5rem !important;
+            }
+
+            /* ✅ Buttons auf iPhone deutlich höher platzieren & Abstand nach unten sichern */
+            .button-row {
+                margin-top: 0.6rem !important;
+                margin-bottom: 3.5rem !important;
+                padding-bottom: max(2rem, calc(env(safe-area-inset-bottom, 0px) + 1.5rem)) !important;
+            }
+
+            .button-row .btn {
+                padding: 0.65rem 0.75rem !important;
+                font-size: 0.95rem !important;
+            }
+
+            #v-tag {
+                padding-bottom: max(3.5rem, calc(env(safe-area-inset-bottom, 0px) + 2rem)) !important;
+                margin-bottom: 4rem !important;
             }
 
             /* Fix für Labels im Dark Mode - WEISS für Sichtbarkeit */
@@ -1896,7 +1922,7 @@
                             onmouseover="this.style.color='#6366F1'; this.style.transform='scale(1.05)';"
                             onmouseout="this.style.color='#9CA3AF'; this.style.transform='scale(1)';"
                             class="version-badge">
-                            v1.3.21 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
+                            v1.3.22 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
                         </div>
                     </div>
                     <div class="header-actions" style="display: flex; gap: 0.5rem; align-items: center;">
@@ -9659,8 +9685,8 @@
             });
         }
 
-        // Version 1.3.21 - Manuell erhöhen bei jeder Änderung
-        const APP_VERSION = '1.3.21';
+        // Version 1.3.22 - Manuell erhöhen bei jeder Änderung
+        const APP_VERSION = '1.3.22';
         const version = APP_VERSION;
 
         // Initialise user info with fallback placeholders
