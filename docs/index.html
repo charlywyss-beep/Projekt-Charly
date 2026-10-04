@@ -1,5 +1,5 @@
 <html lang="de">
-<!-- Version 1.3.28 - Gist GitHub-Check Button & Improved Sync Guidance -->
+<!-- Version 1.3.29 - Automatic Gist Auto-Discovery across all devices -->
 
 <head>
     <meta charset="utf-8">
@@ -1925,7 +1925,7 @@
                             onmouseover="this.style.color='#6366F1'; this.style.transform='scale(1.05)';"
                             onmouseout="this.style.color='#9CA3AF'; this.style.transform='scale(1)';"
                             class="version-badge">
-                            v1.3.28 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
+                            v1.3.29 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
                         </div>
                     </div>
                     <div class="header-actions" style="display: flex; gap: 0.5rem; align-items: center;">
@@ -3217,7 +3217,7 @@
                                 <li>Wähle bei den Berechtigungen das Häkchen bei <strong>gist</strong> (Create gists).</li>
                                 <li>Kopiere den generierten Schlüssel (z.B. <code>ghp_123...</code>) und füge ihn oben bei <strong>1. GitHub Personal Access Token</strong> ein.</li>
                                 <li>Klicke auf <strong>🔄 Gist-Verbindung testen / Erstellen</strong>. Die Gist-ID wird automatisch erzeugt!</li>
-                                <li><strong>Auf iPhone / weiterem PC:</strong> Trage dort dasselbe Token und die Gist-ID ein und klicke auf <strong>☁️ ⬇️ Von GitHub laden</strong>!</li>
+                                <li><strong>Auf iPhone / weiterem PC:</strong> Trage dort einfach nur dasselbe Token ein! Die Gist-ID wird beim Klick auf <strong>☁️ ⬇️ Von GitHub laden</strong> automatisch auf all deinen Geräten gefunden!</li>
                             </ol>
                         </details>
                     </div>
@@ -5880,6 +5880,28 @@
             }
         }
 
+        async function autoDiscoverGist(token) {
+            if (!token) return null;
+            try {
+                const res = await fetch('https://api.github.com/gists?per_page=100', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/vnd.github+json'
+                    }
+                });
+                if (res.ok) {
+                    const gists = await res.json();
+                    const existingGist = gists.find(g => g.files && g.files["arbeitszeitrechner_cloud_backup.json"]);
+                    if (existingGist) {
+                        return existingGist.id;
+                    }
+                }
+            } catch (e) {
+                console.error('Auto discover Gist error:', e);
+            }
+            return null;
+        }
+
         async function createOrTestGitHubGist() {
             saveGistSettings();
             const token = localStorage.getItem('gist_github_token');
@@ -5887,11 +5909,11 @@
 
             if (!token) {
                 alert('Bitte trage zuerst dein GitHub Personal Access Token (PAT) ein.');
-                return;
+                return null;
             }
 
             try {
-                showMsg('🔄 Verbinde mit GitHub...', true);
+                showMsg('🔄 Verbinde mit GitHub & suche bestehenden Cloud-Speicher...', true);
 
                 if (gistId) {
                     const res = await fetch(`https://api.github.com/gists/${gistId}`, {
@@ -5902,8 +5924,18 @@
                     });
                     if (res.ok) {
                         showMsg('✅ Gist-Verbindung erfolgreich hergestellt! Gist ist aktiv.', true);
-                        return;
+                        return gistId;
                     }
+                }
+
+                const discoveredId = await autoDiscoverGist(token);
+                if (discoveredId) {
+                    gistId = discoveredId;
+                    localStorage.setItem('gist_id', gistId);
+                    const gistIdEl = document.getElementById('gist-id');
+                    if (gistIdEl) gistIdEl.value = gistId;
+                    showMsg('✅ Bestehenden Cloud-Speicher auf GitHub automatisch gefunden & verknüpft!', true);
+                    return gistId;
                 }
 
                 const payload = {
@@ -5912,7 +5944,7 @@
                     files: {
                         "arbeitszeitrechner_cloud_backup.json": {
                             content: JSON.stringify({
-                                app_version: typeof APP_VERSION !== 'undefined' ? APP_VERSION : '1.3.26',
+                                app_version: typeof APP_VERSION !== 'undefined' ? APP_VERSION : '1.3.29',
                                 updated_at: new Date().toISOString(),
                                 data: data,
                                 settings: settings,
@@ -5939,13 +5971,16 @@
                     const gistIdEl = document.getElementById('gist-id');
                     if (gistIdEl) gistIdEl.value = gistId;
                     showMsg('✅ Neuer privater Gist erfolgreich auf GitHub erstellt & verknüpft!', true);
+                    return gistId;
                 } else {
                     const err = await res.json();
                     alert('Fehler beim Verbinden/Erstellen des Gists: ' + (err.message || res.statusText));
+                    return null;
                 }
             } catch (e) {
                 console.error('Gist Error:', e);
                 alert('Netzwerk- oder Verbindungsfehler: ' + e.message);
+                return null;
             }
         }
 
@@ -5960,7 +5995,16 @@
             }
 
             if (!gistId) {
-                return await createOrTestGitHubGist();
+                const foundId = await autoDiscoverGist(token);
+                if (foundId) {
+                    gistId = foundId;
+                    localStorage.setItem('gist_id', gistId);
+                    const gistIdEl = document.getElementById('gist-id');
+                    if (gistIdEl) gistIdEl.value = gistId;
+                } else {
+                    gistId = await createOrTestGitHubGist();
+                    if (!gistId) return false;
+                }
             }
 
             try {
@@ -5970,7 +6014,7 @@
                     files: {
                         "arbeitszeitrechner_cloud_backup.json": {
                             content: JSON.stringify({
-                                app_version: typeof APP_VERSION !== 'undefined' ? APP_VERSION : '1.3.26',
+                                app_version: typeof APP_VERSION !== 'undefined' ? APP_VERSION : '1.3.29',
                                 updated_at: new Date().toISOString(),
                                 data: data,
                                 settings: settings,
@@ -5994,6 +6038,13 @@
                     showMsg('✅ Daten erfolgreich auf GitHub gespeichert! (Cloud Sync OK)', true);
                     return true;
                 } else {
+                    const discovered = await autoDiscoverGist(token);
+                    if (discovered && discovered !== gistId) {
+                        localStorage.setItem('gist_id', discovered);
+                        const gistIdEl = document.getElementById('gist-id');
+                        if (gistIdEl) gistIdEl.value = discovered;
+                        return await syncPushGitHubGist(silent);
+                    }
                     const err = await res.json();
                     alert('Fehler beim Upload zu GitHub: ' + (err.message || res.statusText));
                     return false;
@@ -6008,22 +6059,51 @@
         async function syncPullGitHubGist(silent = false) {
             saveGistSettings();
             const token = localStorage.getItem('gist_github_token');
-            const gistId = localStorage.getItem('gist_id');
+            let gistId = localStorage.getItem('gist_id');
 
-            if (!token || !gistId) {
-                if (!silent) alert('Bitte trage in den Einstellungen dein GitHub Token und die Gist-ID ein.');
+            if (!token) {
+                if (!silent) alert('Bitte trage in den Einstellungen zuerst dein GitHub Personal Access Token (PAT) ein.');
                 return false;
+            }
+
+            if (!gistId) {
+                showMsg('🔍 Suche bestehenden Cloud-Speicher auf GitHub...', true);
+                gistId = await autoDiscoverGist(token);
+                if (gistId) {
+                    localStorage.setItem('gist_id', gistId);
+                    const gistIdEl = document.getElementById('gist-id');
+                    if (gistIdEl) gistIdEl.value = gistId;
+                } else {
+                    if (!silent) alert('Kein bestehender Cloud-Speicher auf GitHub gefunden. Klicke zuerst auf "☁️ ⬆️ Auf GitHub speichern".');
+                    return false;
+                }
             }
 
             try {
                 if (!silent) showMsg('☁️ Lade Daten von GitHub herunter...', true);
 
-                const res = await fetch(`https://api.github.com/gists/${gistId}`, {
+                let res = await fetch(`https://api.github.com/gists/${gistId}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Accept': 'application/vnd.github+json'
                     }
                 });
+
+                if (!res.ok) {
+                    const discoveredId = await autoDiscoverGist(token);
+                    if (discoveredId && discoveredId !== gistId) {
+                        gistId = discoveredId;
+                        localStorage.setItem('gist_id', gistId);
+                        const gistIdEl = document.getElementById('gist-id');
+                        if (gistIdEl) gistIdEl.value = gistId;
+                        res = await fetch(`https://api.github.com/gists/${gistId}`, {
+                            headers: {
+                                'Authorization': `Bearer ${token}`,
+                                'Accept': 'application/vnd.github+json'
+                            }
+                        });
+                    }
+                }
 
                 if (!res.ok) {
                     const err = await res.json();
@@ -6058,6 +6138,11 @@
                 showMsg(`✅ Daten von GitHub erfolgreich aktualisiert! (Stand: ${formattedTime})`, true);
                 return true;
             } catch (e) {
+                console.error('Pull Error:', e);
+                alert('Fehler beim Wiederherstellen: ' + e.message);
+                return false;
+            }
+        }
                 console.error('Pull Error:', e);
                 alert('Fehler beim Wiederherstellen: ' + e.message);
                 return false;
@@ -10024,8 +10109,8 @@
             });
         }
 
-        // Version 1.3.28 - Manuell erhöhen bei jeder Änderung
-        const APP_VERSION = '1.3.28';
+        // Version 1.3.29 - Manuell erhöhen bei jeder Änderung
+        const APP_VERSION = '1.3.29';
         const version = APP_VERSION;
 
         // Initialise user info with fallback placeholders
