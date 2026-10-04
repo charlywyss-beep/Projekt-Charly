@@ -1,5 +1,5 @@
 <html lang="de">
-<!-- Version 1.3.35 - Kompakte Cloud-Modal Anzeige ohne doppelte Popups auf Mobilgeräten -->
+<!-- Version 1.3.36 - Benutzerfreundliche Fehlerbehandlung für Bad credentials & PAT-Sanitisierung -->
 
 <head>
     <meta charset="utf-8">
@@ -1925,7 +1925,7 @@
                             onmouseover="this.style.color='#6366F1'; this.style.transform='scale(1.05)';"
                             onmouseout="this.style.color='#9CA3AF'; this.style.transform='scale(1)';"
                             class="version-badge">
-                            v1.3.35 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
+                            v1.3.36 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
                         </div>
                     </div>
                     <div class="header-actions" style="display: flex; gap: 0.5rem; align-items: center;">
@@ -5878,6 +5878,23 @@
         // ☁️ GITHUB GIST CLOUD SYNC FUNCTIONS
         // ==========================================
 
+        function handleGitHubError(res, err, actionName) {
+            const isBadCreds = (res && res.status === 401) || (err && (err.message === 'Bad credentials' || err.message === 'Requires authentication'));
+            if (isBadCreds) {
+                alert('🔑 GitHub-Zugriffsfehler (Bad credentials):\n\nDein GitHub Personal Access Token (PAT) ist ungültig, fehlerhaft kopiert oder auf GitHub abgelaufen.\n\nBitte erstelle auf GitHub ein neues Token (mit Häkchen bei "gist") und trage es unter Einstellungen neu ein.');
+                if (typeof switchView === 'function') switchView('einstellungen');
+                setTimeout(() => {
+                    const el = document.getElementById('gist-github-token');
+                    if (el) {
+                        el.focus();
+                        if (typeof el.select === 'function') el.select();
+                    }
+                }, 300);
+            } else {
+                alert(`Fehler beim ${actionName}: ` + ((err && err.message) ? err.message : (res ? res.statusText : '')));
+            }
+        }
+
         function saveGistSettings() {
             const tokenEl = document.getElementById('gist-github-token');
             const gistIdEl = document.getElementById('gist-id');
@@ -5886,7 +5903,7 @@
             let currentGistId = localStorage.getItem('gist_id') || (settings && settings.gist_id) || '';
 
             if (tokenEl) {
-                const val = tokenEl.value.trim();
+                const val = tokenEl.value.trim().replace(/^["']|["']$/g, '');
                 if (val !== '') {
                     currentToken = val;
                 } else if (document.activeElement === tokenEl) {
@@ -5895,7 +5912,7 @@
             }
 
             if (gistIdEl) {
-                const val = gistIdEl.value.trim();
+                const val = gistIdEl.value.trim().replace(/^["']|["']$/g, '');
                 if (val !== '') {
                     currentGistId = val;
                 } else if (document.activeElement === gistIdEl) {
@@ -5927,10 +5944,12 @@
             let gistId = localStorage.getItem('gist_id') || (settings && settings.gist_id) || '';
 
             if (token) {
+                token = token.trim().replace(/^["']|["']$/g, '');
                 localStorage.setItem('gist_github_token', token);
                 if (settings) settings.gist_github_token = token;
             }
             if (gistId) {
+                gistId = gistId.trim().replace(/^["']|["']$/g, '');
                 localStorage.setItem('gist_id', gistId);
                 if (settings) settings.gist_id = gistId;
             }
@@ -6023,7 +6042,7 @@
                     files: {
                         "arbeitszeitrechner_cloud_backup.json": {
                             content: JSON.stringify({
-                                app_version: typeof APP_VERSION !== 'undefined' ? APP_VERSION : '1.3.32',
+                                app_version: typeof APP_VERSION !== 'undefined' ? APP_VERSION : '1.3.36',
                                 updated_at: new Date().toISOString(),
                                 data: data,
                                 settings: settings,
@@ -6054,7 +6073,7 @@
                     return gistId;
                 } else {
                     const err = await res.json();
-                    alert('Fehler beim Verbinden/Erstellen des Gists: ' + (err.message || res.statusText));
+                    handleGitHubError(res, err, 'Verbinden/Erstellen des Gists');
                     return null;
                 }
             } catch (e) {
@@ -6099,7 +6118,7 @@
                     files: {
                         "arbeitszeitrechner_cloud_backup.json": {
                             content: JSON.stringify({
-                                app_version: typeof APP_VERSION !== 'undefined' ? APP_VERSION : '1.3.32',
+                                app_version: typeof APP_VERSION !== 'undefined' ? APP_VERSION : '1.3.36',
                                 updated_at: new Date().toISOString(),
                                 data: data,
                                 settings: settings,
@@ -6123,6 +6142,10 @@
                     showMsg('✅ Daten erfolgreich auf GitHub gespeichert! (Cloud Sync OK)', true);
                     return true;
                 } else {
+                    if (res.status === 401) {
+                        handleGitHubError(res, null, 'Upload zu GitHub');
+                        return false;
+                    }
                     const discovered = await autoDiscoverGist(token);
                     if (discovered && discovered !== gistId) {
                         localStorage.setItem('gist_id', discovered);
@@ -6132,7 +6155,7 @@
                         return await syncPushGitHubGist(silent, true);
                     }
                     const err = await res.json();
-                    alert('Fehler beim Upload zu GitHub: ' + (err.message || res.statusText));
+                    handleGitHubError(res, err, 'Upload zu GitHub');
                     return false;
                 }
             } catch (e) {
@@ -6181,6 +6204,10 @@
                 });
 
                 if (!res.ok) {
+                    if (res.status === 401) {
+                        handleGitHubError(res, null, 'Herunterladen von GitHub');
+                        return false;
+                    }
                     const discoveredId = await autoDiscoverGist(token);
                     if (discoveredId && discoveredId !== gistId) {
                         gistId = discoveredId;
@@ -6199,7 +6226,7 @@
 
                 if (!res.ok) {
                     const err = await res.json();
-                    alert('Fehler beim Herunterladen von GitHub: ' + (err.message || res.statusText));
+                    handleGitHubError(res, err, 'Herunterladen von GitHub');
                     return false;
                 }
 
@@ -10411,8 +10438,8 @@
             });
         }
 
-        // Version 1.3.35 - Manuell erhöhen bei jeder Änderung
-        const APP_VERSION = '1.3.35';
+        // Version 1.3.36 - Manuell erhöhen bei jeder Änderung
+        const APP_VERSION = '1.3.36';
         const version = APP_VERSION;
 
         // Initialise user info with fallback placeholders
