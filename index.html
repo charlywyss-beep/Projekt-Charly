@@ -10524,40 +10524,22 @@
             userInfoEl.innerHTML = html;
         }
 
-        // Prüfe Version und erzwinge Hard-Reload wenn nötig
-        const lastVersion = localStorage.getItem('app_version');
-
-        if (lastVersion !== version) {
-            console.log(`Update erkannt: ${lastVersion} → ${version}`);
-            localStorage.setItem('app_version', version);
-
-            // Lösche alle Caches
-            if ('caches' in window) {
-                caches.keys().then(function (names) {
-                    for (let name of names) caches.delete(name);
-                });
+        // Synchronisiere app_version in localStorage ohne automatischen Reload-Loop
+        try {
+            const lastVersion = localStorage.getItem('app_version');
+            if (lastVersion !== version) {
+                console.log(`Version aktualisiert: ${lastVersion || 'keine'} → ${version}`);
+                localStorage.setItem('app_version', version);
             }
-
-            // Reload mit Cache-Bypass
-            setTimeout(() => {
-                window.location.reload(true); // Hard reload
-            }, 100);
+            // URL aufräumen, falls ?v=... Parameter vorhanden ist
+            if (window.location.search.includes('v=')) {
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+        } catch (err) {
+            console.warn('LocalStorage Access Error:', err);
         }
 
-        // Zusätzlich: Prüfe beim Fokus ob Update verfügbar (optional)
-        window.addEventListener('focus', function () {
-            // Lade Seite mit Cache-Bypass-Parameter neu
-            const url = new URL(window.location);
-            const currentCheck = url.searchParams.get('v');
-            if (!currentCheck || currentCheck !== version) {
-                url.searchParams.set('v', version);
-                if (currentCheck && currentCheck !== version) {
-                    window.location.href = url.toString();
-                }
-            }
-        });
-
-        // Versions-Update erzwingen
+        // Versions-Update manuell erzwingen (bei Klick auf Versions-Badge)
         async function forceVersionUpdate() {
             try {
                 const toast = document.createElement('div');
@@ -10582,21 +10564,24 @@
                 document.body.appendChild(toast);
 
                 if ('serviceWorker' in navigator) {
-                    const registrations = await navigator.serviceWorker.getRegistrations();
-                    for (let registration of registrations) {
-                        await registration.unregister();
-                    }
+                    try {
+                        const registrations = await navigator.serviceWorker.getRegistrations();
+                        for (let registration of registrations) {
+                            await registration.unregister();
+                        }
+                    } catch (e) { console.warn(e); }
                 }
 
                 if ('caches' in window) {
-                    const cacheNames = await caches.keys();
-                    await Promise.all(cacheNames.map(name => caches.delete(name)));
+                    try {
+                        const cacheNames = await caches.keys();
+                        await Promise.all(cacheNames.map(name => caches.delete(name)));
+                    } catch (e) { console.warn(e); }
                 }
 
                 setTimeout(() => {
-                    const cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
-                    window.location.href = cleanUrl + '?v=' + Date.now();
-                }, 500);
+                    window.location.href = window.location.pathname + '?v=' + Date.now();
+                }, 400);
             } catch (e) {
                 console.error('Update force error:', e);
                 window.location.reload(true);
