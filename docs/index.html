@@ -1,5 +1,5 @@
 <html lang="de">
-<!-- Version 1.3.31 - Sicherheitsabfrage (Ja/Nein) vor Upload und Download bei GitHub Cloud Sync -->
+<!-- Version 1.3.32 - Permanenter Schutz für GitHub PAT-Token & Gist-ID bei Updates & Neustarts -->
 
 <head>
     <meta charset="utf-8">
@@ -1925,7 +1925,7 @@
                             onmouseover="this.style.color='#6366F1'; this.style.transform='scale(1.05)';"
                             onmouseout="this.style.color='#9CA3AF'; this.style.transform='scale(1)';"
                             class="version-badge">
-                            v1.3.31 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
+                            v1.3.32 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
                         </div>
                     </div>
                     <div class="header-actions" style="display: flex; gap: 0.5rem; align-items: center;">
@@ -4025,6 +4025,7 @@
 
         function init() {
             loadFromStorage();
+            loadGistSettings();
             checkYearChange(); // Prüfe ob Jahreswechsel stattgefunden hat
             document.getElementById('selDate').value = date;
             updateDateDisplay();
@@ -5850,17 +5851,66 @@
         function saveGistSettings() {
             const tokenEl = document.getElementById('gist-github-token');
             const gistIdEl = document.getElementById('gist-id');
-            if (tokenEl) localStorage.setItem('gist_github_token', tokenEl.value.trim());
-            if (gistIdEl) localStorage.setItem('gist_id', gistIdEl.value.trim());
+
+            let currentToken = localStorage.getItem('gist_github_token') || (settings && settings.gist_github_token) || '';
+            let currentGistId = localStorage.getItem('gist_id') || (settings && settings.gist_id) || '';
+
+            if (tokenEl) {
+                const val = tokenEl.value.trim();
+                if (val !== '') {
+                    currentToken = val;
+                } else if (document.activeElement === tokenEl) {
+                    currentToken = ''; // Nur löschen, wenn der Benutzer das Feld im Formular aktiv gelehrt hat
+                }
+            }
+
+            if (gistIdEl) {
+                const val = gistIdEl.value.trim();
+                if (val !== '') {
+                    currentGistId = val;
+                } else if (document.activeElement === gistIdEl) {
+                    currentGistId = '';
+                }
+            }
+
+            if (currentToken) {
+                localStorage.setItem('gist_github_token', currentToken);
+                if (settings) settings.gist_github_token = currentToken;
+            } else {
+                localStorage.removeItem('gist_github_token');
+                if (settings) delete settings.gist_github_token;
+            }
+
+            if (currentGistId) {
+                localStorage.setItem('gist_id', currentGistId);
+                if (settings) settings.gist_id = currentGistId;
+            } else {
+                localStorage.removeItem('gist_id');
+                if (settings) delete settings.gist_id;
+            }
+
+            saveToStorage();
         }
 
         function loadGistSettings() {
-            const token = localStorage.getItem('gist_github_token') || '';
-            const gistId = localStorage.getItem('gist_id') || '';
+            let token = localStorage.getItem('gist_github_token') || (settings && settings.gist_github_token) || '';
+            let gistId = localStorage.getItem('gist_id') || (settings && settings.gist_id) || '';
+
+            if (token) {
+                localStorage.setItem('gist_github_token', token);
+                if (settings) settings.gist_github_token = token;
+            }
+            if (gistId) {
+                localStorage.setItem('gist_id', gistId);
+                if (settings) settings.gist_id = gistId;
+            }
+
             const tokenEl = document.getElementById('gist-github-token');
             const gistIdEl = document.getElementById('gist-id');
-            if (tokenEl) tokenEl.value = token;
-            if (gistIdEl) gistIdEl.value = gistId;
+            if (tokenEl && token) tokenEl.value = token;
+            if (gistIdEl && gistId) gistIdEl.value = gistId;
+
+            return { token, gistId };
         }
 
         function toggleTokenVisibility() {
@@ -5871,8 +5921,7 @@
         }
 
         function openGistOnGitHub() {
-            saveGistSettings();
-            const gistId = localStorage.getItem('gist_id') || document.getElementById('gist-id')?.value;
+            const { gistId } = loadGistSettings();
             if (gistId && gistId.trim() !== '') {
                 window.open(`https://gist.github.com/${gistId.trim()}`, '_blank');
             } else {
@@ -5903,9 +5952,8 @@
         }
 
         async function createOrTestGitHubGist() {
-            saveGistSettings();
-            const token = localStorage.getItem('gist_github_token');
-            let gistId = localStorage.getItem('gist_id');
+            const { token } = loadGistSettings();
+            let { gistId } = loadGistSettings();
 
             if (!token) {
                 alert('Bitte trage zuerst dein GitHub Personal Access Token (PAT) ein.');
@@ -5932,6 +5980,7 @@
                 if (discoveredId) {
                     gistId = discoveredId;
                     localStorage.setItem('gist_id', gistId);
+                    if (settings) settings.gist_id = gistId;
                     const gistIdEl = document.getElementById('gist-id');
                     if (gistIdEl) gistIdEl.value = gistId;
                     showMsg('✅ Bestehenden Cloud-Speicher auf GitHub automatisch gefunden & verknüpft!', true);
@@ -5944,7 +5993,7 @@
                     files: {
                         "arbeitszeitrechner_cloud_backup.json": {
                             content: JSON.stringify({
-                                app_version: typeof APP_VERSION !== 'undefined' ? APP_VERSION : '1.3.31',
+                                app_version: typeof APP_VERSION !== 'undefined' ? APP_VERSION : '1.3.32',
                                 updated_at: new Date().toISOString(),
                                 data: data,
                                 settings: settings,
@@ -5968,6 +6017,7 @@
                     const gistData = await res.json();
                     gistId = gistData.id;
                     localStorage.setItem('gist_id', gistId);
+                    if (settings) settings.gist_id = gistId;
                     const gistIdEl = document.getElementById('gist-id');
                     if (gistIdEl) gistIdEl.value = gistId;
                     showMsg('✅ Neuer privater Gist erfolgreich auf GitHub erstellt & verknüpft!', true);
@@ -5985,9 +6035,8 @@
         }
 
         async function syncPushGitHubGist(silent = false, skipConfirm = false) {
-            saveGistSettings();
-            const token = localStorage.getItem('gist_github_token');
-            let gistId = localStorage.getItem('gist_id');
+            const { token } = loadGistSettings();
+            let { gistId } = loadGistSettings();
 
             if (!token) {
                 if (!silent) alert('Bitte trage in den Einstellungen zuerst dein GitHub Personal Access Token (PAT) ein.');
@@ -6004,6 +6053,7 @@
                 if (foundId) {
                     gistId = foundId;
                     localStorage.setItem('gist_id', gistId);
+                    if (settings) settings.gist_id = gistId;
                     const gistIdEl = document.getElementById('gist-id');
                     if (gistIdEl) gistIdEl.value = gistId;
                 } else {
@@ -6019,7 +6069,7 @@
                     files: {
                         "arbeitszeitrechner_cloud_backup.json": {
                             content: JSON.stringify({
-                                app_version: typeof APP_VERSION !== 'undefined' ? APP_VERSION : '1.3.31',
+                                app_version: typeof APP_VERSION !== 'undefined' ? APP_VERSION : '1.3.32',
                                 updated_at: new Date().toISOString(),
                                 data: data,
                                 settings: settings,
@@ -6046,6 +6096,7 @@
                     const discovered = await autoDiscoverGist(token);
                     if (discovered && discovered !== gistId) {
                         localStorage.setItem('gist_id', discovered);
+                        if (settings) settings.gist_id = discovered;
                         const gistIdEl = document.getElementById('gist-id');
                         if (gistIdEl) gistIdEl.value = discovered;
                         return await syncPushGitHubGist(silent, true);
@@ -6062,9 +6113,8 @@
         }
 
         async function syncPullGitHubGist(silent = false, skipConfirm = false) {
-            saveGistSettings();
-            const token = localStorage.getItem('gist_github_token');
-            let gistId = localStorage.getItem('gist_id');
+            const { token } = loadGistSettings();
+            let { gistId } = loadGistSettings();
 
             if (!token) {
                 if (!silent) alert('Bitte trage in den Einstellungen zuerst dein GitHub Personal Access Token (PAT) ein.');
@@ -6081,6 +6131,7 @@
                 gistId = await autoDiscoverGist(token);
                 if (gistId) {
                     localStorage.setItem('gist_id', gistId);
+                    if (settings) settings.gist_id = gistId;
                     const gistIdEl = document.getElementById('gist-id');
                     if (gistIdEl) gistIdEl.value = gistId;
                 } else {
@@ -6104,6 +6155,7 @@
                     if (discoveredId && discoveredId !== gistId) {
                         gistId = discoveredId;
                         localStorage.setItem('gist_id', gistId);
+                        if (settings) settings.gist_id = gistId;
                         const gistIdEl = document.getElementById('gist-id');
                         if (gistIdEl) gistIdEl.value = gistId;
                         res = await fetch(`https://api.github.com/gists/${gistId}`, {
@@ -6130,11 +6182,18 @@
 
                 const cloudData = JSON.parse(fileObj.content);
 
+                const existingToken = localStorage.getItem('gist_github_token') || (settings && settings.gist_github_token);
+                const existingGistId = localStorage.getItem('gist_id') || (settings && settings.gist_id);
+
                 if (cloudData.data) data = cloudData.data;
                 if (cloudData.settings) settings = Object.assign(settings, cloudData.settings);
                 if (cloudData.feiertage) feiertage = cloudData.feiertage;
 
+                if (existingToken && !settings.gist_github_token) settings.gist_github_token = existingToken;
+                if (existingGistId && !settings.gist_id) settings.gist_id = existingGistId;
+
                 saveToStorage();
+                loadGistSettings();
 
                 loadTag();
                 updateUrlaubStats();
@@ -6155,8 +6214,7 @@
         }
 
         function quickCloudSync() {
-            const token = localStorage.getItem('gist_github_token');
-            const gistId = localStorage.getItem('gist_id');
+            const { token, gistId } = loadGistSettings();
 
             if (!token || !gistId) {
                 switchView('einstellungen');
@@ -10114,8 +10172,8 @@
             });
         }
 
-        // Version 1.3.31 - Manuell erhöhen bei jeder Änderung
-        const APP_VERSION = '1.3.31';
+        // Version 1.3.32 - Manuell erhöhen bei jeder Änderung
+        const APP_VERSION = '1.3.32';
         const version = APP_VERSION;
 
         // Initialise user info with fallback placeholders
