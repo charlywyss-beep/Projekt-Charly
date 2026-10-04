@@ -1,5 +1,5 @@
 <html lang="de">
-<!-- Version 1.3.25 - Vertikale Ausmittlung von Text und Zahnrad in Tag-Typ Anzeige -->
+<!-- Version 1.3.26 - GitHub Gist Cloud Sync Feature -->
 
 <head>
     <meta charset="utf-8">
@@ -1925,10 +1925,11 @@
                             onmouseover="this.style.color='#6366F1'; this.style.transform='scale(1.05)';"
                             onmouseout="this.style.color='#9CA3AF'; this.style.transform='scale(1)';"
                             class="version-badge">
-                            v1.3.25 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
+                            v1.3.26 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
                         </div>
                     </div>
                     <div class="header-actions" style="display: flex; gap: 0.5rem; align-items: center;">
+                        <button class="btn btn-sec card-sm" onclick="quickCloudSync()" title="☁️ GitHub Cloud-Sync">☁️</button>
                         <button class="btn btn-sec card-sm" onclick="toggleDark()"><span id="icon">☀️</span></button>
                         <div style="position: relative;">
                             <button class="btn btn-sec card-sm" onclick="toggleExport()">📥</button>
@@ -3161,10 +3162,10 @@
                 </div>
 
                 <div class="card-sm">
-                    <h3 style="margin-bottom: 1rem; font-size: 1.125rem;">Datensicherung &amp; Sync</h3>
+                    <h3 style="margin-bottom: 1rem; font-size: 1.125rem;">Datensicherung (Lokal)</h3>
                     <div class="flex-col">
                         <div style="font-size: 0.875rem; color: #6B7280; margin-bottom: 0.5rem;">
-                            Für manuellen Abgleich zwischen Geräten (z.B. PC ↔ iPad) via OneDrive.
+                            Manuelle Sicherung als Datei herunterladen oder einlesen.
                         </div>
                         <div>
                             <button class="btn btn-primary" style="width: 100%; margin-bottom: 0.5rem;"
@@ -3174,6 +3175,48 @@
                             <input type="file" id="backup-upload-file" accept=".json" style="display: none;"
                                 onchange="handleBackupFileSelect(event)">
                         </div>
+                    </div>
+                </div>
+
+                <div class="card-sm" style="border: 1px solid #6366F1; background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(129, 140, 248, 0.02) 100%);">
+                    <h3 style="margin-bottom: 0.5rem; font-size: 1.125rem; display: flex; align-items: center; gap: 0.5rem; color: #6366F1;">
+                        ☁️ GitHub Cloud-Synchronisation (Gist)
+                    </h3>
+                    <div style="font-size: 0.85rem; color: #6B7280; margin-bottom: 1rem; line-height: 1.4;">
+                        Gleiche deine Arbeitszeiten, Einstellungen und Feiertage automatisch oder per Knopfdruck über ein privates GitHub Gist zwischen Arbeits-PC, Home-PC, iPhone und Tablet ab.
+                    </div>
+                    <div class="flex-col" style="gap: 0.75rem;">
+                        <div>
+                            <label style="font-weight: 600; font-size: 0.85rem; margin-bottom: 0.25rem;">1. GitHub Personal Access Token (PAT)</label>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <input type="password" id="gist-github-token" placeholder="ghp_... oder github_pat_..." onchange="saveGistSettings()" style="flex: 1; font-family: monospace; font-size: 0.85rem; padding: 0.5rem 0.75rem;">
+                                <button type="button" class="btn btn-sec" onclick="toggleTokenVisibility()" style="padding: 0.5rem 0.75rem;" title="Passwort anzeigen/verbergen">👁️</button>
+                            </div>
+                        </div>
+                        <div>
+                            <label style="font-weight: 600; font-size: 0.85rem; margin-bottom: 0.25rem;">2. Gist-ID (wird beim ersten Upload automatisch generiert)</label>
+                            <input type="text" id="gist-id" placeholder="wird automatisch erstellt oder hier einfügen" onchange="saveGistSettings()" style="width: 100%; font-family: monospace; font-size: 0.85rem; padding: 0.5rem 0.75rem;">
+                        </div>
+
+                        <!-- Sync Action Buttons -->
+                        <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem; flex-wrap: wrap;">
+                            <button class="btn btn-success" onclick="syncPushGitHubGist()" style="flex: 1; min-width: 160px;">☁️ ⬆️ Auf GitHub speichern</button>
+                            <button class="btn btn-primary" onclick="syncPullGitHubGist()" style="flex: 1; min-width: 160px;">☁️ ⬇️ Von GitHub laden</button>
+                        </div>
+                        <button class="btn btn-sec" onclick="createOrTestGitHubGist()" style="width: 100%;">🔄 Gist-Verbindung testen / Erstellen</button>
+
+                        <!-- Help Accordion / Guide -->
+                        <details style="margin-top: 0.5rem; font-size: 0.8rem; background: rgba(255,255,255,0.7); padding: 0.75rem; border-radius: 0.5rem; border: 1px solid #E5E7EB;">
+                            <summary style="font-weight: 600; cursor: pointer; color: #6366F1;">❓ Kurzanleitung: Wie richte ich GitHub Gist Sync in 1 Minute ein?</summary>
+                            <ol style="margin-left: 1.2rem; margin-top: 0.5rem; line-height: 1.6; color: #374151;">
+                                <li>Öffne auf GitHub: <strong>Settings → Developer Settings → Personal access tokens → Tokens (classic)</strong> (oder <a href="https://github.com/settings/tokens" target="_blank" style="color: #6366F1; font-weight: 600;">github.com/settings/tokens</a>).</li>
+                                <li>Klicke auf <strong>Generate new token (classic)</strong>.</li>
+                                <li>Wähle bei den Berechtigungen das Häkchen bei <strong>gist</strong> (Create gists).</li>
+                                <li>Kopiere den generierten Schlüssel (z.B. <code>ghp_123...</code>) und füge ihn oben bei <strong>1. GitHub Personal Access Token</strong> ein.</li>
+                                <li>Klicke auf <strong>🔄 Gist-Verbindung testen / Erstellen</strong>. Die Gist-ID wird automatisch erzeugt!</li>
+                                <li><strong>Auf iPhone / weiterem PC:</strong> Trage dort dasselbe Token und die Gist-ID ein und klicke auf <strong>☁️ ⬇️ Von GitHub laden</strong>!</li>
+                            </ol>
+                        </details>
                     </div>
                 </div>
 
@@ -5770,6 +5813,242 @@
 
             updateUrlaubStats();
             updateUeberzeitStats();
+            loadGistSettings();
+        }
+
+        // ==========================================
+        // ☁️ GITHUB GIST CLOUD SYNC FUNCTIONS
+        // ==========================================
+
+        function saveGistSettings() {
+            const tokenEl = document.getElementById('gist-github-token');
+            const gistIdEl = document.getElementById('gist-id');
+            if (tokenEl) localStorage.setItem('gist_github_token', tokenEl.value.trim());
+            if (gistIdEl) localStorage.setItem('gist_id', gistIdEl.value.trim());
+        }
+
+        function loadGistSettings() {
+            const token = localStorage.getItem('gist_github_token') || '';
+            const gistId = localStorage.getItem('gist_id') || '';
+            const tokenEl = document.getElementById('gist-github-token');
+            const gistIdEl = document.getElementById('gist-id');
+            if (tokenEl) tokenEl.value = token;
+            if (gistIdEl) gistIdEl.value = gistId;
+        }
+
+        function toggleTokenVisibility() {
+            const tokenEl = document.getElementById('gist-github-token');
+            if (tokenEl) {
+                tokenEl.type = tokenEl.type === 'password' ? 'text' : 'password';
+            }
+        }
+
+        async function createOrTestGitHubGist() {
+            saveGistSettings();
+            const token = localStorage.getItem('gist_github_token');
+            let gistId = localStorage.getItem('gist_id');
+
+            if (!token) {
+                alert('Bitte trage zuerst dein GitHub Personal Access Token (PAT) ein.');
+                return;
+            }
+
+            try {
+                showMsg('🔄 Verbinde mit GitHub...', true);
+
+                if (gistId) {
+                    const res = await fetch(`https://api.github.com/gists/${gistId}`, {
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Accept': 'application/vnd.github+json'
+                        }
+                    });
+                    if (res.ok) {
+                        showMsg('✅ Gist-Verbindung erfolgreich hergestellt! Gist ist aktiv.', true);
+                        return;
+                    }
+                }
+
+                const payload = {
+                    description: "Arbeitszeitrechner Private Cloud Sync",
+                    public: false,
+                    files: {
+                        "arbeitszeitrechner_cloud_backup.json": {
+                            content: JSON.stringify({
+                                app_version: typeof APP_VERSION !== 'undefined' ? APP_VERSION : '1.3.26',
+                                updated_at: new Date().toISOString(),
+                                data: data,
+                                settings: settings,
+                                feiertage: feiertage
+                            }, null, 2)
+                        }
+                    }
+                };
+
+                const res = await fetch('https://api.github.com/gists', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/vnd.github+json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (res.ok) {
+                    const gistData = await res.json();
+                    gistId = gistData.id;
+                    localStorage.setItem('gist_id', gistId);
+                    const gistIdEl = document.getElementById('gist-id');
+                    if (gistIdEl) gistIdEl.value = gistId;
+                    showMsg('✅ Neuer privater Gist erfolgreich auf GitHub erstellt & verknüpft!', true);
+                } else {
+                    const err = await res.json();
+                    alert('Fehler beim Verbinden/Erstellen des Gists: ' + (err.message || res.statusText));
+                }
+            } catch (e) {
+                console.error('Gist Error:', e);
+                alert('Netzwerk- oder Verbindungsfehler: ' + e.message);
+            }
+        }
+
+        async function syncPushGitHubGist(silent = false) {
+            saveGistSettings();
+            const token = localStorage.getItem('gist_github_token');
+            let gistId = localStorage.getItem('gist_id');
+
+            if (!token) {
+                if (!silent) alert('Bitte trage in den Einstellungen zuerst dein GitHub Personal Access Token (PAT) ein.');
+                return false;
+            }
+
+            if (!gistId) {
+                return await createOrTestGitHubGist();
+            }
+
+            try {
+                if (!silent) showMsg('☁️ Lade Daten hoch zu GitHub...', true);
+
+                const payload = {
+                    files: {
+                        "arbeitszeitrechner_cloud_backup.json": {
+                            content: JSON.stringify({
+                                app_version: typeof APP_VERSION !== 'undefined' ? APP_VERSION : '1.3.26',
+                                updated_at: new Date().toISOString(),
+                                data: data,
+                                settings: settings,
+                                feiertage: feiertage
+                            }, null, 2)
+                        }
+                    }
+                };
+
+                const res = await fetch(`https://api.github.com/gists/${gistId}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/vnd.github+json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (res.ok) {
+                    showMsg('✅ Daten erfolgreich auf GitHub gespeichert! (Cloud Sync OK)', true);
+                    return true;
+                } else {
+                    const err = await res.json();
+                    alert('Fehler beim Upload zu GitHub: ' + (err.message || res.statusText));
+                    return false;
+                }
+            } catch (e) {
+                console.error('Push Error:', e);
+                alert('Fehler beim Upload: ' + e.message);
+                return false;
+            }
+        }
+
+        async function syncPullGitHubGist(silent = false) {
+            saveGistSettings();
+            const token = localStorage.getItem('gist_github_token');
+            const gistId = localStorage.getItem('gist_id');
+
+            if (!token || !gistId) {
+                if (!silent) alert('Bitte trage in den Einstellungen dein GitHub Token und die Gist-ID ein.');
+                return false;
+            }
+
+            try {
+                if (!silent) showMsg('☁️ Lade Daten von GitHub herunter...', true);
+
+                const res = await fetch(`https://api.github.com/gists/${gistId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/vnd.github+json'
+                    }
+                });
+
+                if (!res.ok) {
+                    const err = await res.json();
+                    alert('Fehler beim Herunterladen von GitHub: ' + (err.message || res.statusText));
+                    return false;
+                }
+
+                const gistData = await res.json();
+                const fileObj = gistData.files && gistData.files["arbeitszeitrechner_cloud_backup.json"];
+                if (!fileObj || !fileObj.content) {
+                    alert('Keine gültige Sicherungsdatei im Gist gefunden!');
+                    return false;
+                }
+
+                const cloudData = JSON.parse(fileObj.content);
+
+                if (cloudData.data) data = cloudData.data;
+                if (cloudData.settings) settings = Object.assign(settings, cloudData.settings);
+                if (cloudData.feiertage) feiertage = cloudData.feiertage;
+
+                saveToStorage();
+
+                loadTag();
+                updateUrlaubStats();
+                updateUeberzeitStats();
+                if (typeof renderWoche === 'function' && view === 'woche') renderWoche();
+                if (typeof renderMonat === 'function' && view === 'monat') renderMonat();
+                if (typeof renderJahr === 'function' && view === 'jahr') renderJahr();
+                if (typeof renderEinstellungen === 'function' && view === 'einstellungen') renderEinstellungen();
+
+                const formattedTime = cloudData.updated_at ? new Date(cloudData.updated_at).toLocaleString('de-CH') : '';
+                showMsg(`✅ Daten von GitHub erfolgreich aktualisiert! (Stand: ${formattedTime})`, true);
+                return true;
+            } catch (e) {
+                console.error('Pull Error:', e);
+                alert('Fehler beim Wiederherstellen: ' + e.message);
+                return false;
+            }
+        }
+
+        async function quickCloudSync() {
+            const token = localStorage.getItem('gist_github_token');
+            const gistId = localStorage.getItem('gist_id');
+
+            if (!token || !gistId) {
+                switchView('einstellungen');
+                setTimeout(() => {
+                    const el = document.getElementById('gist-github-token');
+                    if (el) {
+                        el.focus();
+                        alert('☁️ GitHub Cloud-Sync: Bitte trage zuerst dein GitHub Personal Access Token (PAT) ein.');
+                    }
+                }, 200);
+                return;
+            }
+
+            const action = confirm('☁️ GitHub Cloud-Sync:\n\n[OK] = ⬇️ Daten von GitHub LADEN (Empfangen)\n[Abbrechen] = ⬆️ Lokale Daten auf GitHub SPEICHERN (Senden)');
+            if (action) {
+                await syncPullGitHubGist();
+            } else {
+                await syncPushGitHubGist();
+            }
         }
 
         function updateSollFromWoche() {
@@ -9688,8 +9967,8 @@
             });
         }
 
-        // Version 1.3.25 - Manuell erhöhen bei jeder Änderung
-        const APP_VERSION = '1.3.25';
+        // Version 1.3.26 - Manuell erhöhen bei jeder Änderung
+        const APP_VERSION = '1.3.26';
         const version = APP_VERSION;
 
         // Initialise user info with fallback placeholders
