@@ -1,5 +1,5 @@
 <html lang="de">
-<!-- Version 1.3.29 - Automatic Gist Auto-Discovery across all devices -->
+<!-- Version 1.3.30 - Fixed JS syntax error in Gist sync handler -->
 
 <head>
     <meta charset="utf-8">
@@ -1925,7 +1925,7 @@
                             onmouseover="this.style.color='#6366F1'; this.style.transform='scale(1.05)';"
                             onmouseout="this.style.color='#9CA3AF'; this.style.transform='scale(1)';"
                             class="version-badge">
-                            v1.3.29 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
+                            v1.3.30 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
                         </div>
                     </div>
                     <div class="header-actions" style="display: flex; gap: 0.5rem; align-items: center;">
@@ -6143,11 +6143,6 @@
                 return false;
             }
         }
-                console.error('Pull Error:', e);
-                alert('Fehler beim Wiederherstellen: ' + e.message);
-                return false;
-            }
-        }
 
         function quickCloudSync() {
             const token = localStorage.getItem('gist_github_token');
@@ -10109,8 +10104,8 @@
             });
         }
 
-        // Version 1.3.29 - Manuell erhöhen bei jeder Änderung
-        const APP_VERSION = '1.3.29';
+        // Version 1.3.30 - Manuell erhöhen bei jeder Änderung
+        const APP_VERSION = '1.3.30';
         const version = APP_VERSION;
 
         // Initialise user info with fallback placeholders
