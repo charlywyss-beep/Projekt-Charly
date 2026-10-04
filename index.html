@@ -1,5 +1,5 @@
 <html lang="de">
-<!-- Version 1.3.38 - 📋 Gist-Link Kopieren-Button hinzugefügt -->
+<!-- Version 1.3.39 - 📋 ID Kopieren kopiert die reine Gist-ID (ohne Web-Link) -->
 
 <head>
     <meta charset="utf-8">
@@ -3198,7 +3198,7 @@
                             <label style="font-weight: 600; font-size: 0.85rem; margin-bottom: 0.25rem;">2. Gist-ID (wird beim ersten Upload automatisch generiert)</label>
                             <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
                                 <input type="text" id="gist-id" placeholder="wird automatisch erstellt oder hier einfügen" onchange="saveGistSettings()" style="flex: 1; min-width: 180px; font-family: monospace; font-size: 0.85rem; padding: 0.5rem 0.75rem;">
-                                <button type="button" class="btn btn-sec" onclick="copyGistIdLink()" style="padding: 0.5rem 0.75rem; white-space: nowrap;" title="Gist-Link in die Zwischenablage kopieren">📋 Kopieren</button>
+                                <button type="button" class="btn btn-sec" onclick="copyGistId()" style="padding: 0.5rem 0.75rem; white-space: nowrap;" title="Reine Gist-ID (ohne Link) in die Zwischenablage kopieren">📋 ID kopieren</button>
                                 <button type="button" class="btn btn-sec" onclick="openGistOnGitHub()" style="padding: 0.5rem 0.75rem; white-space: nowrap;" title="Gist auf GitHub.com im Browser öffnen und prüfen">🔗 Überprüfen</button>
                                 <button type="button" class="btn btn-sec" onclick="clearGistField('gistId')" style="padding: 0.5rem 0.75rem; color: #EF4444; font-weight: bold;" title="Gist-ID Feld leeren">❌</button>
                             </div>
@@ -5901,6 +5901,13 @@
             }
         }
 
+        function cleanGistIdInput(val) {
+            if (!val) return '';
+            val = val.trim().replace(/^["']|["']$/g, '');
+            const match = val.match(/gist\.github\.com\/(?:[^\/]+\/)?([a-f0-9]+)/i);
+            return match ? match[1] : val;
+        }
+
         function saveGistSettings() {
             const tokenEl = document.getElementById('gist-github-token');
             const gistIdEl = document.getElementById('gist-id');
@@ -5918,9 +5925,10 @@
             }
 
             if (gistIdEl) {
-                const val = gistIdEl.value.trim().replace(/^["']|["']$/g, '');
+                const val = cleanGistIdInput(gistIdEl.value);
                 if (val !== '') {
                     currentGistId = val;
+                    gistIdEl.value = val;
                 } else if (document.activeElement === gistIdEl) {
                     currentGistId = '';
                 }
@@ -5955,7 +5963,7 @@
                 if (settings) settings.gist_github_token = token;
             }
             if (gistId) {
-                gistId = gistId.trim().replace(/^["']|["']$/g, '');
+                gistId = cleanGistIdInput(gistId);
                 localStorage.setItem('gist_id', gistId);
                 if (settings) settings.gist_id = gistId;
             }
@@ -5987,12 +5995,10 @@
         }
 
         async function importFromGistIdPrompt() {
-            let input = prompt("Gib hier die GitHub Gist-ID oder den Gist-Link ein:\n(z.B. a1b2c3d4e5f6... oder https://gist.github.com/...)");
+            let input = prompt("Gib hier die GitHub Gist-ID oder den Gist-Link ein:\n(z.B. d68a522a9606a1dc70c42d57324b78cf oder https://gist.github.com/...)");
             if (!input || !input.trim()) return;
 
-            input = input.trim();
-            const match = input.match(/gist\.github\.com\/(?:[^\/]+\/)?([a-f0-9]+)/i);
-            const gistId = match ? match[1] : input.replace(/[^a-f0-9]/gi, '');
+            const gistId = cleanGistIdInput(input);
 
             if (!gistId) {
                 alert('Ungültige Gist-ID oder URL!');
@@ -6016,21 +6022,21 @@
             }
         }
 
-        function copyGistIdLink() {
+        function copyGistId() {
             const { gistId } = loadGistSettings();
-            if (!gistId || gistId.trim() === '') {
+            const cleanId = cleanGistIdInput(gistId);
+            if (!cleanId) {
                 alert('Noch keine Gist-ID vorhanden!');
                 return;
             }
-            const fullUrl = `https://gist.github.com/${gistId.trim()}`;
             if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(fullUrl).then(() => {
-                    showMsg('📋 Gist-Link in Zwischenablage kopiert!', true);
+                navigator.clipboard.writeText(cleanId).then(() => {
+                    showMsg(`📋 Gist-ID (${cleanId}) in Zwischenablage kopiert!`, true);
                 }).catch(() => {
-                    prompt('Hier ist dein Gist-Link zum Kopieren:', fullUrl);
+                    prompt('Hier ist deine reine Gist-ID zum Kopieren:', cleanId);
                 });
             } else {
-                prompt('Hier ist dein Gist-Link zum Kopieren:', fullUrl);
+                prompt('Hier ist deine reine Gist-ID zum Kopieren:', cleanId);
             }
         }
 
@@ -10503,8 +10509,8 @@
             });
         }
 
-        // Version 1.3.38 - Manuell erhöhen bei jeder Änderung
-        const APP_VERSION = '1.3.38';
+        // Version 1.3.39 - Manuell erhöhen bei jeder Änderung
+        const APP_VERSION = '1.3.39';
         const version = APP_VERSION;
 
         // Initialise user info with fallback placeholders
