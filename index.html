@@ -1,5 +1,5 @@
 <html lang="de">
-<!-- Version 1.3.32 - Permanenter Schutz für GitHub PAT-Token & Gist-ID bei Updates & Neustarts -->
+<!-- Version 1.3.33 - Cloud-Versionshistorie & Automatisches Lokales Undo vor dem Laden -->
 
 <head>
     <meta charset="utf-8">
@@ -1925,7 +1925,7 @@
                             onmouseover="this.style.color='#6366F1'; this.style.transform='scale(1.05)';"
                             onmouseout="this.style.color='#9CA3AF'; this.style.transform='scale(1)';"
                             class="version-badge">
-                            v1.3.32 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
+                            v1.3.33 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
                         </div>
                     </div>
                     <div class="header-actions" style="display: flex; gap: 0.5rem; align-items: center;">
@@ -3206,6 +3206,10 @@
                             <button class="btn btn-success" onclick="syncPushGitHubGist()" style="flex: 1; min-width: 160px;">☁️ ⬆️ Auf GitHub speichern</button>
                             <button class="btn btn-primary" onclick="syncPullGitHubGist()" style="flex: 1; min-width: 160px;">☁️ ⬇️ Von GitHub laden</button>
                         </div>
+                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                            <button class="btn btn-sec" onclick="showGistHistoryModal()" style="flex: 1; min-width: 160px;" title="Frühere Cloud-Sicherungen anzeigen & wiederherstellen">📜 Cloud-Historie</button>
+                            <button class="btn btn-sec" onclick="undoLastSync()" style="flex: 1; min-width: 160px;" title="Lokalen Stand vor dem letzten Laden wiederherstellen">↩️ Rückgängig (Undo)</button>
+                        </div>
                         <button class="btn btn-sec" onclick="createOrTestGitHubGist()" style="width: 100%;">🔄 Gist-Verbindung testen / Erstellen</button>
 
                         <!-- Help Accordion / Guide -->
@@ -3797,10 +3801,37 @@
                 <button class="btn btn-success" style="padding: 0.75rem; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 0.5rem;" onclick="executeCloudSyncAction('push')">
                     ⬆️ Lokale Daten auf GitHub SPEICHERN
                 </button>
+                <div style="display: flex; gap: 0.5rem;">
+                    <button class="btn btn-sec" style="flex: 1; padding: 0.6rem; font-size: 0.85rem;" onclick="showGistHistoryModal()">
+                        📜 Cloud-Historie
+                    </button>
+                    <button class="btn btn-sec" style="flex: 1; padding: 0.6rem; font-size: 0.85rem;" onclick="undoLastSync()">
+                        ↩️ Rückgängig
+                    </button>
+                </div>
                 <button class="btn btn-sec" style="padding: 0.6rem; margin-top: 0.25rem;" onclick="closeCloudSyncModal()">
                     ❌ Abbrechen
                 </button>
             </div>
+        </div>
+    </div>
+
+    <!-- 📜 GitHub Gist History Modal -->
+    <div id="gist-history-modal" class="hidden"
+        style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 9999;">
+        <div class="card" style="width: 100%; max-width: 500px; max-height: 80vh; margin: 1rem; padding: 1.5rem; border-radius: 0.85rem; display: flex; flex-direction: column;">
+            <h3 style="margin-bottom: 0.75rem; color: #6366F1; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                📜 Cloud-Versionshistorie
+            </h3>
+            <div style="font-size: 0.85rem; color: #6B7280; margin-bottom: 1rem; text-align: center;">
+                Wähle eine frühere Sicherung aus der GitHub Cloud aus, um diesen Stand auf dieses Gerät zu laden:
+            </div>
+            <div id="gist-history-list" style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem; padding-right: 0.25rem;">
+                <!-- Revisions generated dynamically -->
+            </div>
+            <button class="btn btn-sec" style="padding: 0.6rem;" onclick="closeGistHistoryModal()">
+                ❌ Schliessen
+            </button>
         </div>
     </div>
 
@@ -6182,6 +6213,8 @@
 
                 const cloudData = JSON.parse(fileObj.content);
 
+                savePreSyncSnapshot();
+
                 const existingToken = localStorage.getItem('gist_github_token') || (settings && settings.gist_github_token);
                 const existingGistId = localStorage.getItem('gist_id') || (settings && settings.gist_id);
 
@@ -6210,6 +6243,213 @@
                 console.error('Pull Error:', e);
                 alert('Fehler beim Wiederherstellen: ' + e.message);
                 return false;
+            }
+        }
+
+        // ==========================================
+        // ↩️ UNDO & 📜 CLOUD-HISTORIE FUNCTIONS
+        // ==========================================
+
+        function savePreSyncSnapshot() {
+            try {
+                const snapshot = {
+                    timestamp: new Date().toISOString(),
+                    data: data,
+                    settings: settings,
+                    feiertage: feiertage
+                };
+                localStorage.setItem('pre_sync_backup', JSON.stringify(snapshot));
+            } catch (e) {
+                console.error('Snapshot Error:', e);
+            }
+        }
+
+        function undoLastSync() {
+            closeCloudSyncModal();
+            const raw = localStorage.getItem('pre_sync_backup');
+            if (!raw) {
+                alert('Kein automatisches Undo-Backup vorhanden.');
+                return;
+            }
+
+            try {
+                const snapshot = JSON.parse(raw);
+                const dateStr = snapshot.timestamp ? new Date(snapshot.timestamp).toLocaleString('de-CH') : '';
+                if (!confirm(`Möchtest du zum lokalen Stand VOR dem letzten Laden (${dateStr}) zurückkehren?`)) {
+                    return;
+                }
+
+                const existingToken = localStorage.getItem('gist_github_token') || (settings && settings.gist_github_token);
+                const existingGistId = localStorage.getItem('gist_id') || (settings && settings.gist_id);
+
+                if (snapshot.data) data = snapshot.data;
+                if (snapshot.settings) settings = Object.assign(settings, snapshot.settings);
+                if (snapshot.feiertage) feiertage = snapshot.feiertage;
+
+                if (existingToken && !settings.gist_github_token) settings.gist_github_token = existingToken;
+                if (existingGistId && !settings.gist_id) settings.gist_id = existingGistId;
+
+                saveToStorage();
+                loadGistSettings();
+
+                loadTag();
+                updateUrlaubStats();
+                updateUeberzeitStats();
+                if (typeof renderWoche === 'function' && view === 'woche') renderWoche();
+                if (typeof renderMonat === 'function' && view === 'monat') renderMonat();
+                if (typeof renderJahr === 'function' && view === 'jahr') renderJahr();
+                if (typeof renderEinstellungen === 'function' && view === 'einstellungen') renderEinstellungen();
+
+                showMsg(`↩️ Erfolgreich zum lokalen Stand vor dem Laden (${dateStr}) zurückgekehrt!`, true);
+            } catch (e) {
+                alert('Fehler beim Wiederherstellen des Snapshots: ' + e.message);
+            }
+        }
+
+        async function showGistHistoryModal() {
+            closeCloudSyncModal();
+            const { token, gistId } = loadGistSettings();
+            if (!token || !gistId) {
+                alert('Bitte trage in den Einstellungen zuerst dein GitHub Personal Access Token (PAT) ein.');
+                return;
+            }
+
+            showMsg('🔍 Lade Versionshistorie von GitHub...', true);
+
+            try {
+                const res = await fetch(`https://api.github.com/gists/${gistId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/vnd.github+json'
+                    }
+                });
+
+                if (!res.ok) {
+                    alert('Fehler beim Abrufen der Historie von GitHub.');
+                    return;
+                }
+
+                const gistData = await res.json();
+                const history = gistData.history || [];
+
+                if (history.length === 0) {
+                    alert('Keine früheren Versionen im Gist gefunden.');
+                    return;
+                }
+
+                renderHistoryModalList(history);
+            } catch (e) {
+                alert('Fehler beim Laden der Historie: ' + e.message);
+            }
+        }
+
+        function renderHistoryModalList(history) {
+            const container = document.getElementById('gist-history-list');
+            if (!container) return;
+
+            container.innerHTML = '';
+
+            history.forEach((item, index) => {
+                const timeStr = item.committed_at ? new Date(item.committed_at).toLocaleString('de-CH') : 'Unbekannt';
+                const shaShort = item.version ? item.version.substring(0, 7) : '';
+
+                const card = document.createElement('div');
+                card.style.cssText = `
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    padding: 0.75rem;
+                    background: #F3F4F6;
+                    border-radius: 0.5rem;
+                    border: 1px solid #E5E7EB;
+                    gap: 0.5rem;
+                `;
+
+                card.innerHTML = `
+                    <div style="text-align: left;">
+                        <div style="font-weight: 600; font-size: 0.85rem; color: #1F2937;">
+                            ${index === 0 ? '🟢 Neueste Cloud-Version' : '🕒 Sicherung vom ' + timeStr}
+                        </div>
+                        <div style="font-size: 0.75rem; color: #6B7280; font-family: monospace;">
+                            Stand: ${timeStr} (${shaShort})
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" style="padding: 0.4rem 0.75rem; font-size: 0.8rem; white-space: nowrap;" onclick="restoreGistRevision('${item.version}')">
+                        ↩️ Laden
+                    </button>
+                `;
+                container.appendChild(card);
+            });
+
+            const modal = document.getElementById('gist-history-modal');
+            if (modal) modal.classList.remove('hidden');
+        }
+
+        function closeGistHistoryModal() {
+            const modal = document.getElementById('gist-history-modal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        async function restoreGistRevision(commitSha) {
+            const { token, gistId } = loadGistSettings();
+            if (!confirm('Möchtest du wirklich diesen früheren Stand von GitHub wiederherstellen?\n\nDeine aktuellen lokalen Daten werden dadurch überschrieben.')) {
+                return;
+            }
+
+            savePreSyncSnapshot();
+
+            showMsg('☁️ Lade historische Version von GitHub...', true);
+
+            try {
+                const res = await fetch(`https://api.github.com/gists/${gistId}/${commitSha}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/vnd.github+json'
+                    }
+                });
+
+                if (!res.ok) {
+                    alert('Fehler beim Laden der Version von GitHub.');
+                    return;
+                }
+
+                const gistData = await res.json();
+                const fileObj = gistData.files && gistData.files["arbeitszeitrechner_cloud_backup.json"];
+                if (!fileObj || !fileObj.content) {
+                    alert('Keine gültige Sicherungsdatei in dieser Gist-Version gefunden!');
+                    return;
+                }
+
+                const cloudData = JSON.parse(fileObj.content);
+
+                const existingToken = localStorage.getItem('gist_github_token') || (settings && settings.gist_github_token);
+                const existingGistId = localStorage.getItem('gist_id') || (settings && settings.gist_id);
+
+                if (cloudData.data) data = cloudData.data;
+                if (cloudData.settings) settings = Object.assign(settings, cloudData.settings);
+                if (cloudData.feiertage) feiertage = cloudData.feiertage;
+
+                if (existingToken && !settings.gist_github_token) settings.gist_github_token = existingToken;
+                if (existingGistId && !settings.gist_id) settings.gist_id = existingGistId;
+
+                saveToStorage();
+                loadGistSettings();
+
+                loadTag();
+                updateUrlaubStats();
+                updateUeberzeitStats();
+                if (typeof renderWoche === 'function' && view === 'woche') renderWoche();
+                if (typeof renderMonat === 'function' && view === 'monat') renderMonat();
+                if (typeof renderJahr === 'function' && view === 'jahr') renderJahr();
+                if (typeof renderEinstellungen === 'function' && view === 'einstellungen') renderEinstellungen();
+
+                closeGistHistoryModal();
+
+                const formattedTime = cloudData.updated_at ? new Date(cloudData.updated_at).toLocaleString('de-CH') : '';
+                showMsg(`✅ Historische Cloud-Version (${formattedTime}) erfolgreich wiederhergestellt!`, true);
+            } catch (e) {
+                console.error('Restore Revision Error:', e);
+                alert('Fehler beim Wiederherstellen der Version: ' + e.message);
             }
         }
 
@@ -10172,8 +10412,8 @@
             });
         }
 
-        // Version 1.3.32 - Manuell erhöhen bei jeder Änderung
-        const APP_VERSION = '1.3.32';
+        // Version 1.3.33 - Manuell erhöhen bei jeder Änderung
+        const APP_VERSION = '1.3.33';
         const version = APP_VERSION;
 
         // Initialise user info with fallback placeholders
