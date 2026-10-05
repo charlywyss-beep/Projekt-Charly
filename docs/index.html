@@ -1,5 +1,5 @@
 <html lang="de">
-<!-- Version 1.3.44 - Erzwungenes Ueberschreiben von Gist-Token und Gist-ID beim Backup-Import -->
+<!-- Version 1.3.45 - Token-Prüfbutton hinzugefügt & vollständiges Re-Rendering aller Ansichten nach Backup-Import -->
 
 <head>
     <meta charset="utf-8">
@@ -1923,7 +1923,7 @@
                             onmouseover="this.style.color='#6366F1'; this.style.transform='scale(1.05)';"
                             onmouseout="this.style.color='#9CA3AF'; this.style.transform='scale(1)';"
                             class="version-badge">
-                            v1.3.44 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
+                            v1.3.45 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
                         </div>
                     </div>
                     <div class="header-actions" style="display: flex; gap: 0.5rem; align-items: center;">
@@ -3189,6 +3189,7 @@
                             <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
                                 <input type="password" id="gist-github-token" placeholder="ghp_... oder github_pat_..." onchange="saveGistSettings()" style="flex: 1; min-width: 180px; font-family: monospace; font-size: 0.85rem; padding: 0.5rem 0.75rem;">
                                 <button type="button" class="btn btn-sec" onclick="toggleTokenVisibility()" style="padding: 0.5rem 0.75rem;" title="Passwort anzeigen/verbergen">👁️</button>
+                                <button type="button" class="btn btn-sec" onclick="testGistTokenConnection()" style="padding: 0.5rem 0.75rem; white-space: nowrap;" title="Token-Verbindung mit GitHub prüfen">🔍 Token prüfen</button>
                                 <button type="button" class="btn btn-sec" onclick="copyGistToken()" style="padding: 0.5rem 0.75rem; white-space: nowrap;" title="Token in die Zwischenablage kopieren">📋 Token kopieren</button>
                                 <button type="button" class="btn btn-sec" onclick="clearGistField('token')" style="padding: 0.5rem 0.75rem; color: #EF4444; font-weight: bold;" title="Token-Feld leeren">❌</button>
                             </div>
@@ -6035,6 +6036,33 @@
                 });
             } else {
                 prompt('Hier ist dein GitHub Personal Access Token zum Kopieren:', token);
+            }
+        }
+
+        async function testGistTokenConnection() {
+            const { token } = loadGistSettings();
+            if (!token) {
+                alert('Bitte zuerst ein GitHub Token eingeben!');
+                return;
+            }
+            showMsg('🔍 Prüfe Token-Gültigkeit bei GitHub...', true);
+            try {
+                const res = await fetch('https://api.github.com/user', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/vnd.github+json'
+                    }
+                });
+                if (res.ok) {
+                    const userData = await res.json();
+                    alert(`✅ Token ist 100% GÜLTIG!\n\nVerbunden mit GitHub-Konto: ${userData.login}`);
+                    showMsg(`✅ Token gültig (Konto: ${userData.login})`, true);
+                } else {
+                    const err = await res.json();
+                    handleGitHubError(res, err, 'Token-Prüfung');
+                }
+            } catch (e) {
+                alert('Netzwerk- oder Verbindungsfehler: ' + e.message);
             }
         }
 
@@ -10405,6 +10433,10 @@
                     // Aktualisiere alle Ansichten
                     calc();
                     loadTag();
+                    if (typeof renderWoche === 'function') renderWoche();
+                    if (typeof renderMonat === 'function') renderMonat();
+                    if (typeof renderJahr === 'function') renderJahr();
+                    if (typeof renderEinstellungen === 'function') renderEinstellungen();
 
 
 
@@ -10539,8 +10571,8 @@
             });
         }
 
-        // Version 1.3.44 - Manuell erhöhen bei jeder Änderung
-        const APP_VERSION = '1.3.44';
+        // Version 1.3.45 - Manuell erhöhen bei jeder Änderung
+        const APP_VERSION = '1.3.45';
         const version = APP_VERSION;
 
         // Initialise user info with fallback placeholders
