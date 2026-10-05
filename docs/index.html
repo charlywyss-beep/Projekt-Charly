@@ -1,5 +1,5 @@
 <html lang="de">
-<!-- Version 1.3.47 - Null-Safe DOM-Element-Zugriffe beim Backup-Import (Fix für Import-Fehler) -->
+<!-- Version 1.3.48 - Modal-Schliessen & Null-Safe Import komplett repariert -->
 
 <head>
     <meta charset="utf-8">
@@ -10471,7 +10471,10 @@
         }
 
         function showNotification(title, text, type = 'success') {
+            document.querySelectorAll('.notification-overlay').forEach(el => el.remove());
+
             const overlay = document.createElement('div');
+            overlay.className = 'notification-overlay';
             overlay.style.cssText = `
                 position: fixed;
                 top: 0;
@@ -10480,7 +10483,7 @@
                 height: 100%;
                 background: rgba(0,0,0,0.5);
                 backdrop-filter: blur(4px);
-                z-index: 999999;
+                z-index: 9999999;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -10510,10 +10513,23 @@
                 <div style="font-size: 0.95rem; color: #4B5563; line-height: 1.6; margin-bottom: 1.5rem; text-align: left; background: #F9FAFB; padding: 1rem; border-radius: 0.5rem; border: 1px solid #E5E7EB;">
                     ${text}
                 </div>
-                <button class="btn btn-primary" style="width: 100%; padding: 0.75rem; font-size: 1rem; font-weight: 600;" onclick="this.closest('div[style*=\"fixed\"]').remove()">
+                <button type="button" class="btn btn-primary notification-close-btn" style="width: 100%; padding: 0.75rem; font-size: 1rem; font-weight: 600;">
                     OK, verstanden
                 </button>
             `;
+
+            const closeBtn = card.querySelector('.notification-close-btn');
+            if (closeBtn) {
+                closeBtn.onclick = function () {
+                    overlay.remove();
+                };
+            }
+
+            overlay.onclick = function (e) {
+                if (e.target === overlay) {
+                    overlay.remove();
+                }
+            };
 
             overlay.appendChild(card);
             document.body.appendChild(overlay);
@@ -10628,8 +10644,8 @@
             });
         }
 
-        // Version 1.3.47 - Manuell erhöhen bei jeder Änderung
-        const APP_VERSION = '1.3.47';
+        // Version 1.3.48 - Manuell erhöhen bei jeder Änderung
+        const APP_VERSION = '1.3.48';
         const version = APP_VERSION;
 
         // Initialise user info with fallback placeholders
