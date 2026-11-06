@@ -1,5 +1,5 @@
 <html lang="de">
-<!-- Version 1.3.54 - Überzeitkachel: Tage-Anzeige entfernt für klares Layout -->
+<!-- Version 1.3.55 - Jahresüberblick: Sollzeit vor Arbeitszeit getauscht & Kacheln harmonisiert -->
 
 <head>
     <meta charset="utf-8">
@@ -2059,7 +2059,7 @@
                             onmouseover="this.style.color='#6366F1'; this.style.transform='scale(1.05)';"
                             onmouseout="this.style.color='#9CA3AF'; this.style.transform='scale(1)';"
                             class="version-badge">
-                            v1.3.54 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
+                            v1.3.55 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
                         </div>
                     </div>
                     <div class="header-actions" style="display: flex; gap: 0.5rem; align-items: center;">
@@ -2896,13 +2896,6 @@
                 </div>
             </div>
             <div class="grid3" style="margin-bottom: 1.5rem;">
-                <div class="grad-blue">
-                    <div style="font-size: 0.875rem;">Arbeitszeit Jahr</div>
-                    <div style="display: flex; justify-content: space-between; align-items: flex-end;">
-                        <div style="font-size: 2rem; font-weight: bold;" id="j-arb">80:56</div>
-                        <div style="font-size: 0.75rem; font-style: italic;" id="j-info">14 / 261 Tage</div>
-                    </div>
-                </div>
                 <div class="grad-purple">
                     <div style="font-size: 0.875rem;">Sollzeit Jahr</div>
                     <div style="display: flex; justify-content: space-between; align-items: flex-end;">
@@ -2910,11 +2903,18 @@
                         <div style="font-size: 0.75rem; font-style: italic;" id="j-soll-info">261 Tage</div>
                     </div>
                 </div>
+                <div class="grad-blue">
+                    <div style="font-size: 0.875rem;">Arbeitszeit Jahr</div>
+                    <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                        <div style="font-size: 2rem; font-weight: bold;" id="j-arb">80:56</div>
+                        <div style="font-size: 0.75rem; font-style: italic;" id="j-info">14 / 261 Tage</div>
+                    </div>
+                </div>
                 <div id="j-diff-card" class="grad-orange">
                     <div style="font-size: 0.875rem;" id="j-diff-lbl">Fehlzeit Jahr</div>
                     <div style="display: flex; justify-content: space-between; align-items: flex-end;">
                         <div style="font-size: 2rem; font-weight: bold;" id="j-diff">2111:28</div>
-                        <div style="font-size: 0.75rem; font-style: italic;" id="j-diff-info">14 / 261 Tage</div>
+                        <div id="j-diff-info" style="display: none;"></div>
                     </div>
                 </div>
             </div>
@@ -6055,12 +6055,12 @@
                 html += `<div class="card-sm month-card" onclick="jumpToMonth('${year}-${String(m).padStart(2, '0')}')">
                     <div style="font-weight: 600; margin-bottom: 0.75rem; font-size: 1.125rem;">${months[m - 1]} ${year}</div>
                     <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                        <span style="color: #6B7280; font-size: 0.875rem;">Arbeitszeit:</span>
-                        <span style="font-weight: bold;">${minToTime(totalArb)}</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
                         <span style="color: #6B7280; font-size: 0.875rem;">Sollzeit:</span>
                         <span style="font-weight: bold;">${minToTime(totalSoll)}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span style="color: #6B7280; font-size: 0.875rem;">Arbeitszeit:</span>
+                        <span style="font-weight: bold;">${minToTime(totalArb)}</span>
                     </div>
                     <div style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #E5E7EB;">
                         <span style="color: #6B7280; font-size: 0.875rem;">${totalDiff <= 0 ? 'Überzeit:' : 'Fehlzeit:'}</span>
@@ -6074,28 +6074,27 @@
 
             const totalDiffJahr = totalSollJahr - totalArbJahr;
 
-            document.getElementById('j-arb').textContent = minToTime(totalArbJahr);
-            document.getElementById('j-info').textContent = `${erfuellteTageJahr} / ${arbeitsTageJahrGesamt} Tage`;
-
             document.getElementById('j-soll').textContent = minToTime(totalSollJahr);
             document.getElementById('j-soll-info').textContent = `${arbeitsTageJahrGesamt} Tage`;
+
+            document.getElementById('j-arb').textContent = minToTime(totalArbJahr);
+            document.getElementById('j-info').textContent = `${erfuellteTageJahr} / ${arbeitsTageJahrGesamt} Tage`;
 
             if (totalDiffJahr === 0) {
                 document.getElementById('j-diff').textContent = minToTime(totalSollJahr);
                 document.getElementById('j-diff-lbl').textContent = 'Soll erreicht';
                 document.getElementById('j-diff-card').className = 'grad-green';
-                document.getElementById('j-diff-info').textContent = `${erfuellteTageJahr} / ${arbeitsTageJahrGesamt} Tage`;
             } else if (totalDiffJahr < 0) {
                 document.getElementById('j-diff').textContent = minToTime(-totalDiffJahr);
                 document.getElementById('j-diff-lbl').textContent = 'Überzeit Jahr';
                 document.getElementById('j-diff-card').className = 'grad-green';
-                document.getElementById('j-diff-info').textContent = `${erfuellteTageJahr} / ${arbeitsTageJahrGesamt} Tage`;
             } else {
                 document.getElementById('j-diff').textContent = minToTime(totalDiffJahr);
                 document.getElementById('j-diff-lbl').textContent = 'Fehlzeit Jahr';
                 document.getElementById('j-diff-card').className = 'grad-orange';
-                document.getElementById('j-diff-info').textContent = `${erfuellteTageJahr} / ${arbeitsTageJahrGesamt} Tage`;
             }
+            const elJDiffInfo = document.getElementById('j-diff-info');
+            if (elJDiffInfo) elJDiffInfo.textContent = '';
 
 
             // Urlaubstage für das angezeigte Jahr berechnen
@@ -11158,8 +11157,8 @@
             });
         }
 
-        // Version 1.3.54 - Manuell erhöhen bei jeder Änderung
-        const APP_VERSION = '1.3.54';
+        // Version 1.3.55 - Manuell erhöhen bei jeder Änderung
+        const APP_VERSION = '1.3.55';
         const version = APP_VERSION;
 
         // Initialise user info with fallback placeholders
