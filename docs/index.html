@@ -1,5 +1,5 @@
 <html lang="de">
-<!-- Version 1.3.50 - FlexWork 2027 Reglement & Vorholzeit (41h/08:12, Vorholtag Tag-Typ) -->
+<!-- Version 1.3.51 - Kontrast-Optimierung: Differenz-Badges für Wochen- und Monatsansicht -->
 
 <head>
     <meta charset="utf-8">
@@ -576,14 +576,14 @@
         }
 
         body.dark div.card-sm.tag-typ-normal {
-            background: linear-gradient(135deg, #6B7280 0%, #9CA3AF 100%) !important;
-            border-left: 4px solid #D1D5DB !important;
+            background: linear-gradient(135deg, #4B5563 0%, #374151 100%) !important;
+            border-left: 4px solid #9CA3AF !important;
             color: white !important;
         }
 
         body.dark label.tag-typ-label.tag-typ-normal {
-            background: linear-gradient(135deg, #6B7280 0%, #9CA3AF 100%) !important;
-            border-left: 4px solid #D1D5DB !important;
+            background: linear-gradient(135deg, #4B5563 0%, #374151 100%) !important;
+            border-left: 4px solid #9CA3AF !important;
             color: white !important;
         }
 
@@ -665,6 +665,74 @@
         body.dark .feiertag-badge.badge-vorholtag {
             background: #164E63 !important;
             color: #22D3EE !important;
+        }
+
+        /* 🏷️ Differenz-Badges mit hohem Kontrast (Wochen- & Monatsansicht) */
+        .diff-pill {
+            display: inline-block;
+            padding: 0.15rem 0.55rem;
+            border-radius: 9999px;
+            font-size: 0.8125rem;
+            font-weight: 700;
+            line-height: 1.25;
+            letter-spacing: 0.01em;
+            white-space: nowrap;
+        }
+
+        .diff-pill.pill-pos {
+            background: #064E3B !important;
+            color: #6EE7B7 !important;
+            border: 1px solid #059669 !important;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .diff-pill.pill-neg {
+            background: #7F1D1D !important;
+            color: #FECACA !important;
+            border: 1px solid #DC2626 !important;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .diff-pill.pill-info {
+            background: #1E3A8A !important;
+            color: #BFDBFE !important;
+            border: 1px solid #3B82F6 !important;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .diff-pill.pill-neutral {
+            background: #1F2937 !important;
+            color: #E5E7EB !important;
+            border: 1px solid #4B5563 !important;
+        }
+
+        /* Light Mode: Helle Badges mit kräftiger, dunkler Schrift */
+        body:not(.dark) .diff-pill.pill-pos {
+            background: #D1FAE5 !important;
+            color: #065F46 !important;
+            border: 1px solid #34D399 !important;
+            box-shadow: none;
+        }
+
+        body:not(.dark) .diff-pill.pill-neg {
+            background: #FEE2E2 !important;
+            color: #991B1B !important;
+            border: 1px solid #F87171 !important;
+            box-shadow: none;
+        }
+
+        body:not(.dark) .diff-pill.pill-info {
+            background: #DBEAFE !important;
+            color: #1E40AF !important;
+            border: 1px solid #60A5FA !important;
+            box-shadow: none;
+        }
+
+        body:not(.dark) .diff-pill.pill-neutral {
+            background: #E5E7EB !important;
+            color: #374151 !important;
+            border: 1px solid #D1D5DB !important;
+            box-shadow: none;
         }
 
         .emoji-large {
@@ -1991,7 +2059,7 @@
                             onmouseover="this.style.color='#6366F1'; this.style.transform='scale(1.05)';"
                             onmouseout="this.style.color='#9CA3AF'; this.style.transform='scale(1)';"
                             class="version-badge">
-                            v1.3.50 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
+                            v1.3.51 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
                         </div>
                     </div>
                     <div class="header-actions" style="display: flex; gap: 0.5rem; align-items: center;">
@@ -2325,7 +2393,7 @@
                             </div>
                             <div style="text-align: right;">
                                 <div style="font-size: 1.25rem; font-weight: bold;">09:28</div>
-                                <div style="font-size: 0.875rem; color: #10B981; font-weight: bold;">+01:04</div>
+                                <div style="margin-top: 0.25rem;"><span class="diff-pill pill-pos">+01:04</span></div>
                             </div>
                         </div>
                     </div>
@@ -2340,7 +2408,7 @@
                             </div>
                             <div style="text-align: right;">
                                 <div style="font-size: 1.25rem; font-weight: bold;">08:00</div>
-                                <div style="font-size: 0.875rem; color: #EF4444; font-weight: bold;">-00:24</div>
+                                <div style="margin-top: 0.25rem;"><span class="diff-pill pill-neg">-00:24</span></div>
                             </div>
                         </div>
                     </div>
@@ -2665,7 +2733,7 @@
                     <div style="text-align: right;">
 
                         <div style="font-size: 0.875rem; font-weight: bold;">09:28</div>
-                        <div style="font-size: 0.75rem; color: #10B981;">+01:04</div>
+                        <div style="margin-top: 0.15rem;"><span class="diff-pill pill-pos" style="font-size: 0.7rem; padding: 0.1rem 0.4rem;">+01:04</span></div>
                     </div>
                 </div>
                 <div class="card-sm cal-day " data-date="2025-11-18"
@@ -2675,7 +2743,7 @@
                     <div style="text-align: right;">
 
                         <div style="font-size: 0.875rem; font-weight: bold;">08:00</div>
-                        <div style="font-size: 0.75rem; color: #EF4444;">-00:24</div>
+                        <div style="margin-top: 0.15rem;"><span class="diff-pill pill-neg" style="font-size: 0.7rem; padding: 0.1rem 0.4rem;">-00:24</span></div>
                     </div>
                 </div>
                 <div class="card-sm cal-day tag-krank" data-date="2025-11-19"
@@ -5435,18 +5503,18 @@
 
                 let sollTagMin = 0;
                 let diffText = '';
-                let diffClass = '';
+                let diffBadgeClass = 'diff-pill pill-neutral';
 
                 if (isWeekend) {
 
                     if (arb > 0) {
-                        diffClass = 'color: #10B981; font-weight: bold;';
+                        diffBadgeClass = 'diff-pill pill-pos';
                         diffText = `+${minToTime(arb)}`;
                     } else if (isFT && ftBezahlt) {
-                        diffClass = 'color: #10B981;';
+                        diffBadgeClass = 'diff-pill pill-info';
                         diffText = '✓ Feiertag';
                     } else {
-                        diffClass = 'color: #6B7280;';
+                        diffBadgeClass = 'diff-pill pill-neutral';
                         diffText = '- Wochenende';
                     }
                 } else {
@@ -5468,14 +5536,14 @@
                         }
 
                         if (arb > 0) {
-                            diffClass = 'color: #10B981; font-weight: bold;';
+                            diffBadgeClass = 'diff-pill pill-pos';
                             if (isFT && ftBezahlt) {
                                 diffText = `✓ Feiertag +${minToTime(arb)}`;
                             } else {
                                 diffText = `+${minToTime(arb)}`;
                             }
                         } else {
-                            diffClass = 'color: #10B981;';
+                            diffBadgeClass = 'diff-pill pill-pos';
                             if (isFT && ftBezahlt) {
                                 diffText = '✓ Feiertag';
                             } else {
@@ -5489,17 +5557,17 @@
 
                         if (diff === 0) {
                             erfuellteTage++;
-                            diffClass = 'color: #10B981; font-weight: bold;';
+                            diffBadgeClass = 'diff-pill pill-pos';
                             diffText = '✓ Erfüllt';
                         } else if (diff < 0) {
                             erfuellteTage++;
-                            diffClass = 'color: #10B981; font-weight: bold;';
+                            diffBadgeClass = 'diff-pill pill-pos';
                             diffText = `+${minToTime(-diff)}`;
                         } else if (arb === 0) {
-                            diffClass = 'color: #EF4444; font-weight: bold;';
+                            diffBadgeClass = 'diff-pill pill-neg';
                             diffText = '- Nicht gearbeitet';
                         } else {
-                            diffClass = 'color: #EF4444; font-weight: bold;';
+                            diffBadgeClass = 'diff-pill pill-neg';
                             diffText = `-${minToTime(diff)}`;
                         }
                     }
@@ -5514,8 +5582,10 @@
 
                     if (ftTyp === 'brueckentag' || ftTyp === 'vorholtag') {
                         bgClass = 'tag-vorholtag';
+                        diffBadgeClass = 'diff-pill pill-pos';
                     } else if (ftTyp === 'unbezahlt') {
                         bgClass = 'feiertag-unbezahlt';
+                        diffBadgeClass = 'diff-pill pill-neg';
                     } else {
                         bgClass = ftBezahlt ? 'feiertag' : 'feiertag-unbezahlt';
                     }
@@ -5525,31 +5595,31 @@
                             bgClass = 'tag-urlaub';
                             tagTypIcon = '<span class="emoji-medium">🏖️</span> ';
                             diffText = 'Urlaub';
-                            diffClass = 'color: #10B981;';
+                            diffBadgeClass = 'diff-pill pill-pos';
                             break;
                         case 'krank':
                             bgClass = 'tag-krank';
                             tagTypIcon = '<span class="emoji-medium">🤒</span> ';
                             diffText = 'Krankheit';
-                            diffClass = 'color: #F59E0B;';
+                            diffBadgeClass = 'diff-pill pill-info';
                             break;
                         case 'unbezahlt':
                             bgClass = 'tag-unbezahlt';
                             tagTypIcon = '<span class="emoji-medium">📅</span> ';
                             diffText = 'Unbez. Urlaub';
-                            diffClass = 'color: #EF4444;';
+                            diffBadgeClass = 'diff-pill pill-neg';
                             break;
                         case 'kompensation':
                             bgClass = 'tag-kompensation';
                             tagTypIcon = '<span class="emoji-medium">⏰</span> ';
                             diffText = 'Kompensation';
-                            diffClass = 'color: #A855F7;';
+                            diffBadgeClass = 'diff-pill pill-info';
                             break;
                         case 'vorholtag':
                             bgClass = 'tag-vorholtag';
                             tagTypIcon = '<span class="emoji-medium">🔄</span> ';
                             diffText = arb > 0 ? `+${minToTime(arb)}` : 'Vorholtag';
-                            diffClass = 'color: #06B6D4;';
+                            diffBadgeClass = 'diff-pill pill-pos';
                             break;
                         case 'normal':
                             bgClass = 'tag-typ-normal';
@@ -5580,7 +5650,7 @@
                         </div>
                         <div style="text-align: right;">
                             <div style="font-size: 1.25rem; font-weight: bold;">${arb > 0 ? minToTime(arb) : '--:--'}</div>
-                            <div style="font-size: 0.875rem; ${diffClass}">${diffText}</div>
+                            <div style="margin-top: 0.25rem;"><span class="${diffBadgeClass}">${diffText}</span></div>
                         </div>
                     </div>
                 </div>`;
@@ -5796,7 +5866,7 @@
                     <div style="text-align: right;">
                         ${isFT ? `<div style="font-size: 0.7rem; opacity: 0.85; line-height: 1.1; margin-bottom: 0.15rem;">${ftBezahlt ? '🔵' : '🟠'} ${ftName}</div>` : tagTypIcon ? `<div style="font-size: 0.875rem; margin-bottom: 0.15rem;">${tagTypIcon}</div>` : ''}
                         ${arb > 0 ? `<div style="font-size: 0.875rem; font-weight: bold;">${minToTime(arb)}</div>` : ''}
-                        ${diff !== 0 && arb > 0 ? `<div style="font-size: 0.75rem; color: ${diffColor};">${diff < 0 ? '+' : '-'}${minToTime(Math.abs(diff))}</div>` : ''}
+                        ${diff !== 0 && arb > 0 ? `<div style="margin-top: 0.2rem;"><span class="diff-pill ${diff < 0 ? 'pill-pos' : 'pill-neg'}" style="font-size: 0.7rem; padding: 0.1rem 0.4rem;">${diff < 0 ? '+' : '-'}${minToTime(Math.abs(diff))}</span></div>` : ''}
                     </div>
                 </div>`;
             }
@@ -5959,7 +6029,7 @@
                     </div>
                     <div style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #E5E7EB;">
                         <span style="color: #6B7280; font-size: 0.875rem;">${totalDiff <= 0 ? 'Überzeit:' : 'Fehlzeit:'}</span>
-                        <span style="font-weight: bold; color: ${totalDiff <= 0 ? '#10B981' : '#EF4444'};">${totalDiff === 0 ? '00:00' : minToTime(Math.abs(totalDiff))}</span>
+                        <span class="diff-pill ${totalDiff <= 0 ? 'pill-pos' : 'pill-neg'}" style="font-size: 0.8rem; padding: 0.1rem 0.45rem;">${totalDiff === 0 ? '00:00' : (totalDiff < 0 ? '+' : '-') + minToTime(Math.abs(totalDiff))}</span>
                     </div>
                     <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #6B7280;">${erfuellteTage} / ${arbeitsTageImMonat} Tage</div>
                 </div>`;
@@ -11008,8 +11078,8 @@
             });
         }
 
-        // Version 1.3.50 - Manuell erhöhen bei jeder Änderung
-        const APP_VERSION = '1.3.50';
+        // Version 1.3.51 - Manuell erhöhen bei jeder Änderung
+        const APP_VERSION = '1.3.51';
         const version = APP_VERSION;
 
         // Initialise user info with fallback placeholders
