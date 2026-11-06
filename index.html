@@ -1,5 +1,5 @@
 <html lang="de">
-<!-- Version 1.3.49 - Neue Spalte geplante Ferientage & automatischer Abzug von verfügbaren Tagen -->
+<!-- Version 1.3.50 - FlexWork 2027 Reglement & Vorholzeit (41h/08:12, Vorholtag Tag-Typ) -->
 
 <head>
     <meta charset="utf-8">
@@ -641,6 +641,30 @@
             background: linear-gradient(135deg, #5B21B6 0%, #6D28D9 100%) !important;
             border-left: 4px solid #C084FC !important;
             color: white !important;
+        }
+
+        div.card-sm.tag-vorholtag,
+        label.tag-typ-label.tag-vorholtag {
+            background: linear-gradient(135deg, #A5F3FC 0%, #67E8F9 100%) !important;
+            border-left: 4px solid #06B6D4 !important;
+            color: #1F2937 !important;
+        }
+
+        body.dark div.card-sm.tag-vorholtag,
+        body.dark label.tag-typ-label.tag-vorholtag {
+            background: linear-gradient(135deg, #164E63 0%, #0E7490 100%) !important;
+            border-left: 4px solid #22D3EE !important;
+            color: white !important;
+        }
+
+        .feiertag-badge.badge-vorholtag {
+            background: #CFFAFE !important;
+            color: #0E7490 !important;
+        }
+
+        body.dark .feiertag-badge.badge-vorholtag {
+            background: #164E63 !important;
+            color: #22D3EE !important;
         }
 
         .emoji-large {
@@ -1967,7 +1991,7 @@
                             onmouseover="this.style.color='#6366F1'; this.style.transform='scale(1.05)';"
                             onmouseout="this.style.color='#9CA3AF'; this.style.transform='scale(1)';"
                             class="version-badge">
-                            v1.3.49 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
+                            v1.3.50 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
                         </div>
                     </div>
                     <div class="header-actions" style="display: flex; gap: 0.5rem; align-items: center;">
@@ -2059,7 +2083,7 @@
                 <div class="arbeitszeit-kachel">
                     <h3 class="arbeitszeit-kachel-title">⏰ Arbeitszeiten</h3>
                     <div
-                        style="display: grid; grid-template-rows: 24px 54px 54px 54px 54px 54px 54px 54px; gap: 0.75rem;">
+                        style="display: grid; grid-template-rows: 24px 54px 54px 54px 54px 54px 54px 54px 54px; gap: 0.75rem;">
                         <!-- Zeile 1: Label (for Desktop layout) -->
                         <label
                             style="grid-row: 1; font-weight: 600; font-size: 0.9375rem; line-height: 24px; align-self: start;" class="desktop-only-inline">Zeiten</label>
@@ -2100,7 +2124,7 @@
                             <button class="clear-btn" id="c-ag" onclick="clearField('ag')">✕</button>
                         </div>
 
-                        <!-- Zeile 6-8: LEER (entspricht weitere Optionen rechts) -->
+                        <!-- Zeile 6-9: LEER (entspricht weitere Optionen rechts) -->
                     </div>
 
                     <!-- Fehlermeldung innerhalb der Kachel -->
@@ -2116,7 +2140,7 @@
                 <div class="arbeitszeit-kachel">
                     <h3 class="arbeitszeit-kachel-title">📋 Zusatzoptionen</h3>
                     <div
-                        style="display: grid; grid-template-rows: 24px 54px 54px 54px 54px 54px 54px 54px; gap: 0.75rem;">
+                        style="display: grid; grid-template-rows: 24px 54px 54px 54px 54px 54px 54px 54px 54px; gap: 0.75rem;">
                         <!-- Zeile 1: Label -->
                         <label
                             style="grid-row: 1; font-weight: 600; font-size: 0.9375rem; line-height: 24px; align-self: start;" class="desktop-only-inline">Tag-Typ</label>
@@ -2177,6 +2201,14 @@
                             <span class="emoji-medium">⏰</span> <span>Überzeit-Kompensation</span>
                         </label>
 
+                        <!-- Zeile 9: Vorholtag (arbeitsfrei) -->
+                        <label class="tag-typ-label tag-vorholtag"
+                            style="grid-row: 9; display: flex; align-items: center; cursor: pointer; padding: 0.75rem; border-radius: 0.5rem; height: 54px;">
+                            <input type="radio" name="tagTyp" value="vorholtag" onchange="updateTagTyp()"
+                                style="margin-right: 0.5rem;">
+                            <span class="emoji-medium">🔄</span> <span>Vorholtag (arbeitsfrei)</span>
+                        </label>
+
                         <!-- Notiz am Ende außerhalb des Grids -->
                         <div style="margin-top: 1rem;">
                             <label
@@ -2234,7 +2266,7 @@
                     <div style="padding-right: 80px;">
                         <div style="font-size: 0.875rem; opacity: 0.9;" id="soll-label">Sollzeit</div>
                         <div style="font-size: 2rem; font-weight: bold; margin-top: 0.5rem; line-height: 1;"
-                            id="r-soll-display">08:24</div>
+                            id="r-soll-display">08:12</div>
                         <div style="font-size: 0.875rem; opacity: 0.85; margin-top: 0.5rem; text-align: right;"
                             id="soll-info">&nbsp;</div>
                     </div>
@@ -2244,7 +2276,7 @@
                     <div>
                         <div style="font-size: 0.875rem; opacity: 0.9;" id="r-diff-lbl">Fehlzeit Soll</div>
                         <div style="font-size: 2rem; font-weight: bold; margin-top: 0.5rem; line-height: 1;"
-                            id="r-diff">08:24</div>
+                            id="r-diff">08:12</div>
                     </div>
                 </div>
             </div>
@@ -2270,7 +2302,7 @@
                 <div class="grad-purple">
                     <div style="font-size: 0.875rem;">Sollzeit Woche</div>
                     <div style="display: flex; justify-content: space-between; align-items: flex-end;">
-                        <div style="font-size: 2rem; font-weight: bold;" id="w-soll">42:00</div>
+                        <div style="font-size: 2rem; font-weight: bold;" id="w-soll">41:00</div>
                         <div style="font-size: 0.75rem; font-style: italic;" id="w-soll-info">5 Tage</div>
                     </div>
                 </div>
@@ -3047,26 +3079,63 @@
             <div class="grid2" style="gap: 1.5rem;">
 
                 <div class="card-sm">
-                    <h3 style="margin-bottom: 1rem; font-size: 1.125rem;">Arbeitszeit-Einstellungen</h3>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                        <h3 style="margin: 0; font-size: 1.125rem;">Arbeitszeit-Einstellungen</h3>
+                        <span style="font-size: 0.75rem; background: rgba(6, 182, 212, 0.15); color: #0891B2; padding: 0.2rem 0.5rem; border-radius: 0.375rem; font-weight: 600;">FlexWork 2027</span>
+                    </div>
+
+                    <!-- FlexWork Modell Info & Vorholen -->
+                    <div style="background: rgba(6, 182, 212, 0.08); border: 1px solid rgba(6, 182, 212, 0.25); border-radius: 0.5rem; padding: 0.75rem; margin-bottom: 0.75rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <div style="font-size: 0.825rem; font-weight: 700; color: #0891B2; display: flex; align-items: center; gap: 0.35rem;">
+                                <span>🔄</span> FlexWork Modell (Müller Martini / Hunkeler)
+                            </div>
+                            <button type="button" class="btn btn-sec" onclick="applyFlexWorkPreset()"
+                                style="font-size: 0.7rem; padding: 0.2rem 0.5rem;" title="Standard 40h + 1h Vorholen = 41h (08:12/Tag) anwenden">
+                                ⚡ FlexWork Standard
+                            </button>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                            <div>
+                                <label style="font-size: 0.75rem; color: #6B7280;">Normalzeit (h/Wo)</label>
+                                <input type="number" id="normal-woche" min="0" max="60" step="0.5" value="40"
+                                    onchange="updateFlexWorkSoll()"
+                                    style="width: 100%; padding: 0.5rem 0.6rem; font-size: 0.95rem; border-radius: 0.375rem; border: 1px solid #D1D5DB;">
+                            </div>
+                            <div>
+                                <label style="font-size: 0.75rem; color: #6B7280;">Vorholzeit (h/Wo)</label>
+                                <input type="number" id="vorhol-woche" min="0" max="10" step="0.25" value="1.0"
+                                    onchange="updateFlexWorkSoll()"
+                                    style="width: 100%; padding: 0.5rem 0.6rem; font-size: 0.95rem; border-radius: 0.375rem; border: 1px solid #D1D5DB;">
+                            </div>
+                        </div>
+                        <div style="font-size: 0.72rem; color: #6B7280; margin-top: 0.4rem; line-height: 1.3;">
+                            40h Normalarbeitszeit + 1h Vorholen = <strong>41.0h Sollarbeitszeit/Woche (8.20h / 08:12 pro Tag)</strong> für 6 festgelegte arbeitsfreie Vorholtage/Jahr (Art. 2.6).
+                        </div>
+                    </div>
+
                     <div class="flex-col">
                         <div>
-                            <label>Sollzeit pro Woche (Stunden)</label>
-                            <input type="number" id="soll-woche" min="0" max="60" step="0.5" value="42"
+                            <label>Sollarbeitszeit pro Woche (Stunden)</label>
+                            <input type="number" id="soll-woche" min="0" max="60" step="0.25" value="41"
                                 onchange="updateSollFromWoche()"
                                 style="width: 100%; padding: 0.75rem 1rem; font-size: 1rem;"
                                 data-ddg-inputtype="unknown">
                         </div>
                         <div>
                             <label>Standard-Sollzeit pro Tag (berechnet aus Woche ÷ 5)</label>
-                            <input type="time" id="soll" value="08:24" onchange="updateSettings()" style="width: 100%; padding: 0.75rem 1rem; font-size: 1rem; box-sizing: border-box;">
+                            <input type="time" id="soll" value="08:12" onchange="updateSettings()" style="width: 100%; padding: 0.75rem 1rem; font-size: 1rem; box-sizing: border-box;">
                             <div style="font-size: 0.75rem; color: #6B7280; margin-top: 0.25rem;">
-                                Wird automatisch berechnet: <span id="soll-berechnet">42h ÷ 5 = 08:24</span>
+                                Wird berechnet: <span id="soll-berechnet">41h ÷ 5 = 08:12 (8.20h dezimal)</span>
                             </div>
                         </div>
                         <div>
                             <label>Pausendauer (ab 6h Arbeitszeit)</label>
                             <input type="time" id="pause" value="00:30" onchange="updateSettings()"
                                 style="width: 100%; padding: 0.75rem 1rem; font-size: 1rem; box-sizing: border-box;">
+                            <div style="font-size: 0.7rem; color: #6B7280; margin-top: 0.2rem;">
+                                Hinweis: Vormittags 12 Min. unbezahlte Pause (Beck-Besuch etc., Art. 2.3).
+                            </div>
                         </div>
                         <div>
                             <label>Überzeit-Vorgabe (z.B. 09:00)</label>
@@ -3081,7 +3150,7 @@
                         </div>
                         <div>
                             <label>Urlaubstage pro Jahr</label>
-                            <input type="number" id="settings-urlaub" min="0" max="50" value="25"
+                            <input type="number" id="settings-urlaub" min="0" max="50" value="30"
                                 onchange="updateSettings()" style="width: 100%; padding: 0.75rem 1rem; font-size: 1rem;"
                                 data-ddg-inputtype="unknown">
                             <div class="urlaub-stats-bar"
@@ -3700,6 +3769,11 @@
                     }
 
                     /* Purple */
+                    .mini-cal-day.holiday-vorholtag::after {
+                        background-color: #06B6D4;
+                    }
+
+                    /* Cyan */
 
                     body.dark .mini-cal-day {
                         color: #E5E7EB;
@@ -3784,6 +3858,7 @@
                         <option value="feiertag">Feiertag (bezahlt)</option>
                         <option value="unbezahlt">Feiertag unbezahlt</option>
                         <option value="brueckentag">Brückentag</option>
+                        <option value="vorholtag">Vorholtag (arbeitsfrei durch Vorholzeit)</option>
                     </select>
                 </div>
                 <div>
@@ -3806,8 +3881,18 @@
     <div id="massenurlaub-modal" class="hidden"
         style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 9999;">
         <div class="card" style="width: 100%; max-width: 500px; margin: 1rem;">
-            <h3 style="margin-bottom: 1rem;">📅 Urlaub über Zeitraum eintragen</h3>
+            <h3 style="margin-bottom: 1rem;">📅 Zeitraum eintragen (Urlaub / Vorholtag)</h3>
             <div class="flex-col">
+                <div>
+                    <label>Eintragen als</label>
+                    <select id="massenurlaub-typ"
+                        style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #D1D5DB; border-radius: 0.5rem;"
+                        onchange="updateUrlaubVorschau()">
+                        <option value="urlaub">🏖️ Urlaub / Ferien</option>
+                        <option value="vorholtag">🔄 Vorholtag (arbeitsfrei durch Vorholzeit)</option>
+                        <option value="kompensation">⏰ Überzeit-Kompensation</option>
+                    </select>
+                </div>
                 <div>
                     <label>Von (Datum)</label>
                     <input type="date" id="urlaub-von"
@@ -3829,12 +3914,12 @@
                 </div>
                 <div id="urlaub-vorschau"
                     style="padding: 0.75rem; background: #F3F4F6; border-radius: 0.5rem; font-size: 0.875rem; color: #374151; display: none;">
-                    <strong>Vorschau:</strong> <span id="urlaub-anzahl">0</span> Arbeitage werden als Urlaub markiert
+                    <strong>Vorschau:</strong> <span id="urlaub-anzahl">0</span> Arbeitstage werden markiert
                 </div>
             </div>
             <div style="display: flex; gap: 0.5rem; margin-top: 1.5rem;">
                 <button class="btn btn-sec" style="flex: 1;" onclick="closeMassenUrlaub()">Abbrechen</button>
-                <button class="btn btn-success" style="flex: 1;" onclick="saveMassenUrlaub()">Urlaub eintragen</button>
+                <button class="btn btn-success" style="flex: 1;" onclick="saveMassenUrlaub()">Eintragen</button>
             </div>
         </div>
     </div>
@@ -3909,19 +3994,22 @@
 
         let feiertage = {};
         let settings = {
-            soll: '08:24',
+            soll: '08:12',
             pause: '00:30',
             ueberzeitVorgabe: '09:00',
-            urlaubTage: 25,
+            urlaubTage: 30,
             resturlaubVorjahr: 0,
-            sollWoche: 42,
+            sollWoche: 41,
+            normalarbeitszeit: 40,
+            vorholzeit: 1.0,
             kanton: '',
             name: 'Wyss Charly',
             personalnummer: '1972',
             ueberzeitStartJahr: new Date().getFullYear(),
             ueberzeitStartDatum: new Date().getFullYear() + '-01-01',
             ueberzeitStartStand: 0,
-            lastProcessedYear: new Date().getFullYear()
+            lastProcessedYear: new Date().getFullYear(),
+            flexworkMigrated: true
         };
         let sollModus = true;
 
@@ -3954,11 +4042,28 @@
                     const oldSettings = JSON.parse(storedSettings);
 
                     if (oldSettings.ueberzeit && !oldSettings.ueberzeitVorgabe) {
-                        const sollMin = timeToMin(oldSettings.soll || '08:24');
+                        const sollMin = timeToMin(oldSettings.soll || '08:12');
                         const ueberzeitMin = parseInt(oldSettings.ueberzeit);
                         const vorgabeMin = sollMin + ueberzeitMin;
                         oldSettings.ueberzeitVorgabe = minToTime(vorgabeMin);
                     }
+
+                    // FlexWork 2027 Migration
+                    if (!oldSettings.flexworkMigrated) {
+                        if (!oldSettings.normalarbeitszeit) oldSettings.normalarbeitszeit = 40;
+                        if (oldSettings.vorholzeit === undefined) oldSettings.vorholzeit = 1.0;
+                        if (oldSettings.sollWoche === 42 || oldSettings.sollWoche === '42' || !oldSettings.sollWoche) {
+                            oldSettings.sollWoche = 41;
+                            oldSettings.soll = '08:12';
+                        }
+                        if (oldSettings.urlaubTage === 25 || oldSettings.urlaubTage === '25') {
+                            oldSettings.urlaubTage = 30;
+                        }
+                        oldSettings.flexworkMigrated = true;
+                        localStorage.setItem('settings', JSON.stringify(oldSettings));
+                    }
+                    if (oldSettings.normalarbeitszeit === undefined) oldSettings.normalarbeitszeit = 40;
+                    if (oldSettings.vorholzeit === undefined) oldSettings.vorholzeit = 1.0;
                     settings = oldSettings;
 
                     // Stelle sicher, dass lastProcessedYear gesetzt ist
@@ -3973,7 +4078,9 @@
                         document.getElementById('settings-urlaub').value = settings.urlaubTage;
                         document.getElementById('settings-resturlaub').value = settings.resturlaubVorjahr || 0;
                         document.getElementById('settings-kanton').value = settings.kanton;
-                        document.getElementById('soll-woche').value = settings.sollWoche || 42;
+                        document.getElementById('soll-woche').value = settings.sollWoche || 41;
+                        if (document.getElementById('normal-woche')) document.getElementById('normal-woche').value = settings.normalarbeitszeit !== undefined ? settings.normalarbeitszeit : 40;
+                        if (document.getElementById('vorhol-woche')) document.getElementById('vorhol-woche').value = settings.vorholzeit !== undefined ? settings.vorholzeit : 1.0;
                     }
                 } catch (e) { }
             }
@@ -4326,7 +4433,9 @@
                     const ftTyp = ft ? (ft.typ || 'feiertag') : 'feiertag';
 
                     // Map feiertage typ to tag typ
-                    if (ftTyp === 'brueckentag') {
+                    if (ftTyp === 'brueckentag' || ftTyp === 'vorholtag') {
+                        defaultTyp = 'vorholtag';
+                    } else if (ftTyp === 'kompensation') {
                         defaultTyp = 'kompensation';
                     } else if (ftTyp === 'unbezahlt') {
                         defaultTyp = 'feiertag-unbezahlt';
@@ -4410,6 +4519,13 @@
                     bg: 'linear-gradient(135deg, #D8B4FE 0%, #C4B5FD 100%)',
                     color: '#1F2937',
                     border: '#A855F7'
+                },
+                'vorholtag': {
+                    icon: '🔄',
+                    text: 'Vorholtag (arbeitsfrei)',
+                    bg: 'linear-gradient(135deg, #A5F3FC 0%, #67E8F9 100%)',
+                    color: '#1F2937',
+                    border: '#06B6D4'
                 }
             };
 
@@ -4457,6 +4573,10 @@
                         case 'kompensation':
                             anzeige.style.setProperty('background', 'linear-gradient(135deg, #5B21B6 0%, #6D28D9 100%)', 'important');
                             anzeige.style.border = '2px solid #C084FC';
+                            break;
+                        case 'vorholtag':
+                            anzeige.style.setProperty('background', 'linear-gradient(135deg, #164E63 0%, #0E7490 100%)', 'important');
+                            anzeige.style.border = '2px solid #22D3EE';
                             break;
                     }
                 }
@@ -4613,7 +4733,7 @@
             const oldTagTyp = oldData.tagTyp || 'normal';
             const hasOldTimes = oldData.mk || oldData.mg || oldData.mittk || oldData.ag;
             const hasNewTimes = mk || mg || mittk || ag;
-            const specialTypes = ['urlaub', 'krank', 'unbezahlt', 'kompensation', 'feiertag-bezahlt', 'feiertag-unbezahlt'];
+            const specialTypes = ['urlaub', 'krank', 'unbezahlt', 'kompensation', 'vorholtag', 'feiertag-bezahlt', 'feiertag-unbezahlt'];
 
             // Wenn von normal mit Zeiten zu speziellem Typ gewechselt wird UND noch Zeiten eingetragen sind
             if (oldTagTyp === 'normal' && hasOldTimes && specialTypes.includes(tagTyp) && hasNewTimes) {
@@ -4647,10 +4767,10 @@
             if (!mk && !mg && !mittk && !ag && tagTyp === 'normal') {
                 delete data[date];
             } else {
-                // Für Feiertage müssen keine Zeiten eingegeben werden
+                // Für Feiertage und arbeitsfreie Tage müssen keine Zeiten eingegeben werden
                 if (tagTyp === 'feiertag-bezahlt' || tagTyp === 'feiertag-unbezahlt' ||
                     tagTyp === 'urlaub' || tagTyp === 'krank' ||
-                    tagTyp === 'unbezahlt' || tagTyp === 'kompensation') {
+                    tagTyp === 'unbezahlt' || tagTyp === 'kompensation' || tagTyp === 'vorholtag') {
                     data[date] = { mk, mg, mittk, ag, tagTyp, notiz };
                 } else {
                     data[date] = { mk, mg, mittk, ag, tagTyp, notiz };
@@ -4985,11 +5105,20 @@
 
             let sollMin = timeToMin(soll);
 
+            // Prüfe ausgewählten TagTyp
+            const tagTypRadios = document.getElementsByName('tagTyp');
+            let currentTagTyp = 'normal';
+            for (const radio of tagTypRadios) {
+                if (radio.checked) {
+                    currentTagTyp = radio.value;
+                    break;
+                }
+            }
+
             const istFeiertag = isFeiertag(date);
             const bezahlt = istFeiertag ? isFeiertagBezahlt(date) : false;
 
-            if (istFeiertag && bezahlt) {
-
+            if ((istFeiertag && bezahlt) || currentTagTyp === 'feiertag-bezahlt' || currentTagTyp === 'vorholtag') {
                 sollMin = 0;
             }
 
@@ -5032,13 +5161,27 @@
                     document.getElementById('soll-info').innerHTML = '&nbsp;';
                 }
 
-                if (diffSoll === 0 && arbNetto > 0) {
+                if (currentTagTyp === 'vorholtag') {
+                    if (arbNetto === 0) {
+                        document.getElementById('r-diff').textContent = '00:00';
+                        document.getElementById('r-diff-lbl').textContent = 'Vorholtag (arbeitsfrei)';
+                        document.getElementById('r-diff-card').className = 'grad-green';
+                    } else {
+                        document.getElementById('r-diff').textContent = `+${minToTime(arbNetto)}`;
+                        document.getElementById('r-diff-lbl').textContent = 'Überzeit Vorholtag (+1:1)';
+                        document.getElementById('r-diff-card').className = 'grad-green';
+                    }
+                } else if (diffSoll === 0 && arbNetto > 0) {
                     document.getElementById('r-diff').textContent = minToTime(sollMin);
                     document.getElementById('r-diff-lbl').textContent = 'Soll erreicht';
                     document.getElementById('r-diff-card').className = 'grad-green';
                 } else if (diffSoll < 0) {
                     document.getElementById('r-diff').textContent = minToTime(-diffSoll);
                     document.getElementById('r-diff-lbl').textContent = 'Überzeit Soll';
+                    document.getElementById('r-diff-card').className = 'grad-green';
+                } else if (sollMin === 0 && arbNetto === 0) {
+                    document.getElementById('r-diff').textContent = '00:00';
+                    document.getElementById('r-diff-lbl').textContent = 'Feiertag (bezahlt)';
                     document.getElementById('r-diff-card').className = 'grad-green';
                 } else {
                     document.getElementById('r-diff').textContent = minToTime(diffSoll);
@@ -5314,13 +5457,13 @@
                     if (tagTyp === 'urlaub' ||
                         tagTyp === 'krank' ||
                         tagTyp === 'kompensation' ||
+                        tagTyp === 'vorholtag' ||
                         tagTyp === 'feiertag-bezahlt' ||
                         (isFT && ftBezahlt)) {
                         sollTagMin = 0;
                         erfuellteTage++;
 
-                        // ⚡ NEU: Krankheit, Urlaub, Kompensation zählen als gearbeitete Zeit (8:24)
-                        if ((tagTyp === 'krank' || tagTyp === 'urlaub' || tagTyp === 'kompensation') && arb === 0) {
+                        if ((tagTyp === 'krank' || tagTyp === 'urlaub' || tagTyp === 'kompensation' || tagTyp === 'vorholtag') && arb === 0) {
                             totalArb += sollProTag;
                         }
 
@@ -5369,8 +5512,8 @@
                     const ft = feiertage[dateStr];
                     const ftTyp = ft ? (ft.typ || 'feiertag') : 'feiertag';
 
-                    if (ftTyp === 'brueckentag') {
-                        bgClass = 'tag-kompensation';
+                    if (ftTyp === 'brueckentag' || ftTyp === 'vorholtag') {
+                        bgClass = 'tag-vorholtag';
                     } else if (ftTyp === 'unbezahlt') {
                         bgClass = 'feiertag-unbezahlt';
                     } else {
@@ -5401,6 +5544,12 @@
                             tagTypIcon = '<span class="emoji-medium">⏰</span> ';
                             diffText = 'Kompensation';
                             diffClass = 'color: #A855F7;';
+                            break;
+                        case 'vorholtag':
+                            bgClass = 'tag-vorholtag';
+                            tagTypIcon = '<span class="emoji-medium">🔄</span> ';
+                            diffText = arb > 0 ? `+${minToTime(arb)}` : 'Vorholtag';
+                            diffClass = 'color: #06B6D4;';
                             break;
                         case 'normal':
                             bgClass = 'tag-typ-normal';
@@ -5567,12 +5716,12 @@
                     if (tagTyp === 'urlaub' ||
                         tagTyp === 'krank' ||
                         tagTyp === 'kompensation' ||
+                        tagTyp === 'vorholtag' ||
                         tagTyp === 'feiertag-bezahlt' ||
                         (isFT && ftBezahlt)) {
                         erfuellteTage++;
 
-                        // ⚡ NEU: Krankheit, Urlaub, Kompensation zählen als gearbeitete Zeit (8:24)
-                        if ((tagTyp === 'krank' || tagTyp === 'urlaub' || tagTyp === 'kompensation') && arb === 0) {
+                        if ((tagTyp === 'krank' || tagTyp === 'urlaub' || tagTyp === 'kompensation' || tagTyp === 'vorholtag') && arb === 0) {
                             totalArb += sollProTag;
                         }
 
@@ -5599,9 +5748,9 @@
                     const ft = feiertage[dateStr];
                     const ftTyp = ft ? (ft.typ || 'feiertag') : 'feiertag';
 
-                    if (ftTyp === 'brueckentag') {
-                        bgClass = 'tag-kompensation';
-                        tagTypIcon = '<span class="emoji-medium">⏰</span>';
+                    if (ftTyp === 'brueckentag' || ftTyp === 'vorholtag') {
+                        bgClass = 'tag-vorholtag';
+                        tagTypIcon = '<span class="emoji-medium">🔄</span>';
                     } else if (ftTyp === 'unbezahlt') {
                         bgClass = 'feiertag-unbezahlt';
                     } else {
@@ -5624,6 +5773,10 @@
                         case 'kompensation':
                             bgClass = 'tag-kompensation';
                             tagTypIcon = '<span class="emoji-medium">⏰</span>';
+                            break;
+                        case 'vorholtag':
+                            bgClass = 'tag-vorholtag';
+                            tagTypIcon = '<span class="emoji-medium">🔄</span>';
                             break;
                         case 'normal':
                             bgClass = 'tag-typ-normal';
@@ -5769,12 +5922,12 @@
                         if (tagTyp === 'urlaub' ||
                             tagTyp === 'krank' ||
                             tagTyp === 'kompensation' ||
+                            tagTyp === 'vorholtag' ||
                             tagTyp === 'feiertag-bezahlt' ||
                             (isFT && ftBezahlt)) {
                             erfuellteTage++;
 
-                            // ⚡ NEU: Krankheit, Urlaub, Kompensation zählen als gearbeitete Zeit (8:24)
-                            if ((tagTyp === 'krank' || tagTyp === 'urlaub' || tagTyp === 'kompensation') && arb === 0) {
+                            if ((tagTyp === 'krank' || tagTyp === 'urlaub' || tagTyp === 'kompensation' || tagTyp === 'vorholtag') && arb === 0) {
                                 totalArb += sollProTag;
                             }
                         } else {
@@ -5901,6 +6054,9 @@
                     if (typ === 'brueckentag') {
                         badgeClass = 'badge-bruecke';
                         badgeText = 'Brücke';
+                    } else if (typ === 'vorholtag') {
+                        badgeClass = 'badge-vorholtag';
+                        badgeText = 'Vorholtag';
                     }
 
                     html += `<div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-radius: 0.5rem; margin-bottom: 0.5rem; background: rgba(0,0,0,0.02);">
@@ -5942,10 +6098,18 @@
                 document.getElementById('settings-ueberzeit-start').value = formatOvertimeString(settings.ueberzeitStartStand || 0);
             }
 
+            if (document.getElementById('normal-woche')) {
+                document.getElementById('normal-woche').value = settings.normalarbeitszeit !== undefined ? settings.normalarbeitszeit : 40;
+            }
+            if (document.getElementById('vorhol-woche')) {
+                document.getElementById('vorhol-woche').value = settings.vorholzeit !== undefined ? settings.vorholzeit : 1.0;
+            }
+
             if (document.getElementById('soll-berechnet')) {
-                const sollWoche = settings.sollWoche || 42;
-                const sollZeit = settings.soll || '08:24';
-                document.getElementById('soll-berechnet').textContent = `${sollWoche}h ÷ 5 = ${sollZeit}`;
+                const sollWoche = settings.sollWoche || 41;
+                const sollZeit = settings.soll || '08:12';
+                const dailyHours = (sollWoche / 5).toFixed(2);
+                document.getElementById('soll-berechnet').textContent = `${sollWoche}h ÷ 5 = ${sollZeit} (${dailyHours}h dezimal)`;
             }
 
             updateUrlaubStats();
@@ -6710,14 +6874,57 @@
             }
         }
 
-        function updateSollFromWoche() {
+        function updateFlexWorkSoll() {
+            const normal = parseFloat(document.getElementById('normal-woche')?.value) || 40;
+            const vorhol = parseFloat(document.getElementById('vorhol-woche')?.value) || 0;
+            const total = normal + vorhol;
 
-            const sollWoche = parseFloat(document.getElementById('soll-woche').value) || 42;
+            settings.normalarbeitszeit = normal;
+            settings.vorholzeit = vorhol;
+            settings.sollWoche = total;
+
+            const sollWocheEl = document.getElementById('soll-woche');
+            if (sollWocheEl) sollWocheEl.value = total;
+
+            const dailyMinuten = Math.round((total * 60) / 5);
+            const dailyTime = minToTime(dailyMinuten);
+            const dailyHours = (total / 5).toFixed(2);
+
+            settings.soll = dailyTime;
+            const sollEl = document.getElementById('soll');
+            if (sollEl) sollEl.value = dailyTime;
+
+            const berechnetEl = document.getElementById('soll-berechnet');
+            if (berechnetEl) {
+                berechnetEl.textContent = `${total}h ÷ 5 = ${dailyTime} (${dailyHours}h dezimal)`;
+            }
+
+            saveToStorage();
+            calc();
+            updateUeberzeitStats();
+            if (view === 'woche') renderWoche();
+            if (view === 'monat') renderMonat();
+            if (view === 'jahr') renderJahr();
+        }
+
+        function applyFlexWorkPreset() {
+            if (document.getElementById('normal-woche')) document.getElementById('normal-woche').value = 40;
+            if (document.getElementById('vorhol-woche')) document.getElementById('vorhol-woche').value = 1.0;
+            if (document.getElementById('settings-urlaub')) document.getElementById('settings-urlaub').value = 30;
+            settings.urlaubTage = 30;
+            updateFlexWorkSoll();
+            updateUrlaubStats();
+            showMsg('FlexWork 2027 Standard (40h + 1h Vorholen = 41h / 08:12, 30 Tage Ferien) aktiviert!', true);
+        }
+
+        function updateSollFromWoche() {
+            const sollWoche = parseFloat(document.getElementById('soll-woche').value) || 41;
             const sollMinutenProTag = (sollWoche * 60) / 5;
             const sollZeit = minToTime(Math.round(sollMinutenProTag));
+            const dailyHours = (sollWoche / 5).toFixed(2);
 
             document.getElementById('soll').value = sollZeit;
-            document.getElementById('soll-berechnet').textContent = `${sollWoche}h ÷ 5 = ${sollZeit}`;
+            document.getElementById('soll-berechnet').textContent = `${sollWoche}h ÷ 5 = ${sollZeit} (${dailyHours}h dezimal)`;
 
             updateSettings();
         }
@@ -6729,7 +6936,13 @@
             settings.urlaubTage = parseInt(document.getElementById('settings-urlaub').value);
             settings.resturlaubVorjahr = parseInt(document.getElementById('settings-resturlaub').value) || 0;
             settings.kanton = document.getElementById('settings-kanton').value;
-            settings.sollWoche = parseFloat(document.getElementById('soll-woche').value) || 42;
+            settings.sollWoche = parseFloat(document.getElementById('soll-woche').value) || 41;
+            if (document.getElementById('normal-woche')) {
+                settings.normalarbeitszeit = parseFloat(document.getElementById('normal-woche').value) || 40;
+            }
+            if (document.getElementById('vorhol-woche')) {
+                settings.vorholzeit = parseFloat(document.getElementById('vorhol-woche').value) || 0;
+            }
             settings.name = document.getElementById('settings-name').value;
             settings.personalnummer = document.getElementById('settings-personalnummer').value;
 
@@ -6790,7 +7003,7 @@
                     if (entry.tagTyp === 'kompensation') {
                         kompensationstage++;
                         sollMin = sollProTag;  // Sollzeit setzen für korrekte Berechnung
-                    } else if (entry.tagTyp !== 'urlaub' && entry.tagTyp !== 'krank' && entry.tagTyp !== 'unbezahlt') {
+                    } else if (entry.tagTyp !== 'urlaub' && entry.tagTyp !== 'krank' && entry.tagTyp !== 'unbezahlt' && entry.tagTyp !== 'vorholtag') {
                         sollMin = sollProTag;
                     }
                 }
@@ -7292,6 +7505,15 @@
             const von = document.getElementById('urlaub-von').value;
             const bis = document.getElementById('urlaub-bis').value;
             const skipWeekend = document.getElementById('urlaub-wochenende').checked;
+            const typEl = document.getElementById('massenurlaub-typ');
+            const chosenTyp = typEl ? typEl.value : 'urlaub';
+
+            const typLabels = {
+                'urlaub': 'Urlaub',
+                'vorholtag': 'Vorholtag (arbeitsfrei)',
+                'kompensation': 'Überzeit-Kompensation'
+            };
+            const label = typLabels[chosenTyp] || 'Urlaub';
 
             if (!von || !bis) {
                 document.getElementById('urlaub-vorschau').style.display = 'none';
@@ -7321,13 +7543,19 @@
             }
 
             document.getElementById('urlaub-anzahl').textContent = count;
-            document.getElementById('urlaub-vorschau').style.display = 'block';
+            const vorschauEl = document.getElementById('urlaub-vorschau');
+            if (vorschauEl) {
+                vorschauEl.innerHTML = `<strong>Vorschau:</strong> <span>${count}</span> Arbeitstage werden als <strong>${label}</strong> markiert`;
+                vorschauEl.style.display = 'block';
+            }
         }
 
         function saveMassenUrlaub() {
             const von = document.getElementById('urlaub-von').value;
             const bis = document.getElementById('urlaub-bis').value;
             const skipWeekend = document.getElementById('urlaub-wochenende').checked;
+            const typEl = document.getElementById('massenurlaub-typ');
+            const chosenTyp = typEl ? typEl.value : 'urlaub';
 
             if (!von || !bis) {
                 alert('Bitte beide Daten auswählen!');
@@ -7357,7 +7585,7 @@
                     if (!data[dateStr]) {
                         data[dateStr] = {};
                     }
-                    data[dateStr].tagTyp = 'urlaub';
+                    data[dateStr].tagTyp = chosenTyp;
                     count++;
                 }
 
@@ -7367,8 +7595,15 @@
             saveToStorage();
             closeMassenUrlaub();
             updateUrlaubStats();
+            updateUeberzeitStats();
 
-            alert(`✓ ${count} Urlaubstage eingetragen!`);
+            const typNames = {
+                'urlaub': 'Urlaubstage',
+                'vorholtag': 'Vorholtage',
+                'kompensation': 'Kompensationstage'
+            };
+            const label = typNames[chosenTyp] || 'Tage';
+            alert(`✓ ${count} ${label} eingetragen!`);
 
             if (view === 'tag') loadTag();
             if (view === 'woche') renderWoche();
@@ -7386,6 +7621,7 @@
                 }
             }
             updateTagTypAnzeige(selectedTyp);
+            calc();
         }
 
         let urlaubLoeschModus = false;
@@ -7736,6 +7972,7 @@
                         let krankheitstageGesamt = 0;
                         let unbezahlteTage = 0;
                         let kompensationsTage = 0;
+                        let vorholTage = 0;
                         let feiertageBezahlt = 0;
                         let feiertageUnbezahlt = 0;
                         let currentRow = headerRow + 1;
@@ -7773,6 +8010,9 @@
                                 } else if (d.tagTyp === 'kompensation') {
                                     kompensationsTage++;
                                     sollMin = sollProTag;
+                                } else if (d.tagTyp === 'vorholtag') {
+                                    vorholTage++;
+                                    sollMin = 0;
                                 } else if (d.tagTyp === 'unbezahlt') {
                                     unbezahlteTage++;
                                 } else if (isFT && !ftBezahlt) {
@@ -7834,6 +8074,8 @@
                                 fillColor = 'FFFECACA';
                             } else if (d.tagTyp === 'kompensation') {
                                 fillColor = 'FFC4B5FD';
+                            } else if (d.tagTyp === 'vorholtag') {
+                                fillColor = 'FFA5F3FC';
                             } else if (isWeekend) {
                                 fillColor = 'FFF3F4F6';
                             }
@@ -7956,7 +8198,9 @@
                             { text: 'Feiertag (bezahlt)', color: 'FFDBEAFE', value: `${feiertageBezahlt} Tage`, desc: 'Feiertag (bezahlt)' },
                             { text: 'Feiertag (unbezahlt)', color: 'FFFED7AA', value: `${feiertageUnbezahlt} Tage`, desc: 'Feiertag (unbezahlt)' },
                             { text: 'Unbezahlt', color: 'FFFECACA', value: `${unbezahlteTage} Tage`, desc: 'Unbezahlter Urlaub' },
-                            { text: 'Kompensation', color: 'FFC4B5FD', value: `${kompensationsTage} Tage`, desc: 'Überzeit-Kompensation' }
+                            { text: 'Kompensation', color: 'FFC4B5FD', value: `${kompensationsTage} Tage`, desc: 'Überzeit-Kompensation' },
+                    { text: 'Vorholtag', color: 'FFA5F3FC', value: `${vorholTage} Tage`, desc: 'Vorholtag (arbeitsfrei)' },
+                            { text: 'Vorholtag', color: 'FFA5F3FC', value: `${vorholTage} Tage`, desc: 'Vorholtag (arbeitsfrei)' }
                         ];
 
                         legende.forEach((item) => {
@@ -8142,6 +8386,7 @@
                 let krankheitstageGesamt = 0;
                 let unbezahlteTage = 0;
                 let kompensationsTage = 0;
+                let vorholTage = 0;
                 let feiertageBezahlt = 0;
                 let feiertageUnbezahlt = 0;
                 let currentRow = headerRow + 1;
@@ -8172,6 +8417,9 @@
                         } else if (d.tagTyp === 'kompensation') {
                             kompensationsTage++;
                             sollMin = sollProTag;
+                        } else if (d.tagTyp === 'vorholtag') {
+                            vorholTage++;
+                            sollMin = 0;
                         } else if (d.tagTyp === 'unbezahlt') {
                             unbezahlteTage++;
                         } else if (isFT && !ftBezahlt) {
@@ -8240,6 +8488,8 @@
                         fillColor = 'FFFECACA';
                     } else if (d.tagTyp === 'kompensation') {
                         fillColor = 'FFC4B5FD';
+                    } else if (d.tagTyp === 'vorholtag') {
+                        fillColor = 'FFA5F3FC';
                     } else if (isWeekend) {
                         fillColor = 'FFF3F4F6';
                     }
@@ -8352,7 +8602,8 @@
                     { text: 'Feiertag (bezahlt)', color: 'FFDBEAFE', value: `${feiertageBezahlt} Tage`, desc: 'Feiertag (bezahlt)' },
                     { text: 'Feiertag (unbezahlt)', color: 'FFFED7AA', value: `${feiertageUnbezahlt} Tage`, desc: 'Feiertag (unbezahlt)' },
                     { text: 'Unbezahlt', color: 'FFFECACA', value: `${unbezahlteTage} Tage`, desc: 'Unbezahlter Urlaub' },
-                    { text: 'Kompensation', color: 'FFC4B5FD', value: `${kompensationsTage} Tage`, desc: 'Überzeit-Kompensation' }
+                    { text: 'Kompensation', color: 'FFC4B5FD', value: `${kompensationsTage} Tage`, desc: 'Überzeit-Kompensation' },
+                    { text: 'Vorholtag', color: 'FFA5F3FC', value: `${vorholTage} Tage`, desc: 'Vorholtag (arbeitsfrei)' }
                 ];
 
                 legende.forEach((item) => {
@@ -8623,6 +8874,7 @@
             let krankheitstageGesamt = 0;
             let unbezahlteTage = 0;
             let kompensationsTage = 0;
+            let vorholTage = 0;
             let feiertageBezahlt = 0;
             let feiertageUnbezahlt = 0;
             let currentRow = headerRow + 1;
@@ -8656,6 +8908,9 @@
                         kompensationsTage++;
                         sollMin = sollProTag;
                         ueberzeitMinuten -= sollProTag;
+                    } else if (d.tagTyp === 'vorholtag') {
+                        vorholTage++;
+                        sollMin = 0;
                     } else if (d.tagTyp === 'unbezahlt') {
                         unbezahlteTage++;
                         // KEINE Sollzeit
@@ -8699,6 +8954,8 @@
                     fillColor = 'FFFECACA';
                 } else if (d.tagTyp === 'kompensation') {
                     fillColor = 'FFC4B5FD';
+                } else if (d.tagTyp === 'vorholtag') {
+                    fillColor = 'FFA5F3FC';
                 } else if (d.tagTyp === 'feiertag-unbezahlt' || (isFT && !ftBezahlt)) {
                     // Unbezahlter Feiertag - Orange (Priorität vor Wochenende)
                     fillColor = 'FFFED7AA';
@@ -8950,6 +9207,7 @@
                 let krankheitstageGesamt = 0;
                 let unbezahlteTage = 0;
                 let kompensationsTage = 0;
+                let vorholTage = 0;
                 let feiertageBezahlt = 0;
                 let feiertageUnbezahlt = 0;
 
@@ -8986,11 +9244,15 @@
                     } else if (d.tagTyp === 'unbezahlt') {
                         fillColor = [254, 202, 202];
                         unbezahlteTage++;
-                    } else if (d.tagTyp === 'kompensation' || (isFT && feiertage[dateStr] && feiertage[dateStr].typ === 'brueckentag')) {
+                    } else if (d.tagTyp === 'kompensation') {
                         fillColor = [196, 181, 253];
                         kompensationsTage++;
                         sollMin = sollProTag;
                         ueberzeitMinutenGesamt -= sollProTag;
+                    } else if (d.tagTyp === 'vorholtag' || (isFT && feiertage[dateStr] && (feiertage[dateStr].typ === 'brueckentag' || feiertage[dateStr].typ === 'vorholtag'))) {
+                        fillColor = [165, 243, 252];
+                        vorholTage++;
+                        sollMin = 0;
                     } else if (d.tagTyp === 'feiertag-unbezahlt' || (isFT && !ftBezahlt)) {
                         // Unbezahlter Feiertag - Orange (Priorität vor Wochenende)
                         fillColor = [254, 215, 170];
@@ -9098,6 +9360,7 @@
                     { text: `${krankheitstageGesamt} Tage`, desc: 'Krankheitstage', color: [254, 243, 199], show: true },
                     { text: `${unbezahlteTage} Tage`, desc: 'Unbezahlter Urlaub', color: [254, 202, 202], show: true },
                     { text: `${kompensationsTage} Tage`, desc: 'Überzeit-Kompensation', color: [196, 181, 253], show: true },
+                    { text: `${vorholTage} Tage`, desc: 'Vorholtage (arbeitsfrei)', color: [165, 243, 252], show: true },
                     { text: `${feiertageBezahlt} Tage`, desc: 'Feiertag (bezahlt)', color: [219, 234, 254], show: true },
                     { text: `${feiertageUnbezahlt} Tage`, desc: 'Feiertag (unbezahlt)', color: [254, 215, 170], show: true }
                 ].filter(item => item.show);
@@ -9323,6 +9586,7 @@
                 let krankheitstageGesamt = 0;
                 let unbezahlteTage = 0;
                 let kompensationsTage = 0;
+                let vorholTage = 0;
                 let feiertageBezahlt = 0;
                 let feiertageUnbezahlt = 0;
 
@@ -9352,10 +9616,14 @@
                     } else if (d.tagTyp === 'unbezahlt') {
                         fillColor = [254, 202, 202];
                         unbezahlteTage++;
-                    } else if (d.tagTyp === 'kompensation' || (isFT && feiertage[dateStr] && feiertage[dateStr].typ === 'brueckentag')) {
+                    } else if (d.tagTyp === 'kompensation') {
                         fillColor = [196, 181, 253];
                         kompensationsTage++;
                         sollMin = sollProTag;
+                    } else if (d.tagTyp === 'vorholtag' || (isFT && feiertage[dateStr] && (feiertage[dateStr].typ === 'brueckentag' || feiertage[dateStr].typ === 'vorholtag'))) {
+                        fillColor = [165, 243, 252];
+                        vorholTage++;
+                        sollMin = 0;
                     } else if (d.tagTyp === 'feiertag-unbezahlt' || (isFT && !ftBezahlt)) {
                         fillColor = [254, 215, 170];
                         feiertageUnbezahlt++;
@@ -9537,6 +9805,7 @@
                     { text: `${krankheitstageGesamt} Tage`, desc: 'Krankheitstage', color: [254, 243, 199], show: true },
                     { text: `${unbezahlteTage} Tage`, desc: 'Unbezahlter Urlaub', color: [254, 202, 202], show: true },
                     { text: `${kompensationsTage} Tage`, desc: 'Überzeit-Kompensation', color: [196, 181, 253], show: true },
+                    { text: `${vorholTage} Tage`, desc: 'Vorholtage (arbeitsfrei)', color: [165, 243, 252], show: true },
                     { text: `${feiertageBezahlt} Tage`, desc: 'Feiertag (bezahlt)', color: [219, 234, 254], show: true },
                     { text: `${feiertageUnbezahlt} Tage`, desc: 'Feiertag (unbezahlt)', color: [254, 215, 170], show: true }
                 ].filter(item => item.show);
@@ -10027,7 +10296,9 @@
                     const ft = feiertage[dateStr];
                     const type = ft.typ || 'feiertag';
 
-                    if (type === 'brueckentag') {
+                    if (type === 'brueckentag' || type === 'vorholtag') {
+                        cell.classList.add('holiday-vorholtag');
+                    } else if (type === 'kompensation') {
                         cell.classList.add('holiday-kompensation');
                     } else if (type === 'unbezahlt') {
                         cell.classList.add('holiday-unbezahlt');
@@ -10737,8 +11008,8 @@
             });
         }
 
-        // Version 1.3.49 - Manuell erhöhen bei jeder Änderung
-        const APP_VERSION = '1.3.49';
+        // Version 1.3.50 - Manuell erhöhen bei jeder Änderung
+        const APP_VERSION = '1.3.50';
         const version = APP_VERSION;
 
         // Initialise user info with fallback placeholders
