@@ -1,5 +1,5 @@
 <html lang="de">
-<!-- Version 1.3.53 - Gesamtkonto Trenner '/' & Zählung gearbeiteter Tage bei Minuszeit korrigiert -->
+<!-- Version 1.3.54 - Überzeitkachel: Tage-Anzeige entfernt für klares Layout -->
 
 <head>
     <meta charset="utf-8">
@@ -2059,7 +2059,7 @@
                             onmouseover="this.style.color='#6366F1'; this.style.transform='scale(1.05)';"
                             onmouseout="this.style.color='#9CA3AF'; this.style.transform='scale(1)';"
                             class="version-badge">
-                            v1.3.53 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
+                            v1.3.54 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
                         </div>
                     </div>
                     <div class="header-actions" style="display: flex; gap: 0.5rem; align-items: center;">
@@ -2378,7 +2378,7 @@
                     <div style="font-size: 0.875rem;" id="w-diff-lbl">Fehlzeit Woche</div>
                     <div style="display: flex; justify-content: space-between; align-items: flex-end;">
                         <div style="font-size: 2rem; font-weight: bold;" id="w-diff">24:32</div>
-                        <div style="font-size: 0.75rem; font-style: italic;" id="w-diff-info">4 / 5 Tage</div>
+                        <div id="w-diff-info" style="display: none;"></div>
                     </div>
                     <div id="w-diff-konto-row" style="margin-top: 0.35rem; padding-top: 0.25rem; border-top: 1px solid rgba(255, 255, 255, 0.25); display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; flex-wrap: wrap; gap: 0.25rem;">
                         <span style="opacity: 0.9;">Gesamtkonto:</span>
@@ -2521,7 +2521,7 @@
                     <div style="font-size: 0.875rem;" id="m-diff-lbl">Fehlzeit Monat</div>
                     <div style="display: flex; justify-content: space-between; align-items: flex-end;">
                         <div style="font-size: 2rem; font-weight: bold;" id="m-diff">150:32</div>
-                        <div style="font-size: 0.75rem; font-style: italic;" id="m-diff-info">12 / 20 Tage</div>
+                        <div id="m-diff-info" style="display: none;"></div>
                     </div>
                     <div id="m-diff-konto-row" style="margin-top: 0.35rem; padding-top: 0.25rem; border-top: 1px solid rgba(255, 255, 255, 0.25); display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; flex-wrap: wrap; gap: 0.25rem;">
                         <span style="opacity: 0.9;">Gesamtkonto:</span>
@@ -5681,18 +5681,17 @@
                 document.getElementById('w-diff').textContent = minToTime(totalSoll);
                 document.getElementById('w-diff-lbl').textContent = 'Soll erreicht';
                 document.getElementById('w-diff-card').className = 'grad-green';
-                document.getElementById('w-diff-info').textContent = `${erfuellteTage} / 5 Tage`;
             } else if (totalDiff < 0) {
                 document.getElementById('w-diff').textContent = minToTime(-totalDiff);
                 document.getElementById('w-diff-lbl').textContent = 'Überzeit Woche';
                 document.getElementById('w-diff-card').className = 'grad-green';
-                document.getElementById('w-diff-info').textContent = `${erfuellteTage} / 5 Tage`;
             } else {
                 document.getElementById('w-diff').textContent = minToTime(totalDiff);
                 document.getElementById('w-diff-lbl').textContent = 'Fehlzeit Woche';
                 document.getElementById('w-diff-card').className = 'grad-orange';
-                document.getElementById('w-diff-info').textContent = `${erfuellteTage} / 5 Tage`;
             }
+            const elWDiffInfo = document.getElementById('w-diff-info');
+            if (elWDiffInfo) elWDiffInfo.textContent = '';
 
             // Gesamtkonto für diese Woche aktualisieren
             const sundayStr = `${sunday.getFullYear()}-${String(sunday.getMonth() + 1).padStart(2, '0')}-${String(sunday.getDate()).padStart(2, '0')}`;
@@ -5909,18 +5908,17 @@
                 document.getElementById('m-diff').textContent = minToTime(totalSoll);
                 document.getElementById('m-diff-lbl').textContent = 'Soll erreicht';
                 document.getElementById('m-diff-card').className = 'grad-green';
-                document.getElementById('m-diff-info').textContent = `${erfuellteTage} / ${arbeitsTageImMonat} Tage`;
             } else if (totalDiff < 0) {
                 document.getElementById('m-diff').textContent = minToTime(-totalDiff);
                 document.getElementById('m-diff-lbl').textContent = 'Überzeit Monat';
                 document.getElementById('m-diff-card').className = 'grad-green';
-                document.getElementById('m-diff-info').textContent = `${erfuellteTage} / ${arbeitsTageImMonat} Tage`;
             } else {
                 document.getElementById('m-diff').textContent = minToTime(totalDiff);
                 document.getElementById('m-diff-lbl').textContent = 'Fehlzeit Monat';
                 document.getElementById('m-diff-card').className = 'grad-orange';
-                document.getElementById('m-diff-info').textContent = `${erfuellteTage} / ${arbeitsTageImMonat} Tage`;
             }
+            const elMDiffInfo = document.getElementById('m-diff-info');
+            if (elMDiffInfo) elMDiffInfo.textContent = '';
 
             // Gesamtkonto für diesen Monat aktualisieren
             const lastDayStr = `${y}-${String(m).padStart(2, '0')}-${String(lastDay.getDate()).padStart(2, '0')}`;
@@ -11160,8 +11158,8 @@
             });
         }
 
-        // Version 1.3.53 - Manuell erhöhen bei jeder Änderung
-        const APP_VERSION = '1.3.53';
+        // Version 1.3.54 - Manuell erhöhen bei jeder Änderung
+        const APP_VERSION = '1.3.54';
         const version = APP_VERSION;
 
         // Initialise user info with fallback placeholders
