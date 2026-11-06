@@ -1,5 +1,5 @@
 <html lang="de">
-<!-- Version 1.3.51 - Kontrast-Optimierung: Differenz-Badges für Wochen- und Monatsansicht -->
+<!-- Version 1.3.52 - Überzeit-Konto Nachführung & Gesamtkonto in Woche und Monat -->
 
 <head>
     <meta charset="utf-8">
@@ -2059,7 +2059,7 @@
                             onmouseover="this.style.color='#6366F1'; this.style.transform='scale(1.05)';"
                             onmouseout="this.style.color='#9CA3AF'; this.style.transform='scale(1)';"
                             class="version-badge">
-                            v1.3.51 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
+                            v1.3.52 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
                         </div>
                     </div>
                     <div class="header-actions" style="display: flex; gap: 0.5rem; align-items: center;">
@@ -2374,11 +2374,15 @@
                         <div style="font-size: 0.75rem; font-style: italic;" id="w-soll-info">5 Tage</div>
                     </div>
                 </div>
-                <div id="w-diff-card" class="grad-orange">
+                <div id="w-diff-card" class="grad-orange" style="cursor: pointer;" onclick="switchView('einstellungen')" title="Klicken für Überzeit-Verwaltung">
                     <div style="font-size: 0.875rem;" id="w-diff-lbl">Fehlzeit Woche</div>
                     <div style="display: flex; justify-content: space-between; align-items: flex-end;">
                         <div style="font-size: 2rem; font-weight: bold;" id="w-diff">24:32</div>
                         <div style="font-size: 0.75rem; font-style: italic;" id="w-diff-info">4 / 5 Tage</div>
+                    </div>
+                    <div id="w-diff-konto-row" style="margin-top: 0.35rem; padding-top: 0.25rem; border-top: 1px solid rgba(255, 255, 255, 0.25); display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; flex-wrap: wrap; gap: 0.25rem;">
+                        <span style="opacity: 0.9;">Gesamtkonto:</span>
+                        <span id="w-diff-konto" style="font-weight: 700; font-variant-numeric: tabular-nums;">+00:00</span>
                     </div>
                 </div>
             </div>
@@ -2513,11 +2517,15 @@
                         <div style="font-size: 0.75rem; font-style: italic;" id="m-soll-info">20 Tage</div>
                     </div>
                 </div>
-                <div id="m-diff-card" class="grad-orange">
+                <div id="m-diff-card" class="grad-orange" style="cursor: pointer;" onclick="switchView('einstellungen')" title="Klicken für Überzeit-Verwaltung">
                     <div style="font-size: 0.875rem;" id="m-diff-lbl">Fehlzeit Monat</div>
                     <div style="display: flex; justify-content: space-between; align-items: flex-end;">
                         <div style="font-size: 2rem; font-weight: bold;" id="m-diff">150:32</div>
                         <div style="font-size: 0.75rem; font-style: italic;" id="m-diff-info">12 / 20 Tage</div>
+                    </div>
+                    <div id="m-diff-konto-row" style="margin-top: 0.35rem; padding-top: 0.25rem; border-top: 1px solid rgba(255, 255, 255, 0.25); display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; flex-wrap: wrap; gap: 0.25rem;">
+                        <span style="opacity: 0.9;">Gesamtkonto:</span>
+                        <span id="m-diff-konto" style="font-weight: 700; font-variant-numeric: tabular-nums;">+00:00</span>
                     </div>
                 </div>
             </div>
@@ -5684,6 +5692,20 @@
                 document.getElementById('w-diff-card').className = 'grad-orange';
                 document.getElementById('w-diff-info').textContent = `${erfuellteTage} / 5 Tage`;
             }
+
+            // Gesamtkonto für diese Woche aktualisieren
+            const sundayStr = `${sunday.getFullYear()}-${String(sunday.getMonth() + 1).padStart(2, '0')}-${String(sunday.getDate()).padStart(2, '0')}`;
+            if (typeof getUeberzeitKonto === 'function') {
+                const kontoDataWoche = getUeberzeitKonto(sundayStr);
+                const wKontoEl = document.getElementById('w-diff-konto');
+                if (wKontoEl) {
+                    if (kontoDataWoche.isBeforeStart) {
+                        wKontoEl.textContent = `Stand: ${formatOvertimeString(kontoDataWoche.startStand)}`;
+                    } else {
+                        wKontoEl.textContent = `${formatOvertimeString(kontoDataWoche.aktuell)} (${minToIndustrialHours(kontoDataWoche.aktuell)})`;
+                    }
+                }
+            }
         }
 
         function getWeekNumber(d) {
@@ -5896,6 +5918,20 @@
                 document.getElementById('m-diff-lbl').textContent = 'Fehlzeit Monat';
                 document.getElementById('m-diff-card').className = 'grad-orange';
                 document.getElementById('m-diff-info').textContent = `${erfuellteTage} / ${arbeitsTageImMonat} Tage`;
+            }
+
+            // Gesamtkonto für diesen Monat aktualisieren
+            const lastDayStr = `${y}-${String(m).padStart(2, '0')}-${String(lastDay.getDate()).padStart(2, '0')}`;
+            if (typeof getUeberzeitKonto === 'function') {
+                const kontoDataMonat = getUeberzeitKonto(lastDayStr);
+                const mKontoEl = document.getElementById('m-diff-konto');
+                if (mKontoEl) {
+                    if (kontoDataMonat.isBeforeStart) {
+                        mKontoEl.textContent = `Stand: ${formatOvertimeString(kontoDataMonat.startStand)}`;
+                    } else {
+                        mKontoEl.textContent = `${formatOvertimeString(kontoDataMonat.aktuell)} (${minToIndustrialHours(kontoDataMonat.aktuell)})`;
+                    }
+                }
             }
 
             // Ferientage anzeigen für das Jahr des Monats
@@ -7036,24 +7072,28 @@
             if (view === 'jahr') renderJahr();
         }
 
-        function updateUeberzeitStats() {
+        function getPreviousDay(dateStr) {
+            const [y, m, d] = dateStr.split('-').map(Number);
+            const dt = new Date(y, m - 1, d - 1);
+            return `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, '0')}-${String(dt.getDate()).padStart(2, '0')}`;
+        }
+
+        function getUeberzeitKonto(bisDatum) {
             const startDatum = settings.ueberzeitStartDatum || (new Date().getFullYear() + '-01-01');
-            const startJahr = parseInt(startDatum.substring(0, 4));
             const startStand = settings.ueberzeitStartStand || 0;
             const sollProTag = timeToMin(settings.soll);
-
             let erarbeitet = 0;
-            let kompensationstage = 0;
 
-            // Alle Tage ab dem Startjahr durchgehen
-            for (const datum in data) {
-                const jahr = parseInt(datum.substring(0, 4));
-                if (jahr < startJahr) continue;
+            const alleTage = Object.keys(data).sort();
+            for (const dStr of alleTage) {
+                // Tage bis und mit Start-Stichtag überspringen (bereits im Start-Saldo enthalten)
+                if (dStr <= startDatum) continue;
+                if (bisDatum && dStr > bisDatum) continue;
 
-                const entry = data[datum];
+                const entry = data[dStr];
                 if (!entry) continue;
 
-                const [y, m, d] = datum.split('-').map(Number);
+                const [y, m, d] = dStr.split('-').map(Number);
                 const dt = new Date(y, m - 1, d);
                 const dayOfWeek = dt.getDay();
                 const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
@@ -7066,26 +7106,41 @@
 
                 // Sollzeit berechnen
                 let sollMin = 0;
-                const isFT = isFeiertag(datum);
-                const ftBezahlt = isFT ? isFeiertagBezahlt(datum) : false;
+                const isFT = isFeiertag(dStr);
+                const ftBezahlt = isFT ? isFeiertagBezahlt(dStr) : false;
 
                 if (!isWeekend && !(isFT && ftBezahlt)) {
                     if (entry.tagTyp === 'kompensation') {
-                        kompensationstage++;
-                        sollMin = sollProTag;  // Sollzeit setzen für korrekte Berechnung
+                        sollMin = sollProTag;
                     } else if (entry.tagTyp !== 'urlaub' && entry.tagTyp !== 'krank' && entry.tagTyp !== 'unbezahlt' && entry.tagTyp !== 'vorholtag') {
                         sollMin = sollProTag;
                     }
                 }
 
-                // Überzeit akkumulieren
                 if (arb > 0 || sollMin > 0) {
                     erarbeitet += (arb - sollMin);
                 }
             }
 
-            const bezogen = 0;  // Kompensation ist jetzt in erarbeitet enthalten
             const aktuell = startStand + erarbeitet;
+            const isBeforeStart = Boolean(bisDatum && bisDatum < startDatum);
+
+            return {
+                startDatum,
+                startStand,
+                erarbeitet,
+                aktuell,
+                isBeforeStart
+            };
+        }
+
+        function updateUeberzeitStats() {
+            const konto = getUeberzeitKonto();
+            const startDatum = konto.startDatum;
+            const startStand = konto.startStand;
+            const erarbeitet = konto.erarbeitet;
+            const bezogen = 0;  // Kompensation ist in erarbeitet enthalten
+            const aktuell = konto.aktuell;
 
             // UI aktualisieren
             if (document.getElementById('ueberzeit-start-display')) {
@@ -7095,8 +7150,8 @@
                 document.getElementById('ueberzeit-aktuell').textContent = formatOvertimeString(aktuell);
 
                 // Formatiere Datum für Anzeige: "01.10.2025"
-                const [y, m, d] = startDatum.split('-');
-                const datumFormatiert = `${d}.${m}.${y}`;
+                const [y, m, d] = (startDatum || '').split('-');
+                const datumFormatiert = (y && m && d) ? `${d}.${m}.${y}` : startDatum;
                 document.getElementById('stats-datum-display').textContent = datumFormatiert;
 
                 // Industriezeit anzeigen
@@ -8097,7 +8152,10 @@
 
                             totalSoll += sollMin;
                             const diff = sollMin - arb;
-                            if (arb > 0 || sollMin > 0) ueberzeitMinutenGesamt += (arb - sollMin);
+                            const startDatum = settings.ueberzeitStartDatum || '';
+                            if (dateStr > startDatum) {
+                                if (arb > 0 || sollMin > 0) ueberzeitMinutenGesamt += (arb - sollMin);
+                            }
 
                             const values = [
                                 ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'][dayOfWeek],
@@ -8452,7 +8510,12 @@
                 }
 
                 let totalArb = 0, totalSoll = 0;
-                let ueberzeitMinuten = settings.ueberzeitStartStand || 0;
+                let startKontoMin = settings.ueberzeitStartStand || 0;
+                if (exportDates.length > 0 && typeof getPreviousDay === 'function' && typeof getUeberzeitKonto === 'function') {
+                    const prevDay = getPreviousDay(exportDates[0]);
+                    startKontoMin = getUeberzeitKonto(prevDay).aktuell;
+                }
+                let ueberzeitMinuten = startKontoMin;
                 let krankheitstageGesamt = 0;
                 let unbezahlteTage = 0;
                 let kompensationsTage = 0;
@@ -8504,7 +8567,10 @@
 
                     totalSoll += sollMin;
                     const diff = sollMin - arb;
-                    if (arb > 0 || sollMin > 0) ueberzeitMinuten += (arb - sollMin);
+                    const startDatum = settings.ueberzeitStartDatum || '';
+                    if (dateStr > startDatum) {
+                        if (arb > 0 || sollMin > 0) ueberzeitMinuten += (arb - sollMin);
+                    }
 
                     const values = [
                         ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'][dayOfWeek],
@@ -8940,7 +9006,12 @@
             }
 
             let totalArb = 0, totalSoll = 0;
-            let ueberzeitMinuten = settings.ueberzeitStartStand || 0;
+            let startKontoMin = settings.ueberzeitStartStand || 0;
+            if (exportDates.length > 0 && typeof getPreviousDay === 'function' && typeof getUeberzeitKonto === 'function') {
+                const prevDay = getPreviousDay(exportDates[0]);
+                startKontoMin = getUeberzeitKonto(prevDay).aktuell;
+            }
+            let ueberzeitMinuten = startKontoMin;
             let krankheitstageGesamt = 0;
             let unbezahlteTage = 0;
             let kompensationsTage = 0;
@@ -8977,7 +9048,6 @@
                     } else if (d.tagTyp === 'kompensation') {
                         kompensationsTage++;
                         sollMin = sollProTag;
-                        ueberzeitMinuten -= sollProTag;
                     } else if (d.tagTyp === 'vorholtag') {
                         vorholTage++;
                         sollMin = 0;
@@ -8993,7 +9063,10 @@
                 totalArb += arb;
                 totalSoll += sollMin;
                 const diff = sollMin - arb;
-                if (arb > 0 || sollMin > 0) ueberzeitMinuten += (arb - sollMin);
+                const startDatum = settings.ueberzeitStartDatum || '';
+                if (dateStr > startDatum) {
+                    if (arb > 0 || sollMin > 0) ueberzeitMinuten += (arb - sollMin);
+                }
 
                 const values = [
                     ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'][dayOfWeek],
@@ -9652,7 +9725,12 @@
                 }
 
                 let totalArb = 0, totalSoll = 0;
-                let ueberzeitMinuten = settings.ueberzeitStartStand || 0;
+                let startKontoMin = settings.ueberzeitStartStand || 0;
+                if (exportDates.length > 0 && typeof getPreviousDay === 'function' && typeof getUeberzeitKonto === 'function') {
+                    const prevDay = getPreviousDay(exportDates[0]);
+                    startKontoMin = getUeberzeitKonto(prevDay).aktuell;
+                }
+                let ueberzeitMinuten = startKontoMin;
                 let krankheitstageGesamt = 0;
                 let unbezahlteTage = 0;
                 let kompensationsTage = 0;
@@ -9709,7 +9787,10 @@
                     totalArb += arb;
                     totalSoll += sollMin;
                     const diff = sollMin - arb;
-                    if (arb > 0 || sollMin > 0) ueberzeitMinuten += (arb - sollMin);
+                    const startDatum = settings.ueberzeitStartDatum || '';
+                    if (dateStr > startDatum) {
+                        if (arb > 0 || sollMin > 0) ueberzeitMinuten += (arb - sollMin);
+                    }
 
                     const rowData = [
                         ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'][dayOfWeek],
@@ -11078,8 +11159,8 @@
             });
         }
 
-        // Version 1.3.51 - Manuell erhöhen bei jeder Änderung
-        const APP_VERSION = '1.3.51';
+        // Version 1.3.52 - Manuell erhöhen bei jeder Änderung
+        const APP_VERSION = '1.3.52';
         const version = APP_VERSION;
 
         // Initialise user info with fallback placeholders
