@@ -1,5 +1,5 @@
 <html lang="de">
-<!-- Version 1.3.52 - Überzeit-Konto Nachführung & Gesamtkonto in Woche und Monat -->
+<!-- Version 1.3.53 - Gesamtkonto Trenner '/' & Zählung gearbeiteter Tage bei Minuszeit korrigiert -->
 
 <head>
     <meta charset="utf-8">
@@ -2059,7 +2059,7 @@
                             onmouseover="this.style.color='#6366F1'; this.style.transform='scale(1.05)';"
                             onmouseout="this.style.color='#9CA3AF'; this.style.transform='scale(1)';"
                             class="version-badge">
-                            v1.3.52 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
+                            v1.3.53 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
                         </div>
                     </div>
                     <div class="header-actions" style="display: flex; gap: 0.5rem; align-items: center;">
@@ -2382,7 +2382,7 @@
                     </div>
                     <div id="w-diff-konto-row" style="margin-top: 0.35rem; padding-top: 0.25rem; border-top: 1px solid rgba(255, 255, 255, 0.25); display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; flex-wrap: wrap; gap: 0.25rem;">
                         <span style="opacity: 0.9;">Gesamtkonto:</span>
-                        <span id="w-diff-konto" style="font-weight: 700; font-variant-numeric: tabular-nums;">+00:00</span>
+                        <span id="w-diff-konto" style="font-weight: 700; font-variant-numeric: tabular-nums;">+00:00 / +0.00h</span>
                     </div>
                 </div>
             </div>
@@ -2525,7 +2525,7 @@
                     </div>
                     <div id="m-diff-konto-row" style="margin-top: 0.35rem; padding-top: 0.25rem; border-top: 1px solid rgba(255, 255, 255, 0.25); display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; flex-wrap: wrap; gap: 0.25rem;">
                         <span style="opacity: 0.9;">Gesamtkonto:</span>
-                        <span id="m-diff-konto" style="font-weight: 700; font-variant-numeric: tabular-nums;">+00:00</span>
+                        <span id="m-diff-konto" style="font-weight: 700; font-variant-numeric: tabular-nums;">+00:00 / +0.00h</span>
                     </div>
                 </div>
             </div>
@@ -5575,6 +5575,7 @@
                             diffBadgeClass = 'diff-pill pill-neg';
                             diffText = '- Nicht gearbeitet';
                         } else {
+                            erfuellteTage++;
                             diffBadgeClass = 'diff-pill pill-neg';
                             diffText = `-${minToTime(diff)}`;
                         }
@@ -5700,9 +5701,9 @@
                 const wKontoEl = document.getElementById('w-diff-konto');
                 if (wKontoEl) {
                     if (kontoDataWoche.isBeforeStart) {
-                        wKontoEl.textContent = `Stand: ${formatOvertimeString(kontoDataWoche.startStand)}`;
+                        wKontoEl.textContent = `Stand: ${formatOvertimeString(kontoDataWoche.startStand)} / ${minToIndustrialHours(kontoDataWoche.startStand)}`;
                     } else {
-                        wKontoEl.textContent = `${formatOvertimeString(kontoDataWoche.aktuell)} (${minToIndustrialHours(kontoDataWoche.aktuell)})`;
+                        wKontoEl.textContent = `${formatOvertimeString(kontoDataWoche.aktuell)} / ${minToIndustrialHours(kontoDataWoche.aktuell)}`;
                     }
                 }
             }
@@ -5828,6 +5829,7 @@
                             erfuellteTage++;
                             diffColor = '#10B981';
                         } else if (arb > 0) {
+                            erfuellteTage++;
                             diffColor = '#EF4444';
                         }
                     }
@@ -5927,9 +5929,9 @@
                 const mKontoEl = document.getElementById('m-diff-konto');
                 if (mKontoEl) {
                     if (kontoDataMonat.isBeforeStart) {
-                        mKontoEl.textContent = `Stand: ${formatOvertimeString(kontoDataMonat.startStand)}`;
+                        mKontoEl.textContent = `Stand: ${formatOvertimeString(kontoDataMonat.startStand)} / ${minToIndustrialHours(kontoDataMonat.startStand)}`;
                     } else {
-                        mKontoEl.textContent = `${formatOvertimeString(kontoDataMonat.aktuell)} (${minToIndustrialHours(kontoDataMonat.aktuell)})`;
+                        mKontoEl.textContent = `${formatOvertimeString(kontoDataMonat.aktuell)} / ${minToIndustrialHours(kontoDataMonat.aktuell)}`;
                     }
                 }
             }
@@ -6037,9 +6039,8 @@
                                 totalArb += sollProTag;
                             }
                         } else {
-                            // Normaler Arbeitstag: Prüfe ob genug gearbeitet wurde
-                            const diff = sollProTag - arb;
-                            if (diff <= 0) {
+                            // Normaler Arbeitstag: Prüfe ob gearbeitet wurde
+                            if (arb > 0) {
                                 erfuellteTage++;
                             }
                         }
@@ -11159,8 +11160,8 @@
             });
         }
 
-        // Version 1.3.52 - Manuell erhöhen bei jeder Änderung
-        const APP_VERSION = '1.3.52';
+        // Version 1.3.53 - Manuell erhöhen bei jeder Änderung
+        const APP_VERSION = '1.3.53';
         const version = APP_VERSION;
 
         // Initialise user info with fallback placeholders
