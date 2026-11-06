@@ -1,5 +1,5 @@
 <html lang="de">
-<!-- Version 1.3.55 - Jahresüberblick: Sollzeit vor Arbeitszeit getauscht & Kacheln harmonisiert -->
+<!-- Version 1.3.56 - Zukünftige Urlaubstage/Vorholtage erst ab tatsächlichem Datum werten; Phantomstunden im Voraus behoben -->
 
 <head>
     <meta charset="utf-8">
@@ -2059,7 +2059,7 @@
                             onmouseover="this.style.color='#6366F1'; this.style.transform='scale(1.05)';"
                             onmouseout="this.style.color='#9CA3AF'; this.style.transform='scale(1)';"
                             class="version-badge">
-                            v1.3.55 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
+                            v1.3.56 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
                         </div>
                     </div>
                     <div class="header-actions" style="display: flex; gap: 0.5rem; align-items: center;">
@@ -4101,6 +4101,11 @@
             return dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0') + '-' + String(dt.getDate()).padStart(2, '0');
         }
 
+        function getTodayStr() {
+            const dt = new Date();
+            return dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0') + '-' + String(dt.getDate()).padStart(2, '0');
+        }
+
         function loadFromStorage() {
             const stored = localStorage.getItem('arbeitszeitData');
             if (stored) {
@@ -5479,6 +5484,11 @@
             let erfuellteTage = 0;
             let html = '<div class="flex-col">';
 
+            const todayStr = typeof getTodayStr === 'function' ? getTodayStr() : (() => {
+                const dt = new Date();
+                return dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0') + '-' + String(dt.getDate()).padStart(2, '0');
+            })();
+
             const sollWocheStunden = parseFloat(document.getElementById('soll-woche').value) || 42;
             const totalSoll = sollWocheStunden * 60;
             const sollProTag = timeToMin(settings.soll);
@@ -5487,6 +5497,7 @@
                 const dt = new Date(monday);
                 dt.setDate(dt.getDate() + i);
                 const dateStr = dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0') + '-' + String(dt.getDate()).padStart(2, '0');
+                const isFutureDay = dateStr > todayStr;
                 const d = data[dateStr] || {};
 
                 const days = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
@@ -5529,7 +5540,7 @@
                     // Wochentag
                     const tagTyp = d.tagTyp || 'normal';
 
-                    // Diese Tagtypen zählen als "erfüllter Tag"
+                    // Diese Tagtypen zählen als "erfüllter Tag" (Zukünftige Tage erst, wenn der Tag da ist)
                     if (tagTyp === 'urlaub' ||
                         tagTyp === 'krank' ||
                         tagTyp === 'kompensation' ||
@@ -5537,10 +5548,13 @@
                         tagTyp === 'feiertag-bezahlt' ||
                         (isFT && ftBezahlt)) {
                         sollTagMin = 0;
-                        erfuellteTage++;
 
-                        if ((tagTyp === 'krank' || tagTyp === 'urlaub' || tagTyp === 'kompensation' || tagTyp === 'vorholtag') && arb === 0) {
-                            totalArb += sollProTag;
+                        if (!isFutureDay) {
+                            erfuellteTage++;
+
+                            if ((tagTyp === 'krank' || tagTyp === 'urlaub' || tagTyp === 'kompensation' || tagTyp === 'vorholtag') && arb === 0) {
+                                totalArb += sollProTag;
+                            }
                         }
 
                         if (arb > 0) {
@@ -5551,11 +5565,11 @@
                                 diffText = `+${minToTime(arb)}`;
                             }
                         } else {
-                            diffBadgeClass = 'diff-pill pill-pos';
+                            diffBadgeClass = isFutureDay ? 'diff-pill pill-neutral' : 'diff-pill pill-pos';
                             if (isFT && ftBezahlt) {
-                                diffText = '✓ Feiertag';
+                                diffText = isFutureDay ? 'Feiertag' : '✓ Feiertag';
                             } else {
-                                diffText = '✓ Erfüllt';
+                                diffText = isFutureDay ? (tagTyp === 'urlaub' ? 'Urlaub' : (tagTyp === 'vorholtag' ? 'Vorholtag' : 'Geplant')) : '✓ Erfüllt';
                             }
                         }
                     } else {
@@ -5563,21 +5577,32 @@
                         sollTagMin = sollProTag;
                         const diff = sollTagMin - arb;
 
-                        if (diff === 0) {
-                            erfuellteTage++;
-                            diffBadgeClass = 'diff-pill pill-pos';
-                            diffText = '✓ Erfüllt';
-                        } else if (diff < 0) {
-                            erfuellteTage++;
-                            diffBadgeClass = 'diff-pill pill-pos';
-                            diffText = `+${minToTime(-diff)}`;
-                        } else if (arb === 0) {
-                            diffBadgeClass = 'diff-pill pill-neg';
-                            diffText = '- Nicht gearbeitet';
+                        if (!isFutureDay) {
+                            if (diff === 0) {
+                                erfuellteTage++;
+                                diffBadgeClass = 'diff-pill pill-pos';
+                                diffText = '✓ Erfüllt';
+                            } else if (diff < 0) {
+                                erfuellteTage++;
+                                diffBadgeClass = 'diff-pill pill-pos';
+                                diffText = `+${minToTime(-diff)}`;
+                            } else if (arb === 0) {
+                                diffBadgeClass = 'diff-pill pill-neg';
+                                diffText = '- Nicht gearbeitet';
+                            } else {
+                                erfuellteTage++;
+                                diffBadgeClass = 'diff-pill pill-neg';
+                                diffText = `-${minToTime(diff)}`;
+                            }
                         } else {
-                            erfuellteTage++;
-                            diffBadgeClass = 'diff-pill pill-neg';
-                            diffText = `-${minToTime(diff)}`;
+                            if (arb > 0) {
+                                erfuellteTage++;
+                                diffBadgeClass = diff <= 0 ? 'diff-pill pill-pos' : 'diff-pill pill-neg';
+                                diffText = diff <= 0 ? `+${minToTime(-diff)}` : `-${minToTime(diff)}`;
+                            } else {
+                                diffBadgeClass = 'diff-pill pill-neutral';
+                                diffText = '--:--';
+                            }
                         }
                     }
                 }
@@ -5677,7 +5702,14 @@
             document.getElementById('w-soll').textContent = minToTime(totalSoll);
             document.getElementById('w-soll-info').textContent = '5 Tage';
 
-            if (totalDiff === 0) {
+            const mondayStr = `${monday.getFullYear()}-${String(monday.getMonth() + 1).padStart(2, '0')}-${String(monday.getDate()).padStart(2, '0')}`;
+            const isFutureWeek = mondayStr > todayStr;
+
+            if (isFutureWeek && totalArb === 0) {
+                document.getElementById('w-diff').textContent = '00:00';
+                document.getElementById('w-diff-lbl').textContent = 'Woche noch offen';
+                document.getElementById('w-diff-card').className = 'grad-gray';
+            } else if (totalDiff === 0) {
                 document.getElementById('w-diff').textContent = minToTime(totalSoll);
                 document.getElementById('w-diff-lbl').textContent = 'Soll erreicht';
                 document.getElementById('w-diff-card').className = 'grad-green';
@@ -5751,6 +5783,10 @@
             let erfuellteTage = 0;
             let arbeitsTageImMonat = 0;
             const sollProTag = timeToMin(settings.soll);
+            const todayStr = typeof getTodayStr === 'function' ? getTodayStr() : (() => {
+                const dt = new Date();
+                return dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0') + '-' + String(dt.getDate()).padStart(2, '0');
+            })();
 
             // SCHRITT 1: Zähle ALLE Wochentage (Mo-Fr) im Monat
             for (let day = 1; day <= lastDay.getDate(); day++) {
@@ -5772,6 +5808,7 @@
 
             for (let day = 1; day <= lastDay.getDate(); day++) {
                 const dateStr = y + '-' + String(m).padStart(2, '0') + '-' + String(day).padStart(2, '0');
+                const isFutureDay = dateStr > todayStr;
                 const d = data[dateStr] || {};
                 const dt = new Date(y, m - 1, day);
                 const dayOfWeek = dt.getDay();
@@ -5804,17 +5841,20 @@
                     // Zähle erfüllte Tage nur an Wochentagen
                     const tagTyp = d.tagTyp || 'normal';
 
-                    // Diese Tagtypen zählen als "erfüllter Tag"
+                    // Diese Tagtypen zählen als "erfüllter Tag" (Zukünftige Tage erst, wenn der Tag da ist)
                     if (tagTyp === 'urlaub' ||
                         tagTyp === 'krank' ||
                         tagTyp === 'kompensation' ||
                         tagTyp === 'vorholtag' ||
                         tagTyp === 'feiertag-bezahlt' ||
                         (isFT && ftBezahlt)) {
-                        erfuellteTage++;
+                        
+                        if (!isFutureDay) {
+                            erfuellteTage++;
 
-                        if ((tagTyp === 'krank' || tagTyp === 'urlaub' || tagTyp === 'kompensation' || tagTyp === 'vorholtag') && arb === 0) {
-                            totalArb += sollProTag;
+                            if ((tagTyp === 'krank' || tagTyp === 'urlaub' || tagTyp === 'kompensation' || tagTyp === 'vorholtag') && arb === 0) {
+                                totalArb += sollProTag;
+                            }
                         }
 
                         if (arb > 0) {
@@ -5824,12 +5864,17 @@
                     } else {
                         // Normaler Arbeitstag: Prüfe ob genug gearbeitet wurde
                         diff = sollProTag - arb;
-                        if (diff <= 0) {
-                            erfuellteTage++;
-                            diffColor = '#10B981';
+                        if (!isFutureDay) {
+                            if (diff <= 0) {
+                                erfuellteTage++;
+                                diffColor = '#10B981';
+                            } else if (arb > 0) {
+                                erfuellteTage++;
+                                diffColor = '#EF4444';
+                            }
                         } else if (arb > 0) {
                             erfuellteTage++;
-                            diffColor = '#EF4444';
+                            diffColor = diff <= 0 ? '#10B981' : '#EF4444';
                         }
                     }
                 }
@@ -5904,7 +5949,14 @@
             document.getElementById('m-soll').textContent = minToTime(totalSoll);
             document.getElementById('m-soll-info').textContent = `${arbeitsTageImMonat} Tage`;
 
-            if (totalDiff === 0) {
+            const currentMonthStr = todayStr.substring(0, 7);
+            const isFutureMonth = month > currentMonthStr;
+
+            if (isFutureMonth && totalArb === 0) {
+                document.getElementById('m-diff').textContent = '00:00';
+                document.getElementById('m-diff-lbl').textContent = 'Monat noch offen';
+                document.getElementById('m-diff-card').className = 'grad-gray';
+            } else if (totalDiff === 0) {
                 document.getElementById('m-diff').textContent = minToTime(totalSoll);
                 document.getElementById('m-diff-lbl').textContent = 'Soll erreicht';
                 document.getElementById('m-diff-card').className = 'grad-green';
@@ -5975,6 +6027,12 @@
             const months = ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'];
             let html = '';
 
+            const todayStr = typeof getTodayStr === 'function' ? getTodayStr() : (() => {
+                const dt = new Date();
+                return dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0') + '-' + String(dt.getDate()).padStart(2, '0');
+            })();
+            const currentMonthStr = todayStr.substring(0, 7);
+
             let totalArbJahr = 0, totalSollJahr = 0, erfuellteTageJahr = 0, arbeitsTageJahrGesamt = 0;
             const sollProTag = timeToMin(settings.soll);
 
@@ -6002,6 +6060,7 @@
                 // SCHRITT 2: Berechne Arbeitszeit und erfüllte Tage
                 for (let day = 1; day <= lastDay.getDate(); day++) {
                     const dateStr = year + '-' + String(m).padStart(2, '0') + '-' + String(day).padStart(2, '0');
+                    const isFutureDay = dateStr > todayStr;
                     const d = data[dateStr] || {};
                     const dt = new Date(year, m - 1, day);
                     const dayOfWeek = dt.getDay();
@@ -6020,7 +6079,7 @@
 
                     totalArb += arb;
 
-                    // Zähle erfüllte Tage nur an Wochentagen
+                    // Zähle erfüllte Tage nur an Wochentagen (Zukünftige Tage erst, wenn der Tag da ist)
                     if (!isWeekend) {
                         const tagTyp = d.tagTyp || 'normal';
 
@@ -6031,10 +6090,13 @@
                             tagTyp === 'vorholtag' ||
                             tagTyp === 'feiertag-bezahlt' ||
                             (isFT && ftBezahlt)) {
-                            erfuellteTage++;
+                            
+                            if (!isFutureDay) {
+                                erfuellteTage++;
 
-                            if ((tagTyp === 'krank' || tagTyp === 'urlaub' || tagTyp === 'kompensation' || tagTyp === 'vorholtag') && arb === 0) {
-                                totalArb += sollProTag;
+                                if ((tagTyp === 'krank' || tagTyp === 'urlaub' || tagTyp === 'kompensation' || tagTyp === 'vorholtag') && arb === 0) {
+                                    totalArb += sollProTag;
+                                }
                             }
                         } else {
                             // Normaler Arbeitstag: Prüfe ob gearbeitet wurde
@@ -6051,6 +6113,26 @@
                 arbeitsTageJahrGesamt += arbeitsTageImMonat;
 
                 const totalDiff = totalSoll - totalArb;
+                const monthStr = `${year}-${String(m).padStart(2, '0')}`;
+                const isFutureMonth = monthStr > currentMonthStr;
+
+                let diffLabel = 'Fehlzeit:';
+                let diffPillClass = 'pill-neg';
+                let diffBadgeText = '';
+
+                if (isFutureMonth && totalArb === 0) {
+                    diffLabel = 'Status:';
+                    diffPillClass = 'pill-neutral';
+                    diffBadgeText = 'Offen';
+                } else if (totalDiff <= 0) {
+                    diffLabel = 'Überzeit:';
+                    diffPillClass = 'pill-pos';
+                    diffBadgeText = totalDiff === 0 ? '00:00' : `+${minToTime(-totalDiff)}`;
+                } else {
+                    diffLabel = 'Fehlzeit:';
+                    diffPillClass = 'pill-neg';
+                    diffBadgeText = `-${minToTime(totalDiff)}`;
+                }
 
                 html += `<div class="card-sm month-card" onclick="jumpToMonth('${year}-${String(m).padStart(2, '0')}')">
                     <div style="font-weight: 600; margin-bottom: 0.75rem; font-size: 1.125rem;">${months[m - 1]} ${year}</div>
@@ -6063,8 +6145,8 @@
                         <span style="font-weight: bold;">${minToTime(totalArb)}</span>
                     </div>
                     <div style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #E5E7EB;">
-                        <span style="color: #6B7280; font-size: 0.875rem;">${totalDiff <= 0 ? 'Überzeit:' : 'Fehlzeit:'}</span>
-                        <span class="diff-pill ${totalDiff <= 0 ? 'pill-pos' : 'pill-neg'}" style="font-size: 0.8rem; padding: 0.1rem 0.45rem;">${totalDiff === 0 ? '00:00' : (totalDiff < 0 ? '+' : '-') + minToTime(Math.abs(totalDiff))}</span>
+                        <span style="color: #6B7280; font-size: 0.875rem;">${diffLabel}</span>
+                        <span class="diff-pill ${diffPillClass}" style="font-size: 0.8rem; padding: 0.1rem 0.45rem;">${diffBadgeText}</span>
                     </div>
                     <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #6B7280;">${erfuellteTage} / ${arbeitsTageImMonat} Tage</div>
                 </div>`;
@@ -6080,7 +6162,11 @@
             document.getElementById('j-arb').textContent = minToTime(totalArbJahr);
             document.getElementById('j-info').textContent = `${erfuellteTageJahr} / ${arbeitsTageJahrGesamt} Tage`;
 
-            if (totalDiffJahr === 0) {
+            if (year > new Date().getFullYear()) {
+                document.getElementById('j-diff').textContent = '00:00';
+                document.getElementById('j-diff-lbl').textContent = 'Jahr noch offen';
+                document.getElementById('j-diff-card').className = 'grad-gray';
+            } else if (totalDiffJahr === 0) {
                 document.getElementById('j-diff').textContent = minToTime(totalSollJahr);
                 document.getElementById('j-diff-lbl').textContent = 'Soll erreicht';
                 document.getElementById('j-diff-card').className = 'grad-green';
@@ -7082,6 +7168,11 @@
             const sollProTag = timeToMin(settings.soll);
             let erarbeitet = 0;
 
+            const todayStr = typeof getTodayStr === 'function' ? getTodayStr() : (() => {
+                const dt = new Date();
+                return dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0') + '-' + String(dt.getDate()).padStart(2, '0');
+            })();
+
             const alleTage = Object.keys(data).sort();
             for (const dStr of alleTage) {
                 // Tage bis und mit Start-Stichtag überspringen (bereits im Start-Saldo enthalten)
@@ -7091,16 +7182,20 @@
                 const entry = data[dStr];
                 if (!entry) continue;
 
-                const [y, m, d] = dStr.split('-').map(Number);
-                const dt = new Date(y, m - 1, d);
-                const dayOfWeek = dt.getDay();
-                const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
-
                 // Arbeitszeit berechnen
                 let arb = 0;
                 if (entry.mk && entry.mg) arb += timeToMin(entry.mg) - timeToMin(entry.mk);
                 if (entry.mittk && entry.ag) arb += timeToMin(entry.ag) - timeToMin(entry.mittk);
                 if (arb >= 360) arb -= timeToMin(settings.pause);
+
+                // Zukünftige Tage zählen erst, wenn der Tag da ist ("ERST ANZEIGEN WENN ES SOWEIT IST DER TAG DA IST")
+                // Falls an einem zukünftigen Tag noch keine Arbeitszeit erfasst wurde, nicht in Überzeit-Saldo einrechnen
+                if (dStr > todayStr && arb === 0) continue;
+
+                const [y, m, d] = dStr.split('-').map(Number);
+                const dt = new Date(y, m - 1, d);
+                const dayOfWeek = dt.getDay();
+                const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
 
                 // Sollzeit berechnen
                 let sollMin = 0;
@@ -11157,8 +11252,8 @@
             });
         }
 
-        // Version 1.3.55 - Manuell erhöhen bei jeder Änderung
-        const APP_VERSION = '1.3.55';
+        // Version 1.3.56 - Manuell erhöhen bei jeder Änderung
+        const APP_VERSION = '1.3.56';
         const version = APP_VERSION;
 
         // Initialise user info with fallback placeholders
