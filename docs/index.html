@@ -1,5 +1,5 @@
 <html lang="de">
-<!-- Version 1.3.57 - Heutiger Tag visuell hervorgehoben (eigene Farbe & Heute-Badge in Monats- und Wochenansicht) -->
+<!-- Version 1.3.58 - Bezeichnung 'Vorholtag (arbeitsfrei)' zu 'Vorgeholter Tag' geändert -->
 
 <head>
     <meta charset="utf-8">
@@ -2121,7 +2121,7 @@
                             onmouseover="this.style.color='#6366F1'; this.style.transform='scale(1.05)';"
                             onmouseout="this.style.color='#9CA3AF'; this.style.transform='scale(1)';"
                             class="version-badge">
-                            v1.3.57 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
+                            v1.3.58 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
                         </div>
                     </div>
                     <div class="header-actions" style="display: flex; gap: 0.5rem; align-items: center;">
@@ -2331,12 +2331,12 @@
                             <span class="emoji-medium">⏰</span> <span>Überzeit-Kompensation</span>
                         </label>
 
-                        <!-- Zeile 9: Vorholtag (arbeitsfrei) -->
+                        <!-- Zeile 9: Vorgeholter Tag -->
                         <label class="tag-typ-label tag-vorholtag"
                             style="grid-row: 9; display: flex; align-items: center; cursor: pointer; padding: 0.75rem; border-radius: 0.5rem; height: 54px;">
                             <input type="radio" name="tagTyp" value="vorholtag" onchange="updateTagTyp()"
                                 style="margin-right: 0.5rem;">
-                            <span class="emoji-medium">🔄</span> <span>Vorholtag (arbeitsfrei)</span>
+                            <span class="emoji-medium">🔄</span> <span>Vorgeholter Tag</span>
                         </label>
 
                         <!-- Notiz am Ende außerhalb des Grids -->
@@ -3996,7 +3996,7 @@
                         <option value="feiertag">Feiertag (bezahlt)</option>
                         <option value="unbezahlt">Feiertag unbezahlt</option>
                         <option value="brueckentag">Brückentag</option>
-                        <option value="vorholtag">Vorholtag (arbeitsfrei durch Vorholzeit)</option>
+                        <option value="vorholtag">Vorgeholter Tag (arbeitsfrei durch Vorholzeit)</option>
                     </select>
                 </div>
                 <div>
@@ -4027,7 +4027,7 @@
                         style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #D1D5DB; border-radius: 0.5rem;"
                         onchange="updateUrlaubVorschau()">
                         <option value="urlaub">🏖️ Urlaub / Ferien</option>
-                        <option value="vorholtag">🔄 Vorholtag (arbeitsfrei durch Vorholzeit)</option>
+                        <option value="vorholtag">🔄 Vorgeholter Tag</option>
                         <option value="kompensation">⏰ Überzeit-Kompensation</option>
                     </select>
                 </div>
@@ -4665,7 +4665,7 @@
                 },
                 'vorholtag': {
                     icon: '🔄',
-                    text: 'Vorholtag (arbeitsfrei)',
+                    text: 'Vorgeholter Tag',
                     bg: 'linear-gradient(135deg, #A5F3FC 0%, #67E8F9 100%)',
                     color: '#1F2937',
                     border: '#06B6D4'
@@ -5307,11 +5307,11 @@
                 if (currentTagTyp === 'vorholtag') {
                     if (arbNetto === 0) {
                         document.getElementById('r-diff').textContent = '00:00';
-                        document.getElementById('r-diff-lbl').textContent = 'Vorholtag (arbeitsfrei)';
+                        document.getElementById('r-diff-lbl').textContent = 'Vorgeholter Tag';
                         document.getElementById('r-diff-card').className = 'grad-green';
                     } else {
                         document.getElementById('r-diff').textContent = `+${minToTime(arbNetto)}`;
-                        document.getElementById('r-diff-lbl').textContent = 'Überzeit Vorholtag (+1:1)';
+                        document.getElementById('r-diff-lbl').textContent = 'Überzeit Vorgeholter Tag (+1:1)';
                         document.getElementById('r-diff-card').className = 'grad-green';
                     }
                 } else if (diffSoll === 0 && arbNetto > 0) {
@@ -5632,7 +5632,7 @@
                             if (isFT && ftBezahlt) {
                                 diffText = isFutureDay ? 'Feiertag' : '✓ Feiertag';
                             } else {
-                                diffText = isFutureDay ? (tagTyp === 'urlaub' ? 'Urlaub' : (tagTyp === 'vorholtag' ? 'Vorholtag' : 'Geplant')) : '✓ Erfüllt';
+                                diffText = isFutureDay ? (tagTyp === 'urlaub' ? 'Urlaub' : (tagTyp === 'vorholtag' ? 'Vorgeholter Tag' : 'Geplant')) : '✓ Erfüllt';
                             }
                         }
                     } else {
@@ -5715,7 +5715,7 @@
                         case 'vorholtag':
                             bgClass = 'tag-vorholtag';
                             tagTypIcon = '<span class="emoji-medium">🔄</span> ';
-                            diffText = arb > 0 ? `+${minToTime(arb)}` : 'Vorholtag';
+                            diffText = arb > 0 ? `+${minToTime(arb)}` : 'Vorgeholter Tag';
                             diffBadgeClass = 'diff-pill pill-pos';
                             break;
                         case 'normal':
@@ -7798,7 +7798,7 @@
 
             const typLabels = {
                 'urlaub': 'Urlaub',
-                'vorholtag': 'Vorholtag (arbeitsfrei)',
+                'vorholtag': 'Vorgeholter Tag',
                 'kompensation': 'Überzeit-Kompensation'
             };
             const label = typLabels[chosenTyp] || 'Urlaub';
@@ -8490,8 +8490,7 @@
                             { text: 'Feiertag (unbezahlt)', color: 'FFFED7AA', value: `${feiertageUnbezahlt} Tage`, desc: 'Feiertag (unbezahlt)' },
                             { text: 'Unbezahlt', color: 'FFFECACA', value: `${unbezahlteTage} Tage`, desc: 'Unbezahlter Urlaub' },
                             { text: 'Kompensation', color: 'FFC4B5FD', value: `${kompensationsTage} Tage`, desc: 'Überzeit-Kompensation' },
-                    { text: 'Vorholtag', color: 'FFA5F3FC', value: `${vorholTage} Tage`, desc: 'Vorholtag (arbeitsfrei)' },
-                            { text: 'Vorholtag', color: 'FFA5F3FC', value: `${vorholTage} Tage`, desc: 'Vorholtag (arbeitsfrei)' }
+                            { text: 'Vorgeholter Tag', color: 'FFA5F3FC', value: `${vorholTage} Tage`, desc: 'Vorgeholter Tag' }
                         ];
 
                         legende.forEach((item) => {
@@ -8902,7 +8901,7 @@
                     { text: 'Feiertag (unbezahlt)', color: 'FFFED7AA', value: `${feiertageUnbezahlt} Tage`, desc: 'Feiertag (unbezahlt)' },
                     { text: 'Unbezahlt', color: 'FFFECACA', value: `${unbezahlteTage} Tage`, desc: 'Unbezahlter Urlaub' },
                     { text: 'Kompensation', color: 'FFC4B5FD', value: `${kompensationsTage} Tage`, desc: 'Überzeit-Kompensation' },
-                    { text: 'Vorholtag', color: 'FFA5F3FC', value: `${vorholTage} Tage`, desc: 'Vorholtag (arbeitsfrei)' }
+                    { text: 'Vorgeholter Tag', color: 'FFA5F3FC', value: `${vorholTage} Tage`, desc: 'Vorgeholter Tag' }
                 ];
 
                 legende.forEach((item) => {
@@ -11322,8 +11321,8 @@
             });
         }
 
-        // Version 1.3.57 - Manuell erhöhen bei jeder Änderung
-        const APP_VERSION = '1.3.57';
+        // Version 1.3.58 - Manuell erhöhen bei jeder Änderung
+        const APP_VERSION = '1.3.58';
         const version = APP_VERSION;
 
         // Initialise user info with fallback placeholders
