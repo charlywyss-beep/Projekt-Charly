@@ -1,5 +1,5 @@
 <html lang="de">
-<!-- Version 1.3.74 - PDF-Ausgabe: Ferientag mit Sollzeit & Arbeitszeit korrekt erfasst, Legende zeigt Tage im Zeitraum -->
+<!-- Version 1.3.75 - PDF-Ausgabe: Zukünftige Tage ohne Stempelung belasten das Überzeitkonto im Monatsausdruck nicht vorab -->
 
 <head>
     <meta charset="utf-8">
@@ -2459,7 +2459,7 @@
                             onmouseover="this.style.color='#6366F1'; this.style.transform='scale(1.05)';"
                             onmouseout="this.style.color='#9CA3AF'; this.style.transform='scale(1)';"
                             class="version-badge">
-                            v1.3.74 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
+                            v1.3.75 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
                         </div>
                     </div>
                     <div class="header-actions" style="display: flex; gap: 0.5rem; align-items: center;">
@@ -9953,12 +9953,18 @@
             let feiertageUnbezahlt = 0;
             let currentRow = headerRow + 1;
 
+            const todayStr = typeof getTodayStr === 'function' ? getTodayStr() : (() => {
+                const dt = new Date();
+                return dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0') + '-' + String(dt.getDate()).padStart(2, '0');
+            })();
+
             exportDates.forEach(dateStr => {
                 const d = data[dateStr] || {};
                 const [y, m, day] = dateStr.split('-').map(Number);
                 const dt = new Date(y, m - 1, day);
                 const dayOfWeek = dt.getDay();
                 const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+                const isFutureDay = dateStr > todayStr;
 
                 let arb = 0;
                 if (d.mk && d.mg) arb += timeToMin(d.mg) - timeToMin(d.mk);
@@ -9996,8 +10002,12 @@
                         unbezahlteTage++;
                         specialExcelLabel = 'Unbez. Urlaub';
                     } else {
-                        // Normaler Arbeitstag
-                        sollMin = sollProTag;
+                        // Normaler Arbeitstag: Zukünftige Tage ohne Stempelung zählen erst, wenn der Tag da ist
+                        if (isFutureDay && arb === 0) {
+                            sollMin = 0;
+                        } else {
+                            sollMin = sollProTag;
+                        }
                     }
                 } else if (isFT && ftBezahlt) {
                     specialExcelLabel = (feiertage[dateStr] && feiertage[dateStr].name) ? feiertage[dateStr].name : 'Feiertag';
@@ -10301,6 +10311,11 @@
                 let feiertageBezahlt = 0;
                 let feiertageUnbezahlt = 0;
 
+                const todayStr = typeof getTodayStr === 'function' ? getTodayStr() : (() => {
+                    const dt = new Date();
+                    return dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0') + '-' + String(dt.getDate()).padStart(2, '0');
+                })();
+
                 // Alle Daten des Monats sammeln
                 const exportDates = getExportDates();
                 exportDates.forEach(dateStr => {
@@ -10313,6 +10328,7 @@
                     const dt = new Date(y, m - 1, day);
                     const dayOfWeek = dt.getDay();
                     const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+                    const isFutureDay = dateStr > todayStr;
 
                     let arb = 0;
                     if (d.mk && d.mg) arb += timeToMin(d.mg) - timeToMin(d.mk);
@@ -10387,7 +10403,11 @@
 
                     // Sollzeit nur für normale Arbeitstage
                     if (!isWeekend && !(isFT && ftBezahlt) && !d.tagTyp && d.tagTyp !== 'urlaub' && d.tagTyp !== 'krank' && d.tagTyp !== 'unbezahlt') {
-                        sollMin = sollProTag;
+                        if (isFutureDay && arb === 0) {
+                            sollMin = 0;
+                        } else {
+                            sollMin = sollProTag;
+                        }
                     }
 
                     totalArb += arb;
@@ -10743,12 +10763,18 @@
                 let feiertageBezahlt = 0;
                 let feiertageUnbezahlt = 0;
 
+                const todayStr = typeof getTodayStr === 'function' ? getTodayStr() : (() => {
+                    const dt = new Date();
+                    return dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0') + '-' + String(dt.getDate()).padStart(2, '0');
+                })();
+
                 exportDates.forEach(dateStr => {
                     const d = data[dateStr] || {};
                     const [y, m, day] = dateStr.split('-').map(Number);
                     const dt = new Date(y, m - 1, day);
                     const dayOfWeek = dt.getDay();
                     const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+                    const isFutureDay = dateStr > todayStr;
 
                     let arb = 0;
                     if (d.mk && d.mg) arb += timeToMin(d.mg) - timeToMin(d.mk);
@@ -10816,7 +10842,12 @@
                     } else if (isWeekend) {
                         fillColor = [243, 244, 246];
                     } else if (!isWeekend && !(isFT && ftBezahlt)) {
-                        sollMin = sollProTag;
+                        // Zukünftige Tage ohne Stempelung zählen erst, wenn der Tag da ist ("ERST ANZEIGEN WENN ES SOWEIT IST")
+                        if (isFutureDay && arb === 0) {
+                            sollMin = 0;
+                        } else {
+                            sollMin = sollProTag;
+                        }
                     }
 
                     totalArb += arb;
@@ -12223,8 +12254,8 @@
             });
         }
 
-        // Version 1.3.74 - Manuell erhöhen bei jeder Änderung
-        const APP_VERSION = '1.3.74';
+        // Version 1.3.75 - Manuell erhöhen bei jeder Änderung
+        const APP_VERSION = '1.3.75';
         const version = APP_VERSION;
 
         // Initialise user info with fallback placeholders
