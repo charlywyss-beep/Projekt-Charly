@@ -1,5 +1,5 @@
 <html lang="de">
-<!-- Version 1.3.75 - PDF-Ausgabe: Zukünftige Tage ohne Stempelung belasten das Überzeitkonto im Monatsausdruck nicht vorab -->
+<!-- Version 1.3.76 - Jahresansicht (PDF, Excel, UI): Tage vor Erfassungsbeginn und zukünftige Tage ohne Stempelung belasten das Überzeitkonto nicht -->
 
 <head>
     <meta charset="utf-8">
@@ -2459,7 +2459,7 @@
                             onmouseover="this.style.color='#6366F1'; this.style.transform='scale(1.05)';"
                             onmouseout="this.style.color='#9CA3AF'; this.style.transform='scale(1)';"
                             class="version-badge">
-                            v1.3.75 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
+                            v1.3.76 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
                         </div>
                     </div>
                     <div class="header-actions" style="display: flex; gap: 0.5rem; align-items: center;">
@@ -6685,20 +6685,32 @@
                     }
                 }
 
-                totalArbJahr += totalArb;
-                totalSollJahr += totalSoll;
-                erfuellteTageJahr += erfuellteTage;
-                arbeitsTageJahrGesamt += arbeitsTageImMonat;
-
-                const totalDiff = totalSoll - totalArb;
+                const startDatum = typeof getEffectiveStartDatum === 'function' ? getEffectiveStartDatum() : (settings.ueberzeitStartDatum || '');
                 const monthStr = `${year}-${String(m).padStart(2, '0')}`;
                 const isFutureMonth = monthStr > currentMonthStr;
+                const isBeforeStartMonth = Boolean(startDatum && monthStr < startDatum.substring(0, 7));
+
+                let monthSoll = totalSoll;
+                if (isBeforeStartMonth && totalArb === 0) {
+                    monthSoll = 0;
+                } else {
+                    totalArbJahr += totalArb;
+                    totalSollJahr += totalSoll;
+                    erfuellteTageJahr += erfuellteTage;
+                    arbeitsTageJahrGesamt += arbeitsTageImMonat;
+                }
+
+                const totalDiff = monthSoll - totalArb;
 
                 let diffLabel = 'Fehlzeit:';
                 let diffPillClass = 'pill-neg';
                 let diffBadgeText = '';
 
-                if (isFutureMonth && totalArb === 0) {
+                if (isBeforeStartMonth && totalArb === 0) {
+                    diffLabel = 'Status:';
+                    diffPillClass = 'pill-neutral';
+                    diffBadgeText = 'Vor Beginn';
+                } else if (isFutureMonth && totalArb === 0) {
                     diffLabel = 'Status:';
                     diffPillClass = 'pill-neutral';
                     diffBadgeText = 'Offen';
@@ -6716,7 +6728,7 @@
                     <div style="font-weight: 600; margin-bottom: 0.75rem; font-size: 1.125rem;">${months[m - 1]} ${year}</div>
                     <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
                         <span style="color: #6B7280; font-size: 0.875rem;">Sollzeit:</span>
-                        <span style="font-weight: bold;">${minToTime(totalSoll)}</span>
+                        <span style="font-weight: bold;">${minToTime(monthSoll)}</span>
                     </div>
                     <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
                         <span style="color: #6B7280; font-size: 0.875rem;">Arbeitszeit:</span>
@@ -8002,8 +8014,25 @@
             return `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, '0')}-${String(dt.getDate()).padStart(2, '0')}`;
         }
 
+        function getEffectiveStartDatum() {
+            const configuredStartDatum = settings.ueberzeitStartDatum || '';
+            const defaultStartOfYear = new Date().getFullYear() + '-01-01';
+            if (configuredStartDatum && configuredStartDatum !== defaultStartOfYear) {
+                return configuredStartDatum;
+            }
+            const trackedKeys = Object.keys(data).filter(k => {
+                const entry = data[k];
+                return entry && (entry.mk || entry.mg || entry.mittk || entry.ag || entry.tagTyp);
+            }).sort();
+            const firstTrackedDate = trackedKeys.length > 0 ? trackedKeys[0] : '';
+            if (firstTrackedDate && (!data[configuredStartDatum] || (!data[configuredStartDatum].mk && !data[configuredStartDatum].tagTyp))) {
+                return firstTrackedDate;
+            }
+            return configuredStartDatum || firstTrackedDate || defaultStartOfYear;
+        }
+
         function getUeberzeitKonto(bisDatum) {
-            const startDatum = settings.ueberzeitStartDatum || (new Date().getFullYear() + '-01-01');
+            const startDatum = typeof getEffectiveStartDatum === 'function' ? getEffectiveStartDatum() : (settings.ueberzeitStartDatum || (new Date().getFullYear() + '-01-01'));
             const startStand = settings.ueberzeitStartStand || 0;
             const sollProTag = timeToMin(settings.soll);
             let erarbeitet = 0;
@@ -8963,6 +8992,11 @@
                     const months = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
                     const sollProTag = timeToMin(settings.soll);
                     let ueberzeitMinutenGesamt = settings.ueberzeitStartStand || 0;
+                    const startDatum = typeof getEffectiveStartDatum === 'function' ? getEffectiveStartDatum() : (settings.ueberzeitStartDatum || '');
+                    const todayStr = typeof getTodayStr === 'function' ? getTodayStr() : (() => {
+                        const dt = new Date();
+                        return dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0') + '-' + String(dt.getDate()).padStart(2, '0');
+                    })();
 
                     for (let monthNum = 1; monthNum <= 12; monthNum++) {
                         const ws = wb.addWorksheet(`${months[monthNum - 1]} ${year}`);
@@ -9048,6 +9082,8 @@
                             const dt = new Date(y, m - 1, day);
                             const dayOfWeek = dt.getDay();
                             const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+                            const isFutureDay = dateStr > todayStr;
+                            const isBeforeStart = Boolean(startDatum && dateStr < startDatum);
 
                             let arb = 0;
                             if (d.mk && d.mg) arb += timeToMin(d.mg) - timeToMin(d.mk);
@@ -9062,9 +9098,12 @@
                                 if (isFT && ftBezahlt) {
                                     feiertageBezahlt++;
                                 } else if (d.tagTyp === 'urlaub') {
-                                    // KEINE Sollzeit
+                                    sollMin = sollProTag;
+                                    if (arb === 0) arb = sollProTag;
                                 } else if (d.tagTyp === 'krank') {
                                     krankheitstageGesamt++;
+                                    sollMin = sollProTag;
+                                    if (arb === 0) arb = sollProTag;
                                 } else if (d.tagTyp === 'kompensation') {
                                     kompensationsTage++;
                                     sollMin = sollProTag;
@@ -9073,19 +9112,22 @@
                                     sollMin = 0;
                                 } else if (d.tagTyp === 'unbezahlt') {
                                     unbezahlteTage++;
+                                    sollMin = 0;
                                 } else if (isFT && !ftBezahlt) {
                                     feiertageUnbezahlt++;
+                                    sollMin = 0;
                                 } else {
-                                    sollMin = sollProTag;
+                                    if ((isBeforeStart || isFutureDay) && arb === 0) {
+                                        sollMin = 0;
+                                    } else {
+                                        sollMin = sollProTag;
+                                    }
                                 }
                             }
 
                             totalArb += arb;
-
-
                             totalSoll += sollMin;
                             const diff = sollMin - arb;
-                            const startDatum = settings.ueberzeitStartDatum || '';
                             if (dateStr > startDatum) {
                                 if (arb > 0 || sollMin > 0) ueberzeitMinutenGesamt += (arb - sollMin);
                             }
@@ -9456,12 +9498,20 @@
                 let feiertageUnbezahlt = 0;
                 let currentRow = headerRow + 1;
 
+                const todayStr = typeof getTodayStr === 'function' ? getTodayStr() : (() => {
+                    const dt = new Date();
+                    return dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0') + '-' + String(dt.getDate()).padStart(2, '0');
+                })();
+                const startDatum = typeof getEffectiveStartDatum === 'function' ? getEffectiveStartDatum() : (settings.ueberzeitStartDatum || '');
+
                 exportDates.forEach(dateStr => {
                     const d = data[dateStr] || {};
                     const [y, m, day] = dateStr.split('-').map(Number);
                     const dt = new Date(y, m - 1, day);
                     const dayOfWeek = dt.getDay();
                     const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+                    const isFutureDay = dateStr > todayStr;
+                    const isBeforeStart = Boolean(startDatum && dateStr < startDatum);
 
                     let arb = 0;
                     if (d.mk && d.mg) arb += timeToMin(d.mg) - timeToMin(d.mk);
@@ -9477,8 +9527,12 @@
                             feiertageBezahlt++;
                         } else if (d.tagTyp === 'urlaub') {
                             urlaubstageVerbraucht++;
+                            sollMin = sollProTag;
+                            if (arb === 0) arb = sollProTag;
                         } else if (d.tagTyp === 'krank') {
                             krankheitstageGesamt++;
+                            sollMin = sollProTag;
+                            if (arb === 0) arb = sollProTag;
                         } else if (d.tagTyp === 'kompensation') {
                             kompensationsTage++;
                             sollMin = sollProTag;
@@ -9487,19 +9541,22 @@
                             sollMin = 0;
                         } else if (d.tagTyp === 'unbezahlt') {
                             unbezahlteTage++;
+                            sollMin = 0;
                         } else if (isFT && !ftBezahlt) {
                             feiertageUnbezahlt++;
+                            sollMin = 0;
                         } else {
-                            sollMin = sollProTag;
+                            if ((isBeforeStart || isFutureDay) && arb === 0) {
+                                sollMin = 0;
+                            } else {
+                                sollMin = sollProTag;
+                            }
                         }
                     }
 
                     totalArb += arb;
-
-
                     totalSoll += sollMin;
                     const diff = sollMin - arb;
-                    const startDatum = settings.ueberzeitStartDatum || '';
                     if (dateStr > startDatum) {
                         if (arb > 0 || sollMin > 0) ueberzeitMinuten += (arb - sollMin);
                     }
@@ -9957,6 +10014,7 @@
                 const dt = new Date();
                 return dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0') + '-' + String(dt.getDate()).padStart(2, '0');
             })();
+            const startDatum = typeof getEffectiveStartDatum === 'function' ? getEffectiveStartDatum() : (settings.ueberzeitStartDatum || '');
 
             exportDates.forEach(dateStr => {
                 const d = data[dateStr] || {};
@@ -9965,6 +10023,7 @@
                 const dayOfWeek = dt.getDay();
                 const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
                 const isFutureDay = dateStr > todayStr;
+                const isBeforeStart = Boolean(startDatum && dateStr < startDatum);
 
                 let arb = 0;
                 if (d.mk && d.mg) arb += timeToMin(d.mg) - timeToMin(d.mk);
@@ -10000,10 +10059,11 @@
                         specialExcelLabel = 'Vorholtag';
                     } else if (d.tagTyp === 'unbezahlt') {
                         unbezahlteTage++;
+                        sollMin = 0;
                         specialExcelLabel = 'Unbez. Urlaub';
                     } else {
-                        // Normaler Arbeitstag: Zukünftige Tage ohne Stempelung zählen erst, wenn der Tag da ist
-                        if (isFutureDay && arb === 0) {
+                        // Normaler Arbeitstag: Zukünftige Tage oder Tage vor Beginn ohne Stempelung zählen erst, wenn der Tag da ist
+                        if ((isBeforeStart || isFutureDay) && arb === 0) {
                             sollMin = 0;
                         } else {
                             sollMin = sollProTag;
@@ -10016,7 +10076,6 @@
                 totalArb += arb;
                 totalSoll += sollMin;
                 const diff = sollMin - arb;
-                const startDatum = settings.ueberzeitStartDatum || '';
                 if (dateStr > startDatum) {
                     if (arb > 0 || sollMin > 0) ueberzeitMinuten += (arb - sollMin);
                 }
@@ -10263,6 +10322,7 @@
             let isFirstPage = true;
 
             // Überzeitkonto EINMAL initialisieren und über alle Monate fortführen
+            const startDatum = typeof getEffectiveStartDatum === 'function' ? getEffectiveStartDatum() : (settings.ueberzeitStartDatum || '');
             let ueberzeitMinutenGesamt = settings.ueberzeitStartStand || 0;
 
             for (let monthNum = 1; monthNum <= 12; monthNum++) {
@@ -10329,6 +10389,7 @@
                     const dayOfWeek = dt.getDay();
                     const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
                     const isFutureDay = dateStr > todayStr;
+                    const isBeforeStart = Boolean(startDatum && dateStr < startDatum);
 
                     let arb = 0;
                     if (d.mk && d.mg) arb += timeToMin(d.mg) - timeToMin(d.mk);
@@ -10371,7 +10432,6 @@
                         fillColor = [196, 181, 253];
                         kompensationsTage++;
                         sollMin = sollProTag;
-                        ueberzeitMinutenGesamt -= sollProTag;
                         isSpecialRow = true;
                         specialLabel = 'Überzeit-Kompensation';
                         specialTextColor = [109, 40, 217];
@@ -10403,7 +10463,7 @@
 
                     // Sollzeit nur für normale Arbeitstage
                     if (!isWeekend && !(isFT && ftBezahlt) && !d.tagTyp && d.tagTyp !== 'urlaub' && d.tagTyp !== 'krank' && d.tagTyp !== 'unbezahlt') {
-                        if (isFutureDay && arb === 0) {
+                        if ((isBeforeStart || isFutureDay) && arb === 0) {
                             sollMin = 0;
                         } else {
                             sollMin = sollProTag;
@@ -10413,7 +10473,9 @@
                     totalArb += arb;
                     totalSoll += sollMin;
                     const diff = sollMin - arb;
-                    if (arb > 0 || sollMin > 0) ueberzeitMinutenGesamt += (arb - sollMin);
+                    if (dateStr > startDatum) {
+                        if (arb > 0 || sollMin > 0) ueberzeitMinutenGesamt += (arb - sollMin);
+                    }
 
                     const hasTimes = Boolean(d.mk || d.mg || d.mittk || d.ag);
 
@@ -10767,6 +10829,7 @@
                     const dt = new Date();
                     return dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0') + '-' + String(dt.getDate()).padStart(2, '0');
                 })();
+                const startDatum = typeof getEffectiveStartDatum === 'function' ? getEffectiveStartDatum() : (settings.ueberzeitStartDatum || '');
 
                 exportDates.forEach(dateStr => {
                     const d = data[dateStr] || {};
@@ -10775,6 +10838,7 @@
                     const dayOfWeek = dt.getDay();
                     const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
                     const isFutureDay = dateStr > todayStr;
+                    const isBeforeStart = Boolean(startDatum && dateStr < startDatum);
 
                     let arb = 0;
                     if (d.mk && d.mg) arb += timeToMin(d.mg) - timeToMin(d.mk);
@@ -10842,8 +10906,8 @@
                     } else if (isWeekend) {
                         fillColor = [243, 244, 246];
                     } else if (!isWeekend && !(isFT && ftBezahlt)) {
-                        // Zukünftige Tage ohne Stempelung zählen erst, wenn der Tag da ist ("ERST ANZEIGEN WENN ES SOWEIT IST")
-                        if (isFutureDay && arb === 0) {
+                        // Zukünftige Tage oder Tage vor Beginn ohne Stempelung zählen erst, wenn der Tag da ist ("ERST ANZEIGEN WENN ES SOWEIT IST")
+                        if ((isBeforeStart || isFutureDay) && arb === 0) {
                             sollMin = 0;
                         } else {
                             sollMin = sollProTag;
@@ -10853,7 +10917,6 @@
                     totalArb += arb;
                     totalSoll += sollMin;
                     const diff = sollMin - arb;
-                    const startDatum = settings.ueberzeitStartDatum || '';
                     if (dateStr > startDatum) {
                         if (arb > 0 || sollMin > 0) ueberzeitMinuten += (arb - sollMin);
                     }
@@ -12254,8 +12317,8 @@
             });
         }
 
-        // Version 1.3.75 - Manuell erhöhen bei jeder Änderung
-        const APP_VERSION = '1.3.75';
+        // Version 1.3.76 - Manuell erhöhen bei jeder Änderung
+        const APP_VERSION = '1.3.76';
         const version = APP_VERSION;
 
         // Initialise user info with fallback placeholders
