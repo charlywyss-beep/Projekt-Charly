@@ -1,5 +1,5 @@
 <html lang="de">
-<!-- Version 1.3.61 - Datumsanzeige optimiert: auf iPhone harmonische, perfekte Schriftgröße ohne Gedränge -->
+<!-- Version 1.3.62 - Notizen zuverlässig gespeichert (auch ohne Arbeitszeiten & an Wochenenden) & in Wochen- und Monatsansicht sichtbar -->
 
 <head>
     <meta charset="utf-8">
@@ -311,6 +311,14 @@
 
         body.dark .curr-date-ft {
             color: #E2E8F0 !important;
+        }
+
+        .woche-notiz {
+            color: #4B5563;
+        }
+
+        body.dark .woche-notiz {
+            color: #E2E8F0;
         }
 
         /* 📱 Speziell für Smartphones / iPhones optimiert */
@@ -2310,7 +2318,7 @@
                             onmouseover="this.style.color='#6366F1'; this.style.transform='scale(1.05)';"
                             onmouseout="this.style.color='#9CA3AF'; this.style.transform='scale(1)';"
                             class="version-badge">
-                            v1.3.61 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
+                            v1.3.62 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
                         </div>
                     </div>
                     <div class="header-actions" style="display: flex; gap: 0.5rem; align-items: center;">
@@ -4578,10 +4586,21 @@
             updateUeberzeitStats();
 
             document.getElementById('selDate').onchange = e => {
+                autoSaveCurrentDay();
                 date = e.target.value;
                 loadTag();
                 updateDateDisplay();
             };
+
+            const notizEl = document.getElementById('notiz');
+            if (notizEl) {
+                notizEl.oninput = () => {
+                    autoSaveCurrentDay();
+                };
+                notizEl.onchange = () => {
+                    autoSaveCurrentDay();
+                };
+            }
 
             ['mk', 'mg', 'mittk', 'ag'].forEach((id, idx) => {
                 const field = document.getElementById(id);
@@ -5166,17 +5185,10 @@
 
             const notiz = document.getElementById('notiz').value.trim();
 
-            if (!mk && !mg && !mittk && !ag && tagTyp === 'normal') {
+            if (!mk && !mg && !mittk && !ag && !notiz && tagTyp === 'normal') {
                 delete data[date];
             } else {
-                // Für Feiertage und arbeitsfreie Tage müssen keine Zeiten eingegeben werden
-                if (tagTyp === 'feiertag-bezahlt' || tagTyp === 'feiertag-unbezahlt' ||
-                    tagTyp === 'urlaub' || tagTyp === 'krank' ||
-                    tagTyp === 'unbezahlt' || tagTyp === 'kompensation' || tagTyp === 'vorholtag') {
-                    data[date] = { mk, mg, mittk, ag, tagTyp, notiz };
-                } else {
-                    data[date] = { mk, mg, mittk, ag, tagTyp, notiz };
-                }
+                data[date] = { mk, mg, mittk, ag, tagTyp, notiz };
             }
 
             saveToStorage();
@@ -5680,33 +5692,39 @@
             }
         }
 
+        function autoSaveCurrentDay() {
+            if (view !== 'tag') return;
+            const mk = document.getElementById('mk') ? document.getElementById('mk').value : '';
+            const mg = document.getElementById('mg') ? document.getElementById('mg').value : '';
+            const mittk = document.getElementById('mittk') ? document.getElementById('mittk').value : '';
+            const ag = document.getElementById('ag') ? document.getElementById('ag').value : '';
+            const notizEl = document.getElementById('notiz');
+            const notiz = notizEl ? notizEl.value.trim() : '';
+
+            const tagTypRadios = document.getElementsByName('tagTyp');
+            let tagTyp = 'normal';
+            for (const radio of tagTypRadios) {
+                if (radio.checked) {
+                    tagTyp = radio.value;
+                    break;
+                }
+            }
+
+            if (mk || mg || mittk || ag || notiz || tagTyp !== 'normal') {
+                data[date] = { mk, mg, mittk, ag, tagTyp, notiz };
+                saveToStorage();
+                console.log('autoSaveCurrentDay() erfolgreich für', date, data[date]);
+            } else if (data[date]) {
+                delete data[date];
+                saveToStorage();
+                console.log('autoSaveCurrentDay() gelöscht für leeren Tag', date);
+            }
+        }
+
         function switchView(v) {
             // AUTO-SAVE: Wenn wir von der Tag-Ansicht wegwechseln, automatisch speichern
             if (view === 'tag' && v !== 'tag') {
-                const mk = document.getElementById('mk').value;
-                const mg = document.getElementById('mg').value;
-                const mittk = document.getElementById('mittk').value;
-                const ag = document.getElementById('ag').value;
-
-                // Nur speichern wenn mindestens eine Zeit eingegeben wurde
-                if (mk || mg || mittk || ag) {
-                    console.log('Auto-Save beim Ansichtswechsel');
-
-                    // Direkt speichern OHNE Validierung (um Datenverlust zu vermeiden)
-                    const tagTypRadios = document.getElementsByName('tagTyp');
-                    let tagTyp = 'normal';
-                    for (const radio of tagTypRadios) {
-                        if (radio.checked) {
-                            tagTyp = radio.value;
-                            break;
-                        }
-                    }
-
-                    const notiz = document.getElementById('notiz').value.trim();
-                    data[date] = { mk, mg, mittk, ag, tagTyp, notiz };
-                    saveToStorage();
-                    console.log('Auto-Save erfolgreich:', date, data[date]);
-                }
+                autoSaveCurrentDay();
             }
 
             // Beende Löschmodus wenn aktiv
@@ -5746,6 +5764,7 @@
 
         function prevDay() {
             try {
+                autoSaveCurrentDay();
                 console.log('prevDay() aufgerufen - aktuelles Datum:', date);
                 const [y, m, d] = date.split('-').map(Number);
                 const dt = new Date(y, m - 1, d);
@@ -5765,6 +5784,7 @@
 
         function nextDay() {
             try {
+                autoSaveCurrentDay();
                 console.log('nextDay() aufgerufen - aktuelles Datum:', date);
                 const [y, m, d] = date.split('-').map(Number);
                 const dt = new Date(y, m - 1, d);
@@ -5783,6 +5803,7 @@
         }
 
         function goToday() {
+            autoSaveCurrentDay();
             const today = new Date();
 
             date = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
@@ -6002,10 +6023,10 @@
                             diffBadgeClass = 'diff-pill pill-pos';
                             break;
                         case 'normal':
-                            bgClass = 'tag-typ-normal';
+                            bgClass = isWeekend ? 'weekend' : 'tag-typ-normal';
                             break;
                         default:
-                            bgClass = 'tag-typ-normal';
+                            bgClass = isWeekend ? 'weekend' : 'tag-typ-normal';
                             break;
                     }
                 } else if (isWeekend) {
@@ -6015,10 +6036,13 @@
                     bgClass = 'tag-typ-normal';
                 }
 
-                // Fix für fehlendes notizDisplay (V18)
+                // Notiz in der Wochenansicht anzeigen
                 let notizDisplay = '';
-                if (d.notiz) {
-                    notizDisplay = `<div style="font-size: 0.75rem; color: #9CA3AF; margin-top: 0.25rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">📝 ${d.notiz}</div>`;
+                if (d && d.notiz) {
+                    notizDisplay = `<div class="woche-notiz" style="font-size: 0.85rem; font-weight: 500; margin-top: 0.35rem; display: flex; align-items: center; gap: 0.4rem; opacity: 0.95;">
+                        <span style="font-size: 0.9rem;">📝</span>
+                        <span style="font-style: italic; white-space: normal; word-break: break-word;">${d.notiz}</span>
+                    </div>`;
                 }
 
                 html += `<div class="card-sm ${bgClass} ${isToday ? 'is-today' : ''}" style="cursor: pointer;" onclick="jumpToDate('${dateStr}')">
@@ -6267,10 +6291,10 @@
                             tagTypIcon = '<span class="emoji-medium">🔄</span>';
                             break;
                         case 'normal':
-                            bgClass = 'tag-typ-normal';
+                            bgClass = isWeekend ? 'weekend' : 'tag-typ-normal';
                             break;
                         default:
-                            bgClass = 'tag-typ-normal';
+                            bgClass = isWeekend ? 'weekend' : 'tag-typ-normal';
                             break;
                     }
                 } else if (isWeekend) {
@@ -6281,7 +6305,10 @@
 
                 html += `<div class="card-sm cal-day ${bgClass} ${isToday ? 'is-today' : ''}" data-date="${dateStr}" style="cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;" onclick="jumpToDate('${dateStr}')">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                        <div class="cal-day-num" style="font-weight: 700;">${day}</div>
+                        <div class="cal-day-num" style="font-weight: 700; display: flex; align-items: center; gap: 0.25rem;">
+                            <span>${day}</span>
+                            ${d && d.notiz ? `<span title="${d.notiz.replace(/"/g, '&quot;')}" style="font-size: 0.72rem; line-height: 1;">📝</span>` : ''}
+                        </div>
                         ${isToday ? '<span class="today-badge">Heute</span>' : ''}
                     </div>
                     <div style="text-align: right;">
@@ -11604,8 +11631,8 @@
             });
         }
 
-        // Version 1.3.61 - Manuell erhöhen bei jeder Änderung
-        const APP_VERSION = '1.3.61';
+        // Version 1.3.62 - Manuell erhöhen bei jeder Änderung
+        const APP_VERSION = '1.3.62';
         const version = APP_VERSION;
 
         // Initialise user info with fallback placeholders
