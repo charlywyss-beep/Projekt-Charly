@@ -1,5 +1,5 @@
 <html lang="de">
-<!-- Version 1.3.68 - Cloud-Historie mit 3-Zeilen-Aufbau (Sicherung / Stand / Datum - Zeit) & exakter Button-Ausrichtung -->
+<!-- Version 1.3.69 - 'Daten von GitHub LADEN' zeigt vor dem Überschreiben die Cloud-Vorschau-Kachel & Version auf 1.3.69 erhöht -->
 
 <head>
     <meta charset="utf-8">
@@ -2427,7 +2427,7 @@
                             onmouseover="this.style.color='#6366F1'; this.style.transform='scale(1.05)';"
                             onmouseout="this.style.color='#9CA3AF'; this.style.transform='scale(1)';"
                             class="version-badge">
-                            v1.3.68 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
+                            v1.3.69 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
                         </div>
                     </div>
                     <div class="header-actions" style="display: flex; gap: 0.5rem; align-items: center;">
@@ -3781,7 +3781,7 @@
                         <!-- Sync Action Buttons -->
                         <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem; flex-wrap: wrap;">
                             <button class="btn btn-success" onclick="syncPushGitHubGist()" style="flex: 1; min-width: 160px;">☁️ ⬆️ Auf GitHub speichern</button>
-                            <button class="btn btn-primary" onclick="syncPullGitHubGist()" style="flex: 1; min-width: 160px;">☁️ ⬇️ Von GitHub laden</button>
+                            <button class="btn btn-primary" onclick="previewGistRevision(null)" style="flex: 1; min-width: 160px;">☁️ ⬇️ Von GitHub laden</button>
                         </div>
                         <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
                             <button class="btn btn-sec" onclick="showGistHistoryModal()" style="flex: 1; min-width: 160px;" title="Frühere Cloud-Sicherungen anzeigen & wiederherstellen">📜 Cloud-Historie</button>
@@ -7524,7 +7524,7 @@
 
             if (!modal || !contentEl) return;
 
-            subtitleEl.innerHTML = `Sicherung vom <strong>${timeStr}</strong>`;
+            subtitleEl.innerHTML = timeStr ? `Sicherung vom <strong>${timeStr}</strong>` : 'Lade neueste Sicherung...';
             contentEl.innerHTML = `
                 <div style="text-align: center; padding: 2rem; color: #6B7280;">
                     <div style="font-size: 1.75rem; margin-bottom: 0.5rem;">⏳</div>
@@ -7534,7 +7534,8 @@
             modal.classList.remove('hidden');
 
             try {
-                const res = await fetch(`https://api.github.com/gists/${gistId}/${commitSha}`, {
+                const url = commitSha ? `https://api.github.com/gists/${gistId}/${commitSha}` : `https://api.github.com/gists/${gistId}`;
+                const res = await fetch(url, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Accept': 'application/vnd.github+json'
@@ -7550,6 +7551,17 @@
                 if (!fileObj || !fileObj.content) {
                     throw new Error('Sicherungsdatei nicht gefunden.');
                 }
+
+                // Zeitstempel ermitteln
+                let displayTime = timeStr;
+                if (!displayTime) {
+                    const commitDate = (gistData.history && gistData.history[0]?.committed_at) || gistData.updated_at;
+                    if (commitDate) {
+                        const dt = new Date(commitDate);
+                        displayTime = dt.toLocaleDateString('de-CH') + ' - ' + dt.toLocaleTimeString('de-CH');
+                    }
+                }
+                subtitleEl.innerHTML = displayTime ? `Sicherung vom <strong>${displayTime}</strong>` : 'Neueste Cloud-Sicherung';
 
                 const cloudData = JSON.parse(fileObj.content);
                 const cloudDays = cloudData.data || {};
@@ -7636,9 +7648,13 @@
                     </div>
                 `;
 
-                restoreBtn.onclick = () => {
+                restoreBtn.onclick = async () => {
                     closeGistPreviewModal();
-                    restoreGistRevision(commitSha);
+                    if (commitSha) {
+                        await restoreGistRevision(commitSha);
+                    } else {
+                        await syncPullGitHubGist(false, true);
+                    }
                 };
 
             } catch (err) {
@@ -7755,7 +7771,7 @@
         async function executeCloudSyncAction(action) {
             closeCloudSyncModal();
             if (action === 'pull') {
-                await syncPullGitHubGist(false, true);
+                await previewGistRevision(null);
             } else if (action === 'push') {
                 await syncPushGitHubGist(false, true);
             }
@@ -11948,8 +11964,8 @@
             });
         }
 
-        // Version 1.3.68 - Manuell erhöhen bei jeder Änderung
-        const APP_VERSION = '1.3.68';
+        // Version 1.3.69 - Manuell erhöhen bei jeder Änderung
+        const APP_VERSION = '1.3.69';
         const version = APP_VERSION;
 
         // Initialise user info with fallback placeholders
