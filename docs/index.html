@@ -1,5 +1,5 @@
 <html lang="de">
-<!-- Version 1.3.73 - iPhone Hochformat: Zeit-/Datumsfenster exakt nach links ausgerichtet -->
+<!-- Version 1.3.74 - PDF-Ausgabe: Ferientag mit Sollzeit & Arbeitszeit korrekt erfasst, Legende zeigt Tage im Zeitraum -->
 
 <head>
     <meta charset="utf-8">
@@ -2459,7 +2459,7 @@
                             onmouseover="this.style.color='#6366F1'; this.style.transform='scale(1.05)';"
                             onmouseout="this.style.color='#9CA3AF'; this.style.transform='scale(1)';"
                             class="version-badge">
-                            v1.3.73 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
+                            v1.3.74 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
                         </div>
                     </div>
                     <div class="header-actions" style="display: flex; gap: 0.5rem; align-items: center;">
@@ -9944,6 +9944,7 @@
                 startKontoMin = getUeberzeitKonto(prevDay).aktuell;
             }
             let ueberzeitMinuten = startKontoMin;
+            let urlaubstageImZeitraumExcel = 0;
             let krankheitstageGesamt = 0;
             let unbezahlteTage = 0;
             let kompensationsTage = 0;
@@ -9968,28 +9969,38 @@
                 const isFT = isFeiertag(dateStr);
                 const ftBezahlt = isFT ? isFeiertagBezahlt(dateStr) : false;
 
-                // Sollzeit NUR für normale Arbeitstage (nicht Urlaub, Krankheit, unbezahlt)
+                let specialExcelLabel = '';
+
+                // Sollzeit & Arbeitszeit für normale Arbeitstage & Urlaub/Krankheit/Kompensation
                 if (!isWeekend && !(isFT && ftBezahlt)) {
                     // Tage zählen
                     if (d.tagTyp === 'urlaub') {
-                        // urlaubstageVerbraucht wird kumulativ berechnet
-                        // KEINE Sollzeit
+                        urlaubstageImZeitraumExcel++;
+                        sollMin = sollProTag;
+                        if (arb === 0) arb = sollProTag;
+                        specialExcelLabel = 'Ferientag';
                     } else if (d.tagTyp === 'krank') {
                         krankheitstageGesamt++;
-                        // KEINE Sollzeit
+                        sollMin = sollProTag;
+                        if (arb === 0) arb = sollProTag;
+                        specialExcelLabel = 'Krankheit';
                     } else if (d.tagTyp === 'kompensation') {
                         kompensationsTage++;
                         sollMin = sollProTag;
+                        specialExcelLabel = 'Überzeit-Kompensation';
                     } else if (d.tagTyp === 'vorholtag') {
                         vorholTage++;
                         sollMin = 0;
+                        specialExcelLabel = 'Vorholtag';
                     } else if (d.tagTyp === 'unbezahlt') {
                         unbezahlteTage++;
-                        // KEINE Sollzeit
+                        specialExcelLabel = 'Unbez. Urlaub';
                     } else {
                         // Normaler Arbeitstag
                         sollMin = sollProTag;
                     }
+                } else if (isFT && ftBezahlt) {
+                    specialExcelLabel = (feiertage[dateStr] && feiertage[dateStr].name) ? feiertage[dateStr].name : 'Feiertag';
                 }
 
                 totalArb += arb;
@@ -10000,16 +10011,18 @@
                     if (arb > 0 || sollMin > 0) ueberzeitMinuten += (arb - sollMin);
                 }
 
+                const hasTimes = Boolean(d.mk || d.mg || d.mittk || d.ag);
+
                 const values = [
                     ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'][dayOfWeek],
                     `${String(day).padStart(2, '0')}.${String(m).padStart(2, '0')}.${y} `,
-                    d.mk || '',
-                    d.mg || '',
-                    d.mittk || '',
-                    d.ag || '',
+                    (!hasTimes && specialExcelLabel) ? specialExcelLabel : (d.mk || ''),
+                    (!hasTimes && specialExcelLabel) ? '' : (d.mg || ''),
+                    (!hasTimes && specialExcelLabel) ? '' : (d.mittk || ''),
+                    (!hasTimes && specialExcelLabel) ? '' : (d.ag || ''),
                     arb > 0 ? minToTime(arb) : '',
                     sollMin > 0 ? minToTime(sollMin) : '',
-                    (arb > 0 || sollMin > 0) ? ((diff < 0 ? '+' : diff > 0 ? '-' : '') + minToTime(Math.abs(diff))) : '',
+                    (arb > 0 || sollMin > 0) ? ((diff < 0 ? '+' : diff > 0 ? '-' : '±') + minToTime(Math.abs(diff))) : '',
                     minToTime(ueberzeitMinuten)
                 ];
 
@@ -10145,8 +10158,9 @@
             const urlaubGesamt = (settings.urlaubTage || 25) + (settings.resturlaubVorjahr || 0);
             const urlaubRest = urlaubGesamt - urlaubstageVerbraucht;
 
+            const urlaubExcelText = urlaubstageImZeitraumExcel === 1 ? '1 Tag' : `${urlaubstageImZeitraumExcel} Tage`;
             const legende = [
-                { text: 'Urlaub', color: 'FFD1FAE5', value: `${urlaubstageVerbraucht} Tage`, desc: 'Urlaub bezogen' },
+                { text: 'Urlaub', color: 'FFD1FAE5', value: urlaubExcelText, desc: 'Urlaub bezogen' },
                 { text: 'Krankheit', color: 'FFFEF3C7', value: `${krankheitstageGesamt} Tage`, desc: 'Krankheitstage' },
                 { text: 'Feiertag (bezahlt)', color: 'FFDBEAFE', value: '', desc: 'Feiertag (bezahlt)' },
                 { text: 'Feiertag (unbezahlt)', color: 'FFFED7AA', value: '', desc: 'Feiertag (unbezahlt)' }
@@ -10279,6 +10293,7 @@
                 const tableData = [];
                 let totalArb = 0, totalSoll = 0;
                 let urlaubstageVerbraucht = getUrlaubBisZumMonat(monthNum);
+                let urlaubstageImMonat = 0;
                 let krankheitstageGesamt = 0;
                 let unbezahlteTage = 0;
                 let kompensationsTage = 0;
@@ -10309,33 +10324,62 @@
                     const ftBezahlt = isFT ? isFeiertagBezahlt(dateStr) : false;
 
                     let fillColor = null;
+                    let isSpecialRow = false;
+                    let specialLabel = '';
+                    let specialTextColor = [0, 0, 0];
 
                     // Zuerst: Spezielle Tag-Typen prüfen (haben höchste Priorität)
                     if (d.tagTyp === 'urlaub') {
                         fillColor = [209, 250, 229];
+                        urlaubstageImMonat++;
+                        sollMin = sollProTag;
+                        if (arb === 0) arb = sollProTag;
+                        isSpecialRow = true;
+                        specialLabel = 'Ferientag';
+                        specialTextColor = [5, 150, 105];
                     } else if (d.tagTyp === 'krank') {
                         fillColor = [254, 243, 199];
                         krankheitstageGesamt++;
+                        sollMin = sollProTag;
+                        if (arb === 0) arb = sollProTag;
+                        isSpecialRow = true;
+                        specialLabel = 'Krankheit';
+                        specialTextColor = [180, 83, 9];
                     } else if (d.tagTyp === 'unbezahlt') {
                         fillColor = [254, 202, 202];
                         unbezahlteTage++;
+                        isSpecialRow = true;
+                        specialLabel = 'Unbez. Urlaub';
+                        specialTextColor = [220, 38, 38];
                     } else if (d.tagTyp === 'kompensation') {
                         fillColor = [196, 181, 253];
                         kompensationsTage++;
                         sollMin = sollProTag;
                         ueberzeitMinutenGesamt -= sollProTag;
+                        isSpecialRow = true;
+                        specialLabel = 'Überzeit-Kompensation';
+                        specialTextColor = [109, 40, 217];
                     } else if (d.tagTyp === 'vorholtag' || (isFT && feiertage[dateStr] && (feiertage[dateStr].typ === 'brueckentag' || feiertage[dateStr].typ === 'vorholtag'))) {
                         fillColor = [165, 243, 252];
                         vorholTage++;
                         sollMin = 0;
+                        isSpecialRow = true;
+                        specialLabel = 'Vorholtag';
+                        specialTextColor = [8, 145, 178];
                     } else if (d.tagTyp === 'feiertag-unbezahlt' || (isFT && !ftBezahlt)) {
                         // Unbezahlter Feiertag - Orange (Priorität vor Wochenende)
                         fillColor = [254, 215, 170];
                         feiertageUnbezahlt++;
+                        isSpecialRow = true;
+                        specialLabel = 'Feiertag (unbezahlt)';
+                        specialTextColor = [194, 65, 12];
                     } else if (isFT && ftBezahlt) {
                         // Bezahlter Feiertag - Blau (Priorität vor Wochenende)
                         fillColor = [219, 234, 254];
                         feiertageBezahlt++;
+                        isSpecialRow = true;
+                        specialLabel = (feiertage[dateStr] && feiertage[dateStr].name) ? feiertage[dateStr].name : 'Feiertag (bezahlt)';
+                        specialTextColor = [29, 78, 216];
                     } else if (isWeekend) {
                         // Wochenende - nur wenn kein Feiertag
                         fillColor = [243, 244, 246];
@@ -10351,30 +10395,57 @@
                     const diff = sollMin - arb;
                     if (arb > 0 || sollMin > 0) ueberzeitMinutenGesamt += (arb - sollMin);
 
-                    const rowData = [
-                        ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'][dayOfWeek],
-                        `${String(day).padStart(2, '0')}.${String(m).padStart(2, '0')}.${y} `,
-                        d.mk || '',
-                        d.mg || '',
-                        d.mittk || '',
-                        d.ag || '',
-                        arb > 0 ? minToTime(arb) : '',
-                        sollMin > 0 ? minToTime(sollMin) : '',
-                        {
-                            content: (arb > 0 || sollMin > 0) ? ((diff < 0 ? '+' : diff > 0 ? '-' : '') + minToTime(Math.abs(diff))) : '',
-                            styles: {
-                                textColor: diff < 0 ? [16, 185, 129] : diff > 0 ? [239, 68, 68] : [0, 0, 0],
-                                fontStyle: 'bold'
+                    const hasTimes = Boolean(d.mk || d.mg || d.mittk || d.ag);
+
+                    let rowData;
+                    if (isSpecialRow && !hasTimes) {
+                        rowData = [
+                            ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'][dayOfWeek],
+                            `${String(day).padStart(2, '0')}.${String(m).padStart(2, '0')}.${y} `,
+                            { content: specialLabel, colSpan: 4, styles: { halign: 'center', fontStyle: 'bold', textColor: specialTextColor } },
+                            arb > 0 ? minToTime(arb) : '',
+                            sollMin > 0 ? minToTime(sollMin) : '',
+                            {
+                                content: (arb > 0 || sollMin > 0) ? ((diff < 0 ? '+' : diff > 0 ? '-' : '±') + minToTime(Math.abs(diff))) : '',
+                                styles: {
+                                    textColor: diff < 0 ? [16, 185, 129] : diff > 0 ? [239, 68, 68] : [0, 0, 0],
+                                    fontStyle: 'bold'
+                                }
+                            },
+                            {
+                                content: minToTime(ueberzeitMinutenGesamt),
+                                styles: {
+                                    textColor: ueberzeitMinutenGesamt > 0 ? [16, 185, 129] : ueberzeitMinutenGesamt < 0 ? [239, 68, 68] : [0, 0, 0],
+                                    fontStyle: 'bold'
+                                }
                             }
-                        },
-                        {
-                            content: minToTime(ueberzeitMinutenGesamt),
-                            styles: {
-                                textColor: ueberzeitMinutenGesamt > 0 ? [16, 185, 129] : ueberzeitMinutenGesamt < 0 ? [239, 68, 68] : [0, 0, 0],
-                                fontStyle: 'bold'
+                        ];
+                    } else {
+                        rowData = [
+                            ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'][dayOfWeek],
+                            `${String(day).padStart(2, '0')}.${String(m).padStart(2, '0')}.${y} `,
+                            d.mk || '',
+                            d.mg || '',
+                            d.mittk || '',
+                            d.ag || '',
+                            arb > 0 ? minToTime(arb) : '',
+                            sollMin > 0 ? minToTime(sollMin) : '',
+                            {
+                                content: (arb > 0 || sollMin > 0) ? ((diff < 0 ? '+' : diff > 0 ? '-' : '±') + minToTime(Math.abs(diff))) : '',
+                                styles: {
+                                    textColor: diff < 0 ? [16, 185, 129] : diff > 0 ? [239, 68, 68] : [0, 0, 0],
+                                    fontStyle: 'bold'
+                                }
+                            },
+                            {
+                                content: minToTime(ueberzeitMinutenGesamt),
+                                styles: {
+                                    textColor: ueberzeitMinutenGesamt > 0 ? [16, 185, 129] : ueberzeitMinutenGesamt < 0 ? [239, 68, 68] : [0, 0, 0],
+                                    fontStyle: 'bold'
+                                }
                             }
-                        }
-                    ];
+                        ];
+                    }
 
                     tableData.push({
                         data: rowData,
@@ -10430,8 +10501,9 @@
                 const legendX = 195;
                 const legendStartY = 24 + 3;
 
+                const urlaubImMonatLabel = urlaubstageImMonat === 1 ? '1 Tag' : `${urlaubstageImMonat} Tage`;
                 const legende = [
-                    { text: `${urlaubstageVerbraucht} Tage`, desc: 'Urlaub bezogen', color: [209, 250, 229], show: true },
+                    { text: urlaubImMonatLabel, desc: 'Urlaub bezogen', color: [209, 250, 229], show: true },
                     { text: `${krankheitstageGesamt} Tage`, desc: 'Krankheitstage', color: [254, 243, 199], show: true },
                     { text: `${unbezahlteTage} Tage`, desc: 'Unbezahlter Urlaub', color: [254, 202, 202], show: true },
                     { text: `${kompensationsTage} Tage`, desc: 'Überzeit-Kompensation', color: [196, 181, 253], show: true },
@@ -10648,12 +10720,12 @@
                 const exportDates = getExportDates();
                 const sollProTag = timeToMin(settings.soll);
 
-                // Berechne Urlaubstage kumulativ vom 1.1. bis zum Ende des Export-Zeitraums
-                let urlaubstageVerbraucht = 0;
+                // Berechne Urlaubstage kumulativ vom 1.1. bis zum Ende des Export-Zeitraums für die Urlaubsübersicht (Jahressaldo)
+                let urlaubstageVerbrauchtJahr = 0;
                 if (exportDates.length > 0) {
                     const lastDateParts = exportDates[exportDates.length - 1].split('-');
                     const lastMonth = parseInt(lastDateParts[1]);
-                    urlaubstageVerbraucht = getUrlaubBisZumMonat(lastMonth);
+                    urlaubstageVerbrauchtJahr = getUrlaubBisZumMonat(lastMonth);
                 }
 
                 let totalArb = 0, totalSoll = 0;
@@ -10663,6 +10735,7 @@
                     startKontoMin = getUeberzeitKonto(prevDay).aktuell;
                 }
                 let ueberzeitMinuten = startKontoMin;
+                let urlaubstageImZeitraum = 0;
                 let krankheitstageGesamt = 0;
                 let unbezahlteTage = 0;
                 let kompensationsTage = 0;
@@ -10687,29 +10760,59 @@
                     const ftBezahlt = isFT ? isFeiertagBezahlt(dateStr) : false;
 
                     let fillColor = null;
+                    let isSpecialRow = false;
+                    let specialLabel = '';
+                    let specialTextColor = [0, 0, 0];
+
                     // Zuerst: Spezielle Tag-Typen prüfen (haben höchste Priorität)
                     if (d.tagTyp === 'urlaub') {
                         fillColor = [209, 250, 229];
+                        urlaubstageImZeitraum++;
+                        sollMin = sollProTag;
+                        if (arb === 0) arb = sollProTag;
+                        isSpecialRow = true;
+                        specialLabel = 'Ferientag';
+                        specialTextColor = [5, 150, 105];
                     } else if (d.tagTyp === 'krank') {
                         fillColor = [254, 243, 199];
-                        krankheitageGesamt++;
+                        krankheitstageGesamt++;
+                        sollMin = sollProTag;
+                        if (arb === 0) arb = sollProTag;
+                        isSpecialRow = true;
+                        specialLabel = 'Krankheit';
+                        specialTextColor = [180, 83, 9];
                     } else if (d.tagTyp === 'unbezahlt') {
                         fillColor = [254, 202, 202];
                         unbezahlteTage++;
+                        isSpecialRow = true;
+                        specialLabel = 'Unbez. Urlaub';
+                        specialTextColor = [220, 38, 38];
                     } else if (d.tagTyp === 'kompensation') {
                         fillColor = [196, 181, 253];
                         kompensationsTage++;
                         sollMin = sollProTag;
+                        isSpecialRow = true;
+                        specialLabel = 'Überzeit-Kompensation';
+                        specialTextColor = [109, 40, 217];
                     } else if (d.tagTyp === 'vorholtag' || (isFT && feiertage[dateStr] && (feiertage[dateStr].typ === 'brueckentag' || feiertage[dateStr].typ === 'vorholtag'))) {
                         fillColor = [165, 243, 252];
                         vorholTage++;
                         sollMin = 0;
+                        isSpecialRow = true;
+                        specialLabel = 'Vorholtag';
+                        specialTextColor = [8, 145, 178];
                     } else if (d.tagTyp === 'feiertag-unbezahlt' || (isFT && !ftBezahlt)) {
                         fillColor = [254, 215, 170];
                         feiertageUnbezahlt++;
+                        isSpecialRow = true;
+                        specialLabel = 'Feiertag (unbezahlt)';
+                        specialTextColor = [194, 65, 12];
                     } else if (isFT && ftBezahlt) {
                         fillColor = [219, 234, 254];
                         feiertageBezahlt++;
+                        isSpecialRow = true;
+                        specialLabel = (feiertage[dateStr] && feiertage[dateStr].name) ? feiertage[dateStr].name : 'Feiertag (bezahlt)';
+                        specialTextColor = [29, 78, 216];
                     } else if (isWeekend) {
                         fillColor = [243, 244, 246];
                     } else if (!isWeekend && !(isFT && ftBezahlt)) {
@@ -10724,30 +10827,57 @@
                         if (arb > 0 || sollMin > 0) ueberzeitMinuten += (arb - sollMin);
                     }
 
-                    const rowData = [
-                        ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'][dayOfWeek],
-                        `${String(day).padStart(2, '0')}.${String(m).padStart(2, '0')}.${y} `,
-                        d.mk || '',
-                        d.mg || '',
-                        d.mittk || '',
-                        d.ag || '',
-                        arb > 0 ? minToTime(arb) : '',
-                        sollMin > 0 ? minToTime(sollMin) : '',
-                        {
-                            content: (arb > 0 || sollMin > 0) ? ((diff < 0 ? '+' : diff > 0 ? '-' : '') + minToTime(Math.abs(diff))) : '',
-                            styles: {
-                                textColor: diff < 0 ? [16, 185, 129] : diff > 0 ? [239, 68, 68] : [0, 0, 0],
-                                fontStyle: 'bold'
+                    const hasTimes = Boolean(d.mk || d.mg || d.mittk || d.ag);
+
+                    let rowData;
+                    if (isSpecialRow && !hasTimes) {
+                        rowData = [
+                            ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'][dayOfWeek],
+                            `${String(day).padStart(2, '0')}.${String(m).padStart(2, '0')}.${y} `,
+                            { content: specialLabel, colSpan: 4, styles: { halign: 'center', fontStyle: 'bold', textColor: specialTextColor } },
+                            arb > 0 ? minToTime(arb) : '',
+                            sollMin > 0 ? minToTime(sollMin) : '',
+                            {
+                                content: (arb > 0 || sollMin > 0) ? ((diff < 0 ? '+' : diff > 0 ? '-' : '±') + minToTime(Math.abs(diff))) : '',
+                                styles: {
+                                    textColor: diff < 0 ? [16, 185, 129] : diff > 0 ? [239, 68, 68] : [0, 0, 0],
+                                    fontStyle: 'bold'
+                                }
+                            },
+                            {
+                                content: minToTime(ueberzeitMinuten),
+                                styles: {
+                                    textColor: ueberzeitMinuten > 0 ? [16, 185, 129] : ueberzeitMinuten < 0 ? [239, 68, 68] : [0, 0, 0],
+                                    fontStyle: 'bold'
+                                }
                             }
-                        },
-                        {
-                            content: minToTime(ueberzeitMinuten),
-                            styles: {
-                                textColor: ueberzeitMinuten > 0 ? [16, 185, 129] : ueberzeitMinuten < 0 ? [239, 68, 68] : [0, 0, 0],
-                                fontStyle: 'bold'
+                        ];
+                    } else {
+                        rowData = [
+                            ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'][dayOfWeek],
+                            `${String(day).padStart(2, '0')}.${String(m).padStart(2, '0')}.${y} `,
+                            d.mk || '',
+                            d.mg || '',
+                            d.mittk || '',
+                            d.ag || '',
+                            arb > 0 ? minToTime(arb) : '',
+                            sollMin > 0 ? minToTime(sollMin) : '',
+                            {
+                                content: (arb > 0 || sollMin > 0) ? ((diff < 0 ? '+' : diff > 0 ? '-' : '±') + minToTime(Math.abs(diff))) : '',
+                                styles: {
+                                    textColor: diff < 0 ? [16, 185, 129] : diff > 0 ? [239, 68, 68] : [0, 0, 0],
+                                    fontStyle: 'bold'
+                                }
+                            },
+                            {
+                                content: minToTime(ueberzeitMinuten),
+                                styles: {
+                                    textColor: ueberzeitMinuten > 0 ? [16, 185, 129] : ueberzeitMinuten < 0 ? [239, 68, 68] : [0, 0, 0],
+                                    fontStyle: 'bold'
+                                }
                             }
-                        }
-                    ];
+                        ];
+                    }
 
                     tableData.push({
                         data: rowData,
@@ -10883,8 +11013,10 @@
                 const legendX = 195;
 
                 // Berechne die Gesamthöhe für Legende und Urlaubsübersicht
+                const urlaubImExport = urlaubstageImZeitraum;
+                const urlaubLabel = urlaubImExport === 1 ? '1 Tag' : `${urlaubImExport} Tage`;
                 const legende = [
-                    { text: `${urlaubstageVerbraucht} Tage`, desc: 'Urlaub bezogen', color: [209, 250, 229], show: true },
+                    { text: urlaubLabel, desc: 'Urlaub bezogen', color: [209, 250, 229], show: true },
                     { text: `${krankheitstageGesamt} Tage`, desc: 'Krankheitstage', color: [254, 243, 199], show: true },
                     { text: `${unbezahlteTage} Tage`, desc: 'Unbezahlter Urlaub', color: [254, 202, 202], show: true },
                     { text: `${kompensationsTage} Tage`, desc: 'Überzeit-Kompensation', color: [196, 181, 253], show: true },
@@ -10930,7 +11062,7 @@
                 // Urlaubsübersicht darunter
                 yPos += 2;
                 const urlaubGesamt = (settings.urlaubTage || 25) + (settings.resturlaubVorjahr || 0);
-                const urlaubRest = urlaubGesamt - urlaubstageVerbraucht;
+                const urlaubRest = urlaubGesamt - urlaubstageVerbrauchtJahr;
 
                 doc.setFont(undefined, 'bold');
                 doc.setFontSize(8);
@@ -10945,7 +11077,7 @@
                 yPos += 4;
 
                 // Zeile 2: bezogene Tage (Text normal)
-                doc.text(`bezogene Tage: ${urlaubstageVerbraucht} `, legendX, yPos);
+                doc.text(`bezogene Tage: ${urlaubstageVerbrauchtJahr} `, legendX, yPos);
                 yPos += 4;
 
                 // Zeile 3: verfügbare Tage (Text normal)
@@ -12091,8 +12223,8 @@
             });
         }
 
-        // Version 1.3.73 - Manuell erhöhen bei jeder Änderung
-        const APP_VERSION = '1.3.73';
+        // Version 1.3.74 - Manuell erhöhen bei jeder Änderung
+        const APP_VERSION = '1.3.74';
         const version = APP_VERSION;
 
         // Initialise user info with fallback placeholders
