@@ -1,5 +1,5 @@
 <html lang="de">
-<!-- Version 1.3.63 - Notiz in Wochenansicht horizontal auf einer Zeile neben Heute/Datum & 40-Zeichen-Begrenzung mit Live-Zähler im Eingabefeld -->
+<!-- Version 1.3.64 - Emojis & Icons in Notizen aufrecht (nicht kursiv) darstellen & Version auf 1.3.64 erhöht -->
 
 <head>
     <meta charset="utf-8">
@@ -2321,7 +2321,7 @@
                             onmouseover="this.style.color='#6366F1'; this.style.transform='scale(1.05)';"
                             onmouseout="this.style.color='#9CA3AF'; this.style.transform='scale(1)';"
                             class="version-badge">
-                            v1.3.63 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
+                            v1.3.64 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
                         </div>
                     </div>
                     <div class="header-actions" style="display: flex; gap: 0.5rem; align-items: center;">
@@ -5710,6 +5710,18 @@
             }
         }
 
+        function formatNotizText(text) {
+            if (!text) return '';
+            const escaped = String(text)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+            // Emojis / Piktogramme dürfen nicht kursiv geneigt sein (aufrecht via font-style: normal)
+            const emojiRegex = /(\p{Extended_Pictographic}(?:[\uFE0F\u{1F3FB}-\u{1F3FF}])*(?:\u200D\p{Extended_Pictographic}(?:[\uFE0F\u{1F3FB}-\u{1F3FF}])*)*)/ug;
+            return escaped.replace(emojiRegex, '<span style="font-style: normal; display: inline-block; vertical-align: -0.05em;">$1</span>');
+        }
+
         function autoSaveCurrentDay() {
             if (view !== 'tag') return;
             const mk = document.getElementById('mk') ? document.getElementById('mk').value : '';
@@ -6059,7 +6071,7 @@
                 if (d && d.notiz) {
                     notizDisplay = `<div class="woche-notiz-inline" style="display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.88rem; font-weight: 500; font-style: italic; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; min-width: 0; padding-left: 0.35rem;" title="${d.notiz.replace(/"/g, '&quot;')}">
                         <span style="font-style: normal; flex-shrink: 0; font-size: 0.85rem;">📝</span>
-                        <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${d.notiz}</span>
+                        <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${formatNotizText(d.notiz)}</span>
                     </div>`;
                 }
 
@@ -11649,8 +11661,8 @@
             });
         }
 
-        // Version 1.3.63 - Manuell erhöhen bei jeder Änderung
-        const APP_VERSION = '1.3.63';
+        // Version 1.3.64 - Manuell erhöhen bei jeder Änderung
+        const APP_VERSION = '1.3.64';
         const version = APP_VERSION;
 
         // Initialise user info with fallback placeholders
