@@ -1,5 +1,5 @@
 <html lang="de">
-<!-- Version 1.3.66 - Cloud-Sync Pfeil-Icons 100% exakt vertikal untereinander ausgerichtet & Version auf 1.3.66 erhöht -->
+<!-- Version 1.3.67 - Cloud-Vorschau & Historie mit optimiertem Hell/Dunkel-Kontrast (Datum & Status perfekt lesbar) -->
 
 <head>
     <meta charset="utf-8">
@@ -321,6 +321,96 @@
         body.dark .woche-notiz,
         body.dark .woche-notiz-inline {
             color: #CBD5E1;
+        }
+
+        /* ☁️ Cloud-Historie & Cloud-Vorschau Styling (Hell / Dunkel mit maximalem Kontrast) */
+        .gist-history-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 1rem;
+            background: #F3F4F6;
+            border-radius: 0.5rem;
+            border: 1px solid #E5E7EB;
+            gap: 0.5rem;
+            color: #1F2937;
+        }
+        body.dark .gist-history-row {
+            background: #2D3748;
+            border: 1px solid #4A5568;
+            color: #F7FAFC;
+        }
+        .gist-history-row .hist-title {
+            font-weight: 600;
+            font-size: 0.88rem;
+            color: #1F2937;
+        }
+        body.dark .gist-history-row .hist-title {
+            color: #F7FAFC;
+        }
+        .gist-history-row .hist-time {
+            font-size: 0.76rem;
+            color: #6B7280;
+            margin-top: 0.15rem;
+        }
+        body.dark .gist-history-row .hist-time {
+            color: #CBD5E1;
+        }
+
+        .gist-preview-box {
+            background: #EEF2FF;
+            border: 1px solid #C7D2FE;
+            border-radius: 0.5rem;
+            padding: 0.85rem;
+            text-align: left;
+            color: #1E1B4B;
+        }
+        body.dark .gist-preview-box {
+            background: #252D3D;
+            border: 1px solid #3B4559;
+            color: #E2E8F0;
+        }
+
+        .gist-preview-row {
+            background: #F9FAFB;
+            border: 1px solid #E5E7EB;
+            border-radius: 0.5rem;
+            padding: 0.6rem 0.85rem;
+            text-align: left;
+            color: #111827;
+        }
+        body.dark .gist-preview-row {
+            background: #2D3748;
+            border: 1px solid #4A5568;
+            color: #F7FAFC;
+        }
+        .gist-preview-row strong {
+            color: #111827 !important;
+            font-size: 0.9rem !important;
+            font-weight: 700 !important;
+        }
+        body.dark .gist-preview-row strong {
+            color: #FFFFFF !important;
+        }
+        .gist-preview-row .tag-desc {
+            color: #374151;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+        body.dark .gist-preview-row .tag-desc {
+            color: #E2E8F0;
+        }
+        .gist-preview-row .notiz-text {
+            font-size: 0.8rem;
+            color: #4B5563;
+            font-style: italic;
+            margin-top: 0.25rem;
+        }
+        body.dark .gist-preview-row .notiz-text {
+            color: #93C5FD;
+        }
+        body.dark #gist-preview-subtitle {
+            color: #CBD5E1 !important;
         }
 
         /* 📱 Speziell für Smartphones / iPhones optimiert */
@@ -2321,7 +2411,7 @@
                             onmouseover="this.style.color='#6366F1'; this.style.transform='scale(1.05)';"
                             onmouseout="this.style.color='#9CA3AF'; this.style.transform='scale(1)';"
                             class="version-badge">
-                            v1.3.66 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
+                            v1.3.67 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
                         </div>
                     </div>
                     <div class="header-actions" style="display: flex; gap: 0.5rem; align-items: center;">
@@ -7367,23 +7457,14 @@
                 const timeStr = item.committed_at ? new Date(item.committed_at).toLocaleString('de-CH') : 'Unbekannt';
 
                 const card = document.createElement('div');
-                card.style.cssText = `
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                    padding: 0.75rem;
-                    background: #F3F4F6;
-                    border-radius: 0.5rem;
-                    border: 1px solid #E5E7EB;
-                    gap: 0.5rem;
-                `;
+                card.className = 'gist-history-row';
 
                 card.innerHTML = `
                     <div style="text-align: left; flex: 1; min-width: 0;">
-                        <div style="font-weight: 600; font-size: 0.88rem; color: #1F2937;">
+                        <div class="hist-title">
                             ${index === 0 ? '🟢 Neueste Cloud-Version' : '🕒 Sicherung vom ' + timeStr}
                         </div>
-                        <div style="font-size: 0.76rem; color: #6B7280; margin-top: 0.15rem;">
+                        <div class="hist-time">
                             Stand: ${timeStr}
                         </div>
                     </div>
@@ -7467,7 +7548,9 @@
                         if (dayObj.tagTyp && dayObj.tagTyp !== 'normal') {
                             const labels = {
                                 'wochenende': '☕ Wochenende',
+                                'feiertag-bezahlt': '🔵 Bezahlter Feiertag',
                                 'feiertag_bezahlt': '🔵 Bezahlter Feiertag',
+                                'feiertag-unbezahlt': '🟠 Unbezahlter Feiertag',
                                 'feiertag_unbezahlt': '🟠 Unbezahlter Feiertag',
                                 'urlaub': '🏖️ Urlaub',
                                 'krankheit': '🩹 Krankheit',
@@ -7486,15 +7569,15 @@
                                 desc = 'Keine Zeiten';
                             }
                         }
-                        const notizPart = dayObj.notiz ? `<div style="font-size: 0.78rem; color: #4B5563; font-style: italic; margin-top: 0.2rem;">📝 ${typeof formatNotizText === 'function' ? formatNotizText(dayObj.notiz) : dayObj.notiz}</div>` : '';
+                        const notizPart = dayObj.notiz ? `<div class="notiz-text">📝 ${typeof formatNotizText === 'function' ? formatNotizText(dayObj.notiz) : dayObj.notiz}</div>` : '';
                         
                         const dateFormatted = typeof formatDateWithDay === 'function' ? formatDateWithDay(k) : k;
 
                         return `
-                            <div style="background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 0.45rem; padding: 0.5rem 0.75rem; text-align: left;">
-                                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem;">
+                            <div class="gist-preview-row">
+                                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.88rem;">
                                     <strong>${dateFormatted}</strong>
-                                    <span style="color: #374151; font-weight: 500;">${desc}</span>
+                                    <span class="tag-desc">${desc}</span>
                                 </div>
                                 ${notizPart}
                             </div>
@@ -7508,13 +7591,13 @@
                 const maxDayFormatted = maxDay && typeof formatDateWithDay === 'function' ? formatDateWithDay(maxDay) : maxDay;
 
                 contentEl.innerHTML = `
-                    <div style="background: #EEF2FF; border: 1px solid #C7D2FE; border-radius: 0.5rem; padding: 0.75rem; text-align: left;">
-                        <div style="font-size: 0.88rem; color: #4338CA; font-weight: 600; margin-bottom: 0.35rem;">
+                    <div class="gist-preview-box">
+                        <div style="font-size: 0.88rem; font-weight: 600; margin-bottom: 0.35rem;">
                             👤 ${name} (Pers.-Nr. ${persNr})
                         </div>
-                        <div style="font-size: 0.82rem; color: #374151;">
+                        <div style="font-size: 0.82rem;">
                             📅 Erfasste Arbeitstage: <strong>${totalDays} Tage</strong>
-                            ${minDay && maxDay ? `<div style="font-size: 0.78rem; color: #6B7280; margin-top: 0.2rem;">Zeitraum: ${minDayFormatted} bis ${maxDayFormatted}</div>` : ''}
+                            ${minDay && maxDay ? `<div style="font-size: 0.78rem; opacity: 0.85; margin-top: 0.2rem;">Zeitraum: ${minDayFormatted} bis ${maxDayFormatted}</div>` : ''}
                         </div>
                     </div>
                     <div>
@@ -11839,8 +11922,8 @@
             });
         }
 
-        // Version 1.3.66 - Manuell erhöhen bei jeder Änderung
-        const APP_VERSION = '1.3.66';
+        // Version 1.3.67 - Manuell erhöhen bei jeder Änderung
+        const APP_VERSION = '1.3.67';
         const version = APP_VERSION;
 
         // Initialise user info with fallback placeholders
