@@ -1,5 +1,5 @@
 <html lang="de">
-<!-- Version 1.3.71 - Cloud-Vorschau zeigt erfasste Ferientage (Montag/Urlaub) prominent & vollständig an -->
+<!-- Version 1.3.72 - Cloud-Vorschau zeigt letzte Arbeitswoche zuerst (Mo–Fr komplett inkl. Ferientag) & beschränkt Ferientage auf die nächsten -->
 
 <head>
     <meta charset="utf-8">
@@ -2455,7 +2455,7 @@
                             onmouseover="this.style.color='#6366F1'; this.style.transform='scale(1.05)';"
                             onmouseout="this.style.color='#9CA3AF'; this.style.transform='scale(1)';"
                             class="version-badge">
-                            v1.3.71 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
+                            v1.3.72 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
                         </div>
                     </div>
                     <div class="header-actions" style="display: flex; gap: 0.5rem; align-items: center;">
@@ -7603,21 +7603,57 @@
                 const name = cloudSettings.name || (settings && settings.name) || 'Wyss Charly';
                 const persNr = cloudSettings.personalnummer || (settings && settings.personalnummer) || '1972';
 
-                // 1. Alle Tage mit Notizen (die neuesten 5)
-                const noteKeys = dayKeys.filter(k => cloudDays[k] && cloudDays[k].notiz && cloudDays[k].notiz.trim() !== '').reverse();
+                // 1. Ganze letzte Arbeitswoche ermitteln (Mo–Fr komplett inkl. Ferientage)
+                const workedDayKeys = dayKeys.filter(k => {
+                    const d = cloudDays[k];
+                    return d && Boolean((d.mk && d.mg) || (d.mittk && d.ag));
+                });
+                let refDay = null;
+                if (workedDayKeys.length > 0) {
+                    refDay = workedDayKeys[workedDayKeys.length - 1];
+                } else {
+                    const todayIso = new Date().toISOString().split('T')[0];
+                    const pastOrTodayKeys = dayKeys.filter(k => k <= todayIso);
+                    refDay = pastOrTodayKeys.length > 0 ? pastOrTodayKeys[pastOrTodayKeys.length - 1] : dayKeys[0];
+                }
 
-                // 2. Alle erfassten Ferientage (Urlaub) im gesamten Datensatz
-                const urlaubKeys = dayKeys.filter(k => cloudDays[k] && cloudDays[k].tagTyp === 'urlaub');
+                let fullWeekKeys = [];
+                if (refDay) {
+                    const [y, m, d] = refDay.split('-').map(Number);
+                    const dt = new Date(y, m - 1, d);
+                    const dayOfWeek = dt.getDay(); // 0: So, 1: Mo, ..., 5: Fr
+                    const diffToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+                    const mondayDate = new Date(dt);
+                    mondayDate.setDate(dt.getDate() + diffToMonday);
 
-                // 3. Relevante Arbeitstage (mit Zeiten oder Urlaub/Krankheit/Kompensation)
-                const activeKeys = dayKeys.filter(k => {
+                    // Mo bis Fr erzeugen in absteigender Reihenfolge (Fr -> Do -> Mi -> Di -> Mo)
+                    for (let i = 4; i >= 0; i--) {
+                        const cur = new Date(mondayDate);
+                        cur.setDate(mondayDate.getDate() + i);
+                        const curIso = cur.getFullYear() + '-' + String(cur.getMonth() + 1).padStart(2, '0') + '-' + String(cur.getDate()).padStart(2, '0');
+                        fullWeekKeys.push(curIso);
+                    }
+                }
+
+                // Tage dieser Arbeitswoche filtern (nur Tage mit Zeiten, Ferientag/Sondertag oder Notiz)
+                const weekDisplayKeys = fullWeekKeys.filter(k => {
                     const d = cloudDays[k];
                     if (!d) return false;
                     const hasTimes = Boolean((d.mk && d.mg) || (d.mittk && d.ag));
-                    const isSpecial = ['urlaub', 'krankheit', 'kompensation', 'unbezahlt'].includes(d.tagTyp);
-                    return hasTimes || isSpecial;
+                    const isSpecial = Boolean(d.tagTyp && d.tagTyp !== 'normal');
+                    const hasNotiz = Boolean(d.notiz && d.notiz.trim() !== '');
+                    return hasTimes || isSpecial || hasNotiz;
                 });
-                const recentActiveKeys = activeKeys.slice(-8).reverse();
+                const finalWeekKeys = weekDisplayKeys.length > 0 ? weekDisplayKeys : fullWeekKeys;
+
+                // 2. Tage mit Notizen (die neuesten 3, Tage der Arbeitswoche nicht doppelt)
+                const noteKeys = dayKeys.filter(k => cloudDays[k] && cloudDays[k].notiz && cloudDays[k].notiz.trim() !== '').reverse();
+                const displayNoteKeys = noteKeys.filter(k => !finalWeekKeys.includes(k)).slice(0, 3);
+
+                // 3. Alle Ferientage (Urlaub) im Datensatz ermitteln
+                const allUrlaubKeys = dayKeys.filter(k => cloudDays[k] && cloudDays[k].tagTyp === 'urlaub');
+                // Nur die nächsten Ferientage anzeigen (max. 2 Tage), die nicht schon oben in der Woche oder Notizen stehen
+                const nextUrlaubKeys = allUrlaubKeys.filter(k => !finalWeekKeys.includes(k) && !displayNoteKeys.includes(k)).slice(0, 2);
 
                 const renderDayRow = (k) => {
                     const dayObj = cloudDays[k] || {};
@@ -7668,46 +7704,46 @@
                     `;
                 };
 
-                let urlaubSectionHtml = '';
-                if (urlaubKeys.length > 0) {
-                    urlaubSectionHtml = `
+                // Sektion 1: Ganze letzte Arbeitswoche (ZUERST!)
+                let workWeekSectionHtml = '';
+                if (finalWeekKeys.length > 0) {
+                    workWeekSectionHtml = `
                         <div style="margin-top: 0.65rem;">
-                            <div class="preview-section-title title-urlaub">
-                                <span>🏖️</span> Erfasste Ferientage (${urlaubKeys.length}):
+                            <div class="preview-section-title title-arbeit">
+                                <span>⏱️</span> Letzte erfasste Arbeitstage:
                             </div>
                             <div style="display: flex; flex-direction: column; gap: 0.35rem;">
-                                ${urlaubKeys.map(renderDayRow).join('')}
+                                ${finalWeekKeys.map(renderDayRow).join('')}
                             </div>
                         </div>
                     `;
                 }
 
+                // Sektion 2: Gespeicherte Notizen
                 let notesSectionHtml = '';
-                if (noteKeys.length > 0) {
+                if (displayNoteKeys.length > 0) {
                     notesSectionHtml = `
                         <div style="margin-top: 0.65rem;">
                             <div class="preview-section-title title-notizen">
                                 <span>📝</span> Gespeicherte Notizen (${noteKeys.length}):
                             </div>
                             <div style="display: flex; flex-direction: column; gap: 0.35rem;">
-                                ${noteKeys.slice(0, 5).map(renderDayRow).join('')}
+                                ${displayNoteKeys.map(renderDayRow).join('')}
                             </div>
                         </div>
                     `;
                 }
 
-                // Tage, die schon unter Ferientagen oder Notizen stehen, nicht nochmals wiederholen (damit es schön kompakt bleibt)
-                const displayedWorkKeys = recentActiveKeys.filter(k => !urlaubKeys.includes(k) && !noteKeys.includes(k));
-
-                let workDaysSectionHtml = '';
-                if (displayedWorkKeys.length > 0) {
-                    workDaysSectionHtml = `
+                // Sektion 3: Weitere anstehende Ferientage (nur die nächsten max. 2 Tage!)
+                let urlaubSectionHtml = '';
+                if (nextUrlaubKeys.length > 0) {
+                    urlaubSectionHtml = `
                         <div style="margin-top: 0.65rem;">
-                            <div class="preview-section-title title-arbeit">
-                                <span>⏱️</span> Letzte erfasste Arbeitstage:
+                            <div class="preview-section-title title-urlaub">
+                                <span>🏖️</span> Weitere anstehende Ferientage:
                             </div>
                             <div style="display: flex; flex-direction: column; gap: 0.35rem;">
-                                ${displayedWorkKeys.slice(0, 6).map(renderDayRow).join('')}
+                                ${nextUrlaubKeys.map(renderDayRow).join('')}
                             </div>
                         </div>
                     `;
@@ -7725,14 +7761,14 @@
                             📅 Erfasste Arbeitstage: <strong>${totalDays} Tage</strong>
                             ${minDay && maxDay ? `<div style="font-size: 0.78rem; opacity: 0.85; margin-top: 0.15rem;">Zeitraum: ${minDayFormatted} bis ${maxDayFormatted}</div>` : ''}
                             <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 0.35rem; font-size: 0.8rem; font-weight: 600;">
-                                ${urlaubKeys.length > 0 ? `<span style="color: #059669;">🏖️ ${urlaubKeys.length} Ferientag(e)</span>` : ''}
+                                ${allUrlaubKeys.length > 0 ? `<span style="color: #059669;">🏖️ ${allUrlaubKeys.length} Ferientag(e)</span>` : ''}
                                 ${noteKeys.length > 0 ? `<span style="color: #2563EB;">📝 ${noteKeys.length} Notiz(en)</span>` : ''}
                             </div>
                         </div>
                     </div>
-                    ${urlaubSectionHtml}
+                    ${workWeekSectionHtml}
                     ${notesSectionHtml}
-                    ${workDaysSectionHtml}
+                    ${urlaubSectionHtml}
                 `;
 
                 restoreBtn.onclick = async () => {
@@ -12051,8 +12087,8 @@
             });
         }
 
-        // Version 1.3.71 - Manuell erhöhen bei jeder Änderung
-        const APP_VERSION = '1.3.71';
+        // Version 1.3.72 - Manuell erhöhen bei jeder Änderung
+        const APP_VERSION = '1.3.72';
         const version = APP_VERSION;
 
         // Initialise user info with fallback placeholders
