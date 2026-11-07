@@ -1,5 +1,5 @@
 <html lang="de">
-<!-- Version 1.3.58 - Bezeichnung 'Vorholtag (arbeitsfrei)' zu 'Vorgeholter Tag' geändert -->
+<!-- Version 1.3.59 - Wochenende als 'Wochenende' dargestellt, Sollzeit 00:00 & Datumsanzeige (KW / Tag / Datum) markanter, größer und schöner gestaltet -->
 
 <head>
     <meta charset="utf-8">
@@ -176,6 +176,124 @@
             display: inline-flex;
             align-items: center;
             line-height: 1;
+        }
+
+        /* 📅 Markante, moderne Datumsanzeige in der Tagesansicht */
+        .datums-anzeige {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 0.6rem 1.25rem;
+            border-radius: 0.85rem;
+            background: linear-gradient(135deg, #FFFFFF 0%, #F3F4F6 100%);
+            border: 1.5px solid #D1D5DB;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            user-select: none;
+            cursor: pointer;
+        }
+
+        .datums-anzeige:hover {
+            border-color: #6366F1;
+            box-shadow: 0 4px 14px rgba(99, 102, 241, 0.2);
+            transform: translateY(-1px);
+        }
+
+        body.dark .datums-anzeige {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.95) 100%);
+            border: 1.5px solid rgba(99, 102, 241, 0.35);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35), 0 0 12px rgba(99, 102, 241, 0.12);
+        }
+
+        body.dark .datums-anzeige:hover {
+            border-color: #818CF8;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45), 0 0 18px rgba(99, 102, 241, 0.3);
+        }
+
+        .curr-date-main {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.85rem;
+            flex-wrap: wrap;
+        }
+
+        .curr-date-kw {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.25rem 0.85rem;
+            font-size: 1.05rem;
+            font-weight: 800;
+            border-radius: 9999px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.14), rgba(79, 70, 229, 0.08));
+            border: 1px solid rgba(99, 102, 241, 0.35);
+            color: #4338CA;
+            letter-spacing: 0.5px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        body.dark .curr-date-kw {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.4), rgba(129, 140, 248, 0.25));
+            border-color: rgba(129, 140, 248, 0.55);
+            color: #E0E7FF;
+            text-shadow: 0 0 8px rgba(199, 210, 254, 0.35);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .curr-date-text {
+            display: inline-flex;
+            align-items: baseline;
+            gap: 0.55rem;
+            font-size: 1.55rem;
+            line-height: 1.2;
+        }
+
+        .curr-date-day {
+            font-weight: 800;
+            color: #111827;
+            letter-spacing: 0.4px;
+        }
+
+        body.dark .curr-date-day {
+            color: #FFFFFF;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .curr-date-val {
+            font-weight: 700;
+            color: #1F2937;
+            letter-spacing: 0.6px;
+        }
+
+        body.dark .curr-date-val {
+            color: #F1F5F9;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+        }
+
+        .curr-date-ft {
+            margin-top: 0.35rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #4B5563;
+        }
+
+        body.dark .curr-date-ft {
+            color: #E2E8F0;
+        }
+
+        @media (max-width: 640px) {
+            .curr-date-text {
+                font-size: 1.25rem;
+            }
+            .curr-date-kw {
+                font-size: 0.9rem;
+                padding: 0.2rem 0.65rem;
+            }
+            .datums-anzeige {
+                padding: 0.5rem 0.85rem;
+            }
         }
 
         h1 {
@@ -2121,7 +2239,7 @@
                             onmouseover="this.style.color='#6366F1'; this.style.transform='scale(1.05)';"
                             onmouseout="this.style.color='#9CA3AF'; this.style.transform='scale(1)';"
                             class="version-badge">
-                            v1.3.58 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
+                            v1.3.59 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
                         </div>
                     </div>
                     <div class="header-actions" style="display: flex; gap: 0.5rem; align-items: center;">
@@ -2191,13 +2309,13 @@
                     <button class="btn btn-primary" onclick="goToday()" style="min-width: 70px;">Heute</button>
                 </div>
                 <div class="nav-controls"
-                    style="display: flex; gap: 0.5rem; align-items: center; justify-content: center;">
+                    style="display: flex; gap: 0.65rem; align-items: center; justify-content: center;">
                     <button class="btn btn-primary" onclick="prevDay()"
-                        style="min-width: 44px; flex-shrink: 0;">←</button>
-                    <span id="curr-date" class="datums-anzeige" style="flex: 1; text-align: center; min-width: 0;">KW
-                        49&nbsp;&nbsp;&nbsp;&nbsp;Mo 01.12.2025</span>
+                        style="min-width: 48px; height: 48px; flex-shrink: 0; font-size: 1.35rem; font-weight: bold; border-radius: 0.65rem; display: flex; align-items: center; justify-content: center;" title="Vorheriger Tag">←</button>
+                    <div id="curr-date" class="datums-anzeige" onclick="openDatePicker()" title="Datum auswählen (Klicken für Kalender)"
+                        style="flex: 1; text-align: center; min-width: 0;">KW 49&nbsp;&nbsp;&nbsp;&nbsp;Mo 01.12.2025</div>
                     <button class="btn btn-primary" onclick="nextDay()"
-                        style="min-width: 44px; flex-shrink: 0;">→</button>
+                        style="min-width: 48px; height: 48px; flex-shrink: 0; font-size: 1.35rem; font-weight: bold; border-radius: 0.65rem; display: flex; align-items: center; justify-content: center;" title="Nächster Tag">→</button>
                 </div>
 
                 <div id="tag-typ-anzeige" class=""
@@ -2275,12 +2393,12 @@
                         <label
                             style="grid-row: 1; font-weight: 600; font-size: 0.9375rem; line-height: 24px; align-self: start;" class="desktop-only-inline">Tag-Typ</label>
 
-                        <!-- Zeile 2: Normaler Arbeitstag -->
-                        <label class="tag-typ-label tag-typ-normal"
+                        <!-- Zeile 2: Normaler Arbeitstag / Wochenende -->
+                        <label class="tag-typ-label tag-typ-normal" id="tag-typ-normal-label"
                             style="grid-row: 2; display: flex; align-items: center; cursor: pointer; padding: 0.75rem; border-radius: 0.5rem; height: 54px;">
                             <input type="radio" name="tagTyp" value="normal" checked="" onchange="updateTagTyp()"
                                 style="margin-right: 0.5rem;">
-                            <span class="emoji-medium">⚙️</span> <span>Normaler Arbeitstag</span>
+                            <span class="emoji-medium" id="tag-typ-normal-icon">⚙️</span> <span id="tag-typ-normal-text">Normaler Arbeitstag</span>
                         </label>
 
                         <!-- Zeile 3: Bezahlter Feiertag -->
@@ -4304,6 +4422,11 @@
             }
 
             if (currentTyp !== 'normal') {
+                const [y, m, dayNum] = date.split('-').map(Number);
+                const dt = new Date(y, m - 1, dayNum);
+                const isWeekend = dt.getDay() === 0 || dt.getDay() === 6;
+                const normalLabelText = isWeekend ? 'Wochenende' : 'Normaler Arbeitstag';
+
                 // Zeige Warnbox
                 const container = document.getElementById('tagtyp-warning-container');
                 if (container) {
@@ -4311,10 +4434,10 @@
                         <div id="tagtyp-warning" 
                             style="margin-top: 1rem; padding: 1rem; background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%); border: 2px solid #F59E0B; border-radius: 0.5rem;">
                             <div style="font-weight: 700; font-size: 1rem; color: #92400E; margin-bottom: 1rem; white-space: normal; word-wrap: break-word; text-align: center;">
-                                ⚠️ Zeiteingabe wechselt zu "Normaler Arbeitstag". Fortfahren?
+                                ⚠️ Zeiteingabe wechselt zu "${normalLabelText}". Fortfahren?
                             </div>
                             <div style="display: flex; gap: 0.5rem;">
-                                <button class="btn btn-success" onclick="confirmTimeInput(true, '${inputField.id}')" style="flex: 1;">Ja - Normaler Arbeitstag</button>
+                                <button class="btn btn-success" onclick="confirmTimeInput(true, '${inputField.id}')" style="flex: 1;">Ja - ${normalLabelText}</button>
                                 <button class="btn btn-danger" onclick="confirmTimeInput(false, '${inputField.id}')" style="flex: 1;">Nein - Abbrechen</button>
                             </div>
                         </div>
@@ -4338,14 +4461,18 @@
             }
 
             if (confirmed) {
-                // OK geklickt: Wechsel zu "Normaler Arbeitstag"
+                // OK geklickt: Wechsel zu "Normaler Arbeitstag" / "Wochenende"
                 const normalRadio = document.querySelector('input[name="tagTyp"][value="normal"]');
                 if (normalRadio) {
                     normalRadio.checked = true;
                     updateTagTyp();
                 }
+                const [y, m, dayNum] = date.split('-').map(Number);
+                const dt = new Date(y, m - 1, dayNum);
+                const isWeekend = dt.getDay() === 0 || dt.getDay() === 6;
+                const normalLabelText = isWeekend ? 'Wochenende' : 'Normaler Arbeitstag';
                 // Zeit bleibt erhalten
-                showMsg('✓ Zu "Normaler Arbeitstag" gewechselt', true);
+                showMsg(`✓ Zu "${normalLabelText}" gewechselt`, true);
             } else {
                 // Abbrechen geklickt: Zeit löschen und bei altem Typ bleiben
                 const field = document.getElementById(fieldId);
@@ -4514,26 +4641,66 @@
                 }
 
                 console.log('KW berechnet:', kw, 'Jahr:', kwJahr);
-                let text = `${kwText}&nbsp;&nbsp;&nbsp;&nbsp;${formatDateWithDay(date)}`;
+                const dayName = days[dt.getDay()];
+                const dateFormatted = `${String(d).padStart(2, '0')}.${String(m).padStart(2, '0')}.${y}`;
+
+                let html = `
+                    <div class="curr-date-main">
+                        <span class="curr-date-kw">${kwText}</span>
+                        <span class="curr-date-text">
+                            <span class="curr-date-day">${dayName}</span>
+                            <span class="curr-date-val">${dateFormatted}</span>
+                        </span>
+                    </div>
+                `;
 
                 if (isFeiertag(date)) {
                     const ftName = getFeiertag(date);
                     const bezahlt = isFeiertagBezahlt(date);
                     const emoji = bezahlt ? '🔵' : '🟠';
-                    text += `<br><small style="opacity: 0.8;">${emoji} ${ftName}</small>`;
+                    html += `
+                        <div class="curr-date-ft" style="display: flex; align-items: center; justify-content: center; gap: 0.35rem;">
+                            <span>${emoji}</span>
+                            <span>${ftName}</span>
+                        </div>
+                    `;
                 }
 
-                document.getElementById('curr-date').innerHTML = text;
-                console.log('updateDateDisplay() erfolgreich - Text:', text);
+                const currDateEl = document.getElementById('curr-date');
+                if (currDateEl) {
+                    currDateEl.innerHTML = html;
+                }
+                console.log('updateDateDisplay() erfolgreich');
             } catch (e) {
                 console.error('Fehler in updateDateDisplay():', e);
 
                 try {
-                    let text = formatDateWithDay(date);
-                    document.getElementById('curr-date').innerHTML = text;
+                    let fallbackHtml = `
+                        <div class="curr-date-main">
+                            <span class="curr-date-text">
+                                <span class="curr-date-day">${formatDateWithDay(date)}</span>
+                            </span>
+                        </div>
+                    `;
+                    document.getElementById('curr-date').innerHTML = fallbackHtml;
                 } catch (e2) {
                     console.error('Auch Fallback fehlgeschlagen:', e2);
                 }
+            }
+        }
+
+        function openDatePicker() {
+            const sel = document.getElementById('selDate');
+            if (sel) {
+                if (typeof sel.showPicker === 'function') {
+                    try {
+                        sel.showPicker();
+                        return;
+                    } catch (e) {
+                        // Ignoriere Fehler und nutze .click()
+                    }
+                }
+                sel.click();
             }
         }
 
@@ -4546,6 +4713,18 @@
 
         function loadTag() {
             const d = data[date];
+
+            const [y, m, dayNum] = date.split('-').map(Number);
+            const dt = new Date(y, m - 1, dayNum);
+            const isWeekend = dt.getDay() === 0 || dt.getDay() === 6;
+
+            const normalIcon = document.getElementById('tag-typ-normal-icon');
+            const normalText = document.getElementById('tag-typ-normal-text');
+            if (normalIcon && normalText) {
+                normalIcon.textContent = isWeekend ? '☕' : '⚙️';
+                normalText.textContent = isWeekend ? 'Wochenende' : 'Normaler Arbeitstag';
+            }
+
             if (d) {
                 document.getElementById('mk').value = d.mk || '';
                 document.getElementById('mg').value = d.mg || '';
@@ -4613,11 +4792,15 @@
                 return;
             }
 
+            const [y, m, dayNum] = date.split('-').map(Number);
+            const dt = new Date(y, m - 1, dayNum);
+            const isWeekend = dt.getDay() === 0 || dt.getDay() === 6;
+
             const typConfig = {
                 'normal': {
-                    icon: '⚙️',
-                    text: 'Normaler Arbeitstag',
-                    bg: 'linear-gradient(135deg, #E5E7EB 0%, #D1D5DB 100%)',
+                    icon: isWeekend ? '☕' : '⚙️',
+                    text: isWeekend ? 'Wochenende' : 'Normaler Arbeitstag',
+                    bg: isWeekend ? 'linear-gradient(135deg, #D1D5DB 0%, #9CA3AF 100%)' : 'linear-gradient(135deg, #E5E7EB 0%, #D1D5DB 100%)',
                     color: '#1F2937',
                     border: '#9CA3AF'
                 },
@@ -4690,8 +4873,13 @@
                     // WICHTIG: setProperty mit 'important' verwenden, um CSS zu überschreiben
                     switch (tagTyp) {
                         case 'normal':
-                            anzeige.style.setProperty('background', 'linear-gradient(135deg, #6B7280 0%, #9CA3AF 100%)', 'important');
-                            anzeige.style.border = '2px solid #D1D5DB';
+                            if (isWeekend) {
+                                anzeige.style.setProperty('background', 'linear-gradient(135deg, #374151 0%, #4B5563 100%)', 'important');
+                                anzeige.style.border = '2px solid #6B7280';
+                            } else {
+                                anzeige.style.setProperty('background', 'linear-gradient(135deg, #6B7280 0%, #9CA3AF 100%)', 'important');
+                                anzeige.style.border = '2px solid #D1D5DB';
+                            }
                             break;
                         case 'feiertag-bezahlt':
                             anzeige.style.setProperty('background', 'linear-gradient(135deg, #1E3A8A 0%, #1E40AF 100%)', 'important');
@@ -5258,10 +5446,14 @@
                 }
             }
 
+            const [y, m, dayNum] = date.split('-').map(Number);
+            const dt = new Date(y, m - 1, dayNum);
+            const isWeekend = dt.getDay() === 0 || dt.getDay() === 6;
+
             const istFeiertag = isFeiertag(date);
             const bezahlt = istFeiertag ? isFeiertagBezahlt(date) : false;
 
-            if ((istFeiertag && bezahlt) || currentTagTyp === 'feiertag-bezahlt' || currentTagTyp === 'vorholtag') {
+            if (isWeekend || (istFeiertag && bezahlt) || currentTagTyp === 'feiertag-bezahlt' || currentTagTyp === 'vorholtag') {
                 sollMin = 0;
             }
 
@@ -5304,7 +5496,17 @@
                     document.getElementById('soll-info').innerHTML = '&nbsp;';
                 }
 
-                if (currentTagTyp === 'vorholtag') {
+                if (isWeekend) {
+                    if (arbNetto === 0) {
+                        document.getElementById('r-diff').textContent = '00:00';
+                        document.getElementById('r-diff-lbl').textContent = 'Wochenende';
+                        document.getElementById('r-diff-card').className = 'grad-gray';
+                    } else {
+                        document.getElementById('r-diff').textContent = `+${minToTime(arbNetto)}`;
+                        document.getElementById('r-diff-lbl').textContent = 'Überzeit Wochenende';
+                        document.getElementById('r-diff-card').className = 'grad-green';
+                    }
+                } else if (currentTagTyp === 'vorholtag') {
                     if (arbNetto === 0) {
                         document.getElementById('r-diff').textContent = '00:00';
                         document.getElementById('r-diff-lbl').textContent = 'Vorgeholter Tag';
@@ -5348,7 +5550,17 @@
                     document.getElementById('soll-info').innerHTML = '&nbsp;';
                 }
 
-                if (diffVorgabe === 0 && arbNetto > 0) {
+                if (isWeekend) {
+                    if (arbNetto === 0) {
+                        document.getElementById('r-diff').textContent = '00:00';
+                        document.getElementById('r-diff-lbl').textContent = 'Wochenende';
+                        document.getElementById('r-diff-card').className = 'grad-gray';
+                    } else {
+                        document.getElementById('r-diff').textContent = `+${minToTime(arbNetto)}`;
+                        document.getElementById('r-diff-lbl').textContent = 'Überzeit Wochenende';
+                        document.getElementById('r-diff-card').className = 'grad-green';
+                    }
+                } else if (diffVorgabe === 0 && arbNetto > 0) {
                     document.getElementById('r-diff').textContent = minToTime(vorgabeMin);
                     document.getElementById('r-diff-lbl').textContent = 'Vorgabe erreicht';
                     document.getElementById('r-diff-card').className = 'grad-green';
@@ -11321,8 +11533,8 @@
             });
         }
 
-        // Version 1.3.58 - Manuell erhöhen bei jeder Änderung
-        const APP_VERSION = '1.3.58';
+        // Version 1.3.59 - Manuell erhöhen bei jeder Änderung
+        const APP_VERSION = '1.3.59';
         const version = APP_VERSION;
 
         // Initialise user info with fallback placeholders
