@@ -1,5 +1,5 @@
 <html lang="de">
-<!-- Version 1.3.76 - Jahresansicht (PDF, Excel, UI): Tage vor Erfassungsbeginn und zukünftige Tage ohne Stempelung belasten das Überzeitkonto nicht -->
+<!-- Version 1.3.77 - PDF/Excel-Jahresausgabe: Sollzeit auf regulären Arbeitstagen korrekt berechnet & Überzeitkonto monatsweise synchronisiert -->
 
 <head>
     <meta charset="utf-8">
@@ -2459,7 +2459,7 @@
                             onmouseover="this.style.color='#6366F1'; this.style.transform='scale(1.05)';"
                             onmouseout="this.style.color='#9CA3AF'; this.style.transform='scale(1)';"
                             class="version-badge">
-                            v1.3.76 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
+                            v1.3.77 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
                         </div>
                     </div>
                     <div class="header-actions" style="display: flex; gap: 0.5rem; align-items: center;">
@@ -8991,7 +8991,6 @@
                 if (view === 'jahr') {
                     const months = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
                     const sollProTag = timeToMin(settings.soll);
-                    let ueberzeitMinutenGesamt = settings.ueberzeitStartStand || 0;
                     const startDatum = typeof getEffectiveStartDatum === 'function' ? getEffectiveStartDatum() : (settings.ueberzeitStartDatum || '');
                     const todayStr = typeof getTodayStr === 'function' ? getTodayStr() : (() => {
                         const dt = new Date();
@@ -8999,6 +8998,12 @@
                     })();
 
                     for (let monthNum = 1; monthNum <= 12; monthNum++) {
+                        const firstDayOfMonth = `${year}-${String(monthNum).padStart(2, '0')}-01`;
+                        const prevDay = typeof getPreviousDay === 'function' ? getPreviousDay(firstDayOfMonth) : '';
+                        let ueberzeitMinutenGesamt = (prevDay && typeof getUeberzeitKonto === 'function')
+                            ? getUeberzeitKonto(prevDay).aktuell
+                            : (settings.ueberzeitStartStand || 0);
+
                         const ws = wb.addWorksheet(`${months[monthNum - 1]} ${year}`);
 
                         const startRow = 2;
@@ -10321,15 +10326,20 @@
             const sollProTag = timeToMin(settings.soll);
             let isFirstPage = true;
 
-            // Überzeitkonto EINMAL initialisieren und über alle Monate fortführen
             const startDatum = typeof getEffectiveStartDatum === 'function' ? getEffectiveStartDatum() : (settings.ueberzeitStartDatum || '');
-            let ueberzeitMinutenGesamt = settings.ueberzeitStartStand || 0;
 
             for (let monthNum = 1; monthNum <= 12; monthNum++) {
                 if (!isFirstPage) {
                     doc.addPage();
                 }
                 isFirstPage = false;
+
+                // Überzeitkonto für diesen Monat mit dem Stand per Vormonat initialisieren
+                const firstDayOfMonth = `${year}-${String(monthNum).padStart(2, '0')}-01`;
+                const prevDay = typeof getPreviousDay === 'function' ? getPreviousDay(firstDayOfMonth) : '';
+                let ueberzeitMinutenGesamt = (prevDay && typeof getUeberzeitKonto === 'function')
+                    ? getUeberzeitKonto(prevDay).aktuell
+                    : (settings.ueberzeitStartStand || 0);
 
                 // Titel
                 doc.setFontSize(16);
@@ -10459,10 +10469,8 @@
                     } else if (isWeekend) {
                         // Wochenende - nur wenn kein Feiertag
                         fillColor = [243, 244, 246];
-                    }
-
-                    // Sollzeit nur für normale Arbeitstage
-                    if (!isWeekend && !(isFT && ftBezahlt) && !d.tagTyp && d.tagTyp !== 'urlaub' && d.tagTyp !== 'krank' && d.tagTyp !== 'unbezahlt') {
+                    } else if (!isWeekend && !(isFT && ftBezahlt)) {
+                        // Normaler Arbeitstag
                         if ((isBeforeStart || isFutureDay) && arb === 0) {
                             sollMin = 0;
                         } else {
@@ -12317,8 +12325,8 @@
             });
         }
 
-        // Version 1.3.76 - Manuell erhöhen bei jeder Änderung
-        const APP_VERSION = '1.3.76';
+        // Version 1.3.77 - Manuell erhöhen bei jeder Änderung
+        const APP_VERSION = '1.3.77';
         const version = APP_VERSION;
 
         // Initialise user info with fallback placeholders
