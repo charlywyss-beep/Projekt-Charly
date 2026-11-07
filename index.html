@@ -1,5 +1,5 @@
 <html lang="de">
-<!-- Version 1.3.67 - Cloud-Vorschau & Historie mit optimiertem Hell/Dunkel-Kontrast (Datum & Status perfekt lesbar) -->
+<!-- Version 1.3.68 - Cloud-Historie mit 3-Zeilen-Aufbau (Sicherung / Stand / Datum - Zeit) & exakter Button-Ausrichtung -->
 
 <head>
     <meta charset="utf-8">
@@ -328,11 +328,11 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0.75rem 1rem;
+            padding: 0.85rem 1rem;
             background: #F3F4F6;
-            border-radius: 0.5rem;
+            border-radius: 0.6rem;
             border: 1px solid #E5E7EB;
-            gap: 0.5rem;
+            gap: 0.75rem;
             color: #1F2937;
         }
         body.dark .gist-history-row {
@@ -341,20 +341,36 @@
             color: #F7FAFC;
         }
         .gist-history-row .hist-title {
-            font-weight: 600;
-            font-size: 0.88rem;
-            color: #1F2937;
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: #111827;
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
         }
         body.dark .gist-history-row .hist-title {
-            color: #F7FAFC;
+            color: #FFFFFF;
         }
-        .gist-history-row .hist-time {
-            font-size: 0.76rem;
+        .gist-history-row .hist-label {
+            font-size: 0.72rem;
+            font-weight: 600;
             color: #6B7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
             margin-top: 0.15rem;
         }
-        body.dark .gist-history-row .hist-time {
-            color: #CBD5E1;
+        body.dark .gist-history-row .hist-label {
+            color: #A0AEC0;
+        }
+        .gist-history-row .hist-datetime {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: #1F2937;
+            font-family: monospace;
+            letter-spacing: 0.3px;
+        }
+        body.dark .gist-history-row .hist-datetime {
+            color: #F7FAFC;
         }
 
         .gist-preview-box {
@@ -2411,7 +2427,7 @@
                             onmouseover="this.style.color='#6366F1'; this.style.transform='scale(1.05)';"
                             onmouseout="this.style.color='#9CA3AF'; this.style.transform='scale(1)';"
                             class="version-badge">
-                            v1.3.67 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
+                            v1.3.68 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
                         </div>
                     </div>
                     <div class="header-actions" style="display: flex; gap: 0.5rem; align-items: center;">
@@ -7454,25 +7470,35 @@
             container.innerHTML = '';
 
             history.forEach((item, index) => {
-                const timeStr = item.committed_at ? new Date(item.committed_at).toLocaleString('de-CH') : 'Unbekannt';
+                let datePart = 'Unbekannt';
+                let timePart = '';
+                if (item.committed_at) {
+                    const dt = new Date(item.committed_at);
+                    datePart = dt.toLocaleDateString('de-CH');
+                    timePart = dt.toLocaleTimeString('de-CH');
+                }
+                const dateTimeStr = timePart ? `${datePart} - ${timePart}` : datePart;
 
                 const card = document.createElement('div');
                 card.className = 'gist-history-row';
 
                 card.innerHTML = `
-                    <div style="text-align: left; flex: 1; min-width: 0;">
+                    <div style="text-align: left; flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 0.12rem;">
                         <div class="hist-title">
-                            ${index === 0 ? '🟢 Neueste Cloud-Version' : '🕒 Sicherung vom ' + timeStr}
+                            ${index === 0 ? '🟢 Sicherung (Neueste)' : '🕒 Sicherung'}
                         </div>
-                        <div class="hist-time">
-                            Stand: ${timeStr}
+                        <div class="hist-label">
+                            Stand
+                        </div>
+                        <div class="hist-datetime">
+                            ${dateTimeStr}
                         </div>
                     </div>
-                    <div style="display: flex; gap: 0.35rem; align-items: center; flex-shrink: 0;">
-                        <button class="btn btn-sec" style="padding: 0.4rem 0.65rem; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 0.25rem;" onclick="previewGistRevision('${item.version}', '${timeStr}')">
+                    <div style="display: flex; gap: 0.45rem; align-items: center; flex-shrink: 0;">
+                        <button class="btn btn-sec" style="padding: 0.45rem 0.75rem; font-size: 0.82rem; min-width: 95px; height: 36px; display: inline-flex; align-items: center; justify-content: center; gap: 0.3rem;" onclick="previewGistRevision('${item.version}', '${dateTimeStr}')">
                             👁️ Vorschau
                         </button>
-                        <button class="btn btn-primary" style="padding: 0.4rem 0.75rem; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 0.25rem;" onclick="restoreGistRevision('${item.version}')">
+                        <button class="btn btn-primary" style="padding: 0.45rem 0.85rem; font-size: 0.82rem; min-width: 82px; height: 36px; display: inline-flex; align-items: center; justify-content: center; gap: 0.3rem;" onclick="restoreGistRevision('${item.version}')">
                             ↩️ Laden
                         </button>
                     </div>
@@ -11922,8 +11948,8 @@
             });
         }
 
-        // Version 1.3.67 - Manuell erhöhen bei jeder Änderung
-        const APP_VERSION = '1.3.67';
+        // Version 1.3.68 - Manuell erhöhen bei jeder Änderung
+        const APP_VERSION = '1.3.68';
         const version = APP_VERSION;
 
         // Initialise user info with fallback placeholders
