@@ -1,5 +1,5 @@
 <html lang="de">
-<!-- Version 1.3.65 - Cloud-Sync Pfeil-Icons links vergrössert über zwei Zeilen dargestellt & Version auf 1.3.65 erhöht -->
+<!-- Version 1.3.66 - Cloud-Sync Pfeil-Icons 100% exakt vertikal untereinander ausgerichtet & Version auf 1.3.66 erhöht -->
 
 <head>
     <meta charset="utf-8">
@@ -2321,7 +2321,7 @@
                             onmouseover="this.style.color='#6366F1'; this.style.transform='scale(1.05)';"
                             onmouseout="this.style.color='#9CA3AF'; this.style.transform='scale(1)';"
                             class="version-badge">
-                            v1.3.65 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
+                            v1.3.66 <span style="font-size: 0.7rem; opacity: 0.8;">🔄</span>
                         </div>
                     </div>
                     <div class="header-actions" style="display: flex; gap: 0.5rem; align-items: center;">
@@ -4282,18 +4282,18 @@
                 ☁️ GitHub Cloud-Sync
             </h3>
             <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-                <button class="btn btn-primary" style="padding: 0.8rem 1.25rem; font-weight: 700; display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 0.85rem;" onclick="executeCloudSyncAction('pull')">
-                    <span style="font-size: 2rem; line-height: 1; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;">⬇️</span>
-                    <div style="display: flex; flex-direction: column; align-items: flex-start; text-align: left; gap: 0.15rem;">
-                        <span style="font-size: 1.02rem; font-weight: 700; line-height: 1.2;">Daten von GitHub LADEN</span>
-                        <span style="font-size: 0.75rem; font-weight: normal; opacity: 0.88; line-height: 1.2;">(Lokale Daten werden überschrieben)</span>
+                <button class="btn btn-primary" style="padding: 0.85rem 1.35rem; font-weight: 700; display: flex; flex-direction: row; align-items: center; justify-content: flex-start; gap: 0.85rem; width: 100%; box-sizing: border-box;" onclick="executeCloudSyncAction('pull')">
+                    <span style="width: 2.5rem; font-size: 2.1rem; line-height: 1; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;">⬇️</span>
+                    <div style="display: flex; flex-direction: column; align-items: flex-start; text-align: left; gap: 0.15rem; min-width: 0;">
+                        <span style="font-size: 1.02rem; font-weight: 700; line-height: 1.2; white-space: nowrap;">Daten von GitHub LADEN</span>
+                        <span style="font-size: 0.74rem; font-weight: normal; opacity: 0.88; line-height: 1.2; white-space: nowrap;">(Lokale Daten werden überschrieben)</span>
                     </div>
                 </button>
-                <button class="btn btn-success" style="padding: 0.8rem 1.25rem; font-weight: 700; display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 0.85rem;" onclick="executeCloudSyncAction('push')">
-                    <span style="font-size: 2rem; line-height: 1; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;">⬆️</span>
-                    <div style="display: flex; flex-direction: column; align-items: flex-start; text-align: left; gap: 0.15rem;">
-                        <span style="font-size: 1.02rem; font-weight: 700; line-height: 1.2;">Daten auf GitHub SPEICHERN</span>
-                        <span style="font-size: 0.75rem; font-weight: normal; opacity: 0.88; line-height: 1.2;">(Cloud-Sicherung wird aktualisiert)</span>
+                <button class="btn btn-success" style="padding: 0.85rem 1.35rem; font-weight: 700; display: flex; flex-direction: row; align-items: center; justify-content: flex-start; gap: 0.85rem; width: 100%; box-sizing: border-box;" onclick="executeCloudSyncAction('push')">
+                    <span style="width: 2.5rem; font-size: 2.1rem; line-height: 1; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;">⬆️</span>
+                    <div style="display: flex; flex-direction: column; align-items: flex-start; text-align: left; gap: 0.15rem; min-width: 0;">
+                        <span style="font-size: 1.02rem; font-weight: 700; line-height: 1.2; white-space: nowrap;">Daten auf GitHub SPEICHERN</span>
+                        <span style="font-size: 0.74rem; font-weight: normal; opacity: 0.88; line-height: 1.2; white-space: nowrap;">(Cloud-Sicherung wird aktualisiert)</span>
                     </div>
                 </button>
                 <div style="display: flex; gap: 0.5rem;">
@@ -4327,6 +4327,30 @@
             <button class="btn btn-sec" style="padding: 0.6rem;" onclick="closeGistHistoryModal()">
                 ❌ Schliessen
             </button>
+        </div>
+    </div>
+
+    <!-- 🔍 GitHub Gist Preview Modal -->
+    <div id="gist-preview-modal" class="hidden"
+        style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 10001;">
+        <div class="card" style="width: 100%; max-width: 520px; max-height: 85vh; margin: 1rem; padding: 1.5rem; border-radius: 0.85rem; display: flex; flex-direction: column;">
+            <h3 style="margin-bottom: 0.5rem; color: #6366F1; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                🔍 Cloud-Sicherungsvorschau
+            </h3>
+            <div id="gist-preview-subtitle" style="font-size: 0.85rem; color: #6B7280; margin-bottom: 1rem; text-align: center;">
+                Lade Daten...
+            </div>
+            <div id="gist-preview-content" style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1rem; padding-right: 0.25rem;">
+                <!-- Dynamisch erzeugt -->
+            </div>
+            <div style="display: flex; gap: 0.5rem;">
+                <button id="gist-preview-restore-btn" class="btn btn-primary" style="flex: 1; padding: 0.7rem; font-weight: 700;">
+                    ↩️ Diesen Stand jetzt laden
+                </button>
+                <button class="btn btn-sec" style="padding: 0.7rem 1.25rem;" onclick="closeGistPreviewModal()">
+                    ❌ Schliessen
+                </button>
+            </div>
         </div>
     </div>
 
@@ -7341,7 +7365,6 @@
 
             history.forEach((item, index) => {
                 const timeStr = item.committed_at ? new Date(item.committed_at).toLocaleString('de-CH') : 'Unbekannt';
-                const shaShort = item.version ? item.version.substring(0, 7) : '';
 
                 const card = document.createElement('div');
                 card.style.cssText = `
@@ -7356,23 +7379,172 @@
                 `;
 
                 card.innerHTML = `
-                    <div style="text-align: left;">
-                        <div style="font-weight: 600; font-size: 0.85rem; color: #1F2937;">
+                    <div style="text-align: left; flex: 1; min-width: 0;">
+                        <div style="font-weight: 600; font-size: 0.88rem; color: #1F2937;">
                             ${index === 0 ? '🟢 Neueste Cloud-Version' : '🕒 Sicherung vom ' + timeStr}
                         </div>
-                        <div style="font-size: 0.75rem; color: #6B7280; font-family: monospace;">
-                            Stand: ${timeStr} (${shaShort})
+                        <div style="font-size: 0.76rem; color: #6B7280; margin-top: 0.15rem;">
+                            Stand: ${timeStr}
                         </div>
                     </div>
-                    <button class="btn btn-primary" style="padding: 0.4rem 0.75rem; font-size: 0.8rem; white-space: nowrap;" onclick="restoreGistRevision('${item.version}')">
-                        ↩️ Laden
-                    </button>
+                    <div style="display: flex; gap: 0.35rem; align-items: center; flex-shrink: 0;">
+                        <button class="btn btn-sec" style="padding: 0.4rem 0.65rem; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 0.25rem;" onclick="previewGistRevision('${item.version}', '${timeStr}')">
+                            👁️ Vorschau
+                        </button>
+                        <button class="btn btn-primary" style="padding: 0.4rem 0.75rem; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 0.25rem;" onclick="restoreGistRevision('${item.version}')">
+                            ↩️ Laden
+                        </button>
+                    </div>
                 `;
                 container.appendChild(card);
             });
 
             const modal = document.getElementById('gist-history-modal');
             if (modal) modal.classList.remove('hidden');
+        }
+
+        async function previewGistRevision(commitSha, timeStr) {
+            const { token, gistId } = loadGistSettings();
+            if (!token || !gistId) {
+                alert('GitHub-Einstellungen unvollständig.');
+                return;
+            }
+
+            const modal = document.getElementById('gist-preview-modal');
+            const subtitleEl = document.getElementById('gist-preview-subtitle');
+            const contentEl = document.getElementById('gist-preview-content');
+            const restoreBtn = document.getElementById('gist-preview-restore-btn');
+
+            if (!modal || !contentEl) return;
+
+            subtitleEl.innerHTML = `Sicherung vom <strong>${timeStr}</strong>`;
+            contentEl.innerHTML = `
+                <div style="text-align: center; padding: 2rem; color: #6B7280;">
+                    <div style="font-size: 1.75rem; margin-bottom: 0.5rem;">⏳</div>
+                    <div style="font-weight: 500;">Lade Vorschau von GitHub Cloud...</div>
+                </div>
+            `;
+            modal.classList.remove('hidden');
+
+            try {
+                const res = await fetch(`https://api.github.com/gists/${gistId}/${commitSha}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/vnd.github+json'
+                    }
+                });
+
+                if (!res.ok) {
+                    throw new Error('Verbindung zu GitHub fehlgeschlagen (Status ' + res.status + ')');
+                }
+
+                const gistData = await res.json();
+                const fileObj = gistData.files && gistData.files["arbeitszeitrechner_cloud_backup.json"];
+                if (!fileObj || !fileObj.content) {
+                    throw new Error('Sicherungsdatei nicht gefunden.');
+                }
+
+                const cloudData = JSON.parse(fileObj.content);
+                const cloudDays = cloudData.data || {};
+                const cloudSettings = cloudData.settings || {};
+                const dayKeys = Object.keys(cloudDays).sort();
+
+                const totalDays = dayKeys.length;
+                const minDay = totalDays > 0 ? dayKeys[0] : null;
+                const maxDay = totalDays > 0 ? dayKeys[totalDays - 1] : null;
+
+                const name = cloudSettings.name || (settings && settings.name) || 'Wyss Charly';
+                const persNr = cloudSettings.personalnummer || (settings && settings.personalnummer) || '1972';
+
+                // Neueste 5 Tage ermitteln
+                const recentKeys = dayKeys.slice(-5).reverse();
+
+                let recentDaysHtml = '';
+                if (recentKeys.length > 0) {
+                    recentDaysHtml = recentKeys.map(k => {
+                        const dayObj = cloudDays[k] || {};
+                        let desc = '';
+                        if (dayObj.tagTyp && dayObj.tagTyp !== 'normal') {
+                            const labels = {
+                                'wochenende': '☕ Wochenende',
+                                'feiertag_bezahlt': '🔵 Bezahlter Feiertag',
+                                'feiertag_unbezahlt': '🟠 Unbezahlter Feiertag',
+                                'urlaub': '🏖️ Urlaub',
+                                'krankheit': '🩹 Krankheit',
+                                'unbezahlt': '📅 Unbezahlter Urlaub',
+                                'kompensation': '⏰ Überzeit-Kompensation',
+                                'vorholtag': '🔄 Vorgeholter Tag'
+                            };
+                            desc = labels[dayObj.tagTyp] || dayObj.tagTyp;
+                        } else {
+                            const m1 = (dayObj.mk && dayObj.mg) ? (timeToMin(dayObj.mg) - timeToMin(dayObj.mk)) : 0;
+                            const m2 = (dayObj.mittk && dayObj.ag) ? (timeToMin(dayObj.ag) - timeToMin(dayObj.mittk)) : 0;
+                            const tot = m1 + m2;
+                            if (tot > 0) {
+                                desc = `⏱️ ${minToTime(tot)} Std`;
+                            } else {
+                                desc = 'Keine Zeiten';
+                            }
+                        }
+                        const notizPart = dayObj.notiz ? `<div style="font-size: 0.78rem; color: #4B5563; font-style: italic; margin-top: 0.2rem;">📝 ${typeof formatNotizText === 'function' ? formatNotizText(dayObj.notiz) : dayObj.notiz}</div>` : '';
+                        
+                        const dateFormatted = typeof formatDateWithDay === 'function' ? formatDateWithDay(k) : k;
+
+                        return `
+                            <div style="background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 0.45rem; padding: 0.5rem 0.75rem; text-align: left;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem;">
+                                    <strong>${dateFormatted}</strong>
+                                    <span style="color: #374151; font-weight: 500;">${desc}</span>
+                                </div>
+                                ${notizPart}
+                            </div>
+                        `;
+                    }).join('');
+                } else {
+                    recentDaysHtml = '<div style="font-size: 0.85rem; color: #9CA3AF; text-align: center; padding: 0.5rem;">Keine Tage in dieser Sicherung erfasst</div>';
+                }
+
+                const minDayFormatted = minDay && typeof formatDateWithDay === 'function' ? formatDateWithDay(minDay) : minDay;
+                const maxDayFormatted = maxDay && typeof formatDateWithDay === 'function' ? formatDateWithDay(maxDay) : maxDay;
+
+                contentEl.innerHTML = `
+                    <div style="background: #EEF2FF; border: 1px solid #C7D2FE; border-radius: 0.5rem; padding: 0.75rem; text-align: left;">
+                        <div style="font-size: 0.88rem; color: #4338CA; font-weight: 600; margin-bottom: 0.35rem;">
+                            👤 ${name} (Pers.-Nr. ${persNr})
+                        </div>
+                        <div style="font-size: 0.82rem; color: #374151;">
+                            📅 Erfasste Arbeitstage: <strong>${totalDays} Tage</strong>
+                            ${minDay && maxDay ? `<div style="font-size: 0.78rem; color: #6B7280; margin-top: 0.2rem;">Zeitraum: ${minDayFormatted} bis ${maxDayFormatted}</div>` : ''}
+                        </div>
+                    </div>
+                    <div>
+                        <div style="font-size: 0.82rem; font-weight: 600; color: #4B5563; margin-bottom: 0.4rem; text-align: left;">
+                            📋 Letzte erfasste Tage in dieser Sicherung:
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 0.35rem;">
+                            ${recentDaysHtml}
+                        </div>
+                    </div>
+                `;
+
+                restoreBtn.onclick = () => {
+                    closeGistPreviewModal();
+                    restoreGistRevision(commitSha);
+                };
+
+            } catch (err) {
+                contentEl.innerHTML = `
+                    <div style="color: #EF4444; padding: 1.5rem; text-align: center;">
+                        ❌ Fehler beim Laden der Vorschau:<br>
+                        <small style="color: #6B7280;">${err.message}</small>
+                    </div>
+                `;
+            }
+        }
+
+        function closeGistPreviewModal() {
+            const modal = document.getElementById('gist-preview-modal');
+            if (modal) modal.classList.add('hidden');
         }
 
         function closeGistHistoryModal() {
@@ -11667,8 +11839,8 @@
             });
         }
 
-        // Version 1.3.65 - Manuell erhöhen bei jeder Änderung
-        const APP_VERSION = '1.3.65';
+        // Version 1.3.66 - Manuell erhöhen bei jeder Änderung
+        const APP_VERSION = '1.3.66';
         const version = APP_VERSION;
 
         // Initialise user info with fallback placeholders
